@@ -19,10 +19,6 @@ module.exports = (env = {}) => ({
   module: {
     rules: [
       {
-        test: /\.vue$/,
-        use: 'vue-loader'
-      },
-      {
         test: /\.png$/,
         use: {
           loader: 'url-loader',
@@ -30,15 +26,42 @@ module.exports = (env = {}) => ({
         }
       },
       {
-        test: /\.css$/,
+        test: /\.styl(us)?$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
-            options: { hmr: !env.prod }
+            loader: "style-loader"
           },
-          'css-loader'
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: "stylus-loader",
+            options: {
+              sourceMap: true
+            }
+          }
         ]
-      }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          // {
+          //   loader: MiniCssExtractPlugin.loader,
+          //   options: { hmr: !env.prod }
+          // },
+          'style-loader',
+          'css-loader'
+        ],
+      },
+      {
+        test: /\.vue$/,
+        use: {
+            loader: 'vue-loader',
+        },
+      },
     ]
   },
   plugins: [
