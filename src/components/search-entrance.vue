@@ -1,28 +1,86 @@
 <style lang="stylus" scoped>
 .search-entrance
-  width 450px
-  .tab-list
+  position relative
+  width 500px
+  .engine-list
+    box-sizing border-box
+    position absolute
+    top 100%
+    width 100%
     display flex
+    flex-wrap wrap
+    padding 16px
+    margin-top 10px
+    border-radius 4px
+    background #fff
   .tab-item
     height 40px
-    padding 0 30px
+    padding 0 20px
     line-height 40px
     font-size 12px
     color #555
-    background rgba(255, 255, 255, 0.5)
+    transition .2s ease-out
     cursor pointer
+    img
+      width 16px
+      height 16px
+    &:hover
+      background #f4f4f4
     &.active
-      background #fff
+      background #ddd
 .search-input
+  display flex
   height 54px
   border-radius 4px
   border 1px solid #ddd
   background #fff
+  .selected-engine
+    display flex
+    justify-content center
+    align-items center
+    width 60px
+    flex-shrink 0
+    cursor pointer
+    img
+      width 24px
+      height 24px
+      filter grayscale(1)
+      transition .2s ease-in-out
+      opacity .5
+    &:hover img
+      filter grayscale(0)
+      opacity 1
+  input
+    box-sizing border-box
+    width 100px
+    flex-grow 1
+    height 54px
+    padding 15px 20px
+    border none
+    line-height 24px
+    font-size 18px
+    color #555
+    &::-webkit-input-placeholder
+      color #ccc
+    &:focus
+      outline none
 </style>
 
 <template>
   <div class="search-entrance">
-    <div class="tab-list">
+    <div class="search-input">
+      <div class="selected-engine" @click="engineListVisible = !engineListVisible">
+        <img :src="selectedEngine.icon" :alt="selectedEngine.label">
+      </div>
+      <input
+        type="text"
+        ref="input"
+        v-model="searchText"
+        :placeholder="selectedEngine.placeholder"
+        @keydown="handleKeydown"
+      />
+    </div>
+    <div class="engine-list" v-show="engineListVisible">
       <div
         :class="[
           'tab-item',
@@ -32,16 +90,9 @@
         :key="engine.name"
         @click="selectedEngineName = engine.name"
       >
+        <img :src="engine.icon" :alt="engine.label">
         {{ engine.label }}
       </div>
-    </div>
-    <div class="search-input">
-      <input
-        type="text"
-        v-model="searchText"
-        placeholder="搜索"
-        @keydown="handleKeydown"
-      />
     </div>
   </div>
 </template>
@@ -55,31 +106,65 @@ export default {
       {
         name: 'baidu',
         label: '百度',
+        placeholder: '百度一下，你就知道了。',
         url: 'https://www.baidu.com/s?ie=UTF-8&wd=[kw]',
+        icon: 'https://www.baidu.com/favicon.ico',
       },
       {
         name: 'google',
         label: '谷歌',
+        placeholder: '谷歌虽好，可不一定访问的了～',
         url: 'https://www.baidu.com/s?ie=UTF-8&wd=[kw]',
+        icon: 'https://www.google.cn/favicon.ico',
       },
       {
         name: 'caniuse',
         label: 'caniuse',
+        placeholder: '前端兼容小字典！',
         url: 'https://www.caniuse.com/?search=[kw]',
+        icon: 'https://caniuse.com/img/favicon-128.png',
       },
       {
         name: 'stackoverflow',
         label: 'stackoverflow',
+        placeholder: '搜一搜歪果仁的技术讨论！',
         url: 'https://www.baidu.com/s?ie=UTF-8&wd=[kw]',
+        icon: 'https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png?v=c78bd457575a',
+      },
+      {
+        name: 'github',
+        label: 'Github',
+        placeholder: '来，我们一起偷代码～',
+        url: 'https://github.com/search?q=[kw]',
+        icon: 'https://github.githubassets.com/favicons/favicon.png',
+      },
+      {
+        name: 'npm',
+        label: 'NPM',
+        placeholder: '搜一搜歪果仁的技术讨论',
+        url: 'https://www.npmjs.com/search?q=[kw]',
+        icon: 'https://static.npmjs.com/58a19602036db1daee0d7863c94673a4.png',
       },
     ];
     const selectedEngineName = ref(searchEngineConfig[0].name);
     const searchText = ref('');
+    const engineListVisible = ref(false)
     return {
       searchEngineConfig,
       selectedEngineName,
       searchText,
+      engineListVisible,
     };
+  },
+  computed: {
+    selectedEngine() {
+      return this.searchEngineConfig.filter(
+        (engine) => engine.name === this.selectedEngineName
+      )[0] || this.searchEngineConfig[0];
+    },
+  },
+  mounted() {
+    this.$refs.input.focus()
   },
   methods: {
     handleKeydown(e) {
@@ -90,10 +175,7 @@ export default {
     },
     search() {
       let searhKeyword = encodeURIComponent(this.searchText);
-      let searchEngine = this.searchEngineConfig.filter(
-        (engine) => engine.name === this.selectedEngineName
-      )[0] || this.searchEngineConfig[0];
-      window.open(searchEngine.url.replace('[kw]', searhKeyword));
+      window.open(this.selectedEngine.url.replace('[kw]', searhKeyword));
     },
   },
 };

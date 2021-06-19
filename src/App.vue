@@ -23,34 +23,23 @@ html, body
   justify-content center
   align-items center
   height 100%
-  background #444
+  background url('http://bh-lay.com/topic/me/imgs/lingtinghu.jpg') no-repeat center #444
+  background-size cover
 </style>
 
 <template>
   <div class="gallery">
     <search-entrance />
     <quick-entry />
-    <button @click="inc">Clicked {{ count }} times.</button>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
-import SearchEntrance from "./components/search-entrance.vue";
-import QuickEntry from "./components/quick-entry.vue";
+import { ref } from 'vue';
+import SearchEntrance from './components/search-entrance.vue';
+import QuickEntry from './components/quick-entry.vue';
 
 export default {
   components: { SearchEntrance, QuickEntry },
-  setup() {
-    const count = ref(0);
-    const inc = () => {
-      count.value++;
-    };
-
-    return {
-      count,
-      inc,
-    };
-  },
 };
 </script>
