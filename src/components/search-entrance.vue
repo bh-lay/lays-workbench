@@ -22,7 +22,8 @@
       filter grayscale(1)
       transition 0.2s ease-in-out
       opacity 0.5
-    &:hover img
+    &:hover img,
+    &.active img
       filter grayscale(0)
       opacity 1
   input
@@ -33,7 +34,7 @@
     padding 15px 20px
     border none
     line-height 24px
-    font-size 18px
+    font-size 16px
     color #555
     &::-webkit-input-placeholder
       color #ccc
@@ -51,14 +52,19 @@
   border-radius 4px
   background #fff
 .tab-item
+  width 100px
   height 40px
-  padding 0 20px
+  margin 0 10px 10px 0
+  padding 0 0 0 12px
   line-height 40px
   font-size 12px
   color #555
+  border-radius 4px
   transition 0.2s ease-out
   cursor pointer
   img
+    display inline-block
+    vertical-align middle
     width 16px
     height 16px
   &:hover
@@ -71,7 +77,7 @@
   <div class="search-entrance">
     <div class="search-input">
       <div
-        class="selected-engine"
+        :class="['selected-engine', engineListVisible ? 'active' : '']"
         @click="engineListVisible = !engineListVisible"
       >
         <img :src="selectedEngine.icon" :alt="selectedEngine.label" />
@@ -85,7 +91,7 @@
       />
     </div>
     <transition name="flip">
-      <div class="engine-list" v-show="engineListVisible">
+      <div class="engine-list" v-if="engineListVisible" v-clickoutside="onClickoutside">
         <div
           :class="[
             'tab-item',
@@ -93,7 +99,7 @@
           ]"
           v-for="engine in searchEngineConfig"
           :key="engine.name"
-          @click="selectedEngineName = engine.name"
+          @click="selectEngine(engine)"
         >
           <img :src="engine.icon" :alt="engine.label" />
           {{ engine.label }}
@@ -176,14 +182,21 @@ export default {
   },
   methods: {
     handleKeydown(e) {
-      console.log('12122', e);
       if (e.keyCode === 13) {
         this.search();
       }
     },
     search() {
       let searhKeyword = encodeURIComponent(this.searchText);
+      this.searchText = ''
       window.open(this.selectedEngine.url.replace('[kw]', searhKeyword));
+    },
+    onClickoutside() {
+      this.engineListVisible = false
+    },
+    selectEngine(engine) {
+      this.selectedEngineName = engine.name
+      this.engineListVisible = false
     },
   },
 };
