@@ -9,11 +9,10 @@ html, body
   -khtml-user-select none /* Konqueror */
   -moz-user-select none /* Firefox */
   -ms-user-select none /* Internet Explorer/Edge */
-  user-select none   /* Non-prefixed version, currently
+  user-select none /* Non-prefixed version, currently */
   #app
     position relative
     height 100%
-   */
 </style>
 <style lang="stylus" scoped>
 .gallery

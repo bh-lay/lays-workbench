@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = (env = {}) => ({
@@ -9,7 +10,7 @@ module.exports = (env = {}) => ({
   entry: path.resolve(__dirname, './src/main.js'),
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/'
+    publicPath: ''
   },
   resolve: {
     alias: {
@@ -71,8 +72,14 @@ module.exports = (env = {}) => ({
     }),
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: 'true',
-      __VUE_PROD_DEVTOOLS__: 'false'
-    })
+      __VUE_PROD_DEVTOOLS__: env.prod ? 'false' : 'true'
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'index.html',
+      favicon: 'src/img/favicon.png',
+      inject: true
+    }),
   ],
   devServer: {
     inline: true,
