@@ -2,32 +2,7 @@
 .search-entrance
   position relative
   width 500px
-  .engine-list
-    box-sizing border-box
-    position absolute
-    top 100%
-    width 100%
-    display flex
-    flex-wrap wrap
-    padding 16px
-    margin-top 10px
-    border-radius 4px
-    background #fff
-  .tab-item
-    height 40px
-    padding 0 20px
-    line-height 40px
-    font-size 12px
-    color #555
-    transition .2s ease-out
-    cursor pointer
-    img
-      width 16px
-      height 16px
-    &:hover
-      background #f4f4f4
-    &.active
-      background #ddd
+  perspective 800px
 .search-input
   display flex
   height 54px
@@ -45,8 +20,8 @@
       width 24px
       height 24px
       filter grayscale(1)
-      transition .2s ease-in-out
-      opacity .5
+      transition 0.2s ease-in-out
+      opacity 0.5
     &:hover img
       filter grayscale(0)
       opacity 1
@@ -64,13 +39,42 @@
       color #ccc
     &:focus
       outline none
+.engine-list
+  box-sizing border-box
+  position absolute
+  top 100%
+  width 100%
+  display flex
+  flex-wrap wrap
+  padding 16px
+  margin-top 10px
+  border-radius 4px
+  background #fff
+.tab-item
+  height 40px
+  padding 0 20px
+  line-height 40px
+  font-size 12px
+  color #555
+  transition 0.2s ease-out
+  cursor pointer
+  img
+    width 16px
+    height 16px
+  &:hover
+    background #f4f4f4
+  &.active
+    background #ddd
 </style>
 
 <template>
   <div class="search-entrance">
     <div class="search-input">
-      <div class="selected-engine" @click="engineListVisible = !engineListVisible">
-        <img :src="selectedEngine.icon" :alt="selectedEngine.label">
+      <div
+        class="selected-engine"
+        @click="engineListVisible = !engineListVisible"
+      >
+        <img :src="selectedEngine.icon" :alt="selectedEngine.label" />
       </div>
       <input
         type="text"
@@ -80,20 +84,22 @@
         @keydown="handleKeydown"
       />
     </div>
-    <div class="engine-list" v-show="engineListVisible">
-      <div
-        :class="[
-          'tab-item',
-          engine.name === selectedEngineName ? 'active' : '',
-        ]"
-        v-for="engine in searchEngineConfig"
-        :key="engine.name"
-        @click="selectedEngineName = engine.name"
-      >
-        <img :src="engine.icon" :alt="engine.label">
-        {{ engine.label }}
+    <transition name="flip">
+      <div class="engine-list" v-show="engineListVisible">
+        <div
+          :class="[
+            'tab-item',
+            engine.name === selectedEngineName ? 'active' : '',
+          ]"
+          v-for="engine in searchEngineConfig"
+          :key="engine.name"
+          @click="selectedEngineName = engine.name"
+        >
+          <img :src="engine.icon" :alt="engine.label" />
+          {{ engine.label }}
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -148,7 +154,7 @@ export default {
     ];
     const selectedEngineName = ref(searchEngineConfig[0].name);
     const searchText = ref('');
-    const engineListVisible = ref(false)
+    const engineListVisible = ref(false);
     return {
       searchEngineConfig,
       selectedEngineName,
@@ -158,13 +164,15 @@ export default {
   },
   computed: {
     selectedEngine() {
-      return this.searchEngineConfig.filter(
-        (engine) => engine.name === this.selectedEngineName
-      )[0] || this.searchEngineConfig[0];
+      return (
+        this.searchEngineConfig.filter(
+          (engine) => engine.name === this.selectedEngineName
+        )[0] || this.searchEngineConfig[0]
+      );
     },
   },
   mounted() {
-    this.$refs.input.focus()
+    this.$refs.input.focus();
   },
   methods: {
     handleKeydown(e) {
