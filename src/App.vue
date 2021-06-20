@@ -15,30 +15,40 @@ html, body
     height 100%
 </style>
 <style lang="stylus" scoped>
-.gallery
+.frame
   position relative
   display flex
   flex-direction column
   justify-content center
   align-items center
   height 100%
-  background url('http://bh-lay.com/topic/me/imgs/lingtinghu.jpg') no-repeat center #444
-  background-size cover
+.pager
+  height 100px
 </style>
 
 <template>
-  <div class="gallery">
-    <search-entrance />
-    <quick-entry />
+  <gallery :defocus="focused" />
+  <div class="frame">
+    <search-entrance @focus="focused = true" @blur="focused = false" />
+    <div class="pager">
+      <transition name="fade-slow">
+        <quick-entry v-if="!focused" />
+      </transition>
+    </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import Gallery from './components/gallery.vue';
 import SearchEntrance from './components/search-entrance.vue';
 import QuickEntry from './components/quick-entry.vue';
 
 export default {
-  components: { SearchEntrance, QuickEntry },
+  components: { Gallery, SearchEntrance, QuickEntry },
+  data() {
+    return {
+      focused: false,
+    };
+  },
 };
 </script>

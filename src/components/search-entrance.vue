@@ -3,12 +3,14 @@
   position relative
   width 500px
   perspective 800px
+  z-index 10
 .search-input
   display flex
   height 54px
   border-radius 4px
-  border 1px solid #ddd
-  background #fff
+  background rgba(255, 255, 255, 0.2)
+  backdrop-filter blur(2px)
+  transition 0.5s 0.4s ease-in-out
   .selected-engine
     display flex
     justify-content center
@@ -22,8 +24,7 @@
       filter grayscale(1)
       transition 0.2s ease-in-out
       opacity 0.5
-    &:hover img,
-    &.active img
+    &:hover img, &.active img
       filter grayscale(0)
       opacity 1
   input
@@ -35,11 +36,21 @@
     border none
     line-height 24px
     font-size 16px
+    background transparent
     color #555
     &::-webkit-input-placeholder
       color #ccc
     &:focus
       outline none
+  & > *
+    transition 0.3s 0.2s
+    opacity 0
+  &.active, &:hover
+    transition 0.5s ease-in-out
+    background #fff
+    & > *
+      transition 0.5s 0.4s
+      opacity 1
 .engine-list
   box-sizing border-box
   position absolute
@@ -47,15 +58,15 @@
   width 100%
   display flex
   flex-wrap wrap
-  padding 16px
+  padding 16px 0 10px 16px
   margin-top 10px
   border-radius 4px
   background #fff
 .tab-item
-  width 100px
+  width 130px
   height 40px
   margin 0 10px 10px 0
-  padding 0 0 0 12px
+  padding 0 0 0 15px
   line-height 40px
   font-size 12px
   color #555
@@ -75,10 +86,19 @@
 
 <template>
   <div class="search-entrance">
-    <div class="search-input">
+    <div
+      :class="[
+        'search-input',
+        isActive? 'active' : '',
+      ]"
+    >
       <div
-        :class="['selected-engine', engineListVisible ? 'active' : '']"
-        @click="engineListVisible = !engineListVisible"
+        :class="[
+          'selected-engine',
+          isActive ? 'active' : '',
+        ]"
+        @mousedown.prevent
+        @click="toggleEngineList"
       >
         <img :src="selectedEngine.icon" :alt="selectedEngine.label" />
       </div>
@@ -88,10 +108,17 @@
         v-model="searchText"
         :placeholder="selectedEngine.placeholder"
         @keydown="handleKeydown"
+        @focus="inputFocused = true"
+        @blur="inputFocused = false"
       />
     </div>
     <transition name="flip">
-      <div class="engine-list" v-if="engineListVisible" v-clickoutside="onClickoutside">
+      <div
+        class="engine-list"
+        v-if="engineListVisible"
+        v-clickoutside="onClickoutside"
+        @mousedown.prevent
+      >
         <div
           :class="[
             'tab-item',
@@ -161,11 +188,13 @@ export default {
     const selectedEngineName = ref(searchEngineConfig[0].name);
     const searchText = ref('');
     const engineListVisible = ref(false);
+    const inputFocused = ref(false);
     return {
       searchEngineConfig,
       selectedEngineName,
       searchText,
       engineListVisible,
+      inputFocused,
     };
   },
   computed: {
@@ -176,9 +205,18 @@ export default {
         )[0] || this.searchEngineConfig[0]
       );
     },
+    isActive() {
+      return this.engineListVisible || this.inputFocused
+    },
   },
-  mounted() {
-    this.$refs.input.focus();
+  watch: {
+    isActive(isFocues) {
+      clearTimeout(this._activeTimer)
+      this._activeTimer = setTimeout(() => {
+        this.$emit(isFocues ? 'focus' : 'blur')
+      }, 100)
+
+    },
   },
   methods: {
     handleKeydown(e) {
@@ -188,15 +226,20 @@ export default {
     },
     search() {
       let searhKeyword = encodeURIComponent(this.searchText);
-      this.searchText = ''
+      this.searchText = '';
       window.open(this.selectedEngine.url.replace('[kw]', searhKeyword));
     },
     onClickoutside() {
-      this.engineListVisible = false
+      this.engineListVisible = false;
     },
     selectEngine(engine) {
-      this.selectedEngineName = engine.name
-      this.engineListVisible = false
+      this.$refs.input.focus();
+      this.selectedEngineName = engine.name;
+      this.engineListVisible = false;
+    },
+    toggleEngineList() {
+      this.$refs.input.focus();
+      this.engineListVisible = !this.engineListVisible
     },
   },
 };
