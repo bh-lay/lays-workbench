@@ -211,11 +211,7 @@ export default {
   },
   watch: {
     isActive(isFocues) {
-      clearTimeout(this._activeTimer)
-      this._activeTimer = setTimeout(() => {
-        this.$emit(isFocues ? 'focus' : 'blur')
-      }, 100)
-
+      this.$emit(isFocues ? 'focus' : 'blur')
     },
   },
   methods: {
@@ -228,6 +224,7 @@ export default {
       let searhKeyword = encodeURIComponent(this.searchText);
       this.searchText = '';
       window.open(this.selectedEngine.url.replace('[kw]', searhKeyword));
+      this.$refs.input.blur();
     },
     onClickoutside() {
       this.engineListVisible = false;

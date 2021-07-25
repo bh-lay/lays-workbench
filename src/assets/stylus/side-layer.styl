@@ -1,0 +1,17 @@
+.side-layer-enter-active
+  opacity 0
+  transform rotate3d(0, 1, 0, -20deg)
+  transform-origin top right
+  transition opacity .2s ease-out, transform .15s ease-out
+.side-layer-enter-to
+  opacity 1
+  transform rotate3d(1, 1, 0, 0)
+
+.side-layer-leave-active
+  transition opacity .15s ease-in, transform .1s ease-in
+  opacity 1
+  transform rotate3d(1, 1, 0, 0)
+  transform-origin top right
+.side-layer-leave-to
+  opacity 0
+  transform rotate3d(0, 1, 0, -20deg)

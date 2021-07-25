@@ -4,15 +4,16 @@ html, body
   height 100%
   margin 0
   padding 0
-  -webkit-touch-callout none /* iOS Safari */
-  -webkit-user-select none /* Chrome/Safari/Opera */
-  -khtml-user-select none /* Konqueror */
-  -moz-user-select none /* Firefox */
-  -ms-user-select none /* Internet Explorer/Edge */
-  user-select none /* Non-prefixed version, currently */
+  -webkit-touch-callout none
+  -webkit-user-select none
+  -khtml-user-select none
+  -moz-user-select none
+  -ms-user-select none
+  user-select none
   #app
     position relative
     height 100%
+    perspective 800px
 </style>
 <style lang="stylus" scoped>
 .frame
@@ -31,20 +32,22 @@ html, body
   <div class="frame">
     <search-entrance @focus="focused = true" @blur="focused = false" />
     <div class="pager">
-      <transition name="fade-slow">
+      <transition name="fade-fast">
         <quick-entry v-if="!focused" />
       </transition>
     </div>
   </div>
+  <settings />
 </template>
 
 <script>
 import Gallery from './components/gallery.vue';
 import SearchEntrance from './components/search-entrance.vue';
 import QuickEntry from './components/quick-entry.vue';
+import Settings from './components/settings.vue';
 
 export default {
-  components: { Gallery, SearchEntrance, QuickEntry },
+  components: { Gallery, SearchEntrance, QuickEntry, Settings },
   data() {
     return {
       focused: false,
