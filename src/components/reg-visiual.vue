@@ -55,7 +55,7 @@
   </transition>
   <transition name="fade-slow">
     <div v-if="visible" class="reg-close" @click="$emit('update:visible', false)">
-      <v-mdi name="mdi-close"></v-mdi>
+      <v-mdi name="mdi-close" />
     </div>
   </transition>
 </template>
