@@ -43,11 +43,13 @@
     z-index 20
     opacity 0
     transform translateX(-50%) scale(.9)
-    transition: .15s
+    visibility hidden
+    transition .1s .15s
   &:hover
     .icon
       box-shadow 2px 2px 8px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.3)
     .popover
+      visibility visible
       transform translateX(-50%) scale(1)
       opacity 1
 .reg-mask
