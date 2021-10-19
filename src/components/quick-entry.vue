@@ -33,18 +33,14 @@
     background rgba(0, 0, 0, .2)
   .popover
     position absolute
-    display flex
     bottom 110%
     left 50%
     width auto
-    padding 16px
-    border-radius 18px
-    background #eee
     z-index 20
     opacity 0
     transform translateX(-50%) scale(.9)
     visibility hidden
-    transition .1s .15s
+    transition .15s
   &:hover
     .icon
       box-shadow 2px 2px 8px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.3)
@@ -52,6 +48,7 @@
       visibility visible
       transform translateX(-50%) scale(1)
       opacity 1
+      transition .15s .3s ease-out
 .reg-mask
   position absolute
   width 100%
@@ -61,59 +58,13 @@
   z-index 100
   background: rgba(0, 0, 0, .5)
   backdrop-filter blur(2px)
-
-.key-button
-  position relative
-  width 55px
-  height 55px
-  border-radius 10px
-  background #000
-  line-height 55px
-  text-align center
-  font-size 30px
-  color #fff
-  & + .key-button
-    margin-left 10px
-&.mac-option
-  &:before
-    content 'alt'
-    position absolute
-    top 7px
-    left 7px
-    line-height 12px
-    font-size 12px
-  &:after
-    content 'option'
-    position absolute
-    left 7px
-    bottom 7px
-    line-height 16px
-    font-size 13px
-.mac-command
-  svg
-    position absolute
-    top 7px
-    right 7px
-    width 14px
-    height 14px
-  &:after
-    content 'option'
-    position absolute
-    left 7px
-    bottom 7px
-    line-height 16px
-    font-size 13px
 </style>
 
 <template>
   <div class="btn-list">
     <div class="item">
       <div class="popover">
-        <div class="key-button mac-option"></div>
-        <div class="key-button mac-command">
-          <v-mdi name="mdi-apple-keyboard-command" />
-        </div>
-        <div class="key-button">B</div>
+        <bookmark-shortcut />
       </div>
       <div class="icon" style="background: #4caf50">
         <v-mdi name="mdi-book" />
@@ -145,9 +96,10 @@
 <script>
 import { ref } from "vue";
 import RegVisual from './reg-visiual.vue'
+import BookmarkShortcut from './bookmark-shortcut.vue'
 
 export default {
-  components: { RegVisual },
+  components: { RegVisual, BookmarkShortcut },
   setup() {
     const regVisualVisible = ref(false)
     return {
