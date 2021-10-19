@@ -25,11 +25,20 @@
     font-size 12px
   &:hover .icon
     box-shadow 2px 2px 8px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.3)
+.reg-mask
+  position absolute
+  width 100%
+  height 100%
+  top 0
+  left 0
+  z-index 100
+  background: rgba(0, 0, 0, .5)
+  backdrop-filter blur(2px)
 </style>
 
 <template>
   <div class="btn-list">
-    <div class="item">
+    <div class="item" @click="regVisualVisible = true" >
       <div class="icon" style="background: #2196f3">
         <img src="../img/magic-m1.png" alt="" />
       </div>
@@ -53,22 +62,21 @@
       <div class="icon" style="background: #673ab7"></div>
       <div class="title"></div>
     </div>
+    <reg-visual v-model:visible="regVisualVisible" />
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
+import RegVisual from './reg-visiual.vue'
 
 export default {
+  components: { RegVisual },
   setup() {
-    const count = ref(0);
-    const inc = () => {
-      count.value++;
-    };
+    const regVisualVisible = ref(false)
 
     return {
-      count,
-      inc,
+      regVisualVisible,
     };
   },
 };

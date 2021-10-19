@@ -33,7 +33,7 @@ html, body
     <search-entrance @focus="focused = true" @blur="focused = false" />
     <div class="pager">
       <transition name="fade-fast">
-        <quick-entry v-if="!focused" />
+        <quick-entry v-show="!focused" />
       </transition>
     </div>
   </div>
