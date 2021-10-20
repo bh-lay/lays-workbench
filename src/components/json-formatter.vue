@@ -27,6 +27,7 @@
       padding 20px
       border none
       resize none
+      font-size 14px
       background #f6f6f6
       transition .15s
       &:focus
@@ -37,8 +38,13 @@
   flex-grow 1
   width 100px
   height 100%
-  padding 20px
+  padding 20px 20px 20px 30px
+  line-height: 1.2
+  font-size 14px
   overflow auto
+:global(.json-formatter-row .json-formatter-toggler)
+    position absolute
+    margin-left -15px
 </style>
 
 <template>
@@ -71,17 +77,29 @@ function parseJSON(str) {
 }
 export default {
   setup() {
-    const sourceJson = ref('')
+    const sourceJson = ref(`{
+  auth: "剧中人",
+  gender: "male",
+  website: "http://bh-lay.com",
+  hobbies: ["photography", "coding"]
+}`)
     return {
       sourceJson
     };
   },
   watch: {
     sourceJson() {
+      this.render()
+    },
+  },
+  mounted() {
+    this.render()
+  },
+  methods: {
+    render() {
       const formatter = new JSONFormatter(parseJSON(this.sourceJson))
       this.$refs.fomatter.innerHTML = ''
       this.$refs.fomatter.appendChild(formatter.render())
-      // console.log('sourceJson', )
     },
   },
 };

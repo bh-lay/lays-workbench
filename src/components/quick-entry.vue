@@ -78,7 +78,9 @@
       <div class="title">正则可视化</div>
     </div>
     <div class="item" @click="jsonFormatterVisible = true">
-      <div class="icon" style="background: #f44336"></div>
+      <div class="icon" style="background: #f44336">
+        <v-mdi name="mdi-code-json" />
+      </div>
       <div class="title">JSON 格式化</div>
     </div>
     <div class="item">
