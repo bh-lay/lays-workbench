@@ -180,7 +180,7 @@ export default {
       {
         name: 'npm',
         label: 'NPM',
-        placeholder: '搜一搜歪果仁的技术讨论',
+        placeholder: '别硬撸了，找个好用的轮子吧！',
         url: 'https://www.npmjs.com/search?q=[kw]',
         icon: 'https://static.npmjs.com/58a19602036db1daee0d7863c94673a4.png',
       },

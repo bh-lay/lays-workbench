@@ -1,13 +1,30 @@
 <style lang="stylus" scoped>
+.settings-mask
+  position fixed
+  width 100%
+  height 100%
+  top 0
+  left 0
+  z-index 10
+  background: rgba(0, 0, 0, .5)
+  backdrop-filter blur(2px)
 .settings-btn
   position absolute
-  top 20px
+  top 10px
   right 20px
   width 40px
   height 40px
+  line-height 40px
+  text-align center
   cursor pointer
-  z-index 15
-  &:hover
+  z-index 12
+  transition .2s ease-in-out
+  svg
+    height 20px
+    vertical-align text-bottom
+    fill #fff
+  &:hover,
+  &.active
     background #333
 .settings-panel
   position absolute
@@ -16,17 +33,20 @@
   width 500px
   height 100%
   background #fff
-  z-index 10
+  z-index 11
 </style>
 
 <template>
   <div
-    class="settings-btn"
+    :class="['settings-btn', settingVisible ? 'active' : '']"
     @mousedown.prevent
     @click="toggleVisible"
   >
-    设置 {{ settingVisible }}
+    <v-mdi name="mdi-tune" />
   </div>
+  <transition name="fade-slow">
+    <div v-if="settingVisible" class="settings-mask"></div>
+  </transition>
   <transition name="side-layer">
     <div
       class="settings-panel"

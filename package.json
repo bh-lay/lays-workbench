@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@mdi/js": "^6.3.95",
+    "json-formatter-js": "^2.3.4",
     "vue": "^3.0.4",
     "vue-mdijs": "^0.5.12"
   },

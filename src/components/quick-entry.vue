@@ -30,7 +30,7 @@
     text-align center
     font-size 12px
     color #fff
-    background rgba(0, 0, 0, .2)
+    text-shadow 1px 1px 1px rgba(0, 0, 0, .4), 1px 1px 4px rgba(0, 0, 0, .4)
   .popover
     position absolute
     bottom 110%
@@ -77,9 +77,9 @@
       </div>
       <div class="title">正则可视化</div>
     </div>
-    <div class="item">
+    <div class="item" @click="jsonFormatterVisible = true">
       <div class="icon" style="background: #f44336"></div>
-      <div class="title">PLEX</div>
+      <div class="title">JSON 格式化</div>
     </div>
     <div class="item">
       <div class="icon" style="background: #607d8b"></div>
@@ -92,6 +92,9 @@
     <modal v-model:visible="regVisualVisible" >
       <reg-visual />
     </modal>
+    <modal v-model:visible="jsonFormatterVisible" >
+      <json-formatter />
+    </modal>
   </div>
 </template>
 
@@ -99,13 +102,16 @@
 import { ref } from "vue";
 import RegVisual from './reg-visiual.vue'
 import BookmarkShortcut from './bookmark-shortcut.vue'
+import JsonFormatter from './json-formatter.vue'
 
 export default {
-  components: { RegVisual, BookmarkShortcut },
+  components: { RegVisual, BookmarkShortcut, JsonFormatter },
   setup() {
     const regVisualVisible = ref(false)
+    const jsonFormatterVisible = ref(false)
     return {
       regVisualVisible,
+      jsonFormatterVisible,
     };
   },
 };
