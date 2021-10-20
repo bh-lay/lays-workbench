@@ -89,7 +89,9 @@
       <div class="icon" style="background: #673ab7"></div>
       <div class="title"></div>
     </div>
-    <reg-visual v-model:visible="regVisualVisible" />
+    <modal v-model:visible="regVisualVisible" >
+      <reg-visual />
+    </modal>
   </div>
 </template>
 
