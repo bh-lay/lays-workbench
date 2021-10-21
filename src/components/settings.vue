@@ -18,11 +18,11 @@
   text-align center
   cursor pointer
   z-index 12
-  transition .2s ease-in-out
   svg
     height 20px
     vertical-align text-bottom
     fill #fff
+    transition .2s ease-in-out
   &:hover,
   &.active
     svg
