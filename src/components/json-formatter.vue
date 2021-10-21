@@ -70,10 +70,7 @@ import { ref } from 'vue';
 import JSONFormatter from 'json-formatter-js'
 function parseJSON(str) {
   try{
-    eval('window.jsonFormatterTemp=' + str)
-    const result = window.jsonFormatterTemp
-    delete window.jsonFormatterTemp
-    return result
+    return (new Function("", "return " + str))()
   } catch (e) {
     console.log('e', e)
     return str

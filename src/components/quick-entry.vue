@@ -1,7 +1,7 @@
 <style lang="stylus" scoped>
 .btn-list
   display flex
-  justify-content space-around
+  justify-content space-between
   padding-top 20px
 .item
   position relative
@@ -52,11 +52,13 @@
 @media screen and (max-width:600px)
   .btn-list
     flex-wrap wrap
+  .shortcut-item
+    display none
 </style>
 
 <template>
   <div class="btn-list">
-    <div class="item">
+    <div class="item shortcut-item">
       <div class="popover">
         <bookmark-shortcut />
       </div>
