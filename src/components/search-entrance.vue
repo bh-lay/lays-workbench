@@ -2,6 +2,7 @@
 .search-entrance
   position relative
   width 500px
+  max-width 90%
   perspective 800px
   z-index 10
 .search-input

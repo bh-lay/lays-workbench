@@ -2,46 +2,33 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Regulex：JavaScript Regular Expression Visualizer</title>
+<title>正则可视化</title>
 <style>
 body,html * {
 margin:0;
 padding:0;
 font-family:sans-serif;
 }
-body {
-background: #303030;
-}
 .code,.code * {
   font-family: "DejaVu Sans Mono",monospace;
 }
 h1 {
-font-size:3em;
-color:#40C0FF;
-margin:14px 0;
-padding:0 16px;
-padding-top:40px;
-padding-bottom: 20px;
-border-bottom:2px dashed grey;
-min-height:60px;
-}
-h1 em{
-color:#BBE0E0;
-font-size:small;
-padding-left:2em;
-font-style: normal;
-font-weight:normal;
-display:inline-block;
+  height: 40px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  line-height: 40px;
+  font-size: 18px;
+  color: #666;
 }
 #inputCt,#errorBox {
 margin:8px 16px;
 }
 #inputCt div.re {
-background:#EEE;
+background:#f8f8ff;
 font-size:1.2em;
 line-height: 1.4em;
 color:#333;
-border:1px solid black;
+border:1px solid #eee;
 padding:4px;
 font-weight: bold;
 word-break:break-all;
@@ -57,7 +44,7 @@ width:100%;
 color:#3030C0;
 padding:0 2px;
 border:none;
-background:#EEE;
+background:transparent;
 font-size:1.2em;
 line-height: 1.4em;
 height:1.4em;
@@ -72,7 +59,7 @@ display:table;
 width:100%;
 }
 #inputCt label {
-  color:white;
+  color:#333;
   cursor:pointer;
   display:inline-block;
 }
@@ -92,20 +79,20 @@ word-break:keep-all;
 display: none;
 overflow:auto;
 }
-#visualIt,#embedIt,#exportIt {
-font-size: 16px;
+button {
+font-size: 14px;
 line-height: 16px;
 display: inline-block;
 margin: 10px;
 margin-left:0;
-padding:12px;
+padding:8px;
 padding-bottom:10px;
-color:#EEF;
+color:#fff;
 border:none;
 cursor:pointer;
 background: #40B0EF;
-background-image: linear-gradient(to bottom, #40B0EF,#3060A0);
-border-radius: 12px;
+background-image: #0af;
+border-radius: 4px;
 text-decoration: none;
 }
 #visualIt:hover,#embedIt:hover,#exportIt:hover {
@@ -117,8 +104,8 @@ text-decoration: none;
 #graphCt {
 padding:4px;
 margin:0px 16px;
-border:1px solid black;
-background: #EEE;
+border:1px solid #eee;
+background:#f8f8ff;
 overflow: auto;
 cursor:move;
 -webkit-touch-callout: none;
@@ -132,20 +119,10 @@ user-select: none;
 display:block;
 margin:0 auto;
 }
-footer div.normal {
-text-align: center;
-border-top:1px solid grey;
-margin:1em auto;
-padding:10px;
-font-size:1.2em;
-}
 footer,footer a {
 color:#EEF;
 }
 
-footer div.embed {
-  display: none;
-}
 body.embed {
   background: #EEE;
 }
@@ -159,17 +136,7 @@ body.embed #inputCt,
 body.embed #github {
   display:none !important;
 }
-body.embed footer div.normal {
-  display:none;
-}
-body.embed footer div.embed {
-  display: block;
-}
-body.embed footer div.embed,body.embed div.footer a {
-  color:white;
-  font-size: 14px;
-}
-body.embed footer {
+body footer {
   display:block;
   width:auto;
   margin:0;
@@ -179,6 +146,8 @@ body.embed footer {
   position:fixed;
   right:0;
   bottom:0;
+  color:white;
+  font-size: 14px;;
 }
 body.embed{height:100%;}
 body.embed #graphCt {
@@ -220,7 +189,7 @@ function getParams() {
   return params;
 }
 </script>
-<h1>Regulex <em>JavaScript Regular Expression Visualizer.</em></h1>
+<h1>正则可视化</h1>
 <div id="inputCt">
     <div class="re code">
       <table>
@@ -234,12 +203,12 @@ function getParams() {
         </tr>
       </table>
     </div>
-    <button id="visualIt">Visualize</button>
-    <button id="exportIt">Export Image</button>
-    <button id="embedIt">Embed On My Site!</button>
-    <label><input type="checkbox" name="flag" value="i" />IgnoreCase</label>
-    <label><input type="checkbox" name="flag" value="m" />Multiline</label>
-    <label><input type="checkbox" name="flag" value="g" />GlobalMatch</label>
+    <button id="visualIt">可视化</button>
+    <button id="exportIt">导出图片</button>
+    <button id="embedIt">插入我的网站</button>
+    <label><input type="checkbox" name="flag" value="i" />忽略大小写</label>
+    <label><input type="checkbox" name="flag" value="m" />多行</label>
+    <label><input type="checkbox" name="flag" value="g" />全局匹配</label>
 </div>
 <p id="errorBox" class="code">Error Message</p>
 <div id="graphCt" class="code"></div>
@@ -553,14 +522,7 @@ function clearSelect() {
 
 
 <footer>
-  <div class="normal">Created by <a href="https://jex.im/" target="_blank">Jex</a>.</div>
-  <div class="embed" ><a id="embedFooterLink" href="https://jex.im/regulex/" target="_blank">By Regulex</a></div>
+  <div class="embed" ><a href="https://jex.im/regulex/" target="_blank">By Regulex</a></div>
 </footer>
-<script>
-if (params.embed || params.cmd==="export") {
-  var embedFooterLink = document.getElementById("embedFooterLink");
-  embedFooterLink.href = "https://jex.im/regulex/" + location.hash.replace(/\bembed=true\b/ig,"").replace(/\bcmd=export\b/ig,'');
-}
-</script>
 </body>
 </html>

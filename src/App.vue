@@ -41,7 +41,9 @@ html, body
     line-height 20px
     font-size 15px
     color rgba(255, 255, 255, .6)
-.pager
+.fixed-height-pager
+  width 500px
+  max-width 90%
   height 100px
 .footer-copyright
   position fixed
@@ -59,6 +61,25 @@ html, body
     text-decoration none
     &:hover
       text-decoration underline
+.mobile-warning
+  display none
+  margin-top 20px
+  padding 30px
+  background rgba(255, 255, 255, .2)
+  border-radius 4px
+  text-align center
+  .title
+    font-size 14px
+    color #fff
+  svg
+    width 120px
+    height 120px
+    fill #fff
+@media screen and (max-width:600px)
+  .mobile-warning
+    display block
+  .fixed-height-pager
+    height 300px
 </style>
 
 <template>
@@ -71,9 +92,15 @@ html, body
       </div>
     </transition>
     <search-entrance @focus="focused = true" @blur="focused = false" />
-    <div class="pager">
+    <div class="fixed-height-pager">
       <transition name="fade-fast">
         <quick-entry v-show="!focused" />
+      </transition>
+      <transition name="fade-fast">
+        <div class="mobile-warning" v-show="!focused">
+          <v-mdi name="mdi-laptop" />
+          <div class="title">使用PC，体验更好哦～</div>
+        </div>
       </transition>
     </div>
     <transition name="fade-fast">

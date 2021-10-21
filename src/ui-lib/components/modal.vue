@@ -38,6 +38,21 @@
   height: 80%
   background #fff
   z-index 101
+@media screen and (max-width:600px)
+  .modal-close
+    top 0
+    left auto
+    right 0
+    border none
+    svg
+      fill #333
+  .modal-mask
+    transition 0s !important
+  .modal-body
+    top 0
+    left 0
+    width 100%
+    height 100%
 </style>
 
 <template>

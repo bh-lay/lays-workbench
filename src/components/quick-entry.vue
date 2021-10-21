@@ -1,11 +1,11 @@
 <style lang="stylus" scoped>
 .btn-list
   display flex
-  justify-content center
+  justify-content space-around
   padding-top 20px
 .item
   position relative
-  width 100px
+  width 90px
   height 90px
   cursor pointer
   .icon
@@ -49,15 +49,9 @@
       transform translateX(-50%) scale(1)
       opacity 1
       transition .15s .3s ease-out
-.reg-mask
-  position absolute
-  width 100%
-  height 100%
-  top 0
-  left 0
-  z-index 100
-  background: rgba(0, 0, 0, .5)
-  backdrop-filter blur(2px)
+@media screen and (max-width:600px)
+  .btn-list
+    flex-wrap wrap
 </style>
 
 <template>
@@ -85,11 +79,7 @@
     </div>
     <div class="item">
       <div class="icon" style="background: #607d8b"></div>
-      <div class="title"></div>
-    </div>
-    <div class="item">
-      <div class="icon" style="background: #673ab7"></div>
-      <div class="title"></div>
+      <div class="title">开发中...</div>
     </div>
     <modal v-model:visible="regVisualVisible" >
       <reg-visual />

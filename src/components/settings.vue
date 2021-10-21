@@ -25,12 +25,14 @@
     fill #fff
   &:hover,
   &.active
-    background #333
+    svg
+      fill #333
 .settings-panel
   position absolute
   top 0
   right 0
   width 500px
+  max-width: 100%
   height 100%
   background #fff
   z-index 11

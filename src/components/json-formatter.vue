@@ -17,7 +17,7 @@
     .half
       position relative
       flex-grow 1
-      width 100px
+      width 100%
       height 100%
     textarea
       display block
@@ -36,7 +36,7 @@
 .json-formatter-content
   box-sizing border-box
   flex-grow 1
-  width 100px
+  width 100%
   height 100%
   padding 20px 20px 20px 30px
   line-height: 1.2
@@ -45,6 +45,10 @@
 :global(.json-formatter-row .json-formatter-toggler)
     position absolute
     margin-left -15px
+
+@media screen and (max-width:600px)
+  .json-formatter .content
+    flex-direction column
 </style>
 
 <template>
