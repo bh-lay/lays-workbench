@@ -168,7 +168,7 @@ export default {
         name: 'stackoverflow',
         label: 'stackoverflow',
         placeholder: '搜一搜歪果仁的技术讨论！',
-        url: 'https://www.baidu.com/s?ie=UTF-8&wd=[kw]',
+        url: 'https://stackoverflow.com/search?q=[kw]',
         icon: '/favicon/stackoverflow.png',
       },
       {
