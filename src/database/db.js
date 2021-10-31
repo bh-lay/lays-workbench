@@ -1,3 +1,4 @@
+import { bookmarkEntityInit } from './entity/bookmark'
 
 function getIDBObject() {
   return window.indexedDB ||
@@ -29,7 +30,16 @@ export function getIDBRequest() {
     }
     request.onupgradeneeded = function(event) {
       const db = request.result
-      resolve(db)
+
+      // db = event.target.result;
+      const transaction = event.target.transaction;
+
+      transaction.oncomplete = function(event) {    
+        resolve(db)
+      }
+
+      bookmarkEntityInit(db)
+      
     }
   })
 }
