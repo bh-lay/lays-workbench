@@ -1,18 +1,20 @@
 <style lang="stylus" scoped>
 .btn-list
-  display flex
-  justify-content space-between
+  display: grid;
+  grid-template-columns repeat(auto-fill, var(--grid-size))
+  grid-auto-flow: dense;
+  justify-content center
   padding-top 20px
 .item
   position relative
-  width 90px
-  height 90px
+  grid-area span 1 / span 1 / auto / auto
+  padding-bottom 20px
   cursor pointer
   .icon
-    width 50px
-    height 50px
-    margin 0 auto 10px
-    border-radius 8px
+    width calc(var(--grid-size) - var(--grid-gap))
+    height calc(var(--grid-size) - var(--grid-gap))
+    margin 0 auto
+    border-radius var(--icon-radius)
     background #333
     line-height 50px
     text-align center
@@ -49,6 +51,12 @@
       transform translateX(-50%) scale(1)
       opacity 1
       transition .15s .3s ease-out
+.item-big
+  grid-area span 2 / span 4 / auto / auto
+  .icon
+    width calc(var(--grid-size) * 4 - var(--grid-gap))
+    height calc(var(--grid-size) * 2 - var(--grid-gap))
+
 @media screen and (max-width:600px)
   .btn-list
     flex-wrap wrap
@@ -67,7 +75,7 @@
       </div>
       <div class="title">书签</div>
     </div>
-    <div class="item" @click="regVisualVisible = true" >
+    <div class="item item-big" @click="regVisualVisible = true" >
       <div class="icon" style="background: #2196f3">
         <v-mdi name="mdi-regex" />
       </div>
@@ -75,6 +83,42 @@
     </div>
     <div class="item" @click="jsonFormatterVisible = true">
       <div class="icon" style="background: #f44336">
+        <v-mdi name="mdi-code-json" />
+      </div>
+      <div class="title">JSON 格式化</div>
+    </div>
+    <div class="item" @click="regVisualVisible = true" >
+      <div class="icon" style="background: #2196f3">
+        <v-mdi name="mdi-regex" />
+      </div>
+      <div class="title">正则可视化</div>
+    </div>
+    <div class="item" @click="jsonFormatterVisible = true">
+      <div class="icon" style="background: #f4a336">
+        <v-mdi name="mdi-code-json" />
+      </div>
+      <div class="title">JSON 格式化</div>
+    </div>
+    <div class="item" @click="regVisualVisible = true" >
+      <div class="icon" style="background: #a196f3">
+        <v-mdi name="mdi-regex" />
+      </div>
+      <div class="title">正则可视化</div>
+    </div>
+    <div class="item" @click="jsonFormatterVisible = true">
+      <div class="icon" style="background: #244336">
+        <v-mdi name="mdi-code-json" />
+      </div>
+      <div class="title">JSON 格式化</div>
+    </div>
+    <div class="item" @click="regVisualVisible = true" >
+      <div class="icon" style="background: #219613">
+        <v-mdi name="mdi-regex" />
+      </div>
+      <div class="title">正则可视化</div>
+    </div>
+    <div class="item" @click="jsonFormatterVisible = true">
+      <div class="icon" style="background: #f443a6">
         <v-mdi name="mdi-code-json" />
       </div>
       <div class="title">JSON 格式化</div>

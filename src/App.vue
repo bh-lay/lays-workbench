@@ -1,4 +1,8 @@
 <style lang="stylus">
+html
+  --grid-size 84px
+  --grid-gap 34px
+  --icon-radius 8px
 html, body
   position relative
   height 100%
@@ -42,8 +46,8 @@ html, body
     font-size 15px
     color rgba(255, 255, 255, .6)
 .fixed-height-pager
-  width 500px
-  max-width 90%
+  width 90%
+  max-width 800px
   height 100px
 .footer-copyright
   position fixed
