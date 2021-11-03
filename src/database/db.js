@@ -1,4 +1,4 @@
-import { bookmarkEntityInit } from './entity/bookmark'
+import { bookmarkEntityInit } from './entity/bookmark.ts'
 
 function getIDBObject() {
   return window.indexedDB ||

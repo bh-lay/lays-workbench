@@ -1,5 +1,5 @@
 import { getIDBRequest } from '../db.js'
-import { Bookmark } from '../entity/bookmark'
+import { Bookmark } from '../entity/bookmark.ts'
 
 function insertMethod(db, bookmarkItem) {
   return new Promise((resolve, reject) => {
