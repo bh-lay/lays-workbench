@@ -1,10 +1,11 @@
+import { App as Application }  from 'vue'
 
 export default {
-  install(app) {
+  install(app: Application) {
     app.directive('clickoutside', {
       mounted (el, binding) {
         const callback = typeof binding.value === 'function' ? binding.value : null
-        const bodyClickListener = (clickEvent) => {
+        const bodyClickListener = (clickEvent: Event) => {
           if (!el.contains(clickEvent.target)) {
               setTimeout(callback, 30)
           }

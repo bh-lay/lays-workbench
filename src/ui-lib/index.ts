@@ -1,10 +1,11 @@
-import Components from './components/index.js';
-import clickOutSide from "./directives/click-out-side";
+import { App as Application }  from 'vue'
+import Components from './components/index.ts';
+import clickOutSide from "./directives/click-out-side.ts";
 import VueMdijs from 'vue-mdijs';
 import { mdiClose, mdiRegex, mdiBook, mdiAppleKeyboardCommand, mdiHail, mdiTune, mdiCodeJson, mdiLaptop } from '@mdi/js';
 
 export default {
-  install(app) {
+  install(app: Application) {
     app.use(Components)
     app.use(clickOutSide)
     // mdi 图标

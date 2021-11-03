@@ -1,5 +1,6 @@
 import { bookmarkEntityInit } from './entity/bookmark.ts'
 
+
 function getIDBObject() {
   return window.indexedDB ||
     window.mozIndexedDB ||
@@ -17,12 +18,12 @@ export function getIDBRequest() {
     var request = indexedDB.open('workbench', 1);
     request.onerror = function(event) {
       let error = new Error('建立数据库连接失败！')
-      error.__detail = event
+      // error.__detail = event
       reject(error)
     }
     request.onerror = function(event) {
       let error = new Error('建立数据库连接失败！')
-      error.__detail = event
+      // error.__detail = event
       reject(error)
     }
     request.onsuccess = function() {

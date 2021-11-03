@@ -1,4 +1,4 @@
-import { getIDBRequest } from '../db.js'
+import { getIDBRequest } from '../db.ts'
 import { Bookmark } from '../entity/bookmark.ts'
 
 function insertMethod(db, bookmarkItem) {
@@ -16,7 +16,7 @@ function insertMethod(db, bookmarkItem) {
     request.onerror = function (event) {
       // 数据写入失败
       let error = new Error('数据写入失败')
-      error.__detail = event
+      // error.__detail = event
       reject(error)
     }
   })
@@ -37,7 +37,7 @@ function updateMethod(db, bookmarkItem) {
     request.onerror = function (event) {
       // 数据写入失败
       let error = new Error('数据写入失败')
-      error.__detail = event
+      // error.__detail = event
       reject(error)
     }
   })
@@ -56,7 +56,7 @@ function getMethod(db, bookmarkId) {
         resolve(bookmark)
       } else {
         let error = new Error('数据读取失败')
-        error.__detail = event
+        // error.__detail = event
         reject(error)
       }
       
@@ -64,7 +64,7 @@ function getMethod(db, bookmarkId) {
     request.onerror = function (event) {
       // 数据写入失败
       let error = new Error('数据写入失败')
-      error.__detail = event
+      // error.__detail = event
       reject(error)
     }
   })
@@ -82,7 +82,7 @@ function removeMethod(db, bookmarkId) {
         resolve(bookmark)
       } else {
         let error = new Error('数据读取失败')
-        error.__detail = event
+        // error.__detail = event
         reject(error)
       }
       
@@ -90,7 +90,7 @@ function removeMethod(db, bookmarkId) {
     request.onerror = function (event) {
       // 数据写入失败
       let error = new Error('数据写入失败')
-      error.__detail = event
+      // error.__detail = event
       reject(error)
     }
   })
@@ -136,9 +136,9 @@ export function updateBookmarkService(bookmarkItem) {
     return updateMethod(db, bookmarkItem)
   })
 }
-export function removeBookmarkService() {
+export function removeBookmarkService(bookmarkId) {
   return getIDBRequest().then(db => {
-    return removeMethod(db, bookmarkItem)
+    return removeMethod(db, bookmarkId)
   })
 }
 
