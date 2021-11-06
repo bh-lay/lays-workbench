@@ -35,7 +35,7 @@ export function getIDBRequest() {
       // db = event.target.result;
       const transaction = event.target.transaction;
 
-      transaction.oncomplete = function(event) {    
+      transaction.oncomplete = function() {    
         resolve(db)
       }
       // 此处处理数据库初始化、升级逻辑

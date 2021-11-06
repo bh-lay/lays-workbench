@@ -1,4 +1,4 @@
-export function bookmarkEntityInit (db) {
+export function bookmarkEntityInit (db: IDBDatabase) {
   if (db.objectStoreNames.contains('bookmark')) {
     return
   }
@@ -40,19 +40,19 @@ function generateID() {
  * Bookmark 书签类
  */
 export class Bookmark {
-  id: string
+  id!: string
   // 收藏名称
-  name: string
+  name: string = '未命名'
   // 类型
-  type: BookmarkType
-  size: BookmarkSize
-  undercoat: string
-  value: string
-  icon: BookmarkIcon
-  constructor(object) {
+  type: BookmarkType = BookmarkType.Link
+  size: BookmarkSize = BookmarkSize.small
+  undercoat: string = '#ffaa00'
+  value: string = 'http://bh-lay.com'
+  icon: BookmarkIcon = 'text:X'
+  constructor(object: any) {
     this.fill(object)
   }
-  fill(object) {
+  fill(object:any) {
     if (typeof object !== 'object') {
       return
     }

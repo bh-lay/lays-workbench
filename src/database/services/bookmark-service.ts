@@ -1,7 +1,7 @@
 import { getIDBRequest } from '../db.ts'
 import { Bookmark } from '../entity/bookmark.ts'
 
-function insertMethod(db, bookmarkItem) {
+function insertMethod(db: IDBDatabase, bookmarkItem: any) {
   return new Promise((resolve, reject) => {
     var bookmark = new Bookmark(bookmarkItem)
     var request = db.transaction(['bookmark'], 'readwrite')
@@ -22,7 +22,7 @@ function insertMethod(db, bookmarkItem) {
   })
 }
 
-function updateMethod(db, bookmarkItem) {
+function updateMethod(db: IDBDatabase, bookmarkItem: any) {
   return new Promise((resolve, reject) => {
     var bookmark = new Bookmark(bookmarkItem)
     var request = db.transaction(['bookmark'], 'readwrite')
@@ -43,13 +43,13 @@ function updateMethod(db, bookmarkItem) {
   })
 }
 
-function getMethod(db, bookmarkId) {
+function getMethod(db: IDBDatabase, bookmarkId: any) {
   return new Promise((resolve, reject) => {
     var transaction = db.transaction(['bookmark']);
     var objectStore = transaction.objectStore('bookmark');
     var request = objectStore.get(bookmarkId);
   
-    request.onsuccess = function (event) {
+    request.onsuccess = function () {
       if (request.result) {
         var bookmark = new Bookmark(request.result)
         // 数据读取成功
@@ -69,7 +69,7 @@ function getMethod(db, bookmarkId) {
     }
   })
 }
-function removeMethod(db, bookmarkId) {
+function removeMethod(db: IDBDatabase, bookmarkId: string) {
   return new Promise((resolve, reject) => {
     var transaction = db.transaction(['bookmark']);
     var objectStore = transaction.objectStore('bookmark');
@@ -96,16 +96,17 @@ function removeMethod(db, bookmarkId) {
   })
 }
 
-function list(db) {
+function list(db: IDBDatabase) {
   return new Promise((resolve, reject) => {
     const objectStore = db.transaction('bookmark').objectStore('bookmark');
     const request = objectStore.openCursor()
     
-    const bookmarkList = []
+    const bookmarkList: Bookmark[] = []
     request.onsuccess = function (event) {
-      var cursor = event.target.result;
+      var cursor: any = event.target.result;
       if (cursor) {
-        bookmarkList.push(new Bookmark(cursor.value))
+        const value: any = cursor.value
+        bookmarkList.push(new Bookmark(value))
         cursor.continue();
       } else {
         resolve(bookmarkList)
@@ -115,35 +116,35 @@ function list(db) {
     request.onerror = function (event) {
       // 数据写入失败
       let error = new Error('数据读取失败')
-      error.__detail = event
+      // error.__detail = event
       reject(error)
     }
   })
 }
-export function insertBookmarkService(bookmarkItem) {
-  return getIDBRequest().then(db => {
+export function insertBookmarkService(bookmarkItem: any) {
+  return getIDBRequest().then((db: IDBDatabase) => {
     return insertMethod(db, bookmarkItem)
   })
 }
-export function getBookmarkService(bookmarkId) {
-  return getIDBRequest().then(db => {
+export function getBookmarkService(bookmarkId: string) {
+  return getIDBRequest().then((db: IDBDatabase) => {
     return getMethod(db, bookmarkId)
   })
 }
 
-export function updateBookmarkService(bookmarkItem) {
-  return getIDBRequest().then(db => {
+export function updateBookmarkService(bookmarkItem: any) {
+  return getIDBRequest().then((db: IDBDatabase) => {
     return updateMethod(db, bookmarkItem)
   })
 }
-export function removeBookmarkService(bookmarkId) {
-  return getIDBRequest().then(db => {
+export function removeBookmarkService(bookmarkId: string) {
+  return getIDBRequest().then((db: IDBDatabase) => {
     return removeMethod(db, bookmarkId)
   })
 }
 
 export function listBookmarkService() {
-  return getIDBRequest().then(db => {
+  return getIDBRequest().then((db: IDBDatabase) => {
     return list(db)
   })
 }
