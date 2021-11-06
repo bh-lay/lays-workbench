@@ -51,7 +51,12 @@
       transform translateX(-50%) scale(1)
       opacity 1
       transition .15s .3s ease-out
-.item-big
+.item-size-medium
+  grid-area span 2 / span 2 / auto / auto
+  .icon
+    width calc(var(--grid-size) * 2 - var(--grid-gap))
+    height calc(var(--grid-size) * 2 - var(--grid-gap))
+.item-size-large
   grid-area span 2 / span 4 / auto / auto
   .icon
     width calc(var(--grid-size) * 4 - var(--grid-gap))
@@ -66,6 +71,21 @@
 
 <template>
   <div class="btn-list">
+    <div :class="['item', 'item-size-' + BookmarkSize[bookmarkItem.size]]" v-for="bookmarkItem in bookmarkList" :key="bookmarkItem.id">
+      <div class="icon" :style="{
+        background: bookmarkItem.undercoat
+      }">
+        <template v-if="bookmarkItem.type === BookmarkType.link">
+          <v-mdi name="mdi-book" />
+        </template>
+        <template v-if="bookmarkItem.type === BookmarkType.widgets">
+          <reg-visual v-if="bookmarkItem.value === 'reg-visual'" />
+          <json-formatter v-else-if="bookmarkItem.value === 'json-formatter'" />
+          <span v-else>unknown {{ bookmarkItem.value }} widgets type</span>
+        </template>
+      </div>
+      <div class="title">{{ bookmarkItem.name }}</div>
+    </div>
     <div class="item shortcut-item">
       <div class="popover">
         <bookmark-shortcut />
@@ -75,82 +95,39 @@
       </div>
       <div class="title">书签</div>
     </div>
-    <div class="item item-big" @click="regVisualVisible = true" >
-      <div class="icon" style="background: #2196f3">
-        <v-mdi name="mdi-regex" />
-      </div>
-      <div class="title">正则可视化</div>
-    </div>
-    <div class="item" @click="jsonFormatterVisible = true">
-      <div class="icon" style="background: #f44336">
-        <v-mdi name="mdi-code-json" />
-      </div>
-      <div class="title">JSON 格式化</div>
-    </div>
-    <div class="item" @click="regVisualVisible = true" >
-      <div class="icon" style="background: #2196f3">
-        <v-mdi name="mdi-regex" />
-      </div>
-      <div class="title">正则可视化</div>
-    </div>
-    <div class="item" @click="jsonFormatterVisible = true">
-      <div class="icon" style="background: #f4a336">
-        <v-mdi name="mdi-code-json" />
-      </div>
-      <div class="title">JSON 格式化</div>
-    </div>
-    <div class="item" @click="regVisualVisible = true" >
-      <div class="icon" style="background: #a196f3">
-        <v-mdi name="mdi-regex" />
-      </div>
-      <div class="title">正则可视化</div>
-    </div>
-    <div class="item" @click="jsonFormatterVisible = true">
-      <div class="icon" style="background: #244336">
-        <v-mdi name="mdi-code-json" />
-      </div>
-      <div class="title">JSON 格式化</div>
-    </div>
-    <div class="item" @click="regVisualVisible = true" >
-      <div class="icon" style="background: #219613">
-        <v-mdi name="mdi-regex" />
-      </div>
-      <div class="title">正则可视化</div>
-    </div>
-    <div class="item" @click="jsonFormatterVisible = true">
-      <div class="icon" style="background: #f443a6">
-        <v-mdi name="mdi-code-json" />
-      </div>
-      <div class="title">JSON 格式化</div>
-    </div>
-    <div class="item">
-      <div class="icon" style="background: #607d8b"></div>
-      <div class="title">开发中...</div>
-    </div>
-    <modal v-model:visible="regVisualVisible" >
-      <reg-visual />
-    </modal>
-    <modal v-model:visible="jsonFormatterVisible" >
-      <json-formatter />
-    </modal>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
-import RegVisual from './reg-visiual.vue'
 import BookmarkShortcut from './bookmark-shortcut.vue'
-import JsonFormatter from './json-formatter.vue'
+import { listBookmarkService } from '../database/services/bookmark-service.ts'
+import { BookmarkType, BookmarkSize } from '../database/entity/bookmark.ts'
+import RegVisual from './widgets/reg-visual.vue'
+import JsonFormatter from './widgets/json-formatter/index.vue'
 
 export default {
-  components: { RegVisual, BookmarkShortcut, JsonFormatter },
-  setup() {
-    const regVisualVisible = ref(false)
-    const jsonFormatterVisible = ref(false)
+  components: { RegVisual, JsonFormatter, BookmarkShortcut },
+  data() {
     return {
-      regVisualVisible,
-      jsonFormatterVisible,
+      bookmarkList: []
+    }
+  },
+  setup() {
+    return {
+      BookmarkType,
+      BookmarkSize,
     };
+  },
+  mounted() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      listBookmarkService().then(list => {
+        console.log('list', list)
+        this.bookmarkList = list
+      })
+    },
   },
 };
 </script>

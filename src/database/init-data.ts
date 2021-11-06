@@ -3,19 +3,35 @@ import { BookmarkType, BookmarkSize } from './entity/bookmark.ts'
 
 const bookmarkDefaultList = [
   {
-    name: '正则可视化',
-    type: BookmarkType.Dialog,
+    name: 'Github',
+    type: BookmarkType.link,
     size: BookmarkSize.small,
+    undercoat: '#222',
+    value: 'https://github.com/',
+    icon: 'Text:G'
+  },
+  {
+    name: 'stackoverflow',
+    type: BookmarkType.link,
+    size: BookmarkSize.small,
+    undercoat: '#444',
+    value: 'https://stackoverflow.com/',
+    icon: 'Text:G'
+  },
+  {
+    name: '正则可视化',
+    type: BookmarkType.widgets,
+    size: BookmarkSize.large,
     undercoat: '#2196f3',
-    value: 'regVisual',
+    value: 'reg-visual',
     icon: 'mdi:regex'
   },
   {
     name: 'JSON 格式化',
-    type: BookmarkType.Dialog,
-    size: BookmarkSize.small,
+    type: BookmarkType.widgets,
+    size: BookmarkSize.medium,
     undercoat: '#f44336',
-    value: 'jsonFormatter',
+    value: 'json-formatter',
     icon: 'mdi:code-json'
   }
 ]

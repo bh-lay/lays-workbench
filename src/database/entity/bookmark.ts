@@ -18,10 +18,10 @@ export function bookmarkEntityInit (db: IDBDatabase) {
 
 // 书签类型
 export enum BookmarkType {
-  Link = 1,
-  Dialog = 2,
-  Widgits = 3,
-  Folder = 4,
+  link = 1,
+  dialog = 2,
+  widgets = 3,
+  folder = 4,
 }
 // 书签尺寸
 export enum BookmarkSize {
@@ -36,7 +36,8 @@ type BookmarkIconText = `${'text:'}${string}`
 export type BookmarkIcon = BookmarkIconCrab | BookmarkIconMdi | BookmarkIconText
 
 function generateID() {
-  return new Date().getTime().toString(24)
+  let randomNum = Math.floor(new Date().getTime() * 100 + Math.random() * 100)
+  return randomNum.toString(24)
 }
 /**
  * Bookmark 书签类
@@ -46,7 +47,7 @@ export class Bookmark {
   // 收藏名称
   name: string = '未命名'
   // 类型
-  type: BookmarkType = BookmarkType.Link
+  type: BookmarkType = BookmarkType.link
   size: BookmarkSize = BookmarkSize.small
   undercoat: string = '#ffaa00'
   value: string = 'http://bh-lay.com'
@@ -60,7 +61,7 @@ export class Bookmark {
     }
     this.id = object.id || generateID()
     this.name = object.name || ''
-    this.type = object.type || BookmarkType.Link
+    this.type = object.type || BookmarkType.link
     this.size = object.size || BookmarkSize.small
     this.undercoat = object.undercoat || ''
     this.value = object.value || ''
