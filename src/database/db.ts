@@ -1,5 +1,5 @@
 import { bookmarkEntityInit } from './entity/bookmark.ts'
-
+import initData from './init-data.ts'
 
 function getIDBObject() {
   return window.indexedDB ||
@@ -36,7 +36,9 @@ export function getIDBRequest() {
       const transaction = event.target.transaction;
 
       transaction.oncomplete = function() {    
-        resolve(db)
+        initData(db).catch(() => {}).then(() => {
+          resolve(db)
+        })
       }
       // 此处处理数据库初始化、升级逻辑
       bookmarkEntityInit(db)
