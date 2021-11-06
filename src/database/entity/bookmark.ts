@@ -1,3 +1,4 @@
+
 export function bookmarkEntityInit (db: IDBDatabase) {
   if (db.objectStoreNames.contains('bookmark')) {
     return
@@ -19,7 +20,8 @@ export function bookmarkEntityInit (db: IDBDatabase) {
 export enum BookmarkType {
   Link = 1,
   Dialog = 2,
-  Widgits = 3
+  Widgits = 3,
+  Folder = 4,
 }
 // 书签尺寸
 export enum BookmarkSize {

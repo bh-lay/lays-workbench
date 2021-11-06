@@ -121,7 +121,10 @@ function list(db: IDBDatabase) {
     }
   })
 }
-export function insertBookmarkService(bookmarkItem: any) {
+export function insertBookmarkService(bookmarkItem: any, db?: IDBDatabase) {
+  if (db) {
+    return insertMethod(db, bookmarkItem)
+  }
   return getIDBRequest().then((db: IDBDatabase) => {
     return insertMethod(db, bookmarkItem)
   })
