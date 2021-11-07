@@ -78,7 +78,8 @@
           <reg-visual v-if="bookmarkItem.value === 'reg-visual'" />
           <json-formatter v-else-if="bookmarkItem.value === 'json-formatter'" />
           <native-bookmark v-else-if="bookmarkItem.value === 'native-bookmark'" />
-          <span v-else>unknown {{ bookmarkItem.value }} widgets type</span>
+          <img-to-base v-else-if="bookmarkItem.value === 'img-to-base'" />
+          <span v-else>unknown widgets type<br/>{{ bookmarkItem.name }} <small>{{ bookmarkItem.value }}</small></span>
         </template>
       </div>
       <div class="title">{{ bookmarkItem.name }}</div>
@@ -94,9 +95,10 @@ import BookmarkIcon from './bookmark-icon.vue'
 import RegVisual from './widgets/reg-visual.vue'
 import JsonFormatter from './widgets/json-formatter/index.vue'
 import NativeBookmark from './widgets/native-bookmark.vue'
+import ImgToBase from './widgets/img-to-base.vue'
 
 export default {
-  components: { RegVisual, JsonFormatter, NativeBookmark, BookmarkIcon },
+  components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon },
   setup() {
     let bookmarkList = ref([])
     return {

@@ -10,6 +10,13 @@ const bookmarkDefaultList = [
     value: 'reg-visual',
   },
   {
+    name: '图片base64',
+    type: BookmarkType.widgets,
+    size: BookmarkSize.large,
+    undercoat: '#4caf50',
+    value: 'img-to-base',
+  },
+  {
     name: 'JSON 格式化',
     type: BookmarkType.widgets,
     size: BookmarkSize.medium,

@@ -47,7 +47,7 @@ html, body
     color rgba(255, 255, 255, .6)
 .fixed-height-pager
   width 90%
-  max-width 800px
+  max-width 1020px
   height 100px
 .footer-copyright
   position fixed

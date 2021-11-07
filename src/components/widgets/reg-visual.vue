@@ -1,10 +1,12 @@
 <style lang="stylus" scoped>
 .reg-visual-widgets
   background linear-gradient(180deg, #20b7f3, transparent, transparent)
+  text-align center
   .title
     padding-top 18px
     line-height 26px
     letter-spacing 2px
+    font-weight bold
     font-size 22px
     color #fff
   .desc
@@ -23,7 +25,7 @@
   button
     box-sizing border-box
     border none
-    height: 30px
+    height 30px
     padding 0 15px
     line-height 30px
     font-size 12px
