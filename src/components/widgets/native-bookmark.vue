@@ -7,6 +7,7 @@
   position relative
   width 55px
   height 48px
+  flex-grow 1
   border-radius 8px
   background #000
   line-height 48px
@@ -67,10 +68,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import BookmarkShortcut from '../bookmark-shortcut.vue'
 export default {
-  components: { BookmarkShortcut },
   setup() {
     var isMac = /macintosh|mac os x/i.test(navigator.userAgent)
     return {
