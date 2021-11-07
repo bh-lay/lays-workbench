@@ -19,11 +19,6 @@
     text-align center
     overflow hidden
     transition 0.15s
-    svg
-      vertical-align text-bottom
-      fill #fff
-    img
-      width 100%
   .title
     height 16px
     padding-top 4px
@@ -89,15 +84,6 @@
         </template>
       </div>
       <div class="title">{{ bookmarkItem.name }}</div>
-    </div>
-    <div class="item shortcut-item">
-      <div class="popover">
-        <bookmark-shortcut />
-      </div>
-      <div class="icon" style="background: #4caf50">
-        <v-mdi name="mdi-book" />
-      </div>
-      <div class="title">书签</div>
     </div>
   </div>
 </template>
