@@ -15,8 +15,6 @@
     margin 0 auto
     border-radius var(--icon-radius)
     background #333
-    line-height 50px
-    text-align center
     overflow hidden
     transition 0.15s
   .title

@@ -1,5 +1,7 @@
 <style lang="stylus" scoped>
 .bookmark-icon
+  line-height 50px
+  text-align center
   svg
     vertical-align text-bottom
     fill #fff
