@@ -1,16 +1,15 @@
 <style lang="stylus" scoped>
 .bookmark-wrapper
   display flex
-  padding 8px
-  border-radius 14px
-  background #eee
+  justify-content space-between
+  padding 1px
 .key-button
   position relative
   width 55px
-  height 55px
-  border-radius 10px
+  height 48px
+  border-radius 8px
   background #000
-  line-height 55px
+  line-height 48px
   text-align center
   font-size 24px
   color #fff
@@ -68,10 +67,10 @@
 </template>
 
 <script>
-import RegVisual from './reg-visiual.vue'
-
+import { ref } from "vue";
+import BookmarkShortcut from '../bookmark-shortcut.vue'
 export default {
-  components: { RegVisual },
+  components: { BookmarkShortcut },
   setup() {
     var isMac = /macintosh|mac os x/i.test(navigator.userAgent)
     return {
