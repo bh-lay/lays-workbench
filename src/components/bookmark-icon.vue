@@ -2,9 +2,13 @@
 .bookmark-icon
   line-height 50px
   text-align center
+  cursor pointer
+  transition .2s
   svg
     vertical-align text-bottom
     fill #fff
+  &:hover
+    background rgba(0, 0, 0, .2)
 </style>
 
 <template>

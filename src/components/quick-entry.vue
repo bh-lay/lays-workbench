@@ -72,7 +72,7 @@
         background: bookmarkItem.undercoat
       }">
         <template v-if="bookmarkItem.type === BookmarkType.link">
-          <bookmark-icon :icon="bookmarkItem.icon" />
+          <bookmark-icon :icon="bookmarkItem.icon" @click="openItem(bookmarkItem)" />
         </template>
         <template v-if="bookmarkItem.type === BookmarkType.widgets">
           <reg-visual v-if="bookmarkItem.value === 'reg-visual'" />
@@ -116,6 +116,9 @@ export default {
         console.log('list', list)
         this.bookmarkList = list
       })
+    },
+    openItem(bookmarkItem) {
+      window.open(bookmarkItem.value, '_blank')
     },
   },
 };
