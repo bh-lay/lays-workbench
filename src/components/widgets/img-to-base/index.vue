@@ -78,6 +78,7 @@
 
 <script>
 import { ref } from "vue";
+import { imgToBase64 } from './image-base64.ts'
 export default {
   setup() {
     const regVisualVisible = ref(false)
@@ -135,6 +136,11 @@ export default {
     },
     handleSelectFile(file) {
       console.log('file', file)
+      imgToBase64(file)
+        .then(base64 => {
+          console.log('base64', base64)
+        })
+        .catch(() => {})
     },
   },
 };

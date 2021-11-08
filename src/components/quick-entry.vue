@@ -95,7 +95,7 @@ import BookmarkIcon from './bookmark-icon.vue'
 import RegVisual from './widgets/reg-visual.vue'
 import JsonFormatter from './widgets/json-formatter/index.vue'
 import NativeBookmark from './widgets/native-bookmark.vue'
-import ImgToBase from './widgets/img-to-base.vue'
+import ImgToBase from './widgets/img-to-base/index.vue'
 
 export default {
   components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon },
