@@ -72,40 +72,29 @@
       @change="handleInputChange"
     />
   </div>
-  <modal v-model:visible="regVisualVisible" >
+  <modal
+    v-model:visible="modalVisible"
+    @after-close="afterModalClose"
+  >
+    <main-function :base64-str="base64Str" />
   </modal>
 </template>
 
 <script>
 import { ref } from "vue";
 import { imgToBase64 } from './image-base64.ts'
+import MainFunction from './main.vue'
 export default {
+  components: { MainFunction },
   setup() {
-    const regVisualVisible = ref(false)
-    const quickInput = ref('')
-    const iframeSrc = ref('')
+    const modalVisible = ref(false)
     const isDragOver = ref(false)
-    function showRegVisual() {
-      let quickInputValue = quickInput.value
-      let queryStr = ''
-      if (quickInputValue && quickInputValue.length) {
-        quickInputValue = quickInputValue.trim()
-        if (/^\/.+\/$/.test(quickInputValue)) {
-          quickInputValue = quickInputValue.replace(/^\/|\/$/g, '')
-        }
-        
-        queryStr = `#!re=${encodeURIComponent(quickInputValue)}`
-      }
-      iframeSrc.value = '/regulex-legacy/' + queryStr
-      regVisualVisible.value = true
-      quickInput.value = ''
-    }
+    const base64Str = ref('')
+    
     return {
-      regVisualVisible,
-      quickInput,
-      showRegVisual,
-      iframeSrc,
+      modalVisible,
       isDragOver,
+      base64Str,
     };
   },
   mounted() {
@@ -136,12 +125,21 @@ export default {
     },
     handleSelectFile(file) {
       console.log('file', file)
+      if (file.size > 2 * 1024 * 1024) {
+        alert('图片大于 2M，不建议使用 base64！')
+        return
+      }
       imgToBase64(file)
         .then(base64 => {
           console.log('base64', base64)
+          this.base64Str = base64
+          this.modalVisible = true
         })
         .catch(() => {})
     },
+    afterModalClose() {
+      this.base64Str = ''
+    }
   },
 };
 </script>
