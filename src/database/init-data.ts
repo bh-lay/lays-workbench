@@ -24,13 +24,6 @@ const bookmarkDefaultList = [
     value: 'json-formatter',
   },
   {
-    name: '书签快捷键',
-    type: BookmarkType.widgets,
-    size: BookmarkSize.three_one,
-    undercoat: '#e9eff6',
-    value: 'native-bookmark',
-  },
-  {
     name: 'Github',
     type: BookmarkType.link,
     size: BookmarkSize.small,
@@ -42,9 +35,40 @@ const bookmarkDefaultList = [
     name: 'stackoverflow',
     type: BookmarkType.link,
     size: BookmarkSize.small,
-    undercoat: '#444',
+    undercoat: '#d06925',
     value: 'https://stackoverflow.com/',
     icon: 'mdi:stack-overflow'
+  },
+  {
+    name: 'Vue.js',
+    type: BookmarkType.link,
+    size: BookmarkSize.small,
+    undercoat: '#4fc08d',
+    value: 'https://cn.vuejs.org/',
+    icon: 'mdi:vuejs'
+  },
+  {
+    name: 'Electron',
+    type: BookmarkType.link,
+    size: BookmarkSize.small,
+    undercoat: '#2d8a9f',
+    value: 'https://www.electronjs.org/',
+    icon: 'mdi:electron-framework'
+  },
+  {
+    name: '书签快捷键',
+    type: BookmarkType.widgets,
+    size: BookmarkSize.three_one,
+    undercoat: '#e9eff6',
+    value: 'native-bookmark',
+  },
+  {
+    name: 'webpack',
+    type: BookmarkType.link,
+    size: BookmarkSize.small,
+    undercoat: '#539ac8',
+    value: 'https://webpack.docschina.org/',
+    icon: 'mdi:webpack'
   },
 ]
 export default function initData(db: IDBDatabase) {
