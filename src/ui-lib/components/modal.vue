@@ -73,10 +73,20 @@
 
 <script>
 export default {
+  emits: ['after-open', 'after-close'],
   props: {
     visible: {
       type: Boolean,
       default: false,
+    },
+  },
+  watch: {
+    visible(isVisible) {
+      if (isVisible) {
+        this.$emit('after-open')
+      } else {
+        this.$emit('after-close')
+      }
     },
   },
 };
