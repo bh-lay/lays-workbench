@@ -45,6 +45,7 @@ function generateID() {
  */
 export class Bookmark {
   id!: string
+  sort: number = 0
   // 收藏名称
   name: string = '未命名'
   // 类型
@@ -61,6 +62,7 @@ export class Bookmark {
       return
     }
     this.id = object.id || generateID()
+    this.sort = object.sort || 0
     this.name = object.name || ''
     this.type = object.type || BookmarkType.link
     this.size = object.size || BookmarkSize.small

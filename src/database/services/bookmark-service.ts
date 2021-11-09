@@ -109,6 +109,7 @@ function list(db: IDBDatabase) {
         bookmarkList.push(new Bookmark(value))
         cursor.continue();
       } else {
+        bookmarkList.sort((A, B) => A.sort - B.sort)
         resolve(bookmarkList)
       }
     };
