@@ -1,9 +1,19 @@
 <style lang="stylus" scoped>
-
+.add-bookmark-modal
+  padding 20px
+.message
+  padding-bottom 10px
+  margin-bottom 20px
+  border-bottom 1px solid #eee
 </style>
 
 <template>
-  <div class="json-formatter">
+  <div class="add-bookmark-modal">
+    <div class="message">
+      <h1>别催了</h1>
+      <p>在写了，已经在写了！</p>
+      <p>下个版本就上线～</p>
+    </div>
     <div class="caption">
       <span class="active">链接</span>
       <span>Widgits</span>

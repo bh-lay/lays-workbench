@@ -8,6 +8,7 @@
   display flex
   align-items center
   justify-content center
+  transition 0 0
   &.hidden
     // 各种方法保证视觉上弹窗不可见，且不影响动画显示
     pointer-events none
@@ -80,11 +81,9 @@
       <transition name="flip">
         <div class="modal-body" v-if="visible" :style="modalBodyStyle">
           <slot/>
-          <transition name="fade-slow">
-            <div v-if="visible" class="modal-close" @click="$emit('update:visible', false)">
-              <v-mdi name="mdi-close" />
-            </div>
-          </transition>
+          <div v-if="visible" class="modal-close" @click="$emit('update:visible', false)">
+            <v-mdi name="mdi-close" />
+          </div>
         </div>
       </transition>
     </div>
