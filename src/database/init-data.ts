@@ -88,6 +88,16 @@ const bookmarkDefaultList = [
     value: 'https://webpack.docschina.org/',
     icon: 'mdi:webpack'
   },
+  {
+    sort: 9,
+    id: 'default-9',
+    name: 'BundleScanner',
+    type: BookmarkType.link,
+    size: BookmarkSize.small,
+    undercoat: '#101418',
+    value: 'https://bundlescanner.com/',
+    icon: 'crab'
+  },
 ]
 export default function initData(db: IDBDatabase) {
   return new Promise((resolve, reject) => {
