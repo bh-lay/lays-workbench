@@ -74,6 +74,8 @@
   </div>
   <modal
     v-model:visible="modalVisible"
+    width="80%"
+    height="80%"
     @after-close="afterModalClose"
   >
     <main-function :base64-str="base64Str" />

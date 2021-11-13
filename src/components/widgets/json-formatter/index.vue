@@ -31,7 +31,7 @@
     <div class="title">JSON格式化</div>
     <div class="desc">数据查看好帮手</div>
   </div>
-  <modal v-model:visible="jsonFormatterVisible" >
+  <modal v-model:visible="jsonFormatterVisible" width="80%" height="80%" >
     <main-function />
   </modal>
 </template>
