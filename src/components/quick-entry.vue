@@ -83,6 +83,7 @@
           <json-formatter v-else-if="bookmarkItem.value === 'json-formatter'" />
           <native-bookmark v-else-if="bookmarkItem.value === 'native-bookmark'" />
           <img-to-base v-else-if="bookmarkItem.value === 'img-to-base'" />
+          <add-bookmark v-else-if="bookmarkItem.value === 'add-bookmark'" />
           <span v-else>unknown widgets type<br/>{{ bookmarkItem.name }} <small>{{ bookmarkItem.value }}</small></span>
         </template>
       </div>
@@ -94,15 +95,16 @@
 <script>
 import { ref } from "vue"
 import { listBookmarkService } from '../database/services/bookmark-service.ts'
-import { BookmarkType, BookmarkSize } from '../database/entity/bookmark.ts'
+import { Bookmark, BookmarkType, BookmarkSize } from '../database/entity/bookmark.ts'
 import BookmarkIcon from './bookmark-icon.vue'
 import RegVisual from './widgets/reg-visual.vue'
 import JsonFormatter from './widgets/json-formatter/index.vue'
 import NativeBookmark from './widgets/native-bookmark.vue'
 import ImgToBase from './widgets/img-to-base/index.vue'
+import AddBookmark from './widgets/add-bookmark/index.vue'
 
 export default {
-  components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon },
+  components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon, AddBookmark },
   setup() {
     let bookmarkList = ref([])
     return {
@@ -118,6 +120,14 @@ export default {
     getList() {
       listBookmarkService().then(list => {
         console.log('list', list)
+        list.push(new Bookmark({
+          id: 'custom-add',
+          name: '添加',
+          type: BookmarkType.widgets,
+          size: BookmarkSize.small,
+          undercoat: '#2196f3',
+          value: 'add-bookmark',
+        }))
         this.bookmarkList = list
       })
     },
