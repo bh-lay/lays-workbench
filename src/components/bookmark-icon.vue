@@ -1,11 +1,15 @@
 <style lang="stylus" scoped>
 .bookmark-icon
-  line-height 50px
-  text-align center
+  display flex
+  height 100%
+  align-items center
+  justify-content center
   cursor pointer
   transition .2s
-  svg
-    vertical-align text-bottom
+  svg,
+  img
+    width 26px
+    height 26px
     fill #fff
   &:hover
     background rgba(0, 0, 0, .2)
@@ -13,41 +17,63 @@
 
 <template>
   <div class="bookmark-icon">
-    <v-mdi v-if="iconData.type === 'mdi'" :name="iconData.value" />
-    <span v-else-if="iconData.type === 'text'">{{ iconData.value }}</span>
-    <span v-else>crab</span>
+    <v-mdi v-if="iconType === 'mdi'" :name="iconData" />
+    <span v-else-if="iconType === 'text'">{{ iconData }}</span>
+    <template v-else>
+      <transition name="fade-fast">
+        <img v-if="faviconLoaded" :src="faviconUrl" />
+      </transition>
+    </template>
   </div>  
 </template>
 <script>
-
+import { ref } from "vue"
+import loadImage from '../assets/js/load-image.ts'
 export default {
   props: {
     icon: {
       type: String,
       default: 'crab'
     },
-    
-  },
-  computed: {
-    iconData() {
-      const iconConfig = this.icon
-      let returnsValue = {
-          type: 'crab',
-          value: ''
-        }
-      if (!iconConfig || iconConfig === 'crab') {
-        return returnsValue
-      }
-      const iconSplit = iconConfig.split(':')
-      if (iconSplit[0] === 'mdi') {
-        returnsValue.type = 'mdi'
-        returnsValue.value = 'mdi-' + iconSplit[1]
-      } else if (iconSplit[0] === 'text') {
-        returnsValue.type = 'text'
-        returnsValue.value = iconSplit[1]
-      }
-      return returnsValue
+    url: {
+      type: String,
+      default: ''
     },
+  },
+  setup(props) {
+    // 解析 icon 数据
+    let iconType = 'crab'
+    let iconData = ''
+
+    const iconSplit = (props.icon || '').split(':')
+    if (iconSplit[0] === 'mdi') {
+      iconType = 'mdi'
+      iconData = 'mdi-' + iconSplit[1]
+    } else if (iconSplit[0] === 'text') {
+      iconType = 'text'
+      iconData = iconSplit[1]
+    }
+    // 处理抓取图标逻辑
+    let faviconLoaded = ref(false)
+    let faviconUrl = ''
+    if (props.icon === 'crab') {
+      faviconUrl = `http://www.getfavicon.org/get.pl?url=${encodeURIComponent(props.url)}&submitget=get+favicon`
+      loadImage(faviconUrl)
+        .then(() => {
+        })
+        .catch(error => {
+          console.log('error', error)
+        })
+    }
+    setTimeout(() => {
+      faviconLoaded.value = true
+    }, 1000)
+    return {
+      iconType,
+      iconData,
+      faviconUrl,
+      faviconLoaded,
+    }
   },
 };
 </script>

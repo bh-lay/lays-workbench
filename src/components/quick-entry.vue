@@ -72,7 +72,11 @@
         background: bookmarkItem.undercoat
       }">
         <template v-if="bookmarkItem.type === BookmarkType.link">
-          <bookmark-icon :icon="bookmarkItem.icon" @click="openItem(bookmarkItem)" />
+          <bookmark-icon
+            :icon="bookmarkItem.icon"
+            :url="bookmarkItem.value"
+            @click="openItem(bookmarkItem)"
+          />
         </template>
         <template v-if="bookmarkItem.type === BookmarkType.widgets">
           <reg-visual v-if="bookmarkItem.value === 'reg-visual'" />
