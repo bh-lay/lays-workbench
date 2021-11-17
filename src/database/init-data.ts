@@ -4,7 +4,7 @@ import { BookmarkType, BookmarkSize } from './entity/bookmark.ts'
 const bookmarkDefaultList = [
   {
     sort: 0,
-    id: 'default-1',
+    id: 'default-0',
     name: '正则可视化',
     type: BookmarkType.widgets,
     size: BookmarkSize.large,
@@ -13,7 +13,7 @@ const bookmarkDefaultList = [
   },
   {
     sort: 1,
-    id: 'default-2',
+    id: 'default-1',
     name: '图片base64',
     type: BookmarkType.widgets,
     size: BookmarkSize.large,
@@ -22,7 +22,7 @@ const bookmarkDefaultList = [
   },
   {
     sort: 2,
-    id: 'default-3',
+    id: 'default-2',
     name: 'JSON 格式化',
     type: BookmarkType.widgets,
     size: BookmarkSize.medium,
@@ -31,7 +31,7 @@ const bookmarkDefaultList = [
   },
   {
     sort: 3,
-    id: 'default-4',
+    id: 'default-3',
     name: 'Github',
     type: BookmarkType.link,
     size: BookmarkSize.small,
@@ -41,7 +41,7 @@ const bookmarkDefaultList = [
   },
   {
     sort: 4,
-    id: 'default-5',
+    id: 'default-4',
     name: 'stackoverflow',
     type: BookmarkType.link,
     size: BookmarkSize.small,
@@ -51,7 +51,7 @@ const bookmarkDefaultList = [
   },
   {
     sort: 4,
-    id: 'default-6',
+    id: 'default-5',
     name: 'Vue.js',
     type: BookmarkType.link,
     size: BookmarkSize.small,
@@ -61,7 +61,7 @@ const bookmarkDefaultList = [
   },
   {
     sort: 6,
-    id: 'default-7',
+    id: 'default-6',
     name: 'Electron',
     type: BookmarkType.link,
     size: BookmarkSize.small,
@@ -71,7 +71,7 @@ const bookmarkDefaultList = [
   },
   {
     sort: 7,
-    id: 'default-8',
+    id: 'default-7',
     name: '书签快捷键',
     type: BookmarkType.widgets,
     size: BookmarkSize.three_one,
@@ -80,7 +80,7 @@ const bookmarkDefaultList = [
   },
   {
     sort: 8,
-    id: 'default-9',
+    id: 'default-8',
     name: 'webpack',
     type: BookmarkType.link,
     size: BookmarkSize.small,
