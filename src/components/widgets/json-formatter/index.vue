@@ -15,7 +15,7 @@
 .title
   margin-bottom 2px
   line-height 20px
-  font-size 16px
+  font-size 15px
   font-weight bold
   color #fff
 .desc

@@ -29,18 +29,23 @@ html, body
 .pager-header
   height 40px
   flex-shrink 0
-  display flex
-  align-items center
-  justify-content space-between
-  padding 0 20px
 .pager-body
   height 100px
   flex-grow 1
   overflow auto
+  &::-webkit-scrollbar
+    width 0
+    height 0
 .pager-footer
   height 40px
   flex-shrink 0
 
+.pager-header-inner
+  height 40px
+  display flex
+  align-items center
+  justify-content space-between
+  padding 0 20px
 .scroll-body
   position relative
   display flex
@@ -100,15 +105,15 @@ html, body
   <gallery :defocus="focused" />
   <div class="pager">
     <div class="pager-header">
-        <transition name="fade-fast">
-          <div class="page-title" v-show="!focused">
+      <transition name="fade-fast">
+        <div v-show="!focused" class="pager-header-inner">
+          <div class="page-title">
             <v-mdi name="mdi-hail" />
             <span>小剧的上网首页</span>
           </div>
-        </transition>
-        <transition name="fade-fast">
-          <settings v-if="!focused" />
-        </transition>
+          <settings />
+        </div>
+      </transition>
     </div>
     <div class="pager-body">
       <div class="scroll-body">

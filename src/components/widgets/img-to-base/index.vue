@@ -13,7 +13,7 @@
     margin-bottom 4px
     line-height 20px
     font-weight bold
-    font-size 18px
+    font-size 16px
     color #fff
   .desc
     margin-bottom 28px

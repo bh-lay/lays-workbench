@@ -1,13 +1,12 @@
 <style lang="stylus" scoped>
 .reg-visual-widgets
-  background linear-gradient(180deg, #20b7f3, transparent, transparent)
   text-align center
   .title
     padding-top 18px
     line-height 26px
     letter-spacing 2px
     font-weight bold
-    font-size 22px
+    font-size 20px
     color #fff
   .desc
     padding-top 6px
