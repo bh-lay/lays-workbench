@@ -1,10 +1,10 @@
 <style lang="stylus" scoped>
 .btn-list
-  display: grid;
+  display grid
   grid-template-columns repeat(auto-fill, var(--grid-size))
-  grid-auto-flow: dense;
+  grid-auto-flow dense
   justify-content center
-  padding-top 20px
+  padding-top 40px
 .item
   position relative
   grid-area span 1 / span 1 / auto / auto

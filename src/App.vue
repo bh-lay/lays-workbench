@@ -21,18 +21,37 @@ html, body
     perspective 800px
 </style>
 <style lang="stylus" scoped>
-.frame
+.pager
+  position relative
+  display flex
+  flex-direction column
+  height 100%
+.pager-header
+  height 40px
+  flex-shrink 0
+  display flex
+  align-items center
+  justify-content space-between
+  padding 0 20px
+.pager-body
+  height 100px
+  flex-grow 1
+  overflow auto
+.pager-footer
+  height 40px
+  flex-shrink 0
+
+.scroll-body
   position relative
   display flex
   flex-direction column
   justify-content center
   align-items center
-  height 100%
+  min-height 100%
 .page-title
-  position fixed
-  top 15px
-  left 25px
   height 40px
+  display flex
+  align-items center
   svg
     height 34px
     vertical-align middle
@@ -48,12 +67,8 @@ html, body
 .fixed-height-pager
   width 90%
   max-width 1020px
-  height 100px
+  height 400px
 .footer-copyright
-  position fixed
-  left 0
-  bottom 0
-  width 100%
   height: 40px
   line-height 40px
   text-align center
@@ -79,44 +94,41 @@ html, body
     width 120px
     height 120px
     fill #fff
-@media screen and (max-width:600px)
-  .mobile-warning
-    display block
-  .fixed-height-pager
-    height 300px
 </style>
 
 <template>
   <gallery :defocus="focused" />
-  <div class="frame">
-    <transition name="fade-fast">
-      <div class="page-title" v-show="!focused">
-        <v-mdi name="mdi-hail" />
-        <span>小剧的上网首页</span>
+  <div class="pager">
+    <div class="pager-header">
+        <transition name="fade-fast">
+          <div class="page-title" v-show="!focused">
+            <v-mdi name="mdi-hail" />
+            <span>小剧的上网首页</span>
+          </div>
+        </transition>
+        <transition name="fade-fast">
+          <settings v-if="!focused" />
+        </transition>
+    </div>
+    <div class="pager-body">
+      <div class="scroll-body">
+        <search-entrance @focus="focused = true" @blur="focused = false" />
+        <div class="fixed-height-pager">
+          <transition name="fade-fast">
+            <quick-entry v-show="!focused" />
+          </transition>
+        </div>
       </div>
-    </transition>
-    <search-entrance @focus="focused = true" @blur="focused = false" />
-    <div class="fixed-height-pager">
+    </div>
+    <div class="pager-footer">
       <transition name="fade-fast">
-        <quick-entry v-show="!focused" />
-      </transition>
-      <transition name="fade-fast">
-        <div class="mobile-warning" v-show="!focused">
-          <v-mdi name="mdi-laptop" />
-          <div class="title">使用PC，体验更好哦～</div>
+        <div class="footer-copyright" v-show="!focused">
+          by：<a href="http://bh-lay.com" target="_blank">剧中人</a>
+          <span>皖ICP备14001331号-1</span>
         </div>
       </transition>
     </div>
-    <transition name="fade-fast">
-      <div class="footer-copyright" v-show="!focused">
-        by：<a href="http://bh-lay.com" target="_blank">剧中人</a>
-        <span>皖ICP备14001331号-1</span>
-      </div>
-    </transition>
   </div>
-  <transition name="fade-fast">
-    <settings v-if="!focused" />
-  </transition>
 </template>
 
 <script>

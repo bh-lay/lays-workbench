@@ -1,9 +1,10 @@
 <style lang="stylus" scoped>
 .search-entrance
   position relative
-  width 500px
-  max-width 90%
+  width 90%
+  max-width 600px
   perspective 800px
+  margin-top 100px
   z-index 10
 .search-input
   display flex
