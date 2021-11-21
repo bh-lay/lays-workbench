@@ -1,5 +1,4 @@
 import { bookmarkEntityInit } from './entity/bookmark.ts'
-import initData from './init-data.ts'
 
 function getIDBObject() {
   return window.indexedDB ||
@@ -15,7 +14,7 @@ export function isSupportIDB() {
 export function getIDBRequest() {
   return new Promise((resolve, reject) => {
     var indexedDB = getIDBObject()
-    var request = indexedDB.open('workbench', 1);
+    var request = indexedDB.open('data-store', 1);
     request.onerror = function(event) {
       let error = new Error('建立数据库连接失败！')
       // error.__detail = event
@@ -36,9 +35,7 @@ export function getIDBRequest() {
       const transaction = event.target.transaction;
 
       transaction.oncomplete = function() {    
-        initData(db).catch(() => {}).then(() => {
-          resolve(db)
-        })
+        resolve(db)
       }
       // 此处处理数据库初始化、升级逻辑
       bookmarkEntityInit(db)

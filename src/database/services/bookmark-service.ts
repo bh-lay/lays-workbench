@@ -1,6 +1,7 @@
 import { getIDBRequest } from '../db.ts'
 import { Bookmark } from '../entity/bookmark.ts'
 import bookmarkDefaultList from '../default-bookmark-data.ts'
+import initBookmark2db from '../init-bookmark-to-db.ts'
 import {
   bookmarkInsertManager,
   bookmarkUpdateManager,
