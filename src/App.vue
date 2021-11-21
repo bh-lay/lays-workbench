@@ -19,6 +19,9 @@ html, body
     position relative
     height 100%
     perspective 800px
+input,
+textarea
+  font-family inherit
 </style>
 <style lang="stylus" scoped>
 .pager

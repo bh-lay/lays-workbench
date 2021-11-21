@@ -1,13 +1,14 @@
 <style lang="stylus" scoped>
-.dropdown-body
-  position absolute
-  background #fff
-  z-index 1000
+.dropdown-button
   cursor pointer
 .dropdown-body
+  position absolute
+  cursor pointer
   border-radius 4px
+  background #fff
   box-shadow 2px 2px 10px rgba(0, 0, 0, .2), 1px 1px 3px rgba(0, 0, 0, .2)
   overflow hidden
+  z-index 1000
 </style>
 
 <template>
