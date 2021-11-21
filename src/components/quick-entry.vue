@@ -14,40 +14,47 @@
       :key="bookmarkItem.id"
       :data="bookmarkItem"
     />
+    <bookmark-item :data="addData">
+      <template v-slot:body>
+        <add-bookmark />
+      </template>
+    </bookmark-item>
   </div>
 </template>
 
+
 <script>
-import { ref } from "vue"
-import { listBookmarkService } from '../database/services/bookmark-service.ts'
+import { ref } from 'vue';
 import { Bookmark, BookmarkType, BookmarkSize } from '../database/entity/bookmark.ts'
-import BookmarkItem from './bookmark-item.vue'
+import { listBookmarkService } from '../database/services/bookmark-service.ts';
+import BookmarkItem from './bookmark-item.vue';
+import AddBookmark from './widgets/add-bookmark/index.vue';
 
 export default {
-  components: { BookmarkItem },
+  components: { BookmarkItem, AddBookmark },
   setup() {
-    let bookmarkList = ref([])
+    let bookmarkList = ref([]);
     return {
       bookmarkList,
+      BookmarkType,
+      BookmarkSize,
+      addData: new Bookmark({
+        name: '添加',
+        type: BookmarkType.widgets,
+        size: BookmarkSize.small,
+        undercoat: '#2196f3',
+      })
     };
   },
   mounted() {
-    this.getList()
+    this.getList();
   },
   methods: {
     getList() {
-      listBookmarkService().then(list => {
-        console.log('list', list)
-        list.push(new Bookmark({
-          id: 'custom-add',
-          name: '添加',
-          type: BookmarkType.widgets,
-          size: BookmarkSize.small,
-          undercoat: '#2196f3',
-          value: 'add-bookmark',
-        }))
-        this.bookmarkList = list
-      })
+      listBookmarkService().then((list) => {
+        console.log('list', list);
+        this.bookmarkList = list;
+      });
     },
   },
 };

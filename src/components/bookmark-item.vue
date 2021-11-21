@@ -65,13 +65,13 @@
           @click="openItem(data)"
         />
       </template>
-      <template v-if="data.type === BookmarkType.widgets">
+      <template v-else-if="data.type === BookmarkType.widgets">
         <reg-visual v-if="data.value === 'reg-visual'" />
         <json-formatter v-else-if="data.value === 'json-formatter'" />
         <native-bookmark v-else-if="data.value === 'native-bookmark'" />
         <img-to-base v-else-if="data.value === 'img-to-base'" />
-        <add-bookmark v-else-if="data.value === 'add-bookmark'" />
-        <span v-else>unknown widgets type<br/>{{ data.name }} <small>{{ data.value }}</small></span>
+        <slot v-else name="body" />
+        <!-- <span>unknown widgets type<br/>{{ data.name }} <small>{{ data.value }}</small></span> -->
       </template>
     </div>
     <div class="title">{{ data.name }}</div>
@@ -85,10 +85,9 @@ import RegVisual from './widgets/reg-visual.vue'
 import JsonFormatter from './widgets/json-formatter/index.vue'
 import NativeBookmark from './widgets/native-bookmark.vue'
 import ImgToBase from './widgets/img-to-base/index.vue'
-import AddBookmark from './widgets/add-bookmark/index.vue'
 
 export default {
-  components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon, AddBookmark },
+  components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon },
   props: {
     data: {
       type: Bookmark,
