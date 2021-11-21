@@ -2,13 +2,13 @@
 .color-outer
   display flex
   flex-wrap wrap
-  width 500px
+  width 535px
   height 300px
-  padding 20px
+  padding 20px 0 20px 20px
   overflow auto
 .color-item
   box-sizing border-box
-  margin 0 3px 3px 0
+  margin 2px
   flex-shrink 0
   width 60px
   height 60px
@@ -42,7 +42,7 @@
 </style>
 
 <script>
-import { ref, h } from 'vue';
+import { resolveComponent, h } from 'vue';
 import colorList from './color-list.ts';
 export default {
   props: {
@@ -52,10 +52,9 @@ export default {
     },
   },
   setup(props, context) {
-    const dropdownVisible = ref(false)
     function createColorItem(colorItem) {
       return h(
-        'div',
+        resolveComponent('dropdown-item'),
         {
           class: ['color-item', props.active === colorItem.value ? 'active' : ''],
           onClick() {
@@ -65,9 +64,11 @@ export default {
             background: colorItem.value
           },
         },
-        [
-          h('span', colorItem.label)
-        ]
+        {
+          default() {
+            return h('span', colorItem.label)
+          }
+        },
       );
     }
     return function () {

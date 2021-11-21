@@ -48,8 +48,8 @@ export default {
       return h('div', {
         class: 'tab-outer'
       },[
-        createTabItem('custom', '自定义'),
-        createTabItem('widgits', '小组件'),
+        createTabItem('custom', '自定义链接'),
+        createTabItem('widgets', '小组件'),
       ]);
     }
   },
