@@ -1,157 +1,58 @@
 import { getIDBRequest } from '../db.ts'
 import { Bookmark } from '../entity/bookmark.ts'
 import bookmarkDefaultList from '../default-bookmark-data.ts'
-import { BookmarkType } from '../entity/bookmark'
+import {
+  bookmarkInsertManager,
+  bookmarkUpdateManager,
+  bookmarkGetManager,
+  bookmarkRemoveManager,
+  bookmarkListManager,
+  bookmarkCountManager,
+} from '../manager/bookmark-manager.ts'
 
-function insertMethod(db: IDBDatabase, bookmarkItem: any) {
-  return new Promise((resolve, reject) => {
-    var bookmark = new Bookmark(bookmarkItem)
-    var request = db.transaction(['bookmark'], 'readwrite')
-      .objectStore('bookmark')
-      .add(bookmark);
-
-    request.onsuccess = function (event) {
-      // 数据写入成功
-      resolve(event)
-    };
-
-    request.onerror = function (event) {
-      // 数据写入失败
-      let error = new Error('数据写入失败')
-      // error.__detail = event
-      reject(error)
-    }
-  })
-}
-
-function updateMethod(db: IDBDatabase, bookmarkItem: any) {
-  return new Promise((resolve, reject) => {
-    var bookmark = new Bookmark(bookmarkItem)
-    var request = db.transaction(['bookmark'], 'readwrite')
-      .objectStore('bookmark')
-      .put(bookmark);
-
-    request.onsuccess = function (event) {
-      // 数据写入成功
-      resolve(event)
-    };
-
-    request.onerror = function (event) {
-      // 数据写入失败
-      let error = new Error('数据写入失败')
-      // error.__detail = event
-      reject(error)
-    }
-  })
-}
-
-function getMethod(db: IDBDatabase, bookmarkId: any) {
-  return new Promise((resolve, reject) => {
-    var transaction = db.transaction(['bookmark']);
-    var objectStore = transaction.objectStore('bookmark');
-    var request = objectStore.get(bookmarkId);
-  
-    request.onsuccess = function () {
-      if (request.result) {
-        var bookmark = new Bookmark(request.result)
-        // 数据读取成功
-        resolve(bookmark)
-      } else {
-        let error = new Error('数据读取失败')
-        // error.__detail = event
-        reject(error)
-      }
-      
-    };
-    request.onerror = function (event) {
-      // 数据写入失败
-      let error = new Error('数据写入失败')
-      // error.__detail = event
-      reject(error)
-    }
-  })
-}
-function removeMethod(db: IDBDatabase, bookmarkId: string) {
-  return new Promise((resolve, reject) => {
-    var transaction = db.transaction(['bookmark']);
-    var objectStore = transaction.objectStore('bookmark');
-    var request = objectStore.delete(bookmarkId);
-  
-    request.onsuccess = function (event) {
-      if (request.result) {
-        var bookmark = new Bookmark(request.result)
-        // 数据读取成功
-        resolve(bookmark)
-      } else {
-        let error = new Error('数据读取失败')
-        // error.__detail = event
-        reject(error)
-      }
-      
-    };
-    request.onerror = function (event) {
-      // 数据写入失败
-      let error = new Error('数据写入失败')
-      // error.__detail = event
-      reject(error)
-    }
-  })
-}
-
-function list(db: IDBDatabase): Promise<Bookmark[]> {
-  return new Promise((resolve, reject) => {
-    const objectStore = db.transaction('bookmark').objectStore('bookmark');
-    const request = objectStore.openCursor()
-    
-    const bookmarkList: Bookmark[] = []
-    request.onsuccess = function (event) {
-      var cursor: any = event.target.result;
-      if (cursor) {
-        const value: any = cursor.value
-        bookmarkList.push(new Bookmark(value))
-        cursor.continue();
-      } else {
-        bookmarkList.sort((A, B) => A.sort - B.sort)
-        resolve(bookmarkList)
-      }
-    };
-
-    request.onerror = function (event) {
-      // 数据写入失败
-      let error = new Error('数据读取失败')
-      // error.__detail = event
-      reject(error)
-    }
-  })
+function getDbFromParams(db?: IDBDatabase): Promise<IDBDatabase> {
+  if (db) {
+    return Promise.resolve(db)
+  }
+  return getIDBRequest()
 }
 export function insertBookmarkService(bookmarkItem: any, db?: IDBDatabase) {
-  if (db) {
-    return insertMethod(db, bookmarkItem)
-  }
-  return getIDBRequest().then((db: IDBDatabase) => {
-    return insertMethod(db, bookmarkItem)
+  
+  return getDbFromParams(db).then((db: IDBDatabase) => {
+    return bookmarkCountManager(db).then((count: number) => {
+      if (count > 0) {
+        return db
+      }
+      return initBookmark2db(db).then(() => {
+        return db
+      })
+    })
+  })
+  .then((db: IDBDatabase) => {
+    console.log(2)
+    return bookmarkInsertManager(db, bookmarkItem)
   })
 }
 export function getBookmarkService(bookmarkId: string) {
   return getIDBRequest().then((db: IDBDatabase) => {
-    return getMethod(db, bookmarkId)
+    return bookmarkGetManager(db, bookmarkId)
   })
 }
 
 export function updateBookmarkService(bookmarkItem: any) {
   return getIDBRequest().then((db: IDBDatabase) => {
-    return updateMethod(db, bookmarkItem)
+    return bookmarkUpdateManager(db, bookmarkItem)
   })
 }
 export function removeBookmarkService(bookmarkId: string) {
   return getIDBRequest().then((db: IDBDatabase) => {
-    return removeMethod(db, bookmarkId)
+    return bookmarkRemoveManager(db, bookmarkId)
   })
 }
 
 export function listBookmarkService() {
   return getIDBRequest().then((db: IDBDatabase) => {
-    return list(db).then((data: Bookmark[]) => {
+    return bookmarkListManager(db).then((data: Bookmark[]) => {
       // 若数据为空，则将使用默认数据填充
       if (data.length === 0) {
         bookmarkDefaultList.forEach((item: Bookmark) => {
