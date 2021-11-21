@@ -72,7 +72,7 @@
 <template>
   <div :class="['bookmark-item', 'item-size-' + BookmarkSize[data.size]]">
     <div class="card" :style="{
-      background: data.undercoat
+      background: data.type === BookmarkType.folder ? 'rgba(255, 255, 255, .5)' : data.undercoat
     }">
       <template v-if="data.type === BookmarkType.link">
         <bookmark-icon
@@ -90,6 +90,11 @@
         <slot v-else-if="$slots.body" name="body" />
         <span v-else>unknown widgets type<br/>{{ data.name }} <small>{{ data.value }}</small></span>
       </template>
+      <folder-icon
+        v-else-if="data.type === BookmarkType.folder"
+        :data="data.value"
+        @click="$emit('next')"
+      />
     </div>
     <div class="title">{{ data.name }}</div>
   </div>
@@ -98,6 +103,7 @@
 <script>
 import { Bookmark, BookmarkType, BookmarkSize } from '../database/entity/bookmark.ts'
 import BookmarkIcon from './bookmark-icon.vue'
+import FolderIcon from './folder-icon.vue'
 import RegVisual from './widgets/reg-visual.vue'
 import JsonFormatter from './widgets/json-formatter/index.vue'
 import NativeBookmark from './widgets/native-bookmark.vue'
@@ -105,7 +111,7 @@ import ImgToBase from './widgets/img-to-base/index.vue'
 
 export default {
   emits: ['next'],
-  components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon },
+  components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon, BookmarkIcon, FolderIcon },
   props: {
     data: {
       type: Bookmark,

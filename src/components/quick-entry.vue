@@ -215,7 +215,11 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
       if (needForbiddenClick) {
         return;
       }
-      window.open(data.value, '_blank');
+      if (data.type === BookmarkType.link) {
+        window.open(data.value, '_blank');
+      } else if (data.type === BookmarkType.folder) {
+        alert('打开组')
+      }
     },
     openContextMenu(event, item) {
       closeContextMenu();
@@ -300,8 +304,9 @@ export default {
 
     const selectedBookmarkItem = ref({});
     const getList = function () {
-      bookmarkListService().then((list) => {
-        console.log('list', list)
+      bookmarkListService({
+        parent: null
+      }).then((list) => {
         bookmarkList.value = list;
       });
     };
@@ -329,21 +334,31 @@ export default {
       }
       if (targetBookmark.type === BookmarkType.folder) {
         // 目标是目录，直接移入
+        // 删除被拖拽的元素
+        list.splice(fromIndex, 1)
+        // 标记 parent
+        fromBookmark.parent = targetBookmark.id
+        // 追加图标颜色
+        targetBookmark.value += '|' + fromBookmark.undercoat
+        return Promise.all([
+          bookmarkUpdateService(fromBookmark),
+          bookmarkUpdateService(targetBookmark)
+        ])
       } else {
         // 目标是链接，先排个序，再合并，最后插入
         const idList = list.map(item => item.id)
-        bookmarkResortService(idList)
+        return bookmarkResortService(idList)
           .then(idSortMap => {
-            const targetSortvalue = idSortMap.get(targetBookmark.id)
-            console.log('idSortMap', idSortMap, targetSortvalue)
+            const targetSortValue = idSortMap.get(targetBookmark.id)
+            console.log('idSortMap', idSortMap, targetSortValue)
             const item = new Bookmark({
               name: '自定义组',
               // 和目标排序值相同
-              sort: targetSortvalue,
+              sort: targetSortValue,
               type: BookmarkType.folder,
               size: BookmarkSize.small,
               undercoat: '#2196f3',
-              value: [targetBookmark.undercoat, fromBookmark.undercoat].join(',')
+              value: [targetBookmark.undercoat, fromBookmark.undercoat].join('|')
             })
             return bookmarkInsertService(item)
           })
@@ -422,7 +437,7 @@ export default {
               break;
             }
           }
-        });
+        }).catch(e => alert(e.message || '删除失败！'));
       },
       handleConfirmEdit(bookmarkItem) {
         bookmarkUpdateService(bookmarkItem).then(() => {

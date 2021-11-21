@@ -11,6 +11,7 @@ import {
   bookmarkCountManager,
   bookmarkResetSortManager,
 } from '../manager/bookmark-manager.ts';
+import { BookmarkType } from '../entity/bookmark';
 
 function getDbFromParams(db?: IDBDatabase): Promise<IDBDatabase> {
   if (db) {
@@ -59,13 +60,22 @@ export function bookmarkUpdateService(bookmarkItem: any, db?: IDBDatabase) {
 }
 export function bookmarkRemoveService(bookmarkId: string) {
   return getIDBRequest().then((db: IDBDatabase) => {
-    return bookmarkRemoveManager(db, bookmarkId);
-  });
+    return bookmarkGetManager(db, bookmarkId)
+      .then((bookmarkItem?: Bookmark) => {
+        if (!bookmarkItem) {
+          return
+        }
+        if (bookmarkItem.type === BookmarkType.folder) {
+          throw Error('目录暂不允许删除，后续会支持的呦')
+        }
+        return bookmarkRemoveManager(db, bookmarkId);
+      });
+  })
 }
 
-export function bookmarkListService() {
+export function bookmarkListService(params: {parent: string | null}) {
   return getIDBRequest().then((db: IDBDatabase) => {
-    return bookmarkListManager(db).then((data: Bookmark[]) => {
+    return bookmarkListManager(db, params).then((data: Bookmark[]) => {
       // 若数据为空，则将使用默认数据填充
       if (data.length === 0) {
         bookmarkDefaultList.forEach((item: Bookmark) => {

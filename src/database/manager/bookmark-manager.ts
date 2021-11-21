@@ -88,17 +88,26 @@ export function bookmarkRemoveManager(db: IDBDatabase, bookmarkId: string) {
   })
 }
 
-export function bookmarkListManager(db: IDBDatabase): Promise<Bookmark[]> {
+export function bookmarkListManager(db: IDBDatabase, params: {parent: string | null}): Promise<Bookmark[]> {
   return new Promise((resolve, reject) => {
     const objectStore = db.transaction('bookmark').objectStore('bookmark');
     const request = objectStore.openCursor()
-    
+    const parentId = params.parent
     const bookmarkList: Bookmark[] = []
     request.onsuccess = function (event) {
       var cursor: any = event.target.result;
       if (cursor) {
         const value: any = cursor.value
-        bookmarkList.push(new Bookmark(value))
+        if (parentId) {
+          if (parentId === value.parent) {
+            bookmarkList.push(new Bookmark(value))
+          }
+        } else {
+          if (!value.parent) {
+            bookmarkList.push(new Bookmark(value))
+          }
+        }
+        
         cursor.continue();
       } else {
         resolve(bookmarkList)
