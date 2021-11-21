@@ -14,6 +14,7 @@ export function bookmarkEntityInit (db: IDBDatabase) {
   objectStore.createIndex("undercoat", "undercoat", { unique: false })
   objectStore.createIndex("value", "value", { unique: false })
   objectStore.createIndex("icon", "icon", { unique: false })
+  objectStore.createIndex("desc", "desc", { unique: false })
 }
 
 // 书签类型
@@ -30,12 +31,13 @@ export enum BookmarkSize {
   large = 3,
   three_one = 4
 }
-// 书签图标
+// 书签图标类型
 type BookmarkIconCrab = 'crab'
 type BookmarkIconMdi = `${'mdi:'}${string}`
 type BookmarkIconText = `${'text:'}${string}`
 export type BookmarkIcon = BookmarkIconCrab | BookmarkIconMdi | BookmarkIconText
 
+// 生成 ID
 function generateID() {
   let randomNum = Math.floor(new Date().getTime() * 100 + Math.random() * 100)
   return randomNum.toString(24)
@@ -54,6 +56,8 @@ export class Bookmark {
   undercoat: string = '#ffaa00'
   value: string = 'http://bh-lay.com'
   icon: BookmarkIcon = 'text:X'
+  // 描述信息
+  desc: string = ''
   constructor(object: any) {
     this.fill(object)
   }
@@ -69,5 +73,6 @@ export class Bookmark {
     this.undercoat = object.undercoat || ''
     this.value = object.value || ''
     this.icon = object.icon || 'text:X'
+    this.desc = object.desc || ''
   }
 }
