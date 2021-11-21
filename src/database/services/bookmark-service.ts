@@ -1,5 +1,7 @@
 import { getIDBRequest } from '../db.ts'
 import { Bookmark } from '../entity/bookmark.ts'
+import bookmarkDefaultList from '../default-bookmark-data.ts'
+import { BookmarkType } from '../entity/bookmark'
 
 function insertMethod(db: IDBDatabase, bookmarkItem: any) {
   return new Promise((resolve, reject) => {
@@ -96,7 +98,7 @@ function removeMethod(db: IDBDatabase, bookmarkId: string) {
   })
 }
 
-function list(db: IDBDatabase) {
+function list(db: IDBDatabase): Promise<Bookmark[]> {
   return new Promise((resolve, reject) => {
     const objectStore = db.transaction('bookmark').objectStore('bookmark');
     const request = objectStore.openCursor()
@@ -149,6 +151,14 @@ export function removeBookmarkService(bookmarkId: string) {
 
 export function listBookmarkService() {
   return getIDBRequest().then((db: IDBDatabase) => {
-    return list(db)
+    return list(db).then((data: Bookmark[]) => {
+      // 若数据为空，则将使用默认数据填充
+      if (data.length === 0) {
+        bookmarkDefaultList.forEach((item: Bookmark) => {
+          data.push(new Bookmark(item))
+        });
+      }
+      return data
+    })
   })
 }
