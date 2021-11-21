@@ -18,7 +18,6 @@ function getDbFromParams(db?: IDBDatabase): Promise<IDBDatabase> {
   return getIDBRequest()
 }
 export function insertBookmarkService(bookmarkItem: any, db?: IDBDatabase) {
-  
   return getDbFromParams(db).then((db: IDBDatabase) => {
     return bookmarkCountManager(db).then((count: number) => {
       if (count > 0) {
@@ -60,6 +59,8 @@ export function listBookmarkService() {
           data.push(new Bookmark(item))
         });
       }
+
+      data.sort((A, B) => B.sort - A.sort)
       return data
     })
   })

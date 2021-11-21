@@ -108,7 +108,6 @@ export function bookmarkListManager(db: IDBDatabase): Promise<Bookmark[]> {
         bookmarkList.push(new Bookmark(value))
         cursor.continue();
       } else {
-        bookmarkList.sort((A, B) => A.sort - B.sort)
         resolve(bookmarkList)
       }
     };

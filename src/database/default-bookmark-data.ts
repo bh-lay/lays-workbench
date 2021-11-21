@@ -2,7 +2,7 @@ import { BookmarkType, BookmarkSize } from './entity/bookmark.ts'
 
 export default [
   {
-    sort: 0,
+    sort: 1000,
     id: 'default-0',
     name: '正则可视化',
     type: BookmarkType.widgets,
@@ -11,7 +11,7 @@ export default [
     value: 'reg-visual',
   },
   {
-    sort: 1,
+    sort: 999,
     id: 'default-1',
     name: '图片base64',
     type: BookmarkType.widgets,
@@ -20,7 +20,7 @@ export default [
     value: 'img-to-base',
   },
   {
-    sort: 2,
+    sort: 998,
     id: 'default-2',
     name: 'JSON 格式化',
     type: BookmarkType.widgets,
@@ -29,7 +29,7 @@ export default [
     value: 'json-formatter',
   },
   {
-    sort: 3,
+    sort: 997,
     id: 'default-3',
     name: 'Github',
     type: BookmarkType.link,
@@ -39,7 +39,7 @@ export default [
     icon: 'mdi:github'
   },
   {
-    sort: 4,
+    sort: 996,
     id: 'default-4',
     name: 'stackoverflow',
     type: BookmarkType.link,
@@ -49,7 +49,7 @@ export default [
     icon: 'mdi:stack-overflow'
   },
   {
-    sort: 4,
+    sort: 995,
     id: 'default-5',
     name: 'Vue.js',
     type: BookmarkType.link,
@@ -59,7 +59,7 @@ export default [
     icon: 'mdi:vuejs'
   },
   {
-    sort: 6,
+    sort: 995,
     id: 'default-6',
     name: 'Electron',
     type: BookmarkType.link,
@@ -69,7 +69,7 @@ export default [
     icon: 'mdi:electron-framework'
   },
   {
-    sort: 7,
+    sort: 993,
     id: 'default-7',
     name: '书签快捷键',
     type: BookmarkType.widgets,
@@ -78,7 +78,7 @@ export default [
     value: 'native-bookmark',
   },
   {
-    sort: 8,
+    sort: 992,
     id: 'default-8',
     name: 'webpack',
     type: BookmarkType.link,
@@ -88,7 +88,7 @@ export default [
     icon: 'mdi:webpack'
   },
   {
-    sort: 9,
+    sort: 991,
     id: 'default-9',
     name: 'BundleScanner',
     type: BookmarkType.link,
