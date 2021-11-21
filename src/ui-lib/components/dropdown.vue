@@ -2,8 +2,7 @@
 .dropdown-button
   cursor pointer
 .dropdown-body
-  position absolute
-  cursor pointer
+  position fixed
   border-radius 4px
   background #fff
   box-shadow 2px 2px 10px rgba(0, 0, 0, .2), 1px 1px 3px rgba(0, 0, 0, .2)
@@ -12,28 +11,29 @@
 </style>
 
 <template>
-  <div class="dropdown-button" ref="button" @click="show"><slot /></div>
-  <teleport to="body"
-    >"
-    <transition name="slidedown">
-      <div
-        class="dropdown-body"
-        v-if="visible"
-        v-clickoutside="onClickoutside"
-        :style="{
-          top: top + 'px',
-          left: left + 'px',
-        }"
-      >
-        <slot name="body" />
-      </div>
-    </transition>
-  </teleport>
+  <div class="dropdown-button" ref="button" @click="show">
+    <slot />
+    <teleport to="body">
+      <transition name="slidedown">
+        <div
+          class="dropdown-body"
+          v-if="visible"
+          v-clickoutside="onClickoutside"
+          :style="{
+            top: top + 'px',
+            left: left + 'px',
+          }"
+        >
+          <slot name="body" />
+        </div>
+      </transition>
+    </teleport>
+  </div>
 </template>
 
 <script>
 export default {
-  emits: ['after-open', 'after-close'],
+  name: 'dropdown',
   data() {
     return {
       left: 0,
@@ -50,9 +50,9 @@ export default {
         return;
       }
       this.visible = true;
-      const buttonBRC = this.$refs.button.getBoundingClientRect()
-      this.left = buttonBRC.left
-      this.top = buttonBRC.top + buttonBRC.height
+      const buttonBRC = this.$refs.button.getBoundingClientRect();
+      this.left = buttonBRC.left;
+      this.top = buttonBRC.top + buttonBRC.height;
     },
   },
 };
