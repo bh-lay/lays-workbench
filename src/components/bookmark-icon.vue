@@ -27,7 +27,7 @@
   </div>  
 </template>
 <script>
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import loadImage from '../assets/js/load-image.ts'
 export default {
   props: {
@@ -42,32 +42,36 @@ export default {
   },
   setup(props) {
     // 解析 icon 数据
-    let iconType = 'crab'
-    let iconData = ''
+    let iconType = ref('crab')
+    let iconData = ref('')
 
-    const iconSplit = (props.icon || '').split(':')
-    if (iconSplit[0] === 'mdi') {
-      iconType = 'mdi'
-      iconData = 'mdi-' + iconSplit[1]
-    } else if (iconSplit[0] === 'text') {
-      iconType = 'text'
-      iconData = iconSplit[1]
-    }
     // 处理抓取图标逻辑
     let faviconLoaded = ref(false)
-    let faviconUrl = ''
-    if (props.icon === 'crab') {
-      faviconUrl = `http://www.getfavicon.org/get.pl?url=${encodeURIComponent(props.url)}&submitget=get+favicon`
-      loadImage(faviconUrl)
-        .then(() => {
-        })
-        .catch(error => {
-          console.log('error', error)
-        })
+    let faviconUrl = ref('')
+    function formatIconData(iconConfig) {
+      const iconSplit = (iconConfig || '').split(':')
+      if (iconSplit[0] === 'mdi') {
+        iconType.value = 'mdi'
+        iconData.value = 'mdi-' + iconSplit[1]
+      } else if (iconSplit[0] === 'text') {
+        iconType.value = 'text'
+        iconData.value = iconSplit[1]
+      } else if (props.icon === 'crab') {
+        iconType.value = 'crab'
+        faviconUrl = `http://www.getfavicon.org/get.pl?url=${encodeURIComponent(props.url)}&submitget=get+favicon`
+        loadImage(faviconUrl)
+          .then(() => {
+            faviconLoaded.value = true
+          })
+          .catch(error => {
+            console.log('error', error)
+          })
+      }
     }
-    setTimeout(() => {
-      faviconLoaded.value = true
-    }, 1000)
+    formatIconData(props.icon)
+    watch(() => props.icon, value => {
+      formatIconData(value)
+    })
     return {
       iconType,
       iconData,

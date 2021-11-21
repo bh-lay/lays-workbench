@@ -40,7 +40,7 @@ import { BookmarkSize } from '../../../database/entity/bookmark.ts';
 export default {
   props: {
     active: {
-      type: String,
+      type: Number,
       default: null,
     },
   },
