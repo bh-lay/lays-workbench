@@ -27,8 +27,8 @@
     <div
       v-for="size in sizeList"
       :key="size.value"
-      :class="[active === size.value ? 'active' : '']"
-      @click="$emit('update:active', size.value)"
+      :class="[modelValue === size.value ? 'active' : '']"
+      @click="$emit('update:modelValue', size.value)"
     >
       {{ size.label }}
     </div>
@@ -39,7 +39,7 @@
 import { BookmarkSize } from '../../database/entity/bookmark.ts';
 export default {
   props: {
-    active: {
+    modelValue: {
       type: Number,
       default: null,
     },

@@ -74,14 +74,14 @@
 
 <template>
   <teleport to="body">"
-    <div :class="['modal-outer', visible ? 'visible' : 'hidden']">
+    <div :class="['modal-outer', modelValue ? 'visible' : 'hidden']">
       <transition name="fade-slow">
-        <div v-if="visible" class="modal-mask"></div>
+        <div v-if="modelValue" class="modal-mask"></div>
       </transition>
       <transition name="flip">
-        <div class="modal-body" v-if="visible" :style="modalBodyStyle">
+        <div class="modal-body" v-if="modelValue" :style="modalBodyStyle">
           <slot/>
-          <div v-if="visible" class="modal-close" @click="$emit('update:visible', false)">
+          <div class="modal-close" @click="$emit('update:modelValue', false)">
             <v-mdi name="mdi-close" />
           </div>
         </div>
@@ -94,7 +94,7 @@
 export default {
   emits: ['after-open', 'after-close'],
   props: {
-    visible: {
+    modelValue: {
       type: Boolean,
       default: false,
     },
@@ -129,7 +129,7 @@ export default {
       }
   },
   watch: {
-    visible(isVisible) {
+    modelValue(isVisible) {
       if (isVisible) {
         this.$emit('after-open')
       } else {

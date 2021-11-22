@@ -28,7 +28,7 @@
     icon="mdi:plus"
     @click="jsonFormatterVisible = true"
   />
-  <modal v-model:visible="jsonFormatterVisible" :width="400">
+  <modal v-model="jsonFormatterVisible" :width="400">
     <main-function />
   </modal>
 </template>

@@ -55,7 +55,7 @@ iframe
       <button @click="showRegVisual">查看</button>
     </div>
   </div>
-  <modal v-model:visible="regVisualVisible" width="80%" height="80%">
+  <modal v-model="regVisualVisible" width="80%" height="80%">
     <iframe :src="iframeSrc" visible="0"></iframe>
   </modal>
 </template>

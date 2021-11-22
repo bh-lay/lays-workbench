@@ -73,7 +73,7 @@
     />
   </div>
   <modal
-    v-model:visible="modalVisible"
+    v-model="modalVisible"
     width="80%"
     height="80%"
     @after-close="afterModalClose"

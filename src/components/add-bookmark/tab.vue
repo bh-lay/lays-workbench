@@ -23,7 +23,7 @@
 import { h } from 'vue';
 export default {
   props: {
-    active: {
+    modelValue: {
       type: String,
       default: null,
     },
@@ -35,10 +35,10 @@ export default {
         {
           class: [
             'tab-item',
-            props.active === id ? 'active' : '',
+            props.modelValue === id ? 'active' : '',
           ],
           onClick() {
-            context.emit('update:active', id)
+            context.emit('update:modelValue', id)
           },
         },
         [label]

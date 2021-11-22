@@ -69,10 +69,10 @@
           background: previewData.undercoat
         }">
           <template v-slot:body>
-            <color-selector v-model:active="previewData.undercoat" />
+            <color-selector v-model="previewData.undercoat" />
           </template>
         </dropdown>
-        <size-selector v-model:active="previewData.size" />
+        <size-selector v-model="previewData.size" />
       </div>
     </div>
     <div class="preview-area">

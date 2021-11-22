@@ -46,7 +46,7 @@ import { resolveComponent, h } from 'vue';
 import colorList from './color-list.ts';
 export default {
   props: {
-    active: {
+    modelValue: {
       type: String,
       default: null,
     },
@@ -56,9 +56,9 @@ export default {
       return h(
         resolveComponent('dropdown-item'),
         {
-          class: ['color-item', props.active === colorItem.value ? 'active' : ''],
+          class: ['color-item', props.modelValue === colorItem.value ? 'active' : ''],
           onClick() {
-            context.emit('update:active', colorItem.value);
+            context.emit('update:modelValue', colorItem.value);
           },
           style: {
             background: colorItem.value

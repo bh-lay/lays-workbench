@@ -5,7 +5,7 @@
 
 <template>
   <div class="add-bookmark-modal">
-    <tab v-model:active="activeCreateType" />
+    <tab v-model="activeCreateType" />
     <custom-link v-if="activeCreateType === 'custom'"/>
   </div>
 </template>
