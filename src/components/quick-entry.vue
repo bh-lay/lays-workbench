@@ -28,7 +28,7 @@ import { ref } from 'vue';
 import { Bookmark, BookmarkType, BookmarkSize } from '../database/entity/bookmark.ts'
 import { listBookmarkService } from '../database/services/bookmark-service.ts';
 import BookmarkItem from './bookmark-item.vue';
-import AddBookmark from './widgets/add-bookmark/index.vue';
+import AddBookmark from './add-bookmark/index.vue';
 
 export default {
   components: { BookmarkItem, AddBookmark },

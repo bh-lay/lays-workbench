@@ -36,7 +36,7 @@
 <script>
 import { ref } from "vue";
 import MainFunction from './main.vue'
-import BookmarkIcon from '../../bookmark-icon.vue'
+import BookmarkIcon from '../bookmark-icon.vue'
 export default {
   components: { BookmarkIcon, MainFunction },
   setup() {

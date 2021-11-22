@@ -84,8 +84,8 @@
 </template>
 
 <script>
-import { Bookmark, BookmarkType, BookmarkSize } from '../../../database/entity/bookmark.ts'
-import BookmarkItem from '../../bookmark-item.vue'
+import { Bookmark, BookmarkType, BookmarkSize } from '../../database/entity/bookmark.ts'
+import BookmarkItem from '../bookmark-item.vue'
 import ColorSelector from './color-selector.vue'
 import SizeSelector from './size-selector.vue'
 import { reactive } from 'vue';
