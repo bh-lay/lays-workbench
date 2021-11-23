@@ -70,8 +70,8 @@
         <json-formatter v-else-if="data.value === 'json-formatter'" />
         <native-bookmark v-else-if="data.value === 'native-bookmark'" />
         <img-to-base v-else-if="data.value === 'img-to-base'" />
-        <slot v-else name="body" />
-        <!-- <span>unknown widgets type<br/>{{ data.name }} <small>{{ data.value }}</small></span> -->
+        <slot v-else-if="$slots.body" name="body" />
+        <span v-else>unknown widgets type<br/>{{ data.name }} <small>{{ data.value }}</small></span>
       </template>
     </div>
     <div class="title">{{ data.name }}</div>
