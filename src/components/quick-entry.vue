@@ -16,7 +16,7 @@
     />
     <bookmark-item :data="addData">
       <template v-slot:body>
-        <add-bookmark />
+        <add-bookmark @success="refreshList" />
       </template>
     </bookmark-item>
   </div>
@@ -55,6 +55,9 @@ export default {
         console.log('list', list);
         this.bookmarkList = list;
       });
+    },
+    refreshList() {
+      this.getList()
     },
   },
 };

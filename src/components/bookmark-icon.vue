@@ -61,6 +61,10 @@ export default {
     let faviconLoaded = ref(false);
     let faviconUrl = ref('');
     function loadFavicon() {
+      // 不是完整 url，不抓取
+      if(!/^http(s|)\:\/\/[^\.]+\.[^\.]+/.test(props.url)) {
+        return
+      }
       faviconLoaded.value = false;
       faviconUrl.value = `http://www.getfavicon.org/get.pl?url=${encodeURIComponent(
         props.url
@@ -116,7 +120,7 @@ export default {
     watch(
       () => props.url,
       (value) => {
-        if (iconType.value === 'crab' && /^http(s|)\:\/\/[^\.]+\.[^\.]+/.test(value)){
+        if (iconType.value === 'crab'){
           loadFavicon()
         }
       },

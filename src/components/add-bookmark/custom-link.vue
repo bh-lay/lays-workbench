@@ -42,13 +42,16 @@
   height 180px
   padding-top 20px
   background #17202b
+.footer
+  padding-top 20px
+  text-align right
 </style>
 
 <template>
   <div class="custom-link">
     <div class="input-item">
       <div class="label">名称</div>
-      <input type="text" v-model="previewData.name" placeholder="请输入链接名称" />
+      <input type="text" v-model="previewData.name" placeholder="请输入链接名称" maxlength="20" />
     </div>
     <div class="input-item">
       <div class="label">链接地址</div>
@@ -74,25 +77,45 @@
         :data="previewData"
       />
     </div>
+    <div class="footer">
+      <wb-button @click="confirm">添加</wb-button>
+    </div>
   </div>
 </template>
 
 <script>
-import { Bookmark, BookmarkType, BookmarkSize } from '../../database/entity/bookmark.ts'
+import { Bookmark } from '../../database/entity/bookmark.ts'
+import { insertBookmarkService } from '../../database/services/bookmark-service.ts'
 import BookmarkItem from '../bookmark-item.vue'
 import ColorSelector from './color-selector.vue'
 import SizeSelector from './size-selector.vue'
 import IconEditor from './icon-editor.vue'
 import { reactive } from 'vue';
 export default {
+  emits: ['success'],
   components: { BookmarkItem, ColorSelector, SizeSelector, IconEditor },
-  setup() {
+  setup(props, context) {
     const previewData = reactive(new Bookmark({
       undercoat: '#9D2932',
       icon: 'text:好看'
     }))
     return {
       previewData,
+      confirm() {
+        console.log('previewData', previewData)
+        if (!previewData.name) {
+          alert('图标名字没写')
+          return
+        }
+        if (!previewData.value) {
+          alert('链接没有填')
+          return
+        }
+        insertBookmarkService(previewData)
+        .then(() => {
+          context.emit('success')
+        })
+      },
     }
   },
 };

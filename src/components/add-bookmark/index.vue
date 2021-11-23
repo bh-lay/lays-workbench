@@ -27,10 +27,10 @@
   <bookmark-icon
     icon="mdi:plus"
     undercoat="#000"
-    @click="jsonFormatterVisible = true"
+    @click="addBookmarkVisible = true"
   />
-  <modal v-model="jsonFormatterVisible" :width="400">
-    <main-function />
+  <modal v-model="addBookmarkVisible" :width="400">
+    <main-function @success="handleCreateSuccess" />
   </modal>
 </template>
 
@@ -39,11 +39,16 @@ import { ref } from "vue";
 import MainFunction from './main.vue'
 import BookmarkIcon from '../bookmark-icon.vue'
 export default {
+  emits: ['success'],
   components: { BookmarkIcon, MainFunction },
-  setup() {
-    const jsonFormatterVisible = ref(false)
+  setup(props, context) {
+    const addBookmarkVisible = ref(false)
     return {
-      jsonFormatterVisible,
+      addBookmarkVisible,
+      handleCreateSuccess() {
+        addBookmarkVisible.value = false
+        context.emit('success')
+      },
     };
   },
 };

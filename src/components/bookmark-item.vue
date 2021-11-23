@@ -19,6 +19,9 @@
     font-size 12px
     color #fff
     text-shadow 1px 1px 1px rgba(0, 0, 0, .4), 1px 1px 4px rgba(0, 0, 0, .4)
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
   .popover
     position absolute
     bottom 110%

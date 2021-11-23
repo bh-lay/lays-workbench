@@ -2,12 +2,11 @@
 .icon-editor
   display flex
   background #e7eaef
+  border 1px solid #e7eaef
 .dropdown-button
   display flex
   align-items center
   width 90px
-  height 38px
-  border 1px solid #e7eaef
   background #f3f4f7
   line-height 38px
   text-align center
@@ -45,13 +44,29 @@ input
   flex-grow 1
   background transparent
   border none
+  &:focus
+    outline none
+.mdi-help
+  display flex
+  width 40px
+  align-items center
+  justify-content center
+  background: #f3f4f7
+  cursor pointer
+  color #3d4c5c
+  transition .15s
+  svg
+    width 14px
+  &:hover
+    background #fff
 .crab-message
   width 10px
   flex-grow 1
   padding-left 15px
-  line-height 40px
+  line-height 38px
   font-size 12px
   color #666
+
 </style>
 
 <template>
@@ -77,6 +92,9 @@ input
       type="text"
     />
     <div v-else class="crab-message">将尝试自动抓取图标</div>
+    <div v-if="iconType === 'mdi'" class="mdi-help" @click="openMdiHelp">
+      <v-mdi name="mdi-help" />
+    </div>
   </div>
 </template>
 
@@ -195,6 +213,9 @@ export default {
       iconValue,
       iconTypeList,
       inputValue,
+      openMdiHelp() {
+        window.open('https://material.iconhelper.cn/', 'about:blank')
+      },
     };
   },
 };
