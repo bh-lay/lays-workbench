@@ -83,11 +83,13 @@ export default {
           });
       }
     }
-    formatIconData(props.icon);
     watch(
       () => props.icon,
       (value) => {
         formatIconData(value);
+      },
+      {
+        immediate: true,
       }
     );
 
@@ -96,7 +98,13 @@ export default {
       () => props.undercoat,
       (value) => {
         const [h, s, l] = anyColorToHsl(value);
-        textColor.value = l > 0.8 ? formatHslToHex(h, 0.2, 0.2) : '#fff';
+        if (l < 0.6) {
+          // 区块亮度小于 60%，文本使用白色
+          textColor.value = '#fff';
+        } else {
+          // 区块亮度大于等于 40%，文本使用和区块同色系的深色
+          textColor.value = formatHslToHex(h, 0.2, 0.2)
+        }
       },
       {
         immediate: true,
