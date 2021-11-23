@@ -72,7 +72,7 @@ input
     </dropdown>
     <input
       v-if="iconType !== 'crab'"
-      :maxlength="iconType === 'mdi' ? 30 : 4"
+      :maxlength="iconType === 'mdi' ? 30 : 6"
       v-model="inputValue"
       type="text"
     />

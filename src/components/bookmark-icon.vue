@@ -60,7 +60,19 @@ export default {
     // 处理抓取图标逻辑
     let faviconLoaded = ref(false);
     let faviconUrl = ref('');
-
+    function loadFavicon() {
+      faviconLoaded.value = false;
+      faviconUrl.value = `http://www.getfavicon.org/get.pl?url=${encodeURIComponent(
+        props.url
+      )}&submitget=get+favicon`;
+      loadImage(faviconUrl.value)
+        .then(() => {
+          faviconLoaded.value = true;
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    }
     function formatIconData(iconConfig) {
       const iconSplit = (iconConfig || '').split(':');
       if (iconSplit[0] === 'mdi') {
@@ -71,16 +83,7 @@ export default {
         iconData.value = iconSplit[1];
       } else if (props.icon === 'crab') {
         iconType.value = 'crab';
-        faviconUrl = `http://www.getfavicon.org/get.pl?url=${encodeURIComponent(
-          props.url
-        )}&submitget=get+favicon`;
-        loadImage(faviconUrl)
-          .then(() => {
-            faviconLoaded.value = true;
-          })
-          .catch((error) => {
-            console.log('error', error);
-          });
+        loadFavicon()
       }
     }
     watch(
@@ -109,6 +112,14 @@ export default {
       {
         immediate: true,
       }
+    );
+    watch(
+      () => props.url,
+      (value) => {
+        if (iconType.value === 'crab' && /^http(s|)\:\/\/[^\.]+\.[^\.]+/.test(value)){
+          loadFavicon()
+        }
+      },
     );
     return {
       iconType,
