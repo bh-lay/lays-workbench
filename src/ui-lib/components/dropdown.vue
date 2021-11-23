@@ -11,7 +11,7 @@
 </style>
 
 <template>
-  <div class="dropdown-button" ref="button" @click="show">
+  <div :class="['dropdown-button', visible ? 'active' : '']" ref="button" @click="show">
     <slot />
     <teleport to="body">
       <transition name="slidedown">
