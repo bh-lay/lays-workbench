@@ -26,6 +26,7 @@
 <template>
   <bookmark-icon
     icon="mdi:plus"
+    undercoat="#000"
     @click="jsonFormatterVisible = true"
   />
   <modal v-model="jsonFormatterVisible" :width="400">

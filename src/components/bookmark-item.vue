@@ -61,6 +61,7 @@
       <template v-if="data.type === BookmarkType.link">
         <bookmark-icon
           :icon="data.icon"
+          :undercoat="data.undercoat"
           :url="data.value"
           @click="openItem(data)"
         />
