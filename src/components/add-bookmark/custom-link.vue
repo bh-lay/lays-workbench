@@ -55,13 +55,7 @@
       <input type="text" v-model="previewData.value" placeholder="请输入链接地址" />
     </div>
     <div class="input-item">
-      <div class="label">图标</div>
-      <div class="color-selector">
-        <input type="text" v-model="previewData.icon" placeholder="请输入链接地址" />
-        文字图标<br/>
-        mdi图标<br/>
-        自动抓取图标
-      </div>
+      <icon-editor v-model="previewData.icon" />
     </div>
     <div class="input-item">
       <div class="undercoat-and-size">
@@ -88,12 +82,14 @@ import { Bookmark, BookmarkType, BookmarkSize } from '../../database/entity/book
 import BookmarkItem from '../bookmark-item.vue'
 import ColorSelector from './color-selector.vue'
 import SizeSelector from './size-selector.vue'
+import IconEditor from './icon-editor.vue'
 import { reactive } from 'vue';
 export default {
-  components: { BookmarkItem, ColorSelector, SizeSelector },
+  components: { BookmarkItem, ColorSelector, SizeSelector, IconEditor },
   setup() {
     const previewData = reactive(new Bookmark({
-      undercoat: '#9D2932'
+      undercoat: '#9D2932',
+      icon: 'text:好看'
     }))
     return {
       previewData,
