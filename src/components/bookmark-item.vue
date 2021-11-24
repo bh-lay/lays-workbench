@@ -1,8 +1,9 @@
 <style lang="stylus" scoped>
 .bookmark-item
   position relative
+  width var(--grid-size)
+  height var(--grid-size)
   grid-area span 1 / span 1 / auto / auto
-  padding-bottom 20px
   .card
     width calc(var(--grid-size) - var(--grid-gap))
     height calc(var(--grid-size) - var(--grid-gap))
@@ -42,15 +43,21 @@
       transition .15s .3s ease-out
 .item-size-medium
   grid-area span 2 / span 2 / auto / auto
+  width calc(var(--grid-size) * 2)
+  height calc(var(--grid-size) * 2)
   .card
     width calc(var(--grid-size) * 2 - var(--grid-gap))
     height calc(var(--grid-size) * 2 - var(--grid-gap))
 .item-size-large
   grid-area span 2 / span 4 / auto / auto
+  width calc(var(--grid-size) * 4)
+  height calc(var(--grid-size) * 2)
   .card
     width calc(var(--grid-size) * 4 - var(--grid-gap))
     height calc(var(--grid-size) * 2 - var(--grid-gap))
 .item-size-three_one
+  width calc(var(--grid-size) * 3)
+  height var(--grid-size)
   grid-area span 1 / span 3 / auto / auto
   .card
     width calc(var(--grid-size) * 3 - var(--grid-gap))

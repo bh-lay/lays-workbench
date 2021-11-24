@@ -5,7 +5,6 @@
   line-height 40px
   text-align center
   cursor pointer
-  z-index 12
   svg
     height 20px
     vertical-align text-bottom

@@ -109,7 +109,7 @@ export default {
           // 区块亮度小于 60%，文本使用白色
           textColor.value = '#fff';
         } else {
-          // 区块亮度大于等于 40%，文本使用和区块同色系的深色
+          // 区块亮度大于等于 60%，文本使用和区块同色系的深色
           textColor.value = formatHslToHex(h, 0.2, 0.2)
         }
       },

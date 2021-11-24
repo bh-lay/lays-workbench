@@ -88,53 +88,48 @@ textarea
     text-decoration none
     &:hover
       text-decoration underline
-.mobile-warning
-  display none
-  margin-top 20px
-  padding 30px
-  background rgba(255, 255, 255, .2)
-  border-radius 4px
-  text-align center
-  .title
-    font-size 14px
-    color #fff
-  svg
-    width 120px
-    height 120px
-    fill #fff
+.screen-mask
+  position fixed
+  width 100%
+  height 100%
+  top 0
+  left 0
+  z-index 10
+  background rgba(0, 0, 0, 0)
+  pointer-events none
+  transition backdrop-filter .4s ease-out, background .6s ease
+  &.defocus
+    background rgba(0, 0, 0, .4)
+    backdrop-filter blur(1px)
+    transition backdrop-filter .15s ease-out, background .3s ease
 </style>
 
 <template>
-  <gallery :defocus="focused" />
+  <gallery />
   <div class="pager">
     <div class="pager-header">
-      <transition name="fade-fast">
-        <div v-show="!focused" class="pager-header-inner">
-          <div class="page-title">
-            <v-mdi name="mdi-hail" />
-            <span>小剧的上网首页</span>
-          </div>
-          <settings />
+      <div class="pager-header-inner">
+        <div class="page-title">
+          <v-mdi name="mdi-hail" />
+          <span>小剧的上网首页</span>
         </div>
-      </transition>
+        <settings />
+      </div>
     </div>
     <div class="pager-body">
       <div class="scroll-body">
+        <div :class="['screen-mask', focused ? 'defocus' : '']"></div>
         <search-entrance @focus="focused = true" @blur="focused = false" />
         <div class="fixed-height-pager">
-          <transition name="fade-fast">
-            <quick-entry v-show="!focused" />
-          </transition>
+          <quick-entry />
         </div>
       </div>
     </div>
     <div class="pager-footer">
-      <transition name="fade-fast">
-        <div class="footer-copyright" v-show="!focused">
-          by：<a href="http://bh-lay.com" target="_blank">剧中人</a>
-          <span>皖ICP备14001331号-1</span>
-        </div>
-      </transition>
+      <div class="footer-copyright">
+        by：<a href="http://bh-lay.com" target="_blank">剧中人</a>
+        <span>皖ICP备14001331号-1</span>
+      </div>
     </div>
   </div>
 </template>

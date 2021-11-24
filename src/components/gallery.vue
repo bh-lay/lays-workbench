@@ -9,17 +9,8 @@
   background no-repeat center #444
   background-size cover
 .mask
-  position absolute
-  width 100%
   height 100%
-  top 0
-  left 0
-  transition backdrop-filter .1s ease-out, background .6s ease-in
-  background rgba(0, 0, 0, .1)
-  &.defocus
-    background rgba(0, 0, 0, .5)
-    backdrop-filter blur(4px)
-    transition backdrop-filter .15s ease-out, background 1s ease-out
+  background rgba(0, 0, 0, .2)
 </style>
 
 <template>
@@ -31,9 +22,7 @@
         :style="{
           backgroundImage: `url(${bakgroundUrl})`
         }"
-      >
-        <div :class="['mask', defocus ? 'defocus' : '']" />
-      </div>
+      ><div class="mask"></div></div>
     </transition>
   </div>
 </template>

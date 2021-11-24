@@ -12,7 +12,7 @@
   border-radius 4px
   background rgba(255, 255, 255, 0.2)
   backdrop-filter blur(2px)
-  transition 0.5s 0.4s ease-in-out
+  transition 0.4s 0.3s ease-in-out
   .selected-engine
     display flex
     justify-content center
@@ -45,14 +45,16 @@
     &:focus
       outline none
   & > *
-    transition 0.3s 0.2s
+    transition 0.2s 0.1s
     opacity 0
   &.active, &:hover
-    transition 0.5s ease-in-out
+    transition 0.2s ease-out
     background #fff
+    backdrop-filter blur(0)
     & > *
-      transition 0.5s 0.4s
+      transition 0.4s 0.15s
       opacity 1
+
 .engine-list
   box-sizing border-box
   position absolute
