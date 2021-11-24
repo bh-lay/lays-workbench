@@ -29,7 +29,6 @@ export function insertBookmarkService(bookmarkItem: any, db?: IDBDatabase) {
     })
   })
   .then((db: IDBDatabase) => {
-    console.log(2)
     return bookmarkInsertManager(db, bookmarkItem)
   })
 }
@@ -39,8 +38,19 @@ export function getBookmarkService(bookmarkId: string) {
   })
 }
 
-export function updateBookmarkService(bookmarkItem: any) {
-  return getIDBRequest().then((db: IDBDatabase) => {
+export function updateBookmarkService(bookmarkItem: any, db?: IDBDatabase) {
+  return getDbFromParams(db).then((db: IDBDatabase) => {
+    return bookmarkCountManager(db).then((count: number) => {
+      if (count > 0) {
+        return db
+      }
+      return initBookmark2db(db).then(() => {
+        return db
+      })
+    })
+  })
+  .then((db: IDBDatabase) => {
+    console.log(2)
     return bookmarkUpdateManager(db, bookmarkItem)
   })
 }
