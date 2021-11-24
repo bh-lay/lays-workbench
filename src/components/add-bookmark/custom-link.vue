@@ -78,14 +78,13 @@
       />
     </div>
     <div class="footer">
-      <wb-button @click="confirm">添加</wb-button>
+      <wb-button @click="confirm">确定</wb-button>
     </div>
   </div>
 </template>
 
 <script>
 import { Bookmark } from '../../database/entity/bookmark.ts'
-import { insertBookmarkService } from '../../database/services/bookmark-service.ts'
 import BookmarkItem from '../bookmark-item.vue'
 import ColorSelector from './color-selector.vue'
 import SizeSelector from './size-selector.vue'
@@ -94,11 +93,21 @@ import { reactive } from 'vue';
 export default {
   emits: ['success'],
   components: { BookmarkItem, ColorSelector, SizeSelector, IconEditor },
+  props: {
+    data: {
+      type: Object,
+      default() {
+        return null
+      },
+    },
+  },
   setup(props, context) {
-    const previewData = reactive(new Bookmark({
-      undercoat: '#9D2932',
-      icon: 'text:好看'
-    }))
+    const previewData = reactive(
+      new Bookmark(props.data || {
+        undercoat: '#9D2932',
+        icon: 'text:好看'
+      })
+    )
     return {
       previewData,
       confirm() {
@@ -111,10 +120,7 @@ export default {
           alert('链接没有填')
           return
         }
-        insertBookmarkService(previewData)
-        .then(() => {
-          context.emit('success')
-        })
+        context.emit('confirm', previewData)
       },
     }
   },

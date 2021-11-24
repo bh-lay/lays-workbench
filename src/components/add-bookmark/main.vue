@@ -6,21 +6,28 @@
 <template>
   <div class="add-bookmark-modal">
     <tab v-model="activeCreateType" />
-    <custom-link v-if="activeCreateType === 'custom'" @success="$emit('success')"/>
+    <custom-link v-if="activeCreateType === 'custom'" @confirm="handleConfirm"/>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue';
+import { insertBookmarkService } from '../../database/services/bookmark-service.ts'
 import Tab from './tab.vue'
 import CustomLink from './custom-link.vue'
 export default {
   emits: ['success'],
   components: { Tab, CustomLink },
-  setup() {
+  setup(props, context) {
     const activeCreateType = ref('custom')
     return {
-      activeCreateType
+      activeCreateType,
+      handleConfirm(data) {
+        insertBookmarkService(data)
+        .then(() => {
+          context.emit('success')
+        })
+      },
     }
   },
 };

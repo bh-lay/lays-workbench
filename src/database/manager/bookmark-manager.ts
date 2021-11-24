@@ -70,25 +70,19 @@ export function bookmarkGetManager(db: IDBDatabase, bookmarkId: any) {
 }
 export function bookmarkRemoveManager(db: IDBDatabase, bookmarkId: string) {
   return new Promise((resolve, reject) => {
-    var transaction = db.transaction(['bookmark']);
+    var transaction = db.transaction(['bookmark'], 'readwrite');
     var objectStore = transaction.objectStore('bookmark');
     var request = objectStore.delete(bookmarkId);
   
-    request.onsuccess = function (event) {
-      if (request.result) {
-        var bookmark = new Bookmark(request.result)
-        // 数据读取成功
-        resolve(bookmark)
-      } else {
-        let error = new Error('数据读取失败')
-        // error.__detail = event
-        reject(error)
-      }
+    request.onsuccess = function () {
+      // 数据读取成功
+      resolve(true)
+
       
     };
     request.onerror = function (event) {
       // 数据写入失败
-      let error = new Error('数据写入失败')
+      let error = new Error('数据删除失败')
       // error.__detail = event
       reject(error)
     }
