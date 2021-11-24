@@ -99,14 +99,14 @@ textarea
   pointer-events none
   transition backdrop-filter .4s ease-out, background .6s ease
   &.defocus
-    background rgba(0, 0, 0, .4)
+    background rgba(0, 0, 0, .5)
     backdrop-filter blur(1px)
     transition backdrop-filter .15s ease-out, background .3s ease
 </style>
 
 <template>
   <gallery />
-  <div class="pager">
+  <div class="pager" @contextmenu.prevent>
     <div class="pager-header">
       <div class="pager-header-inner">
         <div class="page-title">

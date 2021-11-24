@@ -8,7 +8,7 @@
 .contextmenu-body
   position fixed
   width 120px
-  padding 10px 0
+  padding 15px 0
   border-radius 4px
   background #fff
   box-shadow 2px 2px 10px rgba(0, 0, 0, .2), 1px 1px 3px rgba(0, 0, 0, .2)
@@ -16,7 +16,7 @@
   z-index 1000
 .contextmenu-item
   padding 0 20px
-  line-height 30px
+  line-height 34px
   font-size 14px
   color #555
   cursor pointer

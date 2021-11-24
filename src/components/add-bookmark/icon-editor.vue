@@ -27,10 +27,10 @@
       transform rotate(180deg) !important
 .icon-type-selector
   width 120px
-  padding 10px 0
+  padding 15px 0
   .dropdown-item
     padding 0 20px
-    line-height 30px
+    line-height 34px
     font-size 14px
     color #555
     cursor pointer

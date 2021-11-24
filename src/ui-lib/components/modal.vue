@@ -24,8 +24,8 @@
   top 0
   left 0
   z-index 100
-  background: rgba(0, 0, 0, .5)
-  backdrop-filter blur(2px)
+  background: rgba(0, 0, 0, .4)
+  backdrop-filter blur(1px)
 .modal-close
   position absolute
   top 0
