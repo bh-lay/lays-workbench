@@ -76,10 +76,10 @@ import {
   BookmarkSize,
 } from '../database/entity/bookmark.ts';
 import {
-  removeBookmarkService,
-  updateBookmarkService,
+  bookmarkRemoveService,
+  bookmarkUpdateService,
 } from '../database/services/bookmark-service.ts';
-import { listBookmarkService } from '../database/services/bookmark-service.ts';
+import { bookmarkListService } from '../database/services/bookmark-service.ts';
 import dragHandle from '../assets/js/drag-handle.ts';
 import BookmarkItem from './bookmark-item.vue';
 import AddBookmark from './add-bookmark/index.vue';
@@ -155,7 +155,7 @@ export default {
 
     const selectedBookmarkItem = ref({});
     const getList = function () {
-      listBookmarkService().then((list) => {
+      bookmarkListService().then((list) => {
         console.log('list', list);
         bookmarkList.value = list;
       });
@@ -178,7 +178,7 @@ export default {
 
       handleRemove() {
         mouseHandle.closeContextMenu();
-        removeBookmarkService(selectedBookmarkItem.value.id).then(() => {
+        bookmarkRemoveService(selectedBookmarkItem.value.id).then(() => {
           for (let i = 0; i < bookmarkList.value.length; i++) {
             if (bookmarkList.value[i].id === selectedBookmarkItem.value.id) {
               bookmarkList.value.splice(i, 1);
@@ -188,7 +188,7 @@ export default {
         });
       },
       handleConfirmEdit(bookmarkItem) {
-        updateBookmarkService(bookmarkItem).then(() => {
+        bookmarkUpdateService(bookmarkItem).then(() => {
           mouseHandle.closeEditModal()
           for (let i = 0; i < bookmarkList.value.length; i++) {
             if (bookmarkList.value[i].id === bookmarkItem.id) {

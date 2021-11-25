@@ -77,8 +77,6 @@ export function bookmarkRemoveManager(db: IDBDatabase, bookmarkId: string) {
     request.onsuccess = function () {
       // 数据读取成功
       resolve(true)
-
-      
     };
     request.onerror = function (event) {
       // 数据写入失败

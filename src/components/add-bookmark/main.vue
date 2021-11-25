@@ -12,7 +12,7 @@
 
 <script>
 import { ref } from 'vue';
-import { insertBookmarkService } from '../../database/services/bookmark-service.ts'
+import { bookmarkInsertService } from '../../database/services/bookmark-service.ts'
 import Tab from './tab.vue'
 import CustomLink from './custom-link.vue'
 export default {
@@ -23,7 +23,7 @@ export default {
     return {
       activeCreateType,
       handleConfirm(data) {
-        insertBookmarkService(data)
+        bookmarkInsertService(data)
         .then(() => {
           context.emit('success')
         })
