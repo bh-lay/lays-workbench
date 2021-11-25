@@ -132,3 +132,38 @@ export function bookmarkCountManager(db: IDBDatabase): Promise<Bookmark[]> {
     }
   })
 }
+export function bookmarkResetSortManager(db: IDBDatabase, idList: string[]): Promise<Boolean> {
+  return new Promise((resolve, reject) => {
+    // id -> sort 值映射 Map
+    const idSortMap = idList.reduce((result: Map<string, number>, id: string, index: number) => {
+      result.set(id, idList.length - index)
+      return result;
+    }, new Map());
+    // 创建数据库 store 对象
+    const objectStore = db.transaction('bookmark', 'readwrite').objectStore('bookmark');
+    // 打开游标
+    const request = objectStore.openCursor()
+    request.onsuccess = function (event) {
+      var cursor: any = event.target.result;
+      if (cursor) {
+        const value: any = cursor.value
+        const newSortValue = idSortMap.get(value.id)
+        if (newSortValue) {
+          // 如果当前书签在 map 中，则修改
+          value.sort = newSortValue
+          objectStore.put(value);
+        }
+        cursor.continue();
+      } else {
+        resolve(true)
+      }
+    };
+
+    request.onerror = function (event) {
+      // 数据写入失败
+      let error = new Error('数据设置失败')
+      // error.__detail = event
+      reject(error)
+    }
+  })
+}

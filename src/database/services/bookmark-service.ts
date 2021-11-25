@@ -75,3 +75,8 @@ export function listBookmarkService() {
     })
   })
 }
+export function sortBookmarkService(idList: string[]) {
+  return getIDBRequest().then((db: IDBDatabase) => {
+    return bookmarkResetSortManager(db, idList)
+  });
+}

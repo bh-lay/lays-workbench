@@ -8,6 +8,7 @@ import {
   updateBookmarkService,
   removeBookmarkService,
   listBookmarkService,
+  sortBookmarkService,
 } from './database/services/bookmark-service.ts'
 
 window['test'] = {
@@ -16,6 +17,7 @@ window['test'] = {
   updateBookmarkService,
   removeBookmarkService,
   listBookmarkService,
+  sortBookmarkService,
 }
 const app = createApp(App)
 app.use(uiLib)
