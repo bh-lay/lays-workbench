@@ -96,6 +96,7 @@ function mouseIntractive(selectedBookmarkItem) {
   function closeEditModal() {
     editModalVisilbe.value = false;
   }
+  var needForbiddenClick = false
   return {
     editModalVisilbe,
     contextmenuVisible,
@@ -111,6 +112,9 @@ function mouseIntractive(selectedBookmarkItem) {
       editModalVisilbe.value = true;
     },
     openItem(data) {
+      if (needForbiddenClick) {
+        return
+      }
       window.open(data.value, '_blank');
     },
     openContextMenu(event, item) {
@@ -124,11 +128,13 @@ function mouseIntractive(selectedBookmarkItem) {
       });
     },
     handleDrag(event, bookmarkItem) {
+      needForbiddenClick = false
       console.log('bookmarkItem', bookmarkItem);
       dragHandle(event, {
         stableDistance: 20,
         stableStart() {
           console.log('拖动开始了');
+          needForbiddenClick = true
           // targetMap = getTargetMap(data.parentFid)
           // shadowNode = new ShadowNode(data)
         },
