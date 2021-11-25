@@ -91,7 +91,7 @@ import SizeSelector from './size-selector.vue'
 import IconEditor from './icon-editor.vue'
 import { reactive } from 'vue';
 export default {
-  emits: ['success'],
+  emits: ['confirm'],
   components: { BookmarkItem, ColorSelector, SizeSelector, IconEditor },
   props: {
     data: {

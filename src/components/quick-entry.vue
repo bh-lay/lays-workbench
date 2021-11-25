@@ -31,7 +31,9 @@
       v-for="bookmarkItem in bookmarkList"
       :key="bookmarkItem.id"
       :data="bookmarkItem"
+      @next="openItem(bookmarkItem)"
       @contextmenu="openContextMenu($event, bookmarkItem)"
+      @mousedown="handleDrag($event, bookmarkItem)"
     />
     <bookmark-item :data="addData">
       <template v-slot:body>
@@ -48,46 +50,120 @@
           left: contextmenuX + 'px',
         }"
       >
-        <div v-if="selectedBookmarkItem.type === BookmarkType.link" class="contextmenu-item" @click="handleEdit">编辑</div>
+        <div
+          v-if="selectedBookmarkItem.type === BookmarkType.link"
+          class="contextmenu-item"
+          @click="handleEdit"
+        >
+          编辑
+        </div>
         <div class="contextmenu-item" @click="handleRemove">删除</div>
       </div>
     </transition>
     <modal v-model="editModalVisilbe" :width="400">
       <div style="padding: 20px">
-        <custom-link :data="selectedBookmarkItem" @confirm="handleConfirm"/>
+        <custom-link :data="selectedBookmarkItem" @confirm="handleConfirmEdit" />
       </div>
     </modal>
   </div>
 </template>
 
-
 <script>
 import { ref, nextTick, onMounted } from 'vue';
-import { Bookmark, BookmarkType, BookmarkSize } from '../database/entity/bookmark.ts'
-import { removeBookmarkService, updateBookmarkService } from '../database/services/bookmark-service.ts'
+import {
+  Bookmark,
+  BookmarkType,
+  BookmarkSize,
+} from '../database/entity/bookmark.ts';
+import {
+  removeBookmarkService,
+  updateBookmarkService,
+} from '../database/services/bookmark-service.ts';
 import { listBookmarkService } from '../database/services/bookmark-service.ts';
+import dragHandle from '../assets/js/drag-handle.ts';
 import BookmarkItem from './bookmark-item.vue';
 import AddBookmark from './add-bookmark/index.vue';
-import CustomLink from './add-bookmark/custom-link.vue'
+import CustomLink from './add-bookmark/custom-link.vue';
 
+function mouseIntractive(selectedBookmarkItem) {
+  const editModalVisilbe = ref(false);
+  const contextmenuVisible = ref(false);
+  const contextmenuX = ref(0);
+  const contextmenuY = ref(0);
+  function closeContextMenu() {
+    contextmenuVisible.value = false;
+  }
+  function closeEditModal() {
+    editModalVisilbe.value = false;
+  }
+  return {
+    editModalVisilbe,
+    contextmenuVisible,
+    contextmenuX,
+    contextmenuY,
+    closeContextMenu,
+    closeEditModal,
+    handleClickOutside() {
+      closeContextMenu();
+    },
+    handleEdit() {
+      closeContextMenu();
+      editModalVisilbe.value = true;
+    },
+    openItem(data) {
+      window.open(data.value, '_blank');
+    },
+    openContextMenu(event, item) {
+      closeContextMenu();
+      selectedBookmarkItem.value = item;
+      event.preventDefault();
+      nextTick(() => {
+        contextmenuX.value = event.clientX;
+        contextmenuY.value = event.clientY;
+        contextmenuVisible.value = true;
+      });
+    },
+    handleDrag(event, bookmarkItem) {
+      console.log('bookmarkItem', bookmarkItem);
+      dragHandle(event, {
+        stableDistance: 20,
+        stableStart() {
+          console.log('拖动开始了');
+          // targetMap = getTargetMap(data.parentFid)
+          // shadowNode = new ShadowNode(data)
+        },
+        move(params) {
+          console.log('动了动了', params);
+          // shadowNode.updateDragedPosition(clientX, clientY)
+          // matchedTarget = getMacthedTarget(targetMap, clientX, clientY)
+          // shadowNode.highlight(matchedTarget)
+        },
+        end(params) {
+          console.log('结束了结束了', params);
+
+          // shadowNode.destroy()
+          // onDragEnd && onDragEnd(matchedTarget ? matchedTarget.fid : null)
+        },
+      });
+    },
+  };
+}
 export default {
   components: { BookmarkItem, AddBookmark, CustomLink },
   setup() {
     let bookmarkList = ref([]);
-    const contextmenuVisible = ref(false)
-    const contextmenuX = ref(0)
-    const contextmenuY = ref(0)
-    const selectedBookmarkItem = ref({})
-    const editModalVisilbe = ref(false)
-    const getList = function() {
+
+    const selectedBookmarkItem = ref({});
+    const getList = function () {
       listBookmarkService().then((list) => {
         console.log('list', list);
         bookmarkList.value = list;
       });
-    }
+    };
     onMounted(() => {
-      getList()
-    })
+      getList();
+    });
+    const mouseHandle = mouseIntractive(selectedBookmarkItem);
     return {
       bookmarkList,
       BookmarkType,
@@ -98,53 +174,34 @@ export default {
         size: BookmarkSize.small,
         undercoat: '#2196f3',
       }),
-      editModalVisilbe,
       selectedBookmarkItem,
-      contextmenuVisible,
-      contextmenuX,
-      contextmenuY,
-      openContextMenu(event, item) {
-        contextmenuVisible.value = false
-        selectedBookmarkItem.value = item
-        event.preventDefault()
-        nextTick(() => {
-          contextmenuX.value = event.clientX
-          contextmenuY.value = event.clientY
-          contextmenuVisible.value = true
-        })
-      },
-      handleClickOutside() {
-        contextmenuVisible.value= false
-      },
-      handleEdit() {
-        contextmenuVisible.value= false
-        editModalVisilbe.value = true
-      },
+
       handleRemove() {
-        contextmenuVisible.value= false
+        mouseHandle.closeContextMenu();
         removeBookmarkService(selectedBookmarkItem.value.id).then(() => {
           for (let i = 0; i < bookmarkList.value.length; i++) {
             if (bookmarkList.value[i].id === selectedBookmarkItem.value.id) {
-              bookmarkList.value.splice(i, 1)
-              break
+              bookmarkList.value.splice(i, 1);
+              break;
             }
           }
-        })
+        });
       },
-      handleConfirm(bookmarkItem) {
+      handleConfirmEdit(bookmarkItem) {
         updateBookmarkService(bookmarkItem).then(() => {
-          editModalVisilbe.value = false
+          mouseHandle.closeEditModal()
           for (let i = 0; i < bookmarkList.value.length; i++) {
             if (bookmarkList.value[i].id === bookmarkItem.id) {
-              bookmarkList.value[i] = bookmarkItem
-              break
+              bookmarkList.value[i] = bookmarkItem;
+              break;
             }
           }
-        })
+        });
       },
       refreshList() {
-        getList()
+        getList();
       },
+      ...mouseHandle,
     };
   },
 };

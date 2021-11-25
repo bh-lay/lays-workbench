@@ -73,7 +73,7 @@
           :icon="data.icon"
           :undercoat="data.undercoat"
           :url="data.value"
-          @click="openItem(data)"
+          @click="$emit('next')"
         />
       </template>
       <template v-else-if="data.type === BookmarkType.widgets">
@@ -98,6 +98,7 @@ import NativeBookmark from './widgets/native-bookmark.vue'
 import ImgToBase from './widgets/img-to-base/index.vue'
 
 export default {
+  emits: ['next'],
   components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon },
   props: {
     data: {
@@ -112,11 +113,6 @@ export default {
       BookmarkType,
       BookmarkSize,
     };
-  },
-  methods: {
-    openItem(data) {
-      window.open(data.value, '_blank')
-    },
   },
 };
 </script>
