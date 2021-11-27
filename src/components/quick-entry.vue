@@ -77,7 +77,6 @@
 import {
   ref,
   nextTick,
-  getCurrentInstance,
   onMounted,
   onBeforeUpdate,
 } from 'vue';
@@ -170,7 +169,9 @@ function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
   const bookmarkItemVm = [];
   // 确保在每次更新之前重置ref
   onBeforeUpdate(() => {
+    console.log('22222')
     bookmarkItemVm.value = [];
+    console.log('bookmarkItemVm2', bookmarkItemVm)
   });
 
   function closeContextMenu() {
@@ -214,9 +215,14 @@ function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
     },
     handleDrag(event, bookmarkItem) {
       needForbiddenClick = false;
-      const itemSizeAndPositionMap = bookmarkItemVm.value.map(
-        (bookmarkItemVm) => new BookmarkMapItem(bookmarkItemVm)
-      );
+      console.log('bookmarkItemVm', bookmarkItemVm)
+      const itemSizeAndPositionMap = []
+      bookmarkItemVm.value.forEach(bookmarkItemVm => {
+        if (!bookmarkItemVm) {
+          return
+        }
+        itemSizeAndPositionMap.push(new BookmarkMapItem(bookmarkItemVm))
+      });
       dragHandle(event, {
         stableDistance: 20,
         stableStart() {
@@ -253,6 +259,9 @@ function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
             itemSizeAndPositionMap
           );
           dragTriggerBlock.value.isDraging = false;
+          if (!triggered) {
+            return
+          }
           if (bookmarkItem.id === triggered.target.id) {
             return;
           }
