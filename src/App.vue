@@ -1,8 +1,4 @@
 <style lang="stylus">
-html
-  --grid-size 84px
-  --grid-gap 34px
-  --icon-radius 8px
 html, body
   position relative
   height 100%
