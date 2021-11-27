@@ -63,7 +63,10 @@
     </transition>
     <modal v-model="editModalVisilbe" :width="400">
       <div style="padding: 20px">
-        <custom-link :data="selectedBookmarkItem" @confirm="handleConfirmEdit" />
+        <custom-link
+          :data="selectedBookmarkItem"
+          @confirm="handleConfirmEdit"
+        />
       </div>
     </modal>
     <draged-layer v-if="dragTriggerBlock.isDraging" :data="dragTriggerBlock" />
@@ -71,7 +74,13 @@
 </template>
 
 <script>
-import { ref, nextTick, getCurrentInstance, onMounted, onBeforeUpdate } from 'vue';
+import {
+  ref,
+  nextTick,
+  getCurrentInstance,
+  onMounted,
+  onBeforeUpdate,
+} from 'vue';
 import {
   Bookmark,
   BookmarkType,
@@ -80,42 +89,53 @@ import {
 import {
   bookmarkRemoveService,
   bookmarkUpdateService,
+  bookmarkResortService,
 } from '../database/services/bookmark-service.ts';
 import { bookmarkListService } from '../database/services/bookmark-service.ts';
 import dragHandle from '../assets/js/drag-handle.ts';
-import { getVariables } from '../assets/js/css-variables.ts'
+import { getVariables } from '../assets/js/css-variables.ts';
 import BookmarkItem from './bookmark-item.vue';
 import AddBookmark from './add-bookmark/index.vue';
 import CustomLink from './add-bookmark/custom-link.vue';
-import DragedLayer from './draged-layer.vue'
-class BookmarkMapItem{
-  constructor(bookmarkItemVm) {
-    const nodeBCR = bookmarkItemVm.$el.getBoundingClientRect()
-    this.id = bookmarkItemVm.data.id
-    this.top = nodeBCR.top
-    this.left = nodeBCR.left
-    this.right = nodeBCR.right
-    this.bottom = nodeBCR.bottom
+import DragedLayer from './draged-layer.vue';
+
+function moveIndexTo(list, fromIndex, toIndex) {
+  if (fromIndex > toIndex) {
+    list.splice(toIndex, 0, list[fromIndex]);
+    list.splice(fromIndex + 1, 1);
+  } else {
+    list.splice(toIndex, 0, list[fromIndex]);
+    list.splice(fromIndex, 1);
   }
 }
-function getMouseTriggered({top, left}, map) {
-  const { gridGap } = getVariables()
-  for(let i = 0; i < map.length; i++) {
-    let mapItem = map[i]
+class BookmarkMapItem {
+  constructor(bookmarkItemVm) {
+    const nodeBCR = bookmarkItemVm.$el.getBoundingClientRect();
+    this.id = bookmarkItemVm.data.id;
+    this.top = nodeBCR.top;
+    this.left = nodeBCR.left;
+    this.right = nodeBCR.right;
+    this.bottom = nodeBCR.bottom;
+  }
+}
+function getMouseTriggered({ top, left }, map) {
+  const { gridGap } = getVariables();
+  for (let i = 0; i < map.length; i++) {
+    let mapItem = map[i];
     if (
       mapItem.left + gridGap / 2 <= left &&
-      mapItem.right - gridGap / 2 >= left && 
+      mapItem.right - gridGap / 2 >= left &&
       mapItem.top <= top &&
       mapItem.bottom - gridGap >= top
     ) {
       return {
         type: 'enter',
         target: mapItem,
-      }
+      };
     }
   }
-  for(let t = 0; t < map.length; t++) {
-    let mapItem = map[t]
+  for (let t = 0; t < map.length; t++) {
+    let mapItem = map[t];
     if (
       // 鼠标在当前卡片同水平线
       mapItem.top < top &&
@@ -127,19 +147,17 @@ function getMouseTriggered({top, left}, map) {
       return {
         type: 'before',
         target: mapItem,
-      }
+      };
     }
   }
 }
-function mouseIntractive(context, { selectedBookmarkItem }) {
-  // var instance = getCurrentInstance()
-  // const vmInstance = instance.proxy
+function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
   const editModalVisilbe = ref(false);
   const contextmenuConfig = ref({
     visible: false,
     left: 0,
     right: 0,
-  })
+  });
   const dragTriggerBlock = ref({
     // null\enter\before
     isDraging: false,
@@ -148,12 +166,12 @@ function mouseIntractive(context, { selectedBookmarkItem }) {
     left: 0,
     right: 0,
     bottom: 0,
-  })
-  const bookmarkItemVm = []
+  });
+  const bookmarkItemVm = [];
   // 确保在每次更新之前重置ref
   onBeforeUpdate(() => {
-    bookmarkItemVm.value = []
-  })
+    bookmarkItemVm.value = [];
+  });
 
   function closeContextMenu() {
     contextmenuConfig.value.visible = false;
@@ -161,15 +179,15 @@ function mouseIntractive(context, { selectedBookmarkItem }) {
   function closeEditModal() {
     editModalVisilbe.value = false;
   }
-  var needForbiddenClick = false
+  var needForbiddenClick = false;
   return {
     dragTriggerBlock,
     editModalVisilbe,
     contextmenuConfig,
     closeContextMenu,
     closeEditModal,
-    setItemRef (el) {
-      bookmarkItemVm.value.push(el)
+    setItemRef(el) {
+      bookmarkItemVm.value.push(el);
     },
     handleClickOutside() {
       closeContextMenu();
@@ -180,13 +198,13 @@ function mouseIntractive(context, { selectedBookmarkItem }) {
     },
     openItem(data) {
       if (needForbiddenClick) {
-        return
+        return;
       }
       window.open(data.value, '_blank');
     },
     openContextMenu(event, item) {
       closeContextMenu();
-      selectedBookmarkItem.value = item;
+      setSelectedBookmarkItem(item);
       event.preventDefault();
       nextTick(() => {
         contextmenuConfig.value.left = event.clientX;
@@ -195,48 +213,54 @@ function mouseIntractive(context, { selectedBookmarkItem }) {
       });
     },
     handleDrag(event, bookmarkItem) {
-      needForbiddenClick = false
-      const itemSizeAndPositionMap = bookmarkItemVm.value.map(bookmarkItemVm => new BookmarkMapItem(bookmarkItemVm))
-      console.log('itemSizeAndPositionMap', itemSizeAndPositionMap)
+      needForbiddenClick = false;
+      const itemSizeAndPositionMap = bookmarkItemVm.value.map(
+        (bookmarkItemVm) => new BookmarkMapItem(bookmarkItemVm)
+      );
       dragHandle(event, {
         stableDistance: 20,
         stableStart() {
           console.log('拖动开始了');
-          dragTriggerBlock.value.isDraging = true
-          needForbiddenClick = true
-          // targetMap = getTargetMap(data.parentFid)
-          // shadowNode = new ShadowNode(data)
+          dragTriggerBlock.value.isDraging = true;
+          needForbiddenClick = true;
         },
         move(params) {
-          const triggered = getMouseTriggered({
-            top: params.clientY,
-            left: params.clientX,
-          }, itemSizeAndPositionMap)
-          const value = dragTriggerBlock.value
+          const triggered = getMouseTriggered(
+            {
+              top: params.clientY,
+              left: params.clientX,
+            },
+            itemSizeAndPositionMap
+          );
+          const value = dragTriggerBlock.value;
           if (triggered) {
-            let triggeredTarget = triggered.target
-            value.type = triggered.type
-            value.top = triggeredTarget.top
-            value.left = triggeredTarget.left
-            value.right = triggeredTarget.right
-            value.bottom = triggeredTarget.bottom
+            let triggeredTarget = triggered.target;
+            value.type = triggered.type;
+            value.top = triggeredTarget.top;
+            value.left = triggeredTarget.left;
+            value.right = triggeredTarget.right;
+            value.bottom = triggeredTarget.bottom;
           } else {
-            value.type = null
+            value.type = null;
           }
-          // shadowNode.updateDragedPosition(clientX, clientY)
-          // matchedTarget = getMacthedTarget(targetMap, clientX, clientY)
-          // shadowNode.highlight(matchedTarget)
         },
         end(params) {
-          const triggered = getMouseTriggered({
-            top: params.clientY,
-            left: params.clientX,
-          }, itemSizeAndPositionMap)
-          dragTriggerBlock.value.isDraging = false
-          console.log('结束了结束了', triggered);
-
-          // shadowNode.destroy()
-          // onDragEnd && onDragEnd(matchedTarget ? matchedTarget.fid : null)
+          const triggered = getMouseTriggered(
+            {
+              top: params.clientY,
+              left: params.clientX,
+            },
+            itemSizeAndPositionMap
+          );
+          dragTriggerBlock.value.isDraging = false;
+          if (bookmarkItem.id === triggered.target.id) {
+            return;
+          }
+          handleResortList(
+            bookmarkItem.id,
+            triggered.target.id,
+            triggered.type
+          );
         },
       });
     },
@@ -257,8 +281,37 @@ export default {
     onMounted(() => {
       getList();
     });
-    const mouseHandle = mouseIntractive(context, {
-      selectedBookmarkItem
+    const mouseHandle = mouseIntractive({
+      setSelectedBookmarkItem(item) {
+        selectedBookmarkItem.value = item;
+      },
+      // 处理排序
+      handleResortList(from, to, method) {
+        if (method === 'enter') {
+          alert('合并成组尚在开发中！');
+          return;
+        }
+        // 找到拖放元素和目标元素的位置
+        let fromIndex = -1;
+        let toIndex = -1;
+        const list = bookmarkList.value;
+        for (let i = 0; i < list.length; i++) {
+          let id = list[i].id;
+          if (id === from) {
+            fromIndex = i;
+          }
+          if (id === to) {
+            toIndex = i;
+          }
+          if (fromIndex >= 0 && toIndex >= 0) {
+            break;
+          }
+        }
+        moveIndexTo(list, fromIndex, toIndex)
+        const idList = list.map(item => item.id)
+        bookmarkResortService(idList)
+        console.log({ from, to, method, fromIndex, toIndex });
+      },
     });
     return {
       bookmarkList,
@@ -285,7 +338,7 @@ export default {
       },
       handleConfirmEdit(bookmarkItem) {
         bookmarkUpdateService(bookmarkItem).then(() => {
-          mouseHandle.closeEditModal()
+          mouseHandle.closeEditModal();
           for (let i = 0; i < bookmarkList.value.length; i++) {
             if (bookmarkList.value[i].id === bookmarkItem.id) {
               bookmarkList.value[i] = bookmarkItem;

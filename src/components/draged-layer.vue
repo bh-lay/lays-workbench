@@ -56,8 +56,8 @@ export default {
       } else {
         return {
           top: props.data.top + beforeMarging + 'px',
-          left: props.data.left + 'px',
-          width: 6 + 'px',
+          left: props.data.left + 3 + 'px',
+          width: 8 + 'px',
           height: props.data.bottom - props.data.top - beforeMarging * 2 - gridGap + 'px',
         }
       }
