@@ -17,6 +17,14 @@
     border 2px solid transparent
   &.block
     border 6px solid #3d4c5c
+.draged-shadow
+  position absolute
+  width 40px
+  height 40px
+  margin -10px 0 0 -10px
+  border-radius 4px
+  background #333
+  box-shadow 1px 1px 2px rgba(0, 0, 0, 0.2),2px 2px 20px rgba(0, 0, 0, 0.2)
 </style>
 
 <template>
@@ -25,6 +33,11 @@
     <transition name="fade-fast">
       <div v-if="data.type" :class="['shadow-rect', data.type === 'enter' ? 'block' : 'line']" :style="shadowRectStyle"></div>
     </transition>
+    <div class="draged-shadow" :style="{
+      top: data.clientY + 'px',
+      left: data.clientX + 'px',
+      background: data.undercoat,
+    }"></div>
   </div>
 </teleport>
 </template>
@@ -43,7 +56,7 @@ export default {
   },
   setup(props, context) {
     const enterPadding = 3
-    const beforeMarging = 2
+    const beforeMarging = -4
     const shadowRectStyle = computed(() => {
       const { gridGap } = getVariables()
       if (props.data.type === 'enter') {

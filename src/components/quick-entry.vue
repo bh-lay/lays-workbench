@@ -111,37 +111,44 @@ class BookmarkMapItem {
   constructor(bookmarkItemVm) {
     const nodeBCR = bookmarkItemVm.$el.getBoundingClientRect();
     this.id = bookmarkItemVm.data.id;
+    this.type = bookmarkItemVm.data.type;
     this.top = nodeBCR.top;
     this.left = nodeBCR.left;
     this.right = nodeBCR.right;
     this.bottom = nodeBCR.bottom;
   }
 }
-function getMouseTriggered({ top, left }, map) {
+function getMouseTriggered({ clientY, clientX, bookmarkType }, map) {
   const { gridGap } = getVariables();
-  for (let i = 0; i < map.length; i++) {
-    let mapItem = map[i];
-    if (
-      mapItem.left + gridGap / 2 <= left &&
-      mapItem.right - gridGap / 2 >= left &&
-      mapItem.top <= top &&
-      mapItem.bottom - gridGap >= top
-    ) {
-      return {
-        type: 'enter',
-        target: mapItem,
-      };
+  if (bookmarkType !== BookmarkType.widgets) {
+    for (let i = 0; i < map.length; i++) {
+      let mapItem = map[i];
+      if (
+        mapItem.left + gridGap / 2 <= clientX &&
+        mapItem.right - gridGap / 2 >= clientX &&
+        mapItem.top <= clientY &&
+        mapItem.bottom - gridGap >= clientY
+      ) {
+        // 命中 widgets，则忽略
+        if (mapItem.type === BookmarkType.widgets) {
+          return
+        }
+        return {
+          type: 'enter',
+          target: mapItem,
+        };
+      }
     }
   }
   for (let t = 0; t < map.length; t++) {
     let mapItem = map[t];
     if (
       // 鼠标在当前卡片同水平线
-      mapItem.top < top &&
-      mapItem.bottom - gridGap > top &&
+      mapItem.top < clientY &&
+      mapItem.bottom - gridGap > clientY &&
       // 鼠标在卡片左侧 34 像素内
-      left < mapItem.left + gridGap / 2 &&
-      mapItem.left + gridGap / 2 - left < gridGap * 2
+      clientX < mapItem.left + gridGap / 2 &&
+      mapItem.left + gridGap / 2 - clientX < gridGap * 2
     ) {
       return {
         type: 'before',
@@ -161,17 +168,18 @@ function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
     // null\enter\before
     isDraging: false,
     type: null,
+    undercoat: '#333',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
+    clientX: 0,
+    clientY: 0,
   });
   const bookmarkItemVm = [];
   // 确保在每次更新之前重置ref
   onBeforeUpdate(() => {
-    console.log('22222')
     bookmarkItemVm.value = [];
-    console.log('bookmarkItemVm2', bookmarkItemVm)
   });
 
   function closeContextMenu() {
@@ -215,30 +223,37 @@ function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
     },
     handleDrag(event, bookmarkItem) {
       needForbiddenClick = false;
-      console.log('bookmarkItemVm', bookmarkItemVm)
       const itemSizeAndPositionMap = []
-      bookmarkItemVm.value.forEach(bookmarkItemVm => {
-        if (!bookmarkItemVm) {
-          return
-        }
-        itemSizeAndPositionMap.push(new BookmarkMapItem(bookmarkItemVm))
-      });
       dragHandle(event, {
         stableDistance: 20,
         stableStart() {
           console.log('拖动开始了');
+          bookmarkItemVm.value.forEach(bookmarkItemVm => {
+            if (!bookmarkItemVm) {
+              return
+            }
+            if (bookmarkItemVm.data.id === bookmarkItem.id) {
+              return
+            }
+            itemSizeAndPositionMap.push(new BookmarkMapItem(bookmarkItemVm))
+          });
           dragTriggerBlock.value.isDraging = true;
+          dragTriggerBlock.value.undercoat = bookmarkItem.undercoat
           needForbiddenClick = true;
+          console.log('itemSizeAndPositionMap', itemSizeAndPositionMap)
         },
         move(params) {
           const triggered = getMouseTriggered(
             {
-              top: params.clientY,
-              left: params.clientX,
+              bookmarkType: bookmarkItem.type,
+              clientY: params.clientY,
+              clientX: params.clientX,
             },
             itemSizeAndPositionMap
           );
           const value = dragTriggerBlock.value;
+          value.clientX = params.clientX
+          value.clientY = params.clientY
           if (triggered) {
             let triggeredTarget = triggered.target;
             value.type = triggered.type;
@@ -253,8 +268,9 @@ function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
         end(params) {
           const triggered = getMouseTriggered(
             {
-              top: params.clientY,
-              left: params.clientX,
+              clientY: params.clientY,
+              clientX: params.clientX,
+              bookmarkType: bookmarkItem.type,
             },
             itemSizeAndPositionMap
           );

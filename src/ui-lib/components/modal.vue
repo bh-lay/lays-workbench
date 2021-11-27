@@ -108,7 +108,6 @@ export default {
     },
   },
   setup(props) {
-    console.log('props', props)
       const size = {}
       if (props.width) {
         if (typeof props.width === 'number') {
