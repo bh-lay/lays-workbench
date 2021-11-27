@@ -42,12 +42,12 @@
     </bookmark-item>
     <transition name="slidedown">
       <div
-        v-if="contextmenuVisible"
+        v-if="contextmenuConfig.visible"
         class="contextmenu-body"
         v-clickoutside="handleClickOutside"
         :style="{
-          top: contextmenuY + 'px',
-          left: contextmenuX + 'px',
+          top: contextmenuConfig.right + 'px',
+          left: contextmenuConfig.left + 'px',
         }"
       >
         <div
@@ -87,11 +87,13 @@ import CustomLink from './add-bookmark/custom-link.vue';
 
 function mouseIntractive(selectedBookmarkItem) {
   const editModalVisilbe = ref(false);
-  const contextmenuVisible = ref(false);
-  const contextmenuX = ref(0);
-  const contextmenuY = ref(0);
+  const contextmenuConfig = ref({
+    visible: false,
+    left: 0,
+    right: 0,
+  })
   function closeContextMenu() {
-    contextmenuVisible.value = false;
+    contextmenuConfig.value.visible = false;
   }
   function closeEditModal() {
     editModalVisilbe.value = false;
@@ -99,9 +101,7 @@ function mouseIntractive(selectedBookmarkItem) {
   var needForbiddenClick = false
   return {
     editModalVisilbe,
-    contextmenuVisible,
-    contextmenuX,
-    contextmenuY,
+    contextmenuConfig,
     closeContextMenu,
     closeEditModal,
     handleClickOutside() {
@@ -122,9 +122,9 @@ function mouseIntractive(selectedBookmarkItem) {
       selectedBookmarkItem.value = item;
       event.preventDefault();
       nextTick(() => {
-        contextmenuX.value = event.clientX;
-        contextmenuY.value = event.clientY;
-        contextmenuVisible.value = true;
+        contextmenuConfig.value.left = event.clientX;
+        contextmenuConfig.value.right = event.clientY;
+        contextmenuConfig.value.visible = true;
       });
     },
     handleDrag(event, bookmarkItem) {
