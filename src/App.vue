@@ -11,10 +11,9 @@ html, body
   -moz-user-select none
   -ms-user-select none
   user-select none
-  #app
-    position relative
-    height 100%
-    perspective 800px
+#app
+  position relative
+  height 100%
 input,
 textarea
   font-family inherit
@@ -95,8 +94,9 @@ textarea
   pointer-events none
   transition backdrop-filter .4s ease-out, background .6s ease
   &.defocus
-    background rgba(0, 0, 0, .5)
+    background rgba(0, 0, 0, .6)
     backdrop-filter blur(1px)
+    pointer-events all
     transition backdrop-filter .15s ease-out, background .3s ease
 </style>
 

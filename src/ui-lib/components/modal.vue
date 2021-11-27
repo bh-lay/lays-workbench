@@ -24,8 +24,7 @@
   top 0
   left 0
   z-index 100
-  background: rgba(0, 0, 0, .4)
-  backdrop-filter blur(1px)
+  background: rgba(0, 0, 0, .7)
 .modal-close
   position absolute
   top 0
@@ -78,7 +77,7 @@
       <transition name="fade-slow">
         <div v-if="modelValue" class="modal-mask"></div>
       </transition>
-      <transition name="flip">
+      <transition name="slidedown">
         <div class="modal-body" v-if="modelValue" :style="modalBodyStyle">
           <slot/>
           <div class="modal-close" @click="$emit('update:modelValue', false)">

@@ -3,7 +3,6 @@
   position relative
   width 90%
   max-width 600px
-  perspective 800px
   margin-top 100px
   z-index 10
 .search-input
@@ -116,7 +115,7 @@
         @blur="inputFocused = false"
       />
     </div>
-    <transition name="flip">
+    <transition name="slidedown">
       <div
         class="engine-list"
         v-if="engineListVisible"
