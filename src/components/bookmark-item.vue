@@ -33,6 +33,8 @@
     transform translateX(-50%) scale(.9)
     visibility hidden
     transition .15s
+  .bookmark-icon
+    font-size 10px
   &:hover
     .card
       box-shadow 2px 2px 8px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.3)
@@ -45,6 +47,8 @@
   grid-area span 2 / span 2 / auto / auto
   width calc(var(--grid-size) * 2)
   height calc(var(--grid-size) * 2)
+  .bookmark-icon
+    font-size 18px
   .card
     width calc(var(--grid-size) * 2 - var(--grid-gap))
     height calc(var(--grid-size) * 2 - var(--grid-gap))
@@ -52,6 +56,8 @@
   grid-area span 2 / span 4 / auto / auto
   width calc(var(--grid-size) * 4)
   height calc(var(--grid-size) * 2)
+  .bookmark-icon
+    font-size 26px
   .card
     width calc(var(--grid-size) * 4 - var(--grid-gap))
     height calc(var(--grid-size) * 2 - var(--grid-gap))

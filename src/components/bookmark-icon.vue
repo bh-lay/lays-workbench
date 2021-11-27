@@ -8,8 +8,10 @@
   transition .2s
   svg,
   img
-    width 26px
-    height 26px
+    width 2.6em
+    height 2.6em
+  span
+    font-size 1.6em
   &:hover
     background rgba(0, 0, 0, .2)
 </style>
