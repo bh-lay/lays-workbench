@@ -1,0 +1,94 @@
+<style lang="stylus" scoped>
+.folder-layer
+  position fixed
+  top 0
+  left 0
+  width 100%
+  height 100%
+  display flex
+  align-items center
+  justify-content center
+  z-index 1000
+  &.hidden
+    // 各种方法保证视觉上弹窗不可见，且不影响动画显示
+    pointer-events none
+    visibility hidden
+    opacity 0
+    width 0
+    height 0
+    transition .1s 1s
+.mask
+  position absolute
+  top 0
+  left 0
+  width 100%
+  height 100%
+  background rgba(0, 0, 0, .5)
+.container
+  position relative
+  min-width 40%
+  max-width 50%
+  max-height 40%
+  padding 40px
+  border-radius 30px
+  background rgba(255, 255, 255, .7)
+</style>
+
+<template>
+<teleport to="body">
+  <div :class="['folder-layer', visible ? 'visible' : 'hidden']">
+    <transition name="fade-slow">
+      <div v-if="visible" class="mask"></div>
+    </transition>
+    <transition name="zoom">
+      <div v-if="visible" class="container" v-clickoutside="handleClickOutside">
+        <name-editor :modelValue="name" @update:modelValue="handleNameChange" />
+        <div class="btn-list">
+          <bookmark-list :parent-id="id" />
+        </div>
+      </div>
+    </transition>
+  </div>
+</teleport>
+</template>
+
+<script>
+import {
+  ref,
+  nextTick,
+  watch,
+  onMounted,
+  onBeforeUpdate,
+} from 'vue';
+import NameEditor from './name-editor.vue'
+import BookmarkList from './bookmark-list.vue'
+
+export default {
+  emits: ['name-change'],
+  props: {
+    id: {
+      type: String,
+      default: ''
+    },
+    name: {
+      type: String,
+      default: ''
+    },
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  components: { NameEditor, BookmarkList },
+  setup(props, context) {
+    return {
+      handleClickOutside() {
+        context.emit('update:visible', false)
+      },
+      handleNameChange(newValue) {
+        context.emit('name-change', newValue)
+      },
+    };
+  },
+};
+</script>

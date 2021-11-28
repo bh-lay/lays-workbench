@@ -76,6 +76,12 @@
     </div>
   </modal>
   <draged-layer v-if="dragTriggerBlock.isDraging" :data="dragTriggerBlock" />
+  <folder-layer
+    v-model:visible="folderLayerVisible"
+    :id="selectedBookmarkItem.id"
+    :name="selectedBookmarkItem.name"
+    @name-change="handleFolderNameChange"
+  />
 </template>
 
 <script>
@@ -103,6 +109,7 @@ import BookmarkItem from './bookmark-item.vue';
 import AddBookmark from './add-bookmark/index.vue';
 import CustomLink from './add-bookmark/custom-link.vue';
 import DragedLayer from './draged-layer.vue';
+import FolderLayer from './folder-layer/index.vue'
 
 function moveIndexTo(list, fromIndex, toIndex) {
   if (fromIndex > toIndex) {
@@ -170,6 +177,7 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
     left: 0,
     right: 0,
   });
+  const folderLayerVisible = ref(false)
   const dragTriggerBlock = ref({
     // null\enter\before
     isDraging: false,
@@ -196,6 +204,7 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
   }
   var needForbiddenClick = false;
   return {
+    folderLayerVisible,
     dragTriggerBlock,
     editModalVisilbe,
     contextmenuConfig,
@@ -218,7 +227,7 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
       if (data.type === BookmarkType.link) {
         window.open(data.value, '_blank');
       } else if (data.type === BookmarkType.folder) {
-        alert('打开组')
+        folderLayerVisible.value = true
       }
     },
     openContextMenu(event, item) {
@@ -298,7 +307,7 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
   };
 }
 export default {
-  components: { BookmarkItem, AddBookmark, CustomLink, DragedLayer },
+  components: { BookmarkItem, AddBookmark, CustomLink, DragedLayer, FolderLayer },
   setup(props, context) {
     let bookmarkList = ref([]);
 
@@ -313,8 +322,7 @@ export default {
     onMounted(() => {
       getList();
     });
-    function handleDragEnter(fromIndex, targetIndex){
-      const list = bookmarkList.value;
+    function handleDragEnter(list, fromIndex, targetIndex){
       const fromBookmark = list[fromIndex]
       const targetBookmark = list[targetIndex]
       // 找不到拖拽元素，或目标元素，退出
@@ -381,7 +389,7 @@ export default {
       }
       
     }
-    function handleDragMove(fromIndex, targetIndex){
+    function handleDragMove(list, fromIndex, targetIndex){
       moveIndexTo(list, fromIndex, targetIndex)
       const idList = list.map(item => item.id)
       bookmarkResortService(idList)
@@ -409,10 +417,10 @@ export default {
           }
         }
         if (method === 'enter') {
-          handleDragEnter(fromIndex, targetIndex)
+          handleDragEnter(list, fromIndex, targetIndex)
           return;
         } else if (method === 'before') {
-          handleDragMove(fromIndex, targetIndex)
+          handleDragMove(list, fromIndex, targetIndex)
         }
       },
     });
@@ -452,6 +460,10 @@ export default {
       },
       refreshList() {
         getList();
+      },
+      handleFolderNameChange(newName) {
+        selectedBookmarkItem.value.name = newName
+        bookmarkUpdateService(selectedBookmarkItem.value)
       },
       ...mouseHandle,
     };
