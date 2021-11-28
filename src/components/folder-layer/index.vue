@@ -44,7 +44,9 @@
       <div v-if="visible" class="container" v-clickoutside="handleClickOutside">
         <name-editor :modelValue="name" @update:modelValue="handleNameChange" />
         <div class="btn-list">
-          <bookmark-list :parent-id="id" />
+          <bookmark-list :parent-id="id"
+            @open-bookmark-editor="$emit('open-bookmark-editor', $event)"
+          />
         </div>
       </div>
     </transition>
@@ -64,7 +66,7 @@ import NameEditor from './name-editor.vue'
 import BookmarkList from './bookmark-list.vue'
 
 export default {
-  emits: ['name-change'],
+  emits: ['update:visible', 'name-change', 'open-bookmark-editor'],
   props: {
     id: {
       type: String,

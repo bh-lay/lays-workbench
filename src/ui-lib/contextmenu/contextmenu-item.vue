@@ -34,8 +34,6 @@ export default {
     const internalInstance = getCurrentInstance()
     return {
       handleClick() {
-        console.log('internalInstance', internalInstance)
-        context.emit('click')
         tryToCloseParent(internalInstance.proxy.$parent, 10)
       }
     }

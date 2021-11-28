@@ -36,7 +36,7 @@
   <contextmenu ref="menu">
     <contextmenu-item
       v-if="selectedBookmarkItem.type === BookmarkType.link"
-      @click="editModalVisible = true"
+      @click="openEditModal"
     >
       编辑
     </contextmenu-item>
@@ -56,6 +56,7 @@
     :id="selectedBookmarkItem.id"
     :name="selectedBookmarkItem.name"
     @name-change="handleFolderNameChange"
+    @open-bookmark-editor="handleEditSubFolderBookmark"
   />
 </template>
 
@@ -166,15 +167,24 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
     bookmarkItemVm.value = [];
   });
 
+  function openEditModal() {
+    editModalVisible.value = true;
+  }
   function closeEditModal() {
     editModalVisible.value = false;
   }
+  function closeFolderLayer() {
+    folderLayerVisible.value = false;
+  }
+  
   var needForbiddenClick = false;
   return {
     folderLayerVisible,
     dragTriggerBlock,
     editModalVisible,
+    openEditModal,
     closeEditModal,
+    closeFolderLayer,
     setItemRef(el) {
       bookmarkItemVm.value.push(el);
     },
@@ -415,6 +425,11 @@ export default {
       handleFolderNameChange(newName) {
         selectedBookmarkItem.value.name = newName
         bookmarkUpdateService(selectedBookmarkItem.value)
+      },
+      handleEditSubFolderBookmark(bookmarkItem) {
+        mouseHandle.closeFolderLayer()
+        selectedBookmarkItem.value = bookmarkItem
+        mouseHandle.openEditModal()
       },
       ...mouseHandle,
     };

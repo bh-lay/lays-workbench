@@ -76,13 +76,14 @@ export function bookmarkRemoveService(bookmarkId: string) {
 export function bookmarkListService(params: {parent: string | null}) {
   return getIDBRequest().then((db: IDBDatabase) => {
     return bookmarkListManager(db, params).then((data: Bookmark[]) => {
-      // 若数据为空，则将使用默认数据填充
-      if (data.length === 0) {
-        bookmarkDefaultList.forEach((item: Bookmark) => {
-          data.push(new Bookmark(item));
-        });
+      if (!params || !params.parent) {
+        // 若数据为空，则将使用默认数据填充
+        if (data.length === 0) {
+          bookmarkDefaultList.forEach((item: Bookmark) => {
+            data.push(new Bookmark(item));
+          });
+        }
       }
-
       data.sort((A, B) => B.sort - A.sort);
       return data;
     });

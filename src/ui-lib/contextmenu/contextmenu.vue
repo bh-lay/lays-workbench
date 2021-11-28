@@ -17,6 +17,7 @@
         class="contextmenu-body"
         v-if="visible"
         v-clickoutside="onClickoutside"
+        @click.stop
         :style="{
           top: top + 'px',
           left: left + 'px',

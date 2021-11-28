@@ -5,8 +5,7 @@ export default {
     app.directive('contextmenu', {
       mounted (el, binding: DirectiveBinding) {
         const $refKey: string = binding.arg || ''
-        
-        console.log('binding', )
+
         el.addEventListener('contextmenu', function(event: MouseEvent){
           event.preventDefault();
           if (!binding.instance || !binding.instance.$refs) {
@@ -22,9 +21,6 @@ export default {
           if (bindingValue && bindingValue.onVisible) {
             bindingValue.onVisible()
           }
-          // closeContextMenu();
-          // setSelectedBookmarkItem(item);
-          console.log('contextmenuVM', contextmenuVM)
           nextTick(() => {
             contextmenuVM.left = event.clientX;
             contextmenuVM.top = event.clientY;
