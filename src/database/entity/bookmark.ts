@@ -10,6 +10,7 @@ export function bookmarkEntityInit (db: IDBDatabase) {
   objectStore.createIndex("id", "id", { unique: true })
   objectStore.createIndex("name", "name", { unique: false })
   objectStore.createIndex("type", "type", { unique: false })
+  objectStore.createIndex("parent", "parent", { unique: false })
   objectStore.createIndex("size", "size", { unique: false })
   objectStore.createIndex("undercoat", "undercoat", { unique: false })
   objectStore.createIndex("value", "value", { unique: false })
@@ -56,6 +57,7 @@ export class Bookmark {
   undercoat: string = '#ffaa00'
   value: string = 'http://bh-lay.com'
   icon: BookmarkIcon = 'text:X'
+  parent: string = ''
   // 描述信息
   desc: string = ''
   constructor(object: any) {
@@ -72,6 +74,7 @@ export class Bookmark {
     this.size = object.size || BookmarkSize.small
     this.undercoat = object.undercoat || ''
     this.value = object.value || ''
+    this.parent = object.parent || ''
     this.icon = object.icon || 'text:X'
     this.desc = object.desc || ''
   }

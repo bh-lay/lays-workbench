@@ -53,7 +53,7 @@ export function bookmarkUpdateService(bookmarkItem: any, db?: IDBDatabase) {
       });
     })
     .then((db: IDBDatabase) => {
-      console.log(2);
+      console.log('update', bookmarkItem)
       return bookmarkUpdateManager(db, bookmarkItem);
     });
 }

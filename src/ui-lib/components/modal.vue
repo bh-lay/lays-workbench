@@ -92,7 +92,7 @@
 
 <script>
 export default {
-  emits: ['after-open', 'after-close'],
+  emits: ['after-open', 'after-close', 'update:modelValue'],
   props: {
     modelValue: {
       type: Boolean,

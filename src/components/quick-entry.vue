@@ -91,6 +91,7 @@ import {
   BookmarkSize,
 } from '../database/entity/bookmark.ts';
 import {
+  bookmarkInsertService,
   bookmarkRemoveService,
   bookmarkUpdateService,
   bookmarkResortService,
@@ -162,7 +163,7 @@ function getMouseTriggered({ clientY, clientX, bookmarkType }, map) {
     }
   }
 }
-function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
+function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
   const editModalVisilbe = ref(false);
   const contextmenuConfig = ref({
     visible: false,
@@ -242,7 +243,6 @@ function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
           dragTriggerBlock.value.isDraging = true;
           dragTriggerBlock.value.undercoat = bookmarkItem.undercoat
           needForbiddenClick = true;
-          console.log('itemSizeAndPositionMap', itemSizeAndPositionMap)
         },
         move(params) {
           const triggered = getMouseTriggered(
@@ -283,7 +283,7 @@ function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
           if (bookmarkItem.id === triggered.target.id) {
             return;
           }
-          handleResortList(
+          handleDragEnd(
             bookmarkItem.id,
             triggered.target.id,
             triggered.type
@@ -301,26 +301,85 @@ export default {
     const selectedBookmarkItem = ref({});
     const getList = function () {
       bookmarkListService().then((list) => {
-        console.log('list', list);
+        console.log('list', list)
         bookmarkList.value = list;
       });
     };
     onMounted(() => {
       getList();
     });
+    function handleDragEnter(fromIndex, targetIndex){
+      const list = bookmarkList.value;
+      const fromBookmark = list[fromIndex]
+      const targetBookmark = list[targetIndex]
+      // 找不到拖拽元素，或目标元素，退出
+      if (!targetBookmark || !fromBookmark) {
+        return
+      }
+      // 拖拽元素或目标元素是组件，退出
+      if (
+        fromBookmark.type === BookmarkType.widgets ||
+        targetBookmark.type === BookmarkType.widgets
+      ) {
+        return
+      }
+      // 拖拽元素本身是组，退出
+      if (fromBookmark.parent) {
+        return
+      }
+      if (targetBookmark.type === BookmarkType.folder) {
+        // 目标是目录，直接移入
+      } else {
+        // 目标是链接，先排个序，再合并，最后插入
+        const idList = list.map(item => item.id)
+        bookmarkResortService(idList)
+          .then(idSortMap => {
+            const targetSortvalue = idSortMap.get(targetBookmark.id)
+            console.log('idSortMap', idSortMap, targetSortvalue)
+            const item = new Bookmark({
+              name: '自定义组',
+              // 和目标排序值相同
+              sort: targetSortvalue,
+              type: BookmarkType.folder,
+              size: BookmarkSize.small,
+              undercoat: '#2196f3',
+              value: [targetBookmark.undercoat, fromBookmark.undercoat].join(',')
+            })
+            return bookmarkInsertService(item)
+          })
+          .then(folderBookmark => {
+            console.log('folderBookmark', folderBookmark)
+            // 用新的组替换掉 target 元素
+            list.splice(targetIndex, 1, folderBookmark)
+            // 删除被拖拽的元素
+            list.splice(fromIndex, 1)
+
+            // 拖拽与目标元素的父级都标记为新的组
+            fromBookmark.parent = folderBookmark.id
+            targetBookmark.parent = folderBookmark.id
+            
+            return Promise.all([
+              bookmarkUpdateService(fromBookmark),
+              bookmarkUpdateService(targetBookmark)
+            ])
+          })
+      }
+      
+    }
+    function handleDragMove(fromIndex, targetIndex){
+      moveIndexTo(list, fromIndex, targetIndex)
+      const idList = list.map(item => item.id)
+      bookmarkResortService(idList)
+    }
     const mouseHandle = mouseIntractive({
       setSelectedBookmarkItem(item) {
         selectedBookmarkItem.value = item;
       },
-      // 处理排序
-      handleResortList(from, to, method) {
-        if (method === 'enter') {
-          alert('合并成组尚在开发中！');
-          return;
-        }
+      // 处理拖拽完成
+      handleDragEnd(from, to, method) {
         // 找到拖放元素和目标元素的位置
         let fromIndex = -1;
-        let toIndex = -1;
+        let targetIndex = -1;
         const list = bookmarkList.value;
         for (let i = 0; i < list.length; i++) {
           let id = list[i].id;
@@ -328,16 +387,18 @@ export default {
             fromIndex = i;
           }
           if (id === to) {
-            toIndex = i;
+            targetIndex = i;
           }
-          if (fromIndex >= 0 && toIndex >= 0) {
+          if (fromIndex >= 0 && targetIndex >= 0) {
             break;
           }
         }
-        moveIndexTo(list, fromIndex, toIndex)
-        const idList = list.map(item => item.id)
-        bookmarkResortService(idList)
-        console.log({ from, to, method, fromIndex, toIndex });
+        if (method === 'enter') {
+          handleDragEnter(fromIndex, targetIndex)
+          return;
+        } else if (method === 'before') {
+          handleDragMove(fromIndex, targetIndex)
+        }
       },
     });
     return {

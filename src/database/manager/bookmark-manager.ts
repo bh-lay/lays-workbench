@@ -8,8 +8,9 @@ export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: any) {
       .add(bookmark);
 
     request.onsuccess = function (event) {
+      // console.log('insert event', event)
       // 数据写入成功
-      resolve(event)
+      resolve(bookmarkItem)
     };
 
     request.onerror = function (event) {
@@ -130,7 +131,7 @@ export function bookmarkCountManager(db: IDBDatabase): Promise<Bookmark[]> {
     }
   })
 }
-export function bookmarkResetSortManager(db: IDBDatabase, idList: string[]): Promise<Boolean> {
+export function bookmarkResetSortManager(db: IDBDatabase, idList: string[]): Promise<Map<string, number>> {
   return new Promise((resolve, reject) => {
     // id -> sort 值映射 Map
     const idSortMap = idList.reduce((result: Map<string, number>, id: string, index: number) => {
@@ -153,7 +154,7 @@ export function bookmarkResetSortManager(db: IDBDatabase, idList: string[]): Pro
         }
         cursor.continue();
       } else {
-        resolve(true)
+        resolve(idSortMap)
       }
     };
 
