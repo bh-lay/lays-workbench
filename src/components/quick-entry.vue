@@ -7,24 +7,6 @@
   padding-top 40px
   .draged
     opacity 0
-.contextmenu-body
-  position fixed
-  width 120px
-  padding 15px 0
-  border-radius 4px
-  background #fff
-  box-shadow 2px 2px 10px rgba(0, 0, 0, .2), 1px 1px 3px rgba(0, 0, 0, .2)
-  overflow hidden
-  z-index 1000
-.contextmenu-item
-  padding 0 20px
-  line-height 34px
-  font-size 14px
-  color #555
-  cursor pointer
-  transition .15s
-  &:hover
-    background: #f4f4f4
 </style>
 
 <template>
@@ -37,8 +19,12 @@
       :class="{
         draged: dragTriggerBlock.isDraging && selectedBookmarkItem.id === bookmarkItem.id
       }"
+      v-contextmenu:menu="{
+        onVisible() {
+          selectedBookmarkItem = bookmarkItem
+        }
+      }"
       @next="openItem(bookmarkItem)"
-      @contextmenu="openContextMenu($event, bookmarkItem)"
       @mousedown="handleDrag($event, bookmarkItem)"
     />
     <bookmark-item :data="addData">
@@ -46,28 +32,17 @@
         <add-bookmark @success="refreshList" />
       </template>
     </bookmark-item>
-    <transition name="slidedown">
-      <div
-        v-if="contextmenuConfig.visible"
-        class="contextmenu-body"
-        v-clickoutside="handleClickOutside"
-        :style="{
-          top: contextmenuConfig.right + 'px',
-          left: contextmenuConfig.left + 'px',
-        }"
-      >
-        <div
-          v-if="selectedBookmarkItem.type === BookmarkType.link"
-          class="contextmenu-item"
-          @click="handleEdit"
-        >
-          编辑
-        </div>
-        <div class="contextmenu-item" @click="handleRemove">删除</div>
-      </div>
-    </transition>
   </div>
-  <modal v-model="editModalVisilbe" :width="400">
+  <contextmenu ref="menu">
+    <contextmenu-item
+      v-if="selectedBookmarkItem.type === BookmarkType.link"
+      @click="editModalVisible = true"
+    >
+      编辑
+    </contextmenu-item>
+    <contextmenu-item @click="handleRemove">删除</contextmenu-item>
+  </contextmenu>
+  <modal v-model="editModalVisible" :width="400">
     <div style="padding: 20px">
       <custom-link
         :data="selectedBookmarkItem"
@@ -171,12 +146,7 @@ function getMouseTriggered({ clientY, clientX, bookmarkType }, map) {
   }
 }
 function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
-  const editModalVisilbe = ref(false);
-  const contextmenuConfig = ref({
-    visible: false,
-    left: 0,
-    right: 0,
-  });
+  const editModalVisible = ref(false);
   const folderLayerVisible = ref(false)
   const dragTriggerBlock = ref({
     // null\enter\before
@@ -196,29 +166,17 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
     bookmarkItemVm.value = [];
   });
 
-  function closeContextMenu() {
-    contextmenuConfig.value.visible = false;
-  }
   function closeEditModal() {
-    editModalVisilbe.value = false;
+    editModalVisible.value = false;
   }
   var needForbiddenClick = false;
   return {
     folderLayerVisible,
     dragTriggerBlock,
-    editModalVisilbe,
-    contextmenuConfig,
-    closeContextMenu,
+    editModalVisible,
     closeEditModal,
     setItemRef(el) {
       bookmarkItemVm.value.push(el);
-    },
-    handleClickOutside() {
-      closeContextMenu();
-    },
-    handleEdit() {
-      closeContextMenu();
-      editModalVisilbe.value = true;
     },
     openItem(data) {
       if (needForbiddenClick) {
@@ -230,17 +188,11 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
         folderLayerVisible.value = true
       }
     },
-    openContextMenu(event, item) {
-      closeContextMenu();
-      setSelectedBookmarkItem(item);
-      event.preventDefault();
-      nextTick(() => {
-        contextmenuConfig.value.left = event.clientX;
-        contextmenuConfig.value.right = event.clientY;
-        contextmenuConfig.value.visible = true;
-      });
-    },
     handleDrag(event, bookmarkItem) {
+      // 非左键不处理
+      if (event.button !== 0) {
+        return
+      }
       setSelectedBookmarkItem(bookmarkItem);
       needForbiddenClick = false;
       const itemSizeAndPositionMap = []
@@ -336,8 +288,8 @@ export default {
       ) {
         return
       }
-      // 拖拽元素本身是组，退出
-      if (fromBookmark.parent) {
+      // 拖拽元素是组，退出
+      if (fromBookmark.type === BookmarkType.folder) {
         return
       }
       if (targetBookmark.type === BookmarkType.folder) {
@@ -437,7 +389,6 @@ export default {
       selectedBookmarkItem,
 
       handleRemove() {
-        mouseHandle.closeContextMenu();
         bookmarkRemoveService(selectedBookmarkItem.value.id).then(() => {
           for (let i = 0; i < bookmarkList.value.length; i++) {
             if (bookmarkList.value[i].id === selectedBookmarkItem.value.id) {
