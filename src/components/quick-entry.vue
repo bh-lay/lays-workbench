@@ -5,6 +5,8 @@
   grid-auto-flow dense
   justify-content center
   padding-top 40px
+  .draged
+    opacity 0
 .contextmenu-body
   position fixed
   width 120px
@@ -32,6 +34,9 @@
       :key="bookmarkItem.id"
       :data="bookmarkItem"
       :ref="setItemRef"
+      :class="{
+        draged: dragTriggerBlock.isDraging && selectedBookmarkItem.id === bookmarkItem.id
+      }"
       @next="openItem(bookmarkItem)"
       @contextmenu="openContextMenu($event, bookmarkItem)"
       @mousedown="handleDrag($event, bookmarkItem)"
@@ -61,16 +66,16 @@
         <div class="contextmenu-item" @click="handleRemove">删除</div>
       </div>
     </transition>
-    <modal v-model="editModalVisilbe" :width="400">
-      <div style="padding: 20px">
-        <custom-link
-          :data="selectedBookmarkItem"
-          @confirm="handleConfirmEdit"
-        />
-      </div>
-    </modal>
-    <draged-layer v-if="dragTriggerBlock.isDraging" :data="dragTriggerBlock" />
   </div>
+  <modal v-model="editModalVisilbe" :width="400">
+    <div style="padding: 20px">
+      <custom-link
+        :data="selectedBookmarkItem"
+        @confirm="handleConfirmEdit"
+      />
+    </div>
+  </modal>
+  <draged-layer v-if="dragTriggerBlock.isDraging" :data="dragTriggerBlock" />
 </template>
 
 <script>
@@ -222,17 +227,14 @@ function mouseIntractive({ setSelectedBookmarkItem, handleResortList }) {
       });
     },
     handleDrag(event, bookmarkItem) {
+      setSelectedBookmarkItem(bookmarkItem);
       needForbiddenClick = false;
       const itemSizeAndPositionMap = []
       dragHandle(event, {
         stableDistance: 20,
         stableStart() {
-          console.log('拖动开始了');
           bookmarkItemVm.value.forEach(bookmarkItemVm => {
             if (!bookmarkItemVm) {
-              return
-            }
-            if (bookmarkItemVm.data.id === bookmarkItem.id) {
               return
             }
             itemSizeAndPositionMap.push(new BookmarkMapItem(bookmarkItemVm))
