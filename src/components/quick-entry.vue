@@ -80,7 +80,7 @@ import {
 } from '../database/services/bookmark-service.ts';
 import { bookmarkListService } from '../database/services/bookmark-service.ts';
 import dragHandle from '../assets/js/drag-handle.ts';
-import { getVariables } from '../assets/js/css-variables.ts';
+import { getAppConfigItem } from '../assets/js/app-config.ts';
 import BookmarkItem from './bookmark-item.vue';
 import AddBookmark from './add-bookmark/index.vue';
 import CustomLink from './add-bookmark/custom-link.vue';
@@ -108,7 +108,7 @@ class BookmarkMapItem {
   }
 }
 function getMouseTriggered({ clientY, clientX, bookmarkType }, map) {
-  const { gridGap } = getVariables();
+  const gridGap = getAppConfigItem('gridGap')
   if (bookmarkType !== BookmarkType.widgets) {
     for (let i = 0; i < map.length; i++) {
       let mapItem = map[i];

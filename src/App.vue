@@ -69,7 +69,7 @@ textarea
     color rgba(255, 255, 255, .6)
 .fixed-height-pager
   width 90%
-  max-width 1020px
+  max-width var(--max-container-width)
   height 400px
 .footer-copyright
   height: 40px

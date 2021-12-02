@@ -44,7 +44,7 @@
 
 <script>
 import { computed } from 'vue'
-import { getVariables } from '../assets/js/css-variables.ts'
+import { getAppConfigItem } from '../assets/js/app-config.ts'
 export default {
   props: {
     data: {
@@ -58,7 +58,7 @@ export default {
     const enterPadding = 3
     const beforeMarging = -4
     const shadowRectStyle = computed(() => {
-      const { gridGap } = getVariables()
+      const gridGap = getAppConfigItem('gridGap')
       if (props.data.type === 'enter') {
         return {
           top: props.data.top - enterPadding + 'px',
