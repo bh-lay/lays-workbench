@@ -32,7 +32,8 @@
     line-height 24px
     font-size 12px
     color #fff
-
+.size-selector
+  margin-left 10px
 .undercoat-and-size
   display flex
 .preview-area

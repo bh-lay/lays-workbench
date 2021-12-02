@@ -7,6 +7,7 @@
   <div class="add-bookmark-modal">
     <tab v-model="activeCreateType" />
     <custom-link v-if="activeCreateType === 'custom'" @confirm="handleConfirm"/>
+    <widgets-selector v-else />
   </div>
 </template>
 
@@ -15,9 +16,10 @@ import { ref } from 'vue';
 import { bookmarkInsertService } from '../../database/services/bookmark-service.ts'
 import Tab from './tab.vue'
 import CustomLink from './custom-link.vue'
+import WidgetsSelector from './widgets-selector.vue'
 export default {
   emits: ['success'],
-  components: { Tab, CustomLink },
+  components: { Tab, CustomLink, WidgetsSelector },
   setup(props, context) {
     const activeCreateType = ref('custom')
     return {

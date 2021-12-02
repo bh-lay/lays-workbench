@@ -1,7 +1,6 @@
 <style lang="stylus" scoped>
 .size-selector
   display flex
-  margin-left 10px
   width 120px
   height 40px
   border-radius 4px
