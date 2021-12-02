@@ -13,6 +13,7 @@
     v-for="bookmarkItem in bookmarkList"
     :key="bookmarkItem.id"
     :data="bookmarkItem"
+    @click="openItem(bookmarkItem)"
     v-contextmenu:menu="{
       onVisible() {
         selectedBookmarkItem = bookmarkItem
@@ -82,6 +83,14 @@ export default {
       selectedBookmarkItem,
       refreshList() {
         getList();
+      },
+      openItem(data) {
+        // if (needForbiddenClick) {
+        //   return;
+        // }
+        if (data.type === BookmarkType.link) {
+          window.open(data.value, '_blank');
+        }
       },
       handleRemove() {
         bookmarkRemoveService(selectedBookmarkItem.value.id).then(() => {
