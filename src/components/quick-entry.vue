@@ -1,7 +1,8 @@
 <style lang="stylus" scoped>
-.btn-list
+.bookmark-map
   display grid
   grid-template-columns repeat(auto-fill, var(--grid-size))
+  grid-template-rows repeat(auto-fill, var(--grid-size))
   grid-auto-flow dense
   justify-content center
   padding-top 40px
@@ -10,7 +11,7 @@
 </style>
 
 <template>
-  <div class="btn-list">
+  <div class="bookmark-map">
     <bookmark-item
       v-for="bookmarkItem in bookmarkList"
       :key="bookmarkItem.id"

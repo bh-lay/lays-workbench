@@ -6,8 +6,8 @@
 <template>
   <div class="add-bookmark-modal">
     <tab v-model="activeCreateType" />
-    <custom-link v-if="activeCreateType === 'custom'" @confirm="handleConfirm"/>
-    <widgets-selector v-else />
+    <custom-link v-if="activeCreateType === 'custom'" @confirm="handleConfirm" />
+    <widgets-selector v-else @confirm="handleConfirm" />
   </div>
 </template>
 

@@ -112,7 +112,6 @@ export default {
     return {
       previewData,
       confirm() {
-        console.log('previewData', previewData)
         if (!previewData.name) {
           alert('图标名字没写')
           return

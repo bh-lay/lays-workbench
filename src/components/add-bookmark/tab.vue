@@ -49,7 +49,7 @@ export default {
         class: 'tab-outer'
       },[
         createTabItem('custom', '自定义链接'),
-        createTabItem('widgets', '小组件'),
+        createTabItem('widgets', '小工具'),
       ]);
     }
   },

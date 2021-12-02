@@ -111,15 +111,6 @@ export default {
       supportWidgetsList,
       previewData,
       confirm() {
-        console.log('previewData', previewData)
-        if (!previewData.name) {
-          alert('图标名字没写')
-          return
-        }
-        if (!previewData.value) {
-          alert('链接没有填')
-          return
-        }
         context.emit('confirm', previewData)
       },
     }
