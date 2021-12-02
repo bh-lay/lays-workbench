@@ -84,10 +84,10 @@ iframe
 </style>
 
 <template>
-  <div class="reg-visual-small" v-if="widgetsSize === BookmarkSize.small">
+  <div class="reg-visual-small" v-if="widgetsSize === BookmarkSize.small" @click="showRegVisual">
     <v-mdi name="mdi-regex" />
   </div>
-  <div class="reg-visual-medium" v-else-if="widgetsSize === BookmarkSize.medium">
+  <div class="reg-visual-medium" v-else-if="widgetsSize === BookmarkSize.medium" @click="showRegVisual" >
     <div class="title">正则可视化</div>
     <div class="desc">让晦涩的正则<br/>生动起来</div>
   </div>

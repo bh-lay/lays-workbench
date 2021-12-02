@@ -23,7 +23,7 @@
   left 0
   width 100%
   height 100%
-  background rgba(0, 0, 0, .5)
+  background rgba(0, 0, 0, .7)
 .container
   position relative
   min-width 40%
@@ -31,7 +31,7 @@
   max-height 40%
   padding 40px
   border-radius 30px
-  background rgba(255, 255, 255, .7)
+  background rgba(255, 255, 255, .88)
 </style>
 
 <template>
