@@ -83,10 +83,10 @@
         />
       </template>
       <template v-else-if="data.type === BookmarkType.widgets">
-        <reg-visual v-if="data.value === 'reg-visual'" />
-        <json-formatter v-else-if="data.value === 'json-formatter'" />
-        <native-bookmark v-else-if="data.value === 'native-bookmark'" />
-        <img-to-base v-else-if="data.value === 'img-to-base'" />
+        <reg-visual v-if="data.value === 'reg-visual'" :data="data" />
+        <json-formatter v-else-if="data.value === 'json-formatter'" :data="data" />
+        <native-bookmark v-else-if="data.value === 'native-bookmark'" :data="data" />
+        <img-to-base v-else-if="data.value === 'img-to-base'" :data="data" />
         <slot v-else-if="$slots.body" name="body" />
         <span v-else>unknown widgets type<br/>{{ data.name }} <small>{{ data.value }}</small></span>
       </template>
@@ -111,7 +111,7 @@ import ImgToBase from './widgets/img-to-base/index.vue'
 
 export default {
   emits: ['next'],
-  components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon, BookmarkIcon, FolderIcon },
+  components: { RegVisual, JsonFormatter, NativeBookmark, ImgToBase, BookmarkIcon, FolderIcon },
   props: {
     data: {
       type: Bookmark,
