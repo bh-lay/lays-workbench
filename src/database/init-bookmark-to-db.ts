@@ -1,5 +1,5 @@
-import { Bookmark } from './entity/bookmark.ts'
-import bookmarkDefaultList from './default-bookmark-data.ts'
+import { Bookmark } from './entity/bookmark'
+import bookmarkDefaultList from './default-bookmark-data'
 
 export default function initData(db: IDBDatabase) {
   return new Promise((resolve, reject) => {

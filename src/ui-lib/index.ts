@@ -1,7 +1,7 @@
 import { App as Application }  from 'vue'
-import Components from './components/index.ts';
-import clickOutSide from "./directives/click-out-side.ts";
-import contextmenu from "./contextmenu/index.ts";
+import Components from './components/index';
+import clickOutSide from "./directives/click-out-side";
+import contextmenu from "./contextmenu/index";
 import VueMdijs from 'vue-mdijs';
 import * as mdiIcons from '@mdi/js';
 

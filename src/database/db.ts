@@ -1,4 +1,4 @@
-import { bookmarkEntityInit } from './entity/bookmark.ts'
+import { bookmarkEntityInit } from './entity/bookmark'
 
 function getIDBObject() {
   return window.indexedDB ||
@@ -11,7 +11,7 @@ export function isSupportIDB() {
   var indexedDB = getIDBObject()
   return !!(indexedDB && indexedDB.open)
 }
-export function getIDBRequest() {
+export function getIDBRequest(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     var indexedDB = getIDBObject()
     var request = indexedDB.open('data-store', 1);

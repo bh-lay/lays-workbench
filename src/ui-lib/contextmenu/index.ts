@@ -1,5 +1,5 @@
 import { App as Application }  from 'vue'
-import directive from './directive.ts'
+import directive from './directive'
 import Contextmenu from './contextmenu.vue'
 import ContextmenuItem from './contextmenu-item.vue'
 

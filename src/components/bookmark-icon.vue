@@ -37,8 +37,8 @@ import { ref, watch } from 'vue';
 import {
   anyColorToHsl,
   formatHslToHex,
-} from '@/assets/js/color-conversion.ts';
-import loadImage from '@/assets/js/load-image.ts';
+} from '@/assets/js/color-conversion';
+import loadImage from '@/assets/js/load-image';
 export default {
   props: {
     icon: {

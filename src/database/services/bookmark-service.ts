@@ -1,7 +1,7 @@
-import { getIDBRequest } from '../db.ts';
-import { Bookmark } from '../entity/bookmark.ts';
-import bookmarkDefaultList from '../default-bookmark-data.ts';
-import initBookmark2db from '../init-bookmark-to-db.ts';
+import { getIDBRequest } from '../db';
+import { Bookmark } from '../entity/bookmark';
+import bookmarkDefaultList from '../default-bookmark-data';
+import initBookmark2db from '../init-bookmark-to-db';
 import {
   bookmarkInsertManager,
   bookmarkUpdateManager,
@@ -10,7 +10,7 @@ import {
   bookmarkListManager,
   bookmarkCountManager,
   bookmarkResetSortManager,
-} from '../manager/bookmark-manager.ts';
+} from '../manager/bookmark-manager';
 import { BookmarkType } from '../entity/bookmark';
 
 function getDbFromParams(db?: IDBDatabase): Promise<IDBDatabase> {
@@ -79,7 +79,7 @@ export function bookmarkListService(params: {parent: string | null}) {
       if (!params || !params.parent) {
         // 若数据为空，则将使用默认数据填充
         if (data.length === 0) {
-          bookmarkDefaultList.forEach((item: Bookmark) => {
+          bookmarkDefaultList.forEach((item: object) => {
             data.push(new Bookmark(item));
           });
         }

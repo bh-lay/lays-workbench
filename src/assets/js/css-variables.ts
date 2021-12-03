@@ -1,5 +1,5 @@
 import { onAppConfigChange } from './app-config'
-import { getAppConfig } from './app-config.ts'
+import { getAppConfig } from './app-config'
 
 type variableKey = 'maxContainerWidth' | 'gridSize' | 'gridGap' | 'iconRadius'
 const cssVariableKeys: variableKey[] = ['maxContainerWidth', 'gridSize', 'gridGap', 'iconRadius']

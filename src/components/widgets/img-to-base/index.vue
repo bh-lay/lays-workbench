@@ -119,8 +119,8 @@
 
 <script>
 import { ref, computed } from "vue";
-import { Bookmark, BookmarkSize } from '@database/entity/bookmark.ts';
-import { imgToBase64 } from './image-base64.ts'
+import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
+import { imgToBase64 } from './image-base64'
 import MainFunction from './main.vue'
 export default {
   components: { MainFunction },

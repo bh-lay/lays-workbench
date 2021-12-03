@@ -10,5 +10,6 @@
   },
   "paths": {
     "@/*": "src/*",
+    "@database/*": "src/database/*",
   },
 }

@@ -106,7 +106,7 @@ iframe
 
 <script>
 import { ref, computed } from "vue";
-import { Bookmark, BookmarkSize } from '@database/entity/bookmark.ts';
+import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
 export default {
   props: {
     data: {

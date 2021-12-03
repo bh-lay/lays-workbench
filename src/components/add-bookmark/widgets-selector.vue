@@ -69,7 +69,7 @@
 
 <script>
 import { ref, reactive, watch } from 'vue';
-import { Bookmark, BookmarkType, BookmarkSize } from '@database/entity/bookmark.ts'
+import { Bookmark, BookmarkType, BookmarkSize } from '@database/entity/bookmark'
 import BookmarkItem from '../bookmark-item.vue'
 import SizeSelector from './size-selector.vue'
 const supportWidgetsList = [

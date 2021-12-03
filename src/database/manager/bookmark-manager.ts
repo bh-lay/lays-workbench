@@ -1,4 +1,4 @@
-import { Bookmark } from '../entity/bookmark.ts'
+import { Bookmark } from '../entity/bookmark'
 
 export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: any) {
   return new Promise((resolve, reject) => {
@@ -43,7 +43,7 @@ export function bookmarkUpdateManager(db: IDBDatabase, bookmarkItem: any) {
   })
 }
 
-export function bookmarkGetManager(db: IDBDatabase, bookmarkId: any) {
+export function bookmarkGetManager(db: IDBDatabase, bookmarkId: any): Promise<Bookmark> {
   return new Promise((resolve, reject) => {
     var transaction = db.transaction(['bookmark']);
     var objectStore = transaction.objectStore('bookmark');
@@ -122,7 +122,7 @@ export function bookmarkListManager(db: IDBDatabase, params: {parent: string | n
     }
   })
 }
-export function bookmarkCountManager(db: IDBDatabase): Promise<Bookmark[]> {
+export function bookmarkCountManager(db: IDBDatabase): Promise<number> {
   return new Promise((resolve, reject) => {
     
     const objectStore = db.transaction('bookmark').objectStore('bookmark');

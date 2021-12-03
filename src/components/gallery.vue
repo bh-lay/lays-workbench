@@ -29,7 +29,7 @@
 
 <script>
 import { ref } from 'vue';
-import loadImage from '@/assets/js/load-image.ts'
+import loadImage from '@/assets/js/load-image'
 const bakgroundUrl = 'http://bh-lay.com/topic/me/imgs/xunfei.jpg'
 
 export default {
