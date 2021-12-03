@@ -13,7 +13,7 @@
 
 <script>
 import { ref } from 'vue';
-import { bookmarkInsertService } from '../../database/services/bookmark-service.ts'
+import { bookmarkInsertService } from '@database/services/bookmark-service.ts'
 import Tab from './tab.vue'
 import CustomLink from './custom-link.vue'
 import WidgetsSelector from './widgets-selector.vue'

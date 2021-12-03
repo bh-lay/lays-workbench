@@ -106,7 +106,7 @@ iframe
 
 <script>
 import { ref, computed } from "vue";
-import { Bookmark, BookmarkSize } from '../../database/entity/bookmark.ts';
+import { Bookmark, BookmarkSize } from '@database/entity/bookmark.ts';
 export default {
   props: {
     data: {
@@ -132,7 +132,7 @@ export default {
         
         queryStr = `#!re=${encodeURIComponent(quickInputValue)}`
       }
-      iframeSrc.value = '/regulex-legacy/' + queryStr
+      iframeSrc.value = '/regulex-legacy/index.html' + queryStr
       regVisualVisible.value = true
       quickInput.value = ''
     }

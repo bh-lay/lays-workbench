@@ -11,7 +11,7 @@ import {
   bookmarkRemoveService,
   bookmarkListService,
   bookmarkResortService,
-} from './database/services/bookmark-service.ts'
+} from '@database/services/bookmark-service.ts'
 
 window['test'] = {
   bookmarkInsertService,

@@ -131,10 +131,10 @@ textarea
 </template>
 
 <script>
-import Gallery from './components/gallery.vue';
-import SearchEntrance from './components/search-entrance.vue';
-import QuickEntry from './components/quick-entry.vue';
-import Settings from './components/settings.vue';
+import Gallery from '@/components/gallery.vue';
+import SearchEntrance from '@/components/search-entrance.vue';
+import QuickEntry from '@/components/quick-entry.vue';
+import Settings from '@/components/settings.vue';
 
 export default {
   components: { Gallery, SearchEntrance, QuickEntry, Settings },

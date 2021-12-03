@@ -44,12 +44,12 @@ import {
   Bookmark,
   BookmarkType,
   BookmarkSize,
-} from '../../database/entity/bookmark.ts';
+} from '@database/entity/bookmark.ts';
 import {
   bookmarkListService,
   bookmarkRemoveService,
   bookmarkUpdateService,
-} from '../../database/services/bookmark-service.ts';
+} from '@database/services/bookmark-service.ts';
 import BookmarkItem from '../bookmark-item.vue';
 import AddBookmark from '../add-bookmark/index.vue';
 import CustomLink from '../add-bookmark/custom-link.vue';

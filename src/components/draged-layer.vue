@@ -44,7 +44,7 @@
 
 <script>
 import { computed } from 'vue'
-import { getAppConfigItem } from '../assets/js/app-config.ts'
+import { getAppConfigItem } from '@/assets/js/app-config.ts'
 export default {
   props: {
     data: {

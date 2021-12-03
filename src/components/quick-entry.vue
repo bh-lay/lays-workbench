@@ -72,16 +72,16 @@ import {
   Bookmark,
   BookmarkType,
   BookmarkSize,
-} from '../database/entity/bookmark.ts';
+} from '@database/entity/bookmark.ts';
 import {
   bookmarkInsertService,
   bookmarkRemoveService,
   bookmarkUpdateService,
   bookmarkResortService,
-} from '../database/services/bookmark-service.ts';
-import { bookmarkListService } from '../database/services/bookmark-service.ts';
-import dragHandle from '../assets/js/drag-handle.ts';
-import { getAppConfigItem } from '../assets/js/app-config.ts';
+} from '@database/services/bookmark-service.ts';
+import { bookmarkListService } from '@database/services/bookmark-service.ts';
+import dragHandle from '@/assets/js/drag-handle.ts';
+import { getAppConfigItem } from '@/assets/js/app-config.ts';
 import BookmarkItem from './bookmark-item.vue';
 import AddBookmark from './add-bookmark/index.vue';
 import CustomLink from './add-bookmark/custom-link.vue';

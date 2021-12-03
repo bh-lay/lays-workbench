@@ -46,7 +46,7 @@ svg
 
 <script>
 import { ref, computed } from "vue";
-import { Bookmark, BookmarkSize } from '../../../database/entity/bookmark.ts';
+import { Bookmark, BookmarkSize } from '@database/entity/bookmark.ts';
 import MainFunction from './main.vue'
 export default {
   components: { MainFunction },
