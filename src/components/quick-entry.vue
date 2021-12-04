@@ -103,7 +103,7 @@ function moveIndexTo(list, fromIndex, toIndex) {
     list.splice(fromIndex, 1);
   }
 }
-function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
+function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
   const editModalVisible = ref(false);
   const folderLayerVisible = ref(false)
   let dragEvent = null
@@ -169,7 +169,7 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
       if (type === 'cancel') {
         return
       }
-      handleDragEnd(from, to, type)
+      onDragEnd(from, to, type)
     },
   };
 }
@@ -196,13 +196,6 @@ export default {
       if (!targetBookmark || !fromBookmark) {
         return
       }
-      // 拖拽元素或目标元素是组件，退出
-      if (
-        fromBookmark.type === BookmarkType.widgets ||
-        targetBookmark.type === BookmarkType.widgets
-      ) {
-        return
-      }
       // 拖拽元素是组，退出
       if (fromBookmark.type === BookmarkType.folder) {
         return
@@ -220,7 +213,7 @@ export default {
           bookmarkUpdateService(targetBookmark)
         ])
       } else {
-        // 目标是链接，先排个序，再合并，最后插入
+        // 目标是链接或组件，先排个序，再合并，最后插入
         const idList = list.map(item => item.id)
         return bookmarkResortService(idList)
           .then(idSortMap => {
@@ -277,7 +270,7 @@ export default {
         selectedBookmarkItem.value = item;
       },
       // 处理拖拽完成
-      handleDragEnd(from, to, method) {
+      onDragEnd(from, to, method) {
         // 找到拖放元素和目标元素的位置
         let fromIndex = -1;
         let targetIndex = -1;

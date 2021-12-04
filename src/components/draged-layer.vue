@@ -38,9 +38,12 @@
   background rgba(0, 0, 0, .2)
   border-radius 20px
   border 1px solid rgba(255, 255, 255, .5)
+  transform-origin center bottom
+  transition .2s
   color #fff
   &.active
-    background: red
+    background red
+    transform scale(1.5)
 </style>
 
 <template>
@@ -59,7 +62,7 @@
     <div class="draged-shadow" :style="{
       top: clientY + 'px',
       left: clientX + 'px',
-      background: undercoat,
+      background: dragedBookmark.undercoat,
     }"></div>
   </div>
 </teleport>
@@ -88,26 +91,22 @@ class BookmarkMapItem {
 
 function getMouseTriggered({ clientY, clientX, bookmarkType }, map) {
   const gridGap = getAppConfigItem('gridGap')
-  if (bookmarkType !== BookmarkType.widgets) {
-    for (let i = 0; i < map.length; i++) {
-      let mapItem = map[i];
-      if (
-        mapItem.left + gridGap / 2 <= clientX &&
-        mapItem.right - gridGap / 2 >= clientX &&
-        mapItem.top <= clientY &&
-        mapItem.bottom - gridGap >= clientY
-      ) {
-        // 命中 widgets，则忽略
-        if (mapItem.type === BookmarkType.widgets) {
-          return
-        }
-        return {
-          type: 'enter',
-          target: mapItem,
-        };
-      }
+  // 是否拖拽合并
+  for (let i = 0; i < map.length; i++) {
+    let mapItem = map[i];
+    if (
+      mapItem.left + gridGap / 2 <= clientX &&
+      mapItem.right - gridGap / 2 >= clientX &&
+      mapItem.top <= clientY &&
+      mapItem.bottom - gridGap >= clientY
+    ) {
+      return {
+        type: 'enter',
+        target: mapItem,
+      };
     }
   }
+  // 是否拖拽移动
   for (let t = 0; t < map.length; t++) {
     let mapItem = map[t];
     if (
@@ -124,13 +123,15 @@ function getMouseTriggered({ clientY, clientX, bookmarkType }, map) {
       };
     }
   }
+  // 是否拖拽删除
   const winWidth = window.innerWidth
   const winHeight = window.innerHeight
-  if (clientX > winWidth / 2 - 40 && clientX < winWidth / 2 + 40 && clientY > winHeight - 80) {
+  if (clientX > winWidth / 2 - 50 && clientX < winWidth / 2 + 50 && clientY > winHeight - 100) {
     return {
       type: 'delete'
     }
   }
+  // 拖拽取消
   return {
     type: 'cancel'
   }
@@ -159,7 +160,6 @@ export default {
     const clientX = ref(0)
     const clientY = ref(0)
     const gridGap = getAppConfigItem('gridGap')
-    const undercoat = ref('#000')
     const shadowRectStyle = ref({
       top: 0,
       left: 0,
@@ -174,7 +174,6 @@ export default {
       stableStart() {
         context.emit('beforeDrag')
         isStableStart.value = true
-        undercoat.value = dragedBookmark.undercoat
         props.bookmarkItemVmList.forEach(bookmarkItemVm => {
           if (!bookmarkItemVm) {
             return
@@ -236,7 +235,6 @@ export default {
       },
     });
     return {
-      undercoat,
       clientX,
       clientY,
       isStableStart,
