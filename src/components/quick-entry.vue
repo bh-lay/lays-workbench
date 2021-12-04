@@ -106,7 +106,6 @@ function moveIndexTo(list, fromIndex, toIndex) {
 function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
   const editModalVisible = ref(false);
   const folderLayerVisible = ref(false)
-  let dragEvent = null
   const willStartDrag = ref(false);
   const isStartDrag = ref(false)
   const bookmarkItemVm = [];
@@ -130,7 +129,7 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
     folderLayerVisible,
     willStartDrag,
     isStartDrag,
-    dragEvent,
+    dragEvent: null,
     editModalVisible,
     openEditModal,
     closeEditModal,
@@ -198,6 +197,8 @@ export default {
       }
       // 拖拽元素是组，退出
       if (fromBookmark.type === BookmarkType.folder) {
+        // FIXME:组合并
+        alert('暂不支持组合并，后续会支持的呦～')
         return
       }
       if (targetBookmark.type === BookmarkType.folder) {

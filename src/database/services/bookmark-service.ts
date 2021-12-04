@@ -58,19 +58,24 @@ export function bookmarkUpdateService(bookmarkItem: any, db?: IDBDatabase) {
       return bookmarkUpdateManager(db, bookmarkItem);
     });
 }
-export function bookmarkRemoveService(bookmarkId: string) {
-  return getIDBRequest().then((db: IDBDatabase) => {
-    return bookmarkGetManager(db, bookmarkId)
-      .then((bookmarkItem?: Bookmark) => {
-        if (!bookmarkItem) {
-          return
-        }
-        if (bookmarkItem.type === BookmarkType.folder) {
-          throw Error('目录暂不允许删除，后续会支持的呦')
-        }
-        return bookmarkRemoveManager(db, bookmarkId);
-      });
-  })
+export async function bookmarkRemoveService(bookmarkId: string) {
+  const db: IDBDatabase = await getIDBRequest()
+  const bookmarkItem: Bookmark = await bookmarkGetManager(db, bookmarkId)
+  // 不存在，则不继续执行
+  if (!bookmarkItem) {
+    return
+  }
+  // 被删除的是组，则额外处理组内元素转移逻辑
+  if (bookmarkItem.type === BookmarkType.folder) {
+    const childBookmarkList: Bookmark[] = await bookmarkListManager(db, {
+      parent: bookmarkId
+    })
+    if (childBookmarkList.length) {
+      throw Error('分组内还有链接，暂不允许删除！')
+    }
+  }
+  // 执行删除逻辑
+  await bookmarkRemoveManager(db, bookmarkId);
 }
 
 export function bookmarkListService(params: {parent: string | null}) {
