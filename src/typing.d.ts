@@ -10,3 +10,8 @@ declare module '*.vue' {
   const componentOptions: ComponentOptions
   export default componentOptions
 }
+
+declare interface EventTarget {
+  transaction: IDBTransaction
+  result: any
+}

@@ -32,13 +32,16 @@ export function getIDBRequest(): Promise<IDBDatabase> {
       const db = request.result
       console.log('onupgradeneeded event', event)
       // db = event.target.result;
-      const transaction = event.target.transaction;
-
-      transaction.oncomplete = function() {    
-        resolve(db)
+      if (!event.target) {
+        reject(new Error('could not find target'))
+      } else {
+        const transaction = event.target.transaction;
+        transaction.oncomplete = function() {    
+          resolve(db)
+        }
+        // 此处处理数据库初始化、升级逻辑
+        bookmarkEntityInit(db)
       }
-      // 此处处理数据库初始化、升级逻辑
-      bookmarkEntityInit(db)
     }
   })
 }

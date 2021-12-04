@@ -95,6 +95,10 @@ export function bookmarkListManager(db: IDBDatabase, params: {parent: string | n
     const parentId = params.parent
     const bookmarkList: Bookmark[] = []
     request.onsuccess = function (event) {
+      if (!event.target) {
+        reject(new Error('could not find target'))
+        return
+      }
       var cursor: any = event.target.result;
       if (cursor) {
         const value: any = cursor.value
@@ -129,7 +133,11 @@ export function bookmarkCountManager(db: IDBDatabase): Promise<number> {
     const request = objectStore.count()
   
     request.onsuccess = function (event) {
-      resolve(event.target.result)
+      if (!event.target) {
+        reject(new Error('could not find target'))
+      } else {
+        resolve(event.target.result)
+      }
     };
 
     request.onerror = function (event) {
@@ -152,6 +160,10 @@ export function bookmarkResetSortManager(db: IDBDatabase, idList: string[]): Pro
     // 打开游标
     const request = objectStore.openCursor()
     request.onsuccess = function (event) {
+      if (!event.target) {
+        reject(new Error('could not find target'))
+        return
+      }
       var cursor: any = event.target.result;
       if (cursor) {
         const value: any = cursor.value
