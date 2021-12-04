@@ -18,7 +18,7 @@
       :data="bookmarkItem"
       :ref="setItemRef"
       :class="{
-        draged: dragTriggerBlock.isDraging && selectedBookmarkItem.id === bookmarkItem.id
+        draged: isStartDrag && selectedBookmarkItem.id === bookmarkItem.id
       }"
       v-contextmenu:menu="{
         onVisible() {
@@ -51,7 +51,14 @@
       />
     </div>
   </modal>
-  <draged-layer v-if="dragTriggerBlock.isDraging" :data="dragTriggerBlock" />
+  <draged-layer
+    v-if="willStartDrag"
+    :event="dragEvent"
+    :bookmark-item-vm-list="bookmarkItemVm"
+    :draged-bookmark="selectedBookmarkItem"
+    @beforeDrag="handleBeforeDrag"
+    @dragEnd="handleDragEnd"
+  />
   <folder-layer
     v-model:visible="folderLayerVisible"
     :id="selectedBookmarkItem.id"
@@ -80,7 +87,6 @@ import {
   bookmarkResortService,
 } from '@database/services/bookmark-service';
 import { bookmarkListService } from '@database/services/bookmark-service';
-import dragHandle from '@/assets/js/drag-handle';
 import { getAppConfigItem } from '@/assets/js/app-config';
 import BookmarkItem from './bookmark-item.vue';
 import AddBookmark from './add-bookmark/index.vue';
@@ -97,75 +103,16 @@ function moveIndexTo(list, fromIndex, toIndex) {
     list.splice(fromIndex, 1);
   }
 }
-class BookmarkMapItem {
-  constructor(bookmarkItemVm) {
-    const nodeBCR = bookmarkItemVm.$el.getBoundingClientRect();
-    this.id = bookmarkItemVm.data.id;
-    this.type = bookmarkItemVm.data.type;
-    this.top = nodeBCR.top;
-    this.left = nodeBCR.left;
-    this.right = nodeBCR.right;
-    this.bottom = nodeBCR.bottom;
-  }
-}
-function getMouseTriggered({ clientY, clientX, bookmarkType }, map) {
-  const gridGap = getAppConfigItem('gridGap')
-  if (bookmarkType !== BookmarkType.widgets) {
-    for (let i = 0; i < map.length; i++) {
-      let mapItem = map[i];
-      if (
-        mapItem.left + gridGap / 2 <= clientX &&
-        mapItem.right - gridGap / 2 >= clientX &&
-        mapItem.top <= clientY &&
-        mapItem.bottom - gridGap >= clientY
-      ) {
-        // 命中 widgets，则忽略
-        if (mapItem.type === BookmarkType.widgets) {
-          return
-        }
-        return {
-          type: 'enter',
-          target: mapItem,
-        };
-      }
-    }
-  }
-  for (let t = 0; t < map.length; t++) {
-    let mapItem = map[t];
-    if (
-      // 鼠标在当前卡片同水平线
-      mapItem.top < clientY &&
-      mapItem.bottom - gridGap > clientY &&
-      // 鼠标在卡片左侧 34 像素内
-      clientX < mapItem.left + gridGap / 2 &&
-      mapItem.left + gridGap / 2 - clientX < gridGap * 2
-    ) {
-      return {
-        type: 'before',
-        target: mapItem,
-      };
-    }
-  }
-}
 function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
   const editModalVisible = ref(false);
   const folderLayerVisible = ref(false)
-  const dragTriggerBlock = ref({
-    // null\enter\before
-    isDraging: false,
-    type: null,
-    undercoat: '#333',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    clientX: 0,
-    clientY: 0,
-  });
+  let dragEvent = null
+  const willStartDrag = ref(false);
+  const isStartDrag = ref(false)
   const bookmarkItemVm = [];
   // 确保在每次更新之前重置ref
   onBeforeUpdate(() => {
-    bookmarkItemVm.value = [];
+    bookmarkItemVm.splice(0, bookmarkItemVm.length);
   });
 
   function openEditModal() {
@@ -181,13 +128,16 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
   var needForbiddenClick = false;
   return {
     folderLayerVisible,
-    dragTriggerBlock,
+    willStartDrag,
+    isStartDrag,
+    dragEvent,
     editModalVisible,
     openEditModal,
     closeEditModal,
     closeFolderLayer,
+    bookmarkItemVm,
     setItemRef(el) {
-      bookmarkItemVm.value.push(el);
+      bookmarkItemVm.push(el);
     },
     openItem(data) {
       if (needForbiddenClick) {
@@ -205,67 +155,22 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
         return
       }
       setSelectedBookmarkItem(bookmarkItem);
+      this.dragEvent = event
+      willStartDrag.value = true;
+    },
+    handleBeforeDrag() {
+      needForbiddenClick = true;
+      isStartDrag.value = true
+    },
+    handleDragEnd({ type, from, to}) {
+      console.log('handleDragEnd', { type, from, to})
+      willStartDrag.value = false;
+      isStartDrag.value = false
       needForbiddenClick = false;
-      const itemSizeAndPositionMap = []
-      dragHandle(event, {
-        stableDistance: 20,
-        stableStart() {
-          bookmarkItemVm.value.forEach(bookmarkItemVm => {
-            if (!bookmarkItemVm) {
-              return
-            }
-            itemSizeAndPositionMap.push(new BookmarkMapItem(bookmarkItemVm))
-          });
-          dragTriggerBlock.value.isDraging = true;
-          dragTriggerBlock.value.undercoat = bookmarkItem.undercoat
-          needForbiddenClick = true;
-        },
-        move(params) {
-          const triggered = getMouseTriggered(
-            {
-              bookmarkType: bookmarkItem.type,
-              clientY: params.clientY,
-              clientX: params.clientX,
-            },
-            itemSizeAndPositionMap
-          );
-          const value = dragTriggerBlock.value;
-          value.clientX = params.clientX
-          value.clientY = params.clientY
-          if (triggered) {
-            let triggeredTarget = triggered.target;
-            value.type = triggered.type;
-            value.top = triggeredTarget.top;
-            value.left = triggeredTarget.left;
-            value.right = triggeredTarget.right;
-            value.bottom = triggeredTarget.bottom;
-          } else {
-            value.type = null;
-          }
-        },
-        end(params) {
-          const triggered = getMouseTriggered(
-            {
-              clientY: params.clientY,
-              clientX: params.clientX,
-              bookmarkType: bookmarkItem.type,
-            },
-            itemSizeAndPositionMap
-          );
-          dragTriggerBlock.value.isDraging = false;
-          if (!triggered) {
-            return
-          }
-          if (bookmarkItem.id === triggered.target.id) {
-            return;
-          }
-          handleDragEnd(
-            bookmarkItem.id,
-            triggered.target.id,
-            triggered.type
-          );
-        },
-      });
+      if (type === 'cancel') {
+        return
+      }
+      handleDragEnd(from, to, type)
     },
   };
 }
