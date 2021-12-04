@@ -25,13 +25,36 @@
   border-radius 4px
   background #333
   box-shadow 1px 1px 2px rgba(0, 0, 0, 0.2),2px 2px 20px rgba(0, 0, 0, 0.2)
+.trash-area
+  position absolute
+  left 50%
+  bottom 5px
+  margin-left -20px
+  width 40px
+  height 40px
+  display flex
+  align-items center
+  justify-content center
+  background rgba(0, 0, 0, .2)
+  border-radius 20px
+  border 1px solid rgba(255, 255, 255, .5)
+  color #fff
+  &.active
+    background: red
 </style>
 
 <template>
 <teleport to="body">
   <div v-if="isStableStart" class="draged-layer">
+    <div :class="['trash-area', triggeredType === 'delete' ? 'active' : '']">
+      <v-mdi name="mdi-trash-can-outline" :size="20" />
+    </div>
     <transition name="fade-fast">
-      <div v-if="triggeredType" :class="['shadow-rect', triggeredType === 'enter' ? 'block' : 'line']" :style="shadowRectStyle"></div>
+      <div
+        v-if="triggeredType === 'enter' || triggeredType === 'before'"
+        :class="['shadow-rect', triggeredType === 'enter' ? 'block' : 'line']"
+        :style="shadowRectStyle"
+      ></div>
     </transition>
     <div class="draged-shadow" :style="{
       top: clientY + 'px',
@@ -49,7 +72,6 @@ import dragHandle from '@/assets/js/drag-handle';
 import {
   Bookmark,
   BookmarkType,
-  BookmarkSize,
 } from '@database/entity/bookmark';
 
 class BookmarkMapItem {
@@ -102,6 +124,16 @@ function getMouseTriggered({ clientY, clientX, bookmarkType }, map) {
       };
     }
   }
+  const winWidth = window.innerWidth
+  const winHeight = window.innerHeight
+  if (clientX > winWidth / 2 - 40 && clientX < winWidth / 2 + 40 && clientY > winHeight - 80) {
+    return {
+      type: 'delete'
+    }
+  }
+  return {
+    type: 'cancel'
+  }
 }
 export default {
   emits: ['beforeDrag', 'dragEnd'],
@@ -123,8 +155,6 @@ export default {
     },
   },
   setup(props, context) {
-    const enterPadding = 3
-    const beforeMarging = -4
     const isStableStart = ref(false)
     const clientX = ref(0)
     const clientY = ref(0)
@@ -151,8 +181,6 @@ export default {
           }
           itemSizeAndPositionMap.push(new BookmarkMapItem(bookmarkItemVm))
         });
-        console.log('props.bookmarkItemVmList', props.bookmarkItemVmList)
-        console.log('itemSizeAndPositionMap', itemSizeAndPositionMap)
       },
       move(params) {
         const triggered = getMouseTriggered(
@@ -163,36 +191,31 @@ export default {
           },
           itemSizeAndPositionMap
         );
+        triggeredType.value = triggered.type;
         clientX.value = params.clientX
         clientY.value = params.clientY
-        if (triggered) {
-          let triggeredTarget = triggered.target;
-          triggeredType.value = triggered.type;
-          if (triggeredType.value === 'enter') {
-            shadowRectStyle.value = {
-              top: triggeredTarget.top - enterPadding + 'px',
-              left: triggeredTarget.left - enterPadding + gridGap / 2 + 'px',
-              width: triggeredTarget.right - triggeredTarget.left + enterPadding * 2 - gridGap + 'px',
-              height: triggeredTarget.bottom - triggeredTarget.top + enterPadding * 2 - gridGap + 'px',
-            }
-          } else {
-            shadowRectStyle.value = {
-              top: triggeredTarget.top + beforeMarging + 'px',
-              left: triggeredTarget.left + 3 + 'px',
-              width: 8 + 'px',
-              height: triggeredTarget.bottom - triggeredTarget.top - beforeMarging * 2 - gridGap + 'px',
-            }
+
+        const enterPadding = 3
+        const beforeMarging = -4
+      
+        let triggeredTarget = triggered.target;
+        if (triggered.type === 'enter' && triggeredTarget) {
+          shadowRectStyle.value = {
+            top: triggeredTarget.top - enterPadding + 'px',
+            left: triggeredTarget.left - enterPadding + gridGap / 2 + 'px',
+            width: triggeredTarget.right - triggeredTarget.left + enterPadding * 2 - gridGap + 'px',
+            height: triggeredTarget.bottom - triggeredTarget.top + enterPadding * 2 - gridGap + 'px',
           }
-        } else {
-          triggeredType.value = null;
+        } else if (triggered.type === 'before') {
+          shadowRectStyle.value = {
+            top: triggeredTarget.top + beforeMarging + 'px',
+            left: triggeredTarget.left + 3 + 'px',
+            width: 8 + 'px',
+            height: triggeredTarget.bottom - triggeredTarget.top - beforeMarging * 2 - gridGap + 'px',
+          }
         }
       },
       end(params) {
-        const dragData = {
-          type: 'cancel',
-          from: dragedBookmark.id,
-          to: null
-        }
         const triggered = getMouseTriggered(
           {
             clientY: params.clientY,
@@ -201,9 +224,13 @@ export default {
           },
           itemSizeAndPositionMap
         );
-        if (triggered && dragedBookmark.id !== triggered.target.id) {
-          dragData.type = triggered.type
-          dragData.to = triggered.target.id
+        const dragData = {
+          type: triggered.type,
+          from: dragedBookmark.id,
+          to: triggered.target ? triggered.target.id : null
+        }
+        if (dragData.from === dragData.to) {
+          dragData.type = 'cancel'
         }
         context.emit('dragEnd', dragData);
       },

@@ -163,7 +163,6 @@ function mouseIntractive({ setSelectedBookmarkItem, handleDragEnd }) {
       isStartDrag.value = true
     },
     handleDragEnd({ type, from, to}) {
-      console.log('handleDragEnd', { type, from, to})
       willStartDrag.value = false;
       isStartDrag.value = false
       needForbiddenClick = false;
@@ -262,6 +261,17 @@ export default {
       const idList = list.map(item => item.id)
       bookmarkResortService(idList)
     }
+
+    function handleRemove() {
+      bookmarkRemoveService(selectedBookmarkItem.value.id).then(() => {
+        for (let i = 0; i < bookmarkList.value.length; i++) {
+          if (bookmarkList.value[i].id === selectedBookmarkItem.value.id) {
+            bookmarkList.value.splice(i, 1);
+            break;
+          }
+        }
+      }).catch(e => alert(e.message || '删除失败！'));
+    }
     const mouseHandle = mouseIntractive({
       setSelectedBookmarkItem(item) {
         selectedBookmarkItem.value = item;
@@ -277,11 +287,17 @@ export default {
           if (id === from) {
             fromIndex = i;
           }
-          if (id === to) {
-            targetIndex = i;
-          }
-          if (fromIndex >= 0 && targetIndex >= 0) {
-            break;
+          if (to) {
+            if (id === to) {
+              targetIndex = i;
+            }
+            if (fromIndex >= 0 && targetIndex >= 0) {
+              break;
+            }
+          } else {
+            if (fromIndex >= 0) {
+              break;
+            }
           }
         }
         if (method === 'enter') {
@@ -289,6 +305,8 @@ export default {
           return;
         } else if (method === 'before') {
           handleDragMove(list, fromIndex, targetIndex)
+        } else if (method === 'delete') {
+          handleRemove()
         }
       },
     });
@@ -303,17 +321,7 @@ export default {
         undercoat: '#2196f3',
       }),
       selectedBookmarkItem,
-
-      handleRemove() {
-        bookmarkRemoveService(selectedBookmarkItem.value.id).then(() => {
-          for (let i = 0; i < bookmarkList.value.length; i++) {
-            if (bookmarkList.value[i].id === selectedBookmarkItem.value.id) {
-              bookmarkList.value.splice(i, 1);
-              break;
-            }
-          }
-        }).catch(e => alert(e.message || '删除失败！'));
-      },
+      handleRemove,
       handleConfirmEdit(bookmarkItem) {
         bookmarkUpdateService(bookmarkItem).then(() => {
           mouseHandle.closeEditModal();
