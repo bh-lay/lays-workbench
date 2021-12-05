@@ -69,27 +69,40 @@
 </template>
 
 <script>
-import { computed, ref, onMounted } from 'vue'
+import { ref, getCurrentInstance } from 'vue'
 import { getAppConfigItem } from '@/assets/js/app-config'
 import dragHandle from '@/assets/js/drag-handle';
-import {
-  Bookmark,
-  BookmarkType,
-} from '@database/entity/bookmark';
+import { Bookmark } from '@database/entity/bookmark';
 
-class BookmarkMapItem {
-  constructor(bookmarkItemVm) {
-    const nodeBCR = bookmarkItemVm.$el.getBoundingClientRect();
-    this.id = bookmarkItemVm.data.id;
-    this.type = bookmarkItemVm.data.type;
-    this.top = nodeBCR.top;
-    this.left = nodeBCR.left;
-    this.right = nodeBCR.right;
-    this.bottom = nodeBCR.bottom;
+function getItemMap(internalInstance) {
+  const thisVm = internalInstance.proxy
+  const parentVm = thisVm ? thisVm.$parent : null
+  if (!parentVm) {
+    return []
   }
+  const parentEl = parentVm.$el
+  if (!parentEl) {
+    return []
+  }
+  const itemEls = parentEl.parentNode.querySelectorAll('.bookmark-item')
+  const mapList = []
+  Array.prototype.forEach.call(itemEls, bookmarkItemNode => {
+    const bookmarkId = bookmarkItemNode.dataset.id
+    if (!bookmarkId) {
+      return
+    }
+    const nodeBCR = bookmarkItemNode.getBoundingClientRect();
+    mapList.push({
+      id: bookmarkId,
+      top: nodeBCR.top,
+      left: nodeBCR.left,
+      right: nodeBCR.right,
+      bottom: nodeBCR.bottom,
+    })
+  });
+  return mapList
 }
-
-function getMouseTriggered({ clientY, clientX, bookmarkType }, map) {
+function getMouseTriggered({ clientY, clientX }, map) {
   const gridGap = getAppConfigItem('gridGap')
   // 是否拖拽合并
   for (let i = 0; i < map.length; i++) {
@@ -145,12 +158,6 @@ export default {
         return {}
       },
     },
-    bookmarkItemVmList: {
-      type: Array,
-      default() {
-        return []
-      },
-    },
     dragedBookmark: {
       type: Bookmark
     },
@@ -166,25 +173,20 @@ export default {
       width: 0,
       height: 0,
     })
+    const internalInstance = getCurrentInstance()
     const triggeredType = ref('')
-    const itemSizeAndPositionMap = []
+    let itemSizeAndPositionMap = []
     const dragedBookmark = props.dragedBookmark
     dragHandle(props.event, {
       stableDistance: 20,
       stableStart() {
         context.emit('beforeDrag')
         isStableStart.value = true
-        props.bookmarkItemVmList.forEach(bookmarkItemVm => {
-          if (!bookmarkItemVm) {
-            return
-          }
-          itemSizeAndPositionMap.push(new BookmarkMapItem(bookmarkItemVm))
-        });
+        itemSizeAndPositionMap = getItemMap(internalInstance)
       },
       move(params) {
         const triggered = getMouseTriggered(
           {
-            bookmarkType: dragedBookmark.type,
             clientY: params.clientY,
             clientX: params.clientX,
           },
@@ -219,7 +221,6 @@ export default {
           {
             clientY: params.clientY,
             clientX: params.clientX,
-            bookmarkType: dragedBookmark.type,
           },
           itemSizeAndPositionMap
         );

@@ -16,10 +16,10 @@
       v-for="bookmarkItem in bookmarkList"
       :key="bookmarkItem.id"
       :data="bookmarkItem"
-      :ref="setItemRef"
       :class="{
         draged: isStartDrag && selectedBookmarkItem.id === bookmarkItem.id
       }"
+      :data-id="bookmarkItem.id"
       v-contextmenu:menu="{
         onVisible() {
           selectedBookmarkItem = bookmarkItem
@@ -54,7 +54,6 @@
   <draged-layer
     v-if="willStartDrag"
     :event="dragEvent"
-    :bookmark-item-vm-list="bookmarkItemVm"
     :draged-bookmark="selectedBookmarkItem"
     @beforeDrag="handleBeforeDrag"
     @dragEnd="handleDragEnd"
@@ -108,11 +107,6 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
   const folderLayerVisible = ref(false)
   const willStartDrag = ref(false);
   const isStartDrag = ref(false)
-  const bookmarkItemVm = [];
-  // 确保在每次更新之前重置ref
-  onBeforeUpdate(() => {
-    bookmarkItemVm.splice(0, bookmarkItemVm.length);
-  });
 
   function openEditModal() {
     editModalVisible.value = true;
@@ -134,10 +128,6 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
     openEditModal,
     closeEditModal,
     closeFolderLayer,
-    bookmarkItemVm,
-    setItemRef(el) {
-      bookmarkItemVm.push(el);
-    },
     openItem(data) {
       if (needForbiddenClick) {
         return;
