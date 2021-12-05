@@ -1,5 +1,5 @@
 <style lang="stylus" scoped>
-.wb-button
+.v-button
   padding 8px 20px
   background #f4f4f4
   border 1px solid #ddd
@@ -18,7 +18,7 @@
 </style>
 
 <template>
-  <button :class="['wb-button', 'wb-button-' + type]">
+  <button :class="['v-button', 'v-button-' + type]">
     <slot />
   </button>
 </template>

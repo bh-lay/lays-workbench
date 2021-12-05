@@ -62,7 +62,7 @@
       />
     </div>
     <div class="footer">
-      <wb-button @click="confirm">确定</wb-button>
+      <v-button @click="confirm">确定</v-button>
     </div>
   </div>
 </template>
