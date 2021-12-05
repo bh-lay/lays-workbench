@@ -36,6 +36,7 @@
     v-if="willStartDrag"
     :event="dragEvent"
     :draged-bookmark="selectedBookmarkItem"
+    :disabled-enter="true"
     @beforeDrag="handleBeforeDrag"
     @dragEnd="handleDragEnd"
   />

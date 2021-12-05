@@ -137,17 +137,21 @@ function getMouseTriggered({ clientY, clientX }, map) {
     }
   }
   // 是否拖拽删除
-  const winWidth = window.innerWidth
-  const winHeight = window.innerHeight
-  if (clientX > winWidth / 2 - 50 && clientX < winWidth / 2 + 50 && clientY > winHeight - 100) {
+  const winWidth = window.innerWidth;
+  const winHeight = window.innerHeight;
+  if (
+    clientX > winWidth / 2 - 50 &&
+    clientX < winWidth / 2 + 50 &&
+    clientY > winHeight - 100
+  ) {
     return {
-      type: 'delete'
-    }
+      type: 'delete',
+    };
   }
   // 拖拽取消
   return {
-    type: 'cancel'
-  }
+    type: 'cancel',
+  };
 }
 export default {
   emits: ['beforeDrag', 'dragEnd'],
@@ -155,34 +159,39 @@ export default {
     event: {
       type: MouseEvent,
       default() {
-        return {}
+        return {};
       },
     },
     dragedBookmark: {
-      type: Bookmark
+      type: Bookmark,
+    },
+    disabledEnter: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props, context) {
-    const isStableStart = ref(false)
-    const clientX = ref(0)
-    const clientY = ref(0)
-    const gridGap = getAppConfigItem('gridGap')
+    const isStableStart = ref(false);
+    const clientX = ref(0);
+    const clientY = ref(0);
+    const gridGap = getAppConfigItem('gridGap');
     const shadowRectStyle = ref({
       top: 0,
       left: 0,
       width: 0,
       height: 0,
-    })
-    const internalInstance = getCurrentInstance()
-    const triggeredType = ref('')
-    let itemSizeAndPositionMap = []
-    const dragedBookmark = props.dragedBookmark
+    });
+    const internalInstance = getCurrentInstance();
+    const triggeredType = ref('');
+    let itemSizeAndPositionMap = [];
+    const dragedBookmark = props.dragedBookmark;
     dragHandle(props.event, {
       stableDistance: 20,
       stableStart() {
-        context.emit('beforeDrag')
-        isStableStart.value = true
-        itemSizeAndPositionMap = getItemMap(internalInstance)
+        context.emit('beforeDrag');
+        isStableStart.value = true;
+        itemSizeAndPositionMap = getItemMap(internalInstance);
+        // console.log('itemSizeAndPositionMap', itemSizeAndPositionMap)
       },
       move(params) {
         const triggered = getMouseTriggered(
@@ -193,27 +202,46 @@ export default {
           itemSizeAndPositionMap
         );
         triggeredType.value = triggered.type;
-        clientX.value = params.clientX
-        clientY.value = params.clientY
-
-        const enterPadding = 3
-        const beforeMarging = -4
-      
+        clientX.value = params.clientX;
+        clientY.value = params.clientY;
+        // 增加 enter 检测
+        if (props.disabledEnter && triggered.type === 'enter') {
+          triggered.type = 'cancel'
+          return
+        }
+        const enterPadding = 3;
+        const beforeMarging = -4;
+        
         let triggeredTarget = triggered.target;
         if (triggered.type === 'enter' && triggeredTarget) {
           shadowRectStyle.value = {
             top: triggeredTarget.top - enterPadding + 'px',
             left: triggeredTarget.left - enterPadding + gridGap / 2 + 'px',
-            width: triggeredTarget.right - triggeredTarget.left + enterPadding * 2 - gridGap + 'px',
-            height: triggeredTarget.bottom - triggeredTarget.top + enterPadding * 2 - gridGap + 'px',
-          }
+            width:
+              triggeredTarget.right -
+              triggeredTarget.left +
+              enterPadding * 2 -
+              gridGap +
+              'px',
+            height:
+              triggeredTarget.bottom -
+              triggeredTarget.top +
+              enterPadding * 2 -
+              gridGap +
+              'px',
+          };
         } else if (triggered.type === 'before') {
           shadowRectStyle.value = {
             top: triggeredTarget.top + beforeMarging + 'px',
             left: triggeredTarget.left + 3 + 'px',
             width: 8 + 'px',
-            height: triggeredTarget.bottom - triggeredTarget.top - beforeMarging * 2 - gridGap + 'px',
-          }
+            height:
+              triggeredTarget.bottom -
+              triggeredTarget.top -
+              beforeMarging * 2 -
+              gridGap +
+              'px',
+          };
         }
       },
       end(params) {
@@ -224,13 +252,18 @@ export default {
           },
           itemSizeAndPositionMap
         );
+        // 增加 enter 检测
+        if (props.disabledEnter && triggered.type === 'enter') {
+          triggered.type = 'cancel'
+          return
+        }
         const dragData = {
           type: triggered.type,
           from: dragedBookmark.id,
-          to: triggered.target ? triggered.target.id : null
-        }
+          to: triggered.target ? triggered.target.id : null,
+        };
         if (dragData.from === dragData.to) {
-          dragData.type = 'cancel'
+          dragData.type = 'cancel';
         }
         context.emit('dragEnd', dragData);
       },
@@ -241,7 +274,7 @@ export default {
       isStableStart,
       triggeredType,
       shadowRectStyle,
-    }
+    };
   },
 };
 </script>
