@@ -65,8 +65,8 @@ export async function bookmarkRemoveService(bookmarkId: string) {
   if (!bookmarkItem) {
     return
   }
-  // 被删除的是组，则额外处理组内元素转移逻辑
   if (bookmarkItem.type === BookmarkType.folder) {
+    // 被删除的是组，则检查组内是否还有元素
     const childBookmarkList: Bookmark[] = await bookmarkListManager(db, {
       parent: bookmarkId
     })

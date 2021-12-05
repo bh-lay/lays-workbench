@@ -86,7 +86,6 @@ import {
   bookmarkResortService,
 } from '@database/services/bookmark-service';
 import { bookmarkListService } from '@database/services/bookmark-service';
-import { getAppConfigItem } from '@/assets/js/app-config';
 import BookmarkItem from './bookmark-item.vue';
 import AddBookmark from './add-bookmark/index.vue';
 import CustomLink from './add-bookmark/custom-link.vue';
@@ -118,7 +117,7 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
     folderLayerVisible.value = false;
   }
   
-  var needForbiddenClick = false;
+  let needForbiddenClick = false;
   return {
     folderLayerVisible,
     willStartDrag,
@@ -286,7 +285,6 @@ export default {
         }
         if (method === 'enter') {
           handleDragEnter(list, fromIndex, targetIndex)
-          return;
         } else if (method === 'before') {
           handleDragMove(list, fromIndex, targetIndex)
         } else if (method === 'delete') {
