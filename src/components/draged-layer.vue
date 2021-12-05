@@ -201,14 +201,14 @@ export default {
           },
           itemSizeAndPositionMap
         );
-        triggeredType.value = triggered.type;
-        clientX.value = params.clientX;
-        clientY.value = params.clientY;
         // 增加 enter 检测
         if (props.disabledEnter && triggered.type === 'enter') {
           triggered.type = 'cancel'
-          return
         }
+        triggeredType.value = triggered.type;
+        clientX.value = params.clientX;
+        clientY.value = params.clientY;
+        
         const enterPadding = 3;
         const beforeMarging = -4;
         
@@ -255,7 +255,6 @@ export default {
         // 增加 enter 检测
         if (props.disabledEnter && triggered.type === 'enter') {
           triggered.type = 'cancel'
-          return
         }
         const dragData = {
           type: triggered.type,
