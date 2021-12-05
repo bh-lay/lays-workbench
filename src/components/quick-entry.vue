@@ -131,6 +131,7 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
       if (needForbiddenClick) {
         return;
       }
+      willStartDrag.value = false;
       if (data.type === BookmarkType.link) {
         window.open(data.value, '_blank');
       } else if (data.type === BookmarkType.folder) {
@@ -138,6 +139,7 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
       }
     },
     handleDrag(event, bookmarkItem) {
+      // console.log('event, bookmarkItem', event, bookmarkItem)
       // 非左键不处理
       if (event.button !== 0) {
         return

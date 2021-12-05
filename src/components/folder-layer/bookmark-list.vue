@@ -113,6 +113,7 @@ export default {
         if (needForbiddenClick) {
           return;
         }
+        willStartDrag.value = false;
         if (data.type === BookmarkType.link) {
           window.open(data.value, '_blank');
         }
