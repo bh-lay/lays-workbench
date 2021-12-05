@@ -72,3 +72,7 @@ export function getAppConfig() {
 export function getAppConfigItem(key: string) {
   return APP_CONFIG[key]
 }
+
+export function setAppConfigItem(key: string, value: any) {
+  APP_CONFIG[key] = value
+}

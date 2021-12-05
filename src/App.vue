@@ -134,7 +134,7 @@ textarea
 import Gallery from '@/components/gallery.vue';
 import SearchEntrance from '@/components/search-entrance.vue';
 import QuickEntry from '@/components/quick-entry.vue';
-import Settings from '@/components/settings.vue';
+import Settings from '@/components/settings/index.vue';
 
 export default {
   components: { Gallery, SearchEntrance, QuickEntry, Settings },

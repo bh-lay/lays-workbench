@@ -2,7 +2,6 @@
 .v-sider
   height 18px
   padding-top 12px
-  border 10px solid #eee
 .railway-track
   height 6px
   border-radius 4px
@@ -16,7 +15,7 @@
 .railway-engine
   position absolute
   top -4px
-  right -4px
+  right -7px
   width 12px
   height 12px
   border-radius 10px
@@ -33,21 +32,18 @@
 </style>
 
 <template>
-  <div>
-    {{ min }} - {{ isInDragMode }} - {{ max }}
-    <div class="v-sider">
-      <div ref="trackRef" class="railway-track">
+  <div class="v-sider">
+    <div ref="trackRef" class="railway-track">
+      <div
+        class="railway-train"
+        :style="{
+          width: isInDragMode ? screenWidthByDrag : screenWidthByValue,
+        }"
+      >
         <div
-          class="railway-train"
-          :style="{
-            width: isInDragMode ? screenWidthByDrag : screenWidthByValue,
-          }"
-        >
-          <div
-            :class="['railway-engine', isInDragMode ? 'active' : '']"
-            @mousedown="dragHandleStart"
-          ></div>
-        </div>
+          :class="['railway-engine', isInDragMode ? 'active' : '']"
+          @mousedown="dragHandleStart"
+        ></div>
       </div>
     </div>
   </div>
@@ -117,7 +113,7 @@ export default {
           clearTimeout(timer)
           timer = setTimeout(() => {
             context.emit('update:modelValue', value);
-          }, 100) 
+          }, 10) 
         }
         dragHandle(event, {
           stableDistance: 20,
