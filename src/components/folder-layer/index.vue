@@ -32,6 +32,10 @@
   padding 40px
   border-radius 30px
   background rgba(255, 255, 255, .88)
+  overflow auto
+  &::-webkit-scrollbar
+    width 0
+    height 0
 </style>
 
 <template>
