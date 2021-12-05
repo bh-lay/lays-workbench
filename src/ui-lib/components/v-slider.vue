@@ -15,7 +15,7 @@
   background #2196f3
 .railway-engine
   position absolute
-  top -4px
+  top -5px
   margin-left -6px
   width 12px
   height 12px
@@ -112,9 +112,9 @@ export default {
     watch(
       [() => props.modelValue, () => props.min, () => props.max],
       () => {
-        screenWidthByValue.value =
-          ((props.modelValue - props.min) / (props.max - props.min)) * 100 +
-          '%';
+        let widthRate = (props.modelValue - props.min) / (props.max - props.min)
+        widthRate = Math.max(Math.min(widthRate, 1), 0)
+        screenWidthByValue.value = widthRate * 100 + '%';
       },
       { immediate: true }
     );

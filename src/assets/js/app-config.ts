@@ -3,6 +3,7 @@ const APP_CONFIG_DEFAULT = {
   gridSize: 84,
   gridGap: 34,
   iconRadius: 8,
+  wallpaper: 'http://bh-lay.com/topic/me/imgs/xunfei.jpg',
 }
 
 let APP_CONFIG: Record<string, unknown> = new Proxy({}, {})

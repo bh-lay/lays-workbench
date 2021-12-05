@@ -28,9 +28,9 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import loadImage from '@/assets/js/load-image'
-const bakgroundUrl = 'http://bh-lay.com/topic/me/imgs/xunfei.jpg'
+import { getAppConfigItem } from '@/assets/js/app-config'
 
 export default {
   props: {
@@ -41,20 +41,17 @@ export default {
   },
   setup() {
     const isImageLoaded = ref(false)
+    const bakgroundUrl = getAppConfigItem('wallpaper')
+    onMounted(function () {
+      loadImage(bakgroundUrl)
+        .then(() => {
+          isImageLoaded.value = true
+        })
+    })
     return {
       isImageLoaded,
       bakgroundUrl,
     }
-  },
-  mounted() {
-    const startTime = Date.now()
-    loadImage(bakgroundUrl)
-      .then(() => {
-        const now = Date.now()
-        const speedTime = now - startTime
-        console.log('speedTime', speedTime)
-        this.isImageLoaded = true
-      })
   },
 };
 </script>

@@ -1,19 +1,23 @@
 <style lang="stylus" scoped>
 .settings-btn
-  width 40px
-  height 40px
-  line-height 40px
-  text-align center
+  width 36px
+  height 36px
+  display flex
+  align-items center
+  justify-content center
   cursor pointer
+  border 1px solid rgba(255, 255, 255, .1)
+  border-radius 4px
+  transition .2s ease-in-out
   svg
     height 20px
-    vertical-align text-bottom
     fill #fff
-    transition .2s ease-in-out
   &:hover
-    svg
-      fill #333
-
+    border-color rgba(255, 255, 255, .5)
+    background rgba(255, 255, 255, .2)
+  &:active
+    border-color #fff
+    background rgba(255, 255, 255, .35)
 .settings-modal
   position fixed
   width 100%
@@ -26,6 +30,8 @@
   height 100%
   background rgba(0, 0, 0, .2)
 .settings-panel
+  display flex
+  flex-direction column
   position absolute
   top 0
   right 0
@@ -43,9 +49,22 @@
   height 0
   transition .1s 1s
 .header
-  padding 20px
+  position relative
+  display flex
+  justify-content space-between
+  align-items center
+  padding 15px 20px 15px 20px
   background #fff
-  text-align right
+  box-shadow 0 0 2px rgba(0, 0, 0, .3)
+  .title
+    font-size 18px
+.scroll-body
+  height 100px
+  flex-grow 1
+  overflow auto
+  &::-webkit-scrollbar
+    width 0
+    height 0
 </style>
 
 <template>
@@ -69,9 +88,12 @@
           @mousedown.prevent
         >
           <div class="header">
+            <div class="title">应用配置</div>
             <v-button @click="settingVisible = false" type="dark">完成</v-button>
           </div>
-          <settings-list />
+          <div class="scroll-body">
+            <settings-list />
+          </div>
         </div>
       </transition>
     </div>

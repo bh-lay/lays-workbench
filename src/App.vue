@@ -39,7 +39,7 @@ textarea
   flex-shrink 0
 
 .pager-header-inner
-  height 40px
+  height 60px
   display flex
   align-items center
   justify-content space-between

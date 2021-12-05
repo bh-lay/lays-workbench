@@ -1,11 +1,12 @@
 <style lang="stylus" scoped>
 .label
   font-size 14px
+  color #666
 </style>
 
 <template>
   <div>
-    <div class="label">页面宽度</div>
+    <div class="label">页面最大宽度</div>
     <v-slider
       v-model="maxContainerWidth"
       :min="500"
