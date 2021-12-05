@@ -68,7 +68,9 @@ export function initAppConfig() {
 export function getAppConfig() {
   return APP_CONFIG
 }
-
+export function getAppConfigDefault() {
+  return Object.assign({}, APP_CONFIG_DEFAULT)
+}
 export function getAppConfigItem(key: string) {
   return APP_CONFIG[key]
 }

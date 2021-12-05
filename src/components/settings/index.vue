@@ -42,10 +42,9 @@
   width 0
   height 0
   transition .1s 1s
-
 .header
   padding 20px
-  border-bottom 1px solid #eee
+  background #fff
   text-align right
 </style>
 
@@ -70,7 +69,7 @@
           @mousedown.prevent
         >
           <div class="header">
-            <button @click="settingVisible = false">完成</button>
+            <v-button @click="settingVisible = false" type="dark">完成</v-button>
           </div>
           <settings-list />
         </div>

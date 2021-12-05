@@ -85,7 +85,7 @@
       <template v-else-if="data.type === BookmarkType.widgets">
         <reg-visual v-if="data.value === 'reg-visual'" :data="data" />
         <json-formatter v-else-if="data.value === 'json-formatter'" :data="data" />
-        <native-bookmark v-else-if="data.value === 'native-bookmark'" :data="data" />
+        <native-bookmark v-else-if="data.value === 'native-bookmark'" />
         <img-to-base v-else-if="data.value === 'img-to-base'" :data="data" />
         <slot v-else-if="$slots.body" name="body" />
         <span v-else>unknown widgets type<br/>{{ data.name }} <small>{{ data.value }}</small></span>

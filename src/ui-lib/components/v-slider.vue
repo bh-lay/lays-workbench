@@ -3,9 +3,10 @@
   height 18px
   padding-top 12px
 .railway-track
+  position relative
   height 6px
   border-radius 4px
-  background: #edf0f2
+  background: #e7ebee
 .railway-train
   position relative
   height 6px
@@ -15,13 +16,13 @@
 .railway-engine
   position absolute
   top -4px
-  right -7px
+  margin-left -6px
   width 12px
   height 12px
   border-radius 10px
   border 2px solid #2196f3
   background #fff
-  transition .15s
+  transition transform .15s
   &:hover
     cursor grab
     transform scale(1.3)
@@ -29,6 +30,20 @@
   &.active
     cursor grabbing
     transform scale(1.5)
+.railway-stations
+  position absolute
+  width 100%
+  height 100%
+  top 0
+  left 0
+  z-index 0
+.railway-station
+  position absolute
+  top 0
+  margin-left -1px
+  width 2px
+  height 6px
+  background rgba(255, 255, 255, .6)
 </style>
 
 <template>
@@ -40,11 +55,26 @@
           width: isInDragMode ? screenWidthByDrag : screenWidthByValue,
         }"
       >
-        <div
-          :class="['railway-engine', isInDragMode ? 'active' : '']"
-          @mousedown="dragHandleStart"
-        ></div>
       </div>
+      <div class="railway-stations">
+        <div
+          class="railway-station"
+          v-for="(mark, index) in marks"
+          :key="index"
+          :style="{
+            left: 100 * (mark.value - min) / (max - min) + '%'
+          }"
+        >
+          <div class="label"></div>
+        </div>
+      </div>
+      <div
+        :class="['railway-engine', isInDragMode ? 'active' : '']"
+        @mousedown="dragHandleStart"
+        :style="{
+          left: isInDragMode ? screenWidthByDrag : screenWidthByValue,
+        }"
+      ></div>
     </div>
   </div>
 </template>
@@ -65,6 +95,12 @@ export default {
     max: {
       type: Number,
       default: 100,
+    },
+    marks: {
+      type: Array,
+      default() {
+        return []
+      },
     },
   },
   setup(props, context) {
@@ -96,13 +132,40 @@ export default {
         const startWidth =
           ((props.modelValue - props.min) / (props.max - props.min)) *
           trackWidth;
-        function countNewValue(xOffset) {
-          let newWidth = startWidth + xOffset;
-          newWidth = Math.max(Math.min(newWidth, trackWidth), 0);
-
+        // 获取吸附的数值
+        function sorptionValue(value) {
+          // 不能超出最大、最小限制
+          const newValue = Math.max(Math.min(props.max, value), props.min);
+          if (newValue !== value) {
+            return newValue
+          }
+          // 吸附范围在 最大最小值的差值 1/50
+          const sorptionRange = (props.max - props.min) / 50
+          // 遍历标记
+          for (let i = 0; i < props.marks.length; i++) {
+            let distance = Math.abs(props.marks[i].value - newValue)
+            if (distance < sorptionRange) {
+              return props.marks[i].value
+            }
+          }
+          // 其他情况，原值返回
+          return value
+        }
+        // 根据拖拽情况计算新值
+        function countValueByDrag(xOffset) {
+          const newWidth = startWidth + xOffset;
           const widthRate = newWidth / trackWidth;
-          let newValue = widthRate * (props.max - props.min) + props.min;
-          newValue = Math.max(Math.min(props.max, newValue), props.min);
+          const dragValue = widthRate * (props.max - props.min) + props.min;
+          // 数值进行吸附处理
+          const newValue = sorptionValue(dragValue)
+          // 若吸附修正后的值和原值有差异，则使用修正后的值
+          if (newValue !== dragValue) {
+            return {
+              width: trackWidth * (newValue - props.min) / (props.max - props.min),
+              value: newValue,
+            };
+          }
+          // 默认返回原职原值
           return {
             width: newWidth,
             value: newValue,
@@ -121,13 +184,13 @@ export default {
             isInDragMode.value = true;
           },
           move(params) {
-            const { width, value } = countNewValue(params.xOffset);
+            const { width, value } = countValueByDrag(params.xOffset);
             screenWidthByDrag.value = width + 'px';
             dragValue.value = value;
             delayTriggerUpdate(value)
           },
           end(params) {
-            const { value } = countNewValue(params.xOffset);
+            const { value } = countValueByDrag(params.xOffset);
             context.emit('update:modelValue', value);
             isInDragMode.value = false;
           },

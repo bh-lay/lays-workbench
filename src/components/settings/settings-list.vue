@@ -1,35 +1,26 @@
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+.setting-group
+  padding 24px 30px
+  background #fff
+.label
+  margin-bottom 15px
+  font-size 16px
+</style>
 
 <template>
-  <div>
-    <p style="padding: 24px 50px;font-size:24px">
-    设置功能正在开发中<br/>
-    包含背景图设置、图标管理等功能
-    </p>
-    <v-slider v-model="containerWidth" :min="500" :max="windowWidth - 40" />
+  <div style="padding: 24px 50px;">
+    <div class="setting-group">
+      <div class="label">布局</div>
+      <layout />
+    </div>
   </div>
 </template>
 
 <script>
 import { ref, watch } from 'vue';
-import { getAppConfigItem, setAppConfigItem } from '@/assets/js/app-config'
+import Layout from './layout.vue'
 
 export default {
-  setup() {
-    const settingVisible = ref(false);
-    const containerWidth = ref(getAppConfigItem('maxContainerWidth'))
-    const windowWidth = window.innerWidth
-    watch(containerWidth, value => {
-      setAppConfigItem('maxContainerWidth', value)
-    })
-    return {
-      settingVisible,
-      containerWidth,
-      windowWidth,
-      handleClickoutSide() {
-        this.settingVisible = false
-      },
-    };
-  },
+  components: { Layout },
 };
 </script>

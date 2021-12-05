@@ -2,17 +2,16 @@
 .bookmark-wrapper
   display flex
   justify-content space-between
+  box-sizing border-box
+  height 100%
   padding 1px
 .key-button
   position relative
   width 55px
-  height 48px
+  height 100%
   flex-grow 1
   border-radius 8px
   background #000
-  line-height 48px
-  text-align center
-  font-size 24px
   color #fff
   &.mini-text
     font-size 15px
@@ -33,6 +32,11 @@
     bottom 7px
     line-height 16px
     font-size 13px
+.key-button-text
+  display flex
+  align-items center
+  justify-content center
+  font-size 24px
 .mac-command
   width 70px
   svg
@@ -57,12 +61,12 @@
       <div class="key-button mac-command">
         <v-mdi name="mdi-apple-keyboard-command" />
       </div>
-      <div class="key-button">B</div>
+      <div class="key-button key-button-text">B</div>
     </template>
     <template v-else>
-      <div class="key-button mini-text">Ctrl</div>
-      <div class="key-button mini-text">Shift</div>
-      <div class="key-button">O</div>
+      <div class="key-button key-button-text mini-text">Ctrl</div>
+      <div class="key-button key-button-text mini-text">Shift</div>
+      <div class="key-button key-button-text">O</div>
     </template>
   </div>
 </template>
