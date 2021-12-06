@@ -28,17 +28,17 @@
 .settings-mask
   position relative
   height 100%
-  background rgba(0, 0, 0, .2)
+  background rgba(0, 0, 0, .3)
 .settings-panel
   display flex
   flex-direction column
   position absolute
   top 0
   right 0
-  width 500px
+  width 380px
   max-width: 100%
   height 100%
-  background rgba(255, 255, 255, .6)
+  background rgba(255, 255, 255, .5)
   z-index 11
 .hidden
   // 各种方法保证视觉上弹窗不可见，且不影响动画显示
@@ -53,11 +53,27 @@
   display flex
   justify-content space-between
   align-items center
-  padding 15px 20px 15px 20px
+  height 36px
+  padding 10px 20px 10px 20px
   background #fff
-  box-shadow 0 0 2px rgba(0, 0, 0, .3)
+  box-shadow 0 0 3px rgba(0, 0, 0, .2)
   .title
-    font-size 18px
+    font-size 14px
+    color #333
+  .modal-close
+    width 32px
+    height 32px
+    display flex
+    align-items center
+    justify-content center
+    color #aaa
+    cursor pointer
+    transition .15s
+    &:hover
+      color #333
+      background #f4f4f4
+    &:active
+      background #eee
 .scroll-body
   height 100px
   flex-grow 1
@@ -89,7 +105,9 @@
         >
           <div class="header">
             <div class="title">应用配置</div>
-            <v-button @click="settingVisible = false" type="dark">完成</v-button>
+            <div class="modal-close" @click="settingVisible = false">
+              <v-mdi name="mdi-close" />
+            </div>
           </div>
           <div class="scroll-body">
             <settings-list />
@@ -111,7 +129,7 @@ export default {
     return {
       settingVisible,
       handleClickoutSide() {
-        this.settingVisible = false
+        settingVisible.value = false
       },
     };
   },

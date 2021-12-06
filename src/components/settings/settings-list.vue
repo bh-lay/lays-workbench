@@ -1,13 +1,13 @@
 <style lang="stylus" scoped>
 .group-list
-  padding 15px
+  padding 10px 10px 50px
 .setting-group
   margin-bottom 10px
-  padding 24px 30px
+  padding 18px 20px
   background #fff
 .label
   margin-bottom 15px
-  font-size 16px
+  font-size 14px
 </style>
 
 <template>

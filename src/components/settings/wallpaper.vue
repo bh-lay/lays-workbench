@@ -3,7 +3,7 @@
   display flex
   align-items center
   justify-content center
-  height 200px
+  height 180px
   background no-repeat center #444
   background-size cover
 </style>

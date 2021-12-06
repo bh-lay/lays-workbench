@@ -1,15 +1,15 @@
 <style lang="stylus" scoped>
 .v-sider
-  height 18px
-  padding-top 12px
+  height 14px
+  padding-top 10px
 .railway-track
   position relative
-  height 6px
+  height 4px
   border-radius 4px
   background: #e7ebee
 .railway-train
   position relative
-  height 6px
+  height 4px
   max-width 100%
   border-radius 4px
   background #2196f3
@@ -17,19 +17,19 @@
   position absolute
   top -5px
   margin-left -6px
-  width 12px
-  height 12px
+  width 10px
+  height 10px
   border-radius 10px
   border 2px solid #2196f3
   background #fff
   transition transform .15s
   &:hover
     cursor grab
-    transform scale(1.3)
+    transform scale(1.4)
   &:active,
   &.active
     cursor grabbing
-    transform scale(1.5)
+    transform scale(1.6)
 .railway-stations
   position absolute
   width 100%
@@ -42,7 +42,7 @@
   top 0
   margin-left -1px
   width 2px
-  height 6px
+  height 4px
   background rgba(255, 255, 255, .6)
 </style>
 

@@ -120,7 +120,8 @@ display:block;
 margin:0 auto;
 }
 footer,footer a {
-color:#EEF;
+font-size: 12px;
+color: #666
 }
 
 body.embed {
@@ -141,12 +142,12 @@ body footer {
   width:auto;
   margin:0;
   padding:2px 10px;
-  background:rgb(75,0,130);
+  background:#eee;
   opacity: 0.85;
   position:fixed;
   right:0;
   bottom:0;
-  color:white;
+  color:#555;
   font-size: 14px;;
 }
 body.embed{height:100%;}
@@ -196,7 +197,7 @@ function getParams() {
         <tr>
           <td style="width:1em">/</td>
           <td style="width:auto">
-            <input id="input" class="input" value="^(a|b)*?$" />
+            <input id="input" class="input" value="(?:http(?:|s):|)\/\/(?:[a-zA-Z0-9-]){1,26}(\.[a-zA-Z0-9-]+)+" />
           </td>
           <td style="width:1em">/</td>
           <td style="width:3em" id="flagBox"></td>
