@@ -100,7 +100,6 @@
         <div
           class="settings-panel"
           v-if="settingVisible"
-          v-clickoutside="handleClickoutSide"
           @mousedown.prevent
         >
           <div class="header">
@@ -128,9 +127,6 @@ export default {
     const settingVisible = ref(false);
     return {
       settingVisible,
-      handleClickoutSide() {
-        settingVisible.value = false
-      },
     };
   },
 };

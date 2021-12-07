@@ -13,6 +13,10 @@
 <template>
 <div class="group-list">
   <div class="setting-group">
+    <div class="label">书签</div>
+    <bookmarks-entrance />
+  </div>
+  <div class="setting-group">
     <div class="label">布局</div>
     <layout />
   </div>
@@ -25,10 +29,11 @@
 
 <script>
 import { ref, watch } from 'vue';
+import BookmarksEntrance from './bookmarks-entrance.vue'
 import Layout from './layout.vue'
 import Wallpaper from './wallpaper.vue'
 
 export default {
-  components: { Layout, Wallpaper },
+  components: { BookmarksEntrance, Layout, Wallpaper },
 };
 </script>

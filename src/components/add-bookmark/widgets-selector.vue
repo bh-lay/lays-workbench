@@ -4,7 +4,7 @@
 .input-item
   margin-bottom 20px
   .label
-    height 14px
+    height 12px
     margin-bottom 6px
     line-height 14px
     font-size 14px
@@ -84,6 +84,10 @@ const supportWidgetsList = [
   {
     label: '图片base64',
     name: 'img-to-base'
+  },
+  {
+    label: '藏经阁',
+    name: 'public-bookmarks'
   },
 ]
 export default {

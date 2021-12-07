@@ -55,7 +55,7 @@
   flex-grow 1
   align-items center
   justify-content center
-  border-left 1px dashed #8cd98f
+  border-left 1px dashed #63bb66
   cursor pointer
   transition .2s
   span
