@@ -87,7 +87,8 @@
         <json-formatter v-else-if="data.value === 'json-formatter'" :data="data" />
         <native-bookmark v-else-if="data.value === 'native-bookmark'" />
         <img-to-base v-else-if="data.value === 'img-to-base'" :data="data" />
-        <bookmarks v-else-if="data.value === 'bookmarks'" :data="data" />
+        <public-bookmarks v-else-if="data.value === 'public-bookmarks'" :data="data" />
+        <private-bookmarks v-else-if="data.value === 'private-bookmarks'" :data="data" />
         <slot v-else-if="$slots.body" name="body" />
         <span v-else>unknown widgets type<br/>{{ data.name }} <small>{{ data.value }}</small></span>
       </template>
@@ -109,7 +110,8 @@ import RegVisual from './widgets/reg-visual.vue'
 import JsonFormatter from './widgets/json-formatter/index.vue'
 import NativeBookmark from './widgets/native-bookmark.vue'
 import ImgToBase from './widgets/img-to-base/index.vue'
-import Bookmarks from './widgets/bookmarks/index.vue'
+import PublicBookmarks from './widgets/public-bookmarks/index.vue'
+import PrivateBookmarks from './widgets/private-bookmarks/index.vue'
 
 export default {
   emits: ['next'],
@@ -120,7 +122,8 @@ export default {
     ImgToBase,
     BookmarkIcon,
     FolderIcon,
-    Bookmarks,
+    PublicBookmarks,
+    PrivateBookmarks,
   },
   props: {
     data: {

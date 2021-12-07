@@ -89,6 +89,10 @@ const supportWidgetsList = [
     label: '藏经阁',
     name: 'public-bookmarks'
   },
+  {
+    label: '小书房',
+    name: 'private-bookmarks'
+  },
 ]
 export default {
   emits: ['confirm'],

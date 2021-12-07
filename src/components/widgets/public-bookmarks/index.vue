@@ -40,16 +40,16 @@ svg
     </template>
   </div>
   <modal v-model="modalVisible" width="80%" height="80%" >
-    <bookmark-directory />
+    <public-bookmarks />
   </modal>
 </template>
 
 <script>
 import { ref, computed } from "vue";
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
-import BookmarkDirectory from '@/components/bookmark-directory/index.vue'
+import PublicBookmarks from '@/components/public-bookmarks/index.vue'
 export default {
-  components: { BookmarkDirectory },
+  components: { PublicBookmarks },
   props: {
     data: {
       type: Bookmark,
