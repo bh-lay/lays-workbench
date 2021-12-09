@@ -23,7 +23,7 @@ export default defineConfig({
         // 分包逻辑
         manualChunks(id: any){
           // mdi 较大，单独拆包
-          if(id.includes('mdi')){
+          if(id.includes('@mdi')){
             return 'mdi'
           }
           // JSON formatter 分离
