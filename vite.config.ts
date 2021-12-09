@@ -16,5 +16,26 @@ export default defineConfig({
       '@': resolve('./src'),
       '@database': resolve('./src/database')
     }
+  },
+  build:{
+    rollupOptions:{
+      output:{
+        // 分包逻辑
+        manualChunks(id: any){
+          // mdi 较大，单独拆包
+          if(id.includes('mdi')){
+            return 'mdi'
+          }
+          // JSON formatter 分离
+          if (id.includes('node_modules/json-formatter-js')) {
+            return 'json-formatter'
+          }
+          // 其余依赖均拆分至 libs 模块
+          if(id.includes('node_modules')){
+            return 'libs'
+          }
+        }
+      }
+    }
   }
 });
