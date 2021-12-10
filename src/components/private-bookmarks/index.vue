@@ -17,13 +17,25 @@
 <template>
   <div class="bookmark-directory">
     <div class="category-list">
-      <folder-list
-        parent="root"
+      <folder-item
+        :data="{
+          id: 'root',
+          label: '我的书签'
+        }"
+        :deep="0.5"
         :active="activeId"
-        @select="activeId = $event"
-      />
+        :expand="true"
+        @select="activeId = 'root'"
+      >
+        <folder-list
+          parent="root"
+          :active="activeId"
+          @select="activeId = $event"
+        />
+      </folder-item>
     </div>
     <div class="bookmark-container">
+      {{ activeId }}
       <h1 style="color: #aaa">开发中，就快好了！</h1>
     </div>
   </div>
@@ -32,8 +44,9 @@
 <script>
 import { ref } from "vue";
 import FolderList from './folder-list.vue'
+import FolderItem from './folder-item.vue'
 export default {
-  components: { FolderList },
+  components: { FolderList, FolderItem },
   setup(props) {
     const activeId = ref('root')
     return {

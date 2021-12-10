@@ -11,18 +11,21 @@
     .label
       color #b6d9f7
 .expand-btn
+  display flex
+  align-items center
+  justify-content center
   width 30px
   height 30px
   margin-right 4px
   border-radius 20px
-  line-height 30px
-  text-align center
   cursor pointer
+  svg
+    transition .2s
+    fill #aaa
   &:hover
     background #50505a
-  &:active,
-  &.active
-    background #63aae3
+  &:active
+    background #636780
     color #243542
 .label
   width 50px
@@ -38,20 +41,39 @@
   &.active
     color #fff
 .add-btn
+  display flex
+  align-items center
+  justify-content center
+  width 30px
+  height 30px
+  margin-right 4px
+  border-radius 20px
+  cursor pointer
   opacity 0
+  svg
+    width 18px
+    transition .2s
+    fill #aaa
+  &:hover
+    background #50505a
+  &:active
+    background #636780
+    color #243542
 </style>
 <template>
   <div
     :class="['folder-item', active === data.id ? 'active' : '']"
     :style="{
-      paddingLeft: deep * 20 + 'px'
+      paddingLeft: deep * 15 + 'px'
     }"
   >
-    <div class="expand-btn" @click="isExpand = !isExpand">
-      {{ isExpand ? 'v' : '>' }}
+    <div :class="['expand-btn', isExpand ? 'expand' : '']" @click="isExpand = !isExpand">
+      <v-mdi v-if="hasSubMenu" name="mdi-menu-down" :rotate="isExpand ? 0 : -90" />
     </div>
     <div class="label" @click="$emit('select', data.id)">{{ data.label }}</div>
-    <div class="add-btn">+</div>
+    <div class="add-btn">
+      <v-mdi name="mdi-plus" />
+    </div>
   </div>
   <div v-if="isExpand" class="sub-folder">
     <slot />
@@ -78,11 +100,16 @@ export default {
       type: String,
       default: 'root',
     },
+    expand: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props) {
-    const isExpand = ref(false)
+    const isExpand = ref(props.expand)
     return {
-      isExpand
+      isExpand,
+      hasSubMenu: true,
     };
   },
 };

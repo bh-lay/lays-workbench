@@ -4,9 +4,6 @@
   svg
     transition .2s
     fill #b6bcce
-  &.active
-    svg
-      transform rotate(180deg) !important
 .dropdown-body
   position fixed
   border-radius 4px
@@ -19,7 +16,7 @@
 <template>
   <div :class="['dropdown-button', visible ? 'active' : '']" ref="button" @click="show">
     <slot />
-    <v-mdi v-if="arrow" name="mdi-menu-down" />
+    <v-mdi v-if="arrow" name="mdi-menu-down" :rotate="visible ? -180 : 0" />
     <teleport to="body">
       <transition name="slidedown">
         <div
