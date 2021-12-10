@@ -1,6 +1,12 @@
 <style lang="stylus" scoped>
 .dropdown-button
   cursor pointer
+  svg
+    transition .2s
+    fill #b6bcce
+  &.active
+    svg
+      transform rotate(180deg) !important
 .dropdown-body
   position fixed
   border-radius 4px
@@ -13,6 +19,7 @@
 <template>
   <div :class="['dropdown-button', visible ? 'active' : '']" ref="button" @click="show">
     <slot />
+    <v-mdi v-if="arrow" name="mdi-menu-down" />
     <teleport to="body">
       <transition name="slidedown">
         <div
@@ -34,6 +41,12 @@
 <script>
 export default {
   name: 'dropdown',
+  props: {
+    arrow: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       left: 0,

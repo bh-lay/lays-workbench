@@ -17,14 +17,8 @@
     width 50px
     flex-grow 1
     text-align center
-  svg
-    transition .2s
-    fill #b6bcce
   &:hover
     background #fff
-  &.active
-    svg
-      transform rotate(180deg) !important
 .icon-type-selector
   width 120px
   padding 15px 0
@@ -71,9 +65,8 @@ input
 
 <template>
   <div class="icon-editor">
-    <dropdown>
+    <dropdown :arrow="true">
       <span>{{ iconTypeLabel }}</span>
-      <v-mdi name="mdi-menu-down" />
       <template v-slot:body>
         <div class="icon-type-selector">
           <dropdown-item
