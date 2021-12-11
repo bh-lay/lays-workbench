@@ -14,6 +14,8 @@
   box-shadow 1px 1px 3px rgba(0, 0, 0, .3), 1px 1px 10px rgba(0, 0, 0, .1)
 .header
   margin-bottom 15px
+  .v-button
+    margin-right 15px
 .empty
   padding 100px 20px
   text-align center
@@ -23,6 +25,7 @@
   <div class="bookmark-container" v-contextmenu:listMenu>
     <div class="header">
       <v-button type="dark" @click="handleCreateLink">添加链接</v-button>
+      <v-button type="dark" @click="handleCreateFolder">添加文件夹</v-button>
     </div>
     <div v-if="bookmarkList.length === 0" class="empty">
       万物皆空
@@ -164,7 +167,6 @@ export default {
           bookmarkItem.name = name
           bookmarkItem.value = value
           bookmarkUpdateService(bookmarkItem)
-          linkEditorConfig.value.visible = false
         } else {
           const item = new Bookmark({
             name,
@@ -177,6 +179,7 @@ export default {
             context.emit('after-insert')
           });
         }
+        linkEditorConfig.value.visible = false
       },
       handleFolderEditorConfirm({ name }) {
         if (folderEditorConfig.value.type === 'edit') {

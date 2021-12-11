@@ -37,10 +37,19 @@
       @after-insert="handleMainListInsert"
     />
   </div>
+  <modal v-model="folderEditorConfig.visible" :width="440">
+    <folder-editor
+      :type="folderEditorConfig.type"
+      :folder-name="folderEditorConfig.name"
+      @cancel="folderEditorConfig.visible = false"
+      @confirm="handleFolderEditorConfirm"
+    />
+  </modal>
 </template>
 
 <script>
 import { ref } from "vue";
+import FolderEditor from './folder-editor.vue'
 import {
   Bookmark,
   BookmarkType,
@@ -50,33 +59,52 @@ import { bookmarkInsertService } from '@database/services/bookmark-service';
 import FolderItem from './folder-item.vue'
 import MainList from './main-list.vue'
 export default {
-  components: { FolderItem, MainList },
+  components: { FolderItem, MainList, FolderEditor },
   setup(props) {
     const activeId = ref('root')
     const changedParentId = ref('')
     
+    const folderEditorConfig = ref({
+      visible: false,
+      type: 'create',
+      parentId: '',
+      id: null,
+      name: '',
+    })
     return {
       activeId,
       changedParentId,
+      folderEditorConfig,
       handleSelect(selectedId) {
         activeId.value = selectedId
       },
       handleCreate(parentId) {
-        // console.log('handleCreate', parentId)
-        // const item = new Bookmark({
-        //   name: '自定义组-' + new Date().getSeconds(),
-        //   sort: 0,
-        //   type: BookmarkType.folder,
-        //   parent: parentId,
-        //   value: '',
-        // })
-        // bookmarkInsertService(item)
-        // .then(() => {
-        //   changedParentId.value = parentId
-        //   setTimeout(() => {
-        //     changedParentId.value = ''
-        //   }, 200)
-        // })
+        const folderEditorConfigValue = folderEditorConfig.value
+        folderEditorConfigValue.visible = true
+        folderEditorConfigValue.type = 'create'
+        folderEditorConfigValue.parentId = parentId
+      },
+      handleFolderEditorConfirm({ name }){
+        const folderEditorConfigValue = folderEditorConfig.value
+        if (folderEditorConfigValue.type === 'edit') {
+          const bookmarkItem = selectedBookmark.value
+          bookmarkItem.name = name
+          bookmarkUpdateService(bookmarkItem)
+        } else {
+          const item = new Bookmark({
+            name,
+            sort: 0,
+            type: BookmarkType.folder,
+            parent: folderEditorConfigValue.parentId,
+          })
+          bookmarkInsertService(item).then(() => {
+            changedParentId.value = folderEditorConfigValue.parentId
+            setTimeout(() => {
+              changedParentId.value = ''
+            }, 200)
+          })
+        }
+        folderEditorConfig.value.visible = false
       },
       handleMainListInsert() {
         changedParentId.value = activeId.value

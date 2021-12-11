@@ -39,7 +39,7 @@ svg
       <div class="desc">个人书签库</div>
     </template>
   </div>
-  <modal v-model="modalVisible" :width="1024" height="80%" >
+  <modal v-model="modalVisible" width="80%" height="80%" >
     <private-bookmarks />
   </modal>
 </template>

@@ -2,7 +2,7 @@
 .main-item
   display flex
   align-items center
-  min-height 30px
+  min-height 34px
   padding 5px 20px
   color #bdbdc7
   svg
