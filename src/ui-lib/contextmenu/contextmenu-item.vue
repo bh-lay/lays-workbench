@@ -1,15 +1,3 @@
-<style lang="stylus" scoped>
-.contextmenu-item
-  padding 0 20px
-  line-height 34px
-  font-size 14px
-  color #555
-  cursor pointer
-  transition .15s
-  &:hover
-    background: #f4f4f4
-</style>
-
 <template>
   <div class="contextmenu-item" @click="handleClick">
     <slot />

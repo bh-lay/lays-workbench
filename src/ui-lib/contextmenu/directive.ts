@@ -3,11 +3,17 @@ import { App as Application, DirectiveBinding, nextTick, ComponentInternalInstan
 export default {
   install(app: Application) {
     app.directive('contextmenu', {
-      mounted (el, binding: DirectiveBinding) {
+      mounted (el: HTMLElement, binding: DirectiveBinding) {
         const $refKey: string = binding.arg || ''
 
         el.addEventListener('contextmenu', function(event: MouseEvent){
           event.preventDefault();
+          // event.stopPropagation();
+          // 若已触发过右键菜单，则
+          if (event._hasTriggered) {
+            return
+          }
+          event._hasTriggered = true
           if (!binding.instance || !binding.instance.$refs) {
             return
           }
@@ -28,12 +34,7 @@ export default {
           });
         }, false)
       },
-      unmounted(el) {
-        if (el._removeGloballistener) {
-          el._removeGloballistener()
-          el._removeGloballistener = null
-        }
-      },
+      unmounted(el: HTMLElement) {},
     })
   }
 }
