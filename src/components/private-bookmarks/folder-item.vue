@@ -86,7 +86,7 @@
       :data="item"
       :deep="deep + 1"
       :active="active"
-      :changed-id="changedId"
+      :changed-parent-id="changedParentId"
       @select="$emit('select', $event)"
       @create="$emit('create', $event)"
     />
@@ -123,7 +123,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    changedId: {
+    changedParentId: {
       type: String,
       default: '',
     },
@@ -154,9 +154,9 @@ export default {
       }
     );
     watch(
-      () => props.changedId,
-      (changedId) => {
-        if (changedId !== props.data.id || !isExpand.value) {
+      () => props.changedParentId,
+      (changedParentId) => {
+        if (changedParentId !== props.data.id || !isExpand.value) {
           return;
         }
         loadList();
@@ -164,8 +164,8 @@ export default {
     );
     watch(
       () => props.active,
-      (changedId) => {
-        if (changedId == props.data.id) {
+      (changedParentId) => {
+        if (changedParentId == props.data.id) {
           isExpand.value = true;
         }
       }

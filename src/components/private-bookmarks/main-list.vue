@@ -22,11 +22,29 @@
     <main-item
       v-for="item in bookmarkList"
       :key="item.id" :data="item"
-      :active="selectedId === item.id"
-      @click="selectedId = item.id"
+      :active="selectedBookmark.id === item.id"
+      v-contextmenu:menu="{
+        onVisible() {
+          selectedBookmark = item
+        }
+      }"
+      @click="selectedBookmark = item"
       @dblclick="handleOpen(item)"
     />
   </div>
+  <contextmenu ref="menu">
+    <contextmenu-item @click="handleEdit">编辑</contextmenu-item>
+    <contextmenu-item @click="handleRemove">删除</contextmenu-item>
+  </contextmenu>
+  <modal v-model="linkEditorConfig.visible" :width="440">
+    <link-editor
+      :type="linkEditorConfig.type"
+      :link-name="selectedBookmark.name"
+      :link-value="selectedBookmark.value"
+      @cancel="linkEditorConfig.visible = false"
+      @confirm="handleLinkEditorConfirm"
+    />
+  </modal>
 </template>
 
 <script>
@@ -39,20 +57,27 @@ import {
 import {
   bookmarkListService,
   bookmarkInsertService,
+  bookmarkUpdateService,
+  bookmarkRemoveService,
 } from '@database/services/bookmark-service';
 import MainItem from './main-item.vue';
+import LinkEditor from './link-editor.vue'
 export default {
-  components: { MainItem },
-  emits: ['select', 'create'],
+  components: { MainItem, LinkEditor },
+  emits: ['select', 'create', 'open-folder', 'after-insert', 'after-remove'],
   props: {
     parent: {
+      type: String,
+      default: '',
+    },
+    changedParentId: {
       type: String,
       default: '',
     },
   },
   setup(props, context) {
     const bookmarkList = ref([]);
-    const selectedId = ref('')
+    const selectedBookmark = ref({})
     const loadList = () => {
       bookmarkListService({
         parent: props.parent,
@@ -67,20 +92,56 @@ export default {
     };
     loadList();
     watch(() => props.parent, loadList);
+    watch(
+      () => props.changedParentId,
+      (changedParentId) => {
+        if (changedParentId !== props.parent) {
+          return;
+        }
+        loadList();
+      }
+    );
+    const linkEditorConfig = ref({
+      visible: false,
+      type: 'create'
+    })
     return {
-      selectedId,
+      selectedBookmark,
       bookmarkList,
+      linkEditorConfig,
       handleCreate() {
-        const item = new Bookmark({
-          name: '自定义链接-' + new Date().getSeconds(),
-          sort: 0,
-          type: BookmarkType.link,
-          parent: props.parent,
-          value: 'http://bh-lay.com',
-        });
-        bookmarkInsertService(item).then(() => {
-          loadList();
-        });
+        const linEditorConfigValue = linkEditorConfig.value
+        linEditorConfigValue.visible = true
+        linEditorConfigValue.type = 'create'
+      },
+      handleEdit() {
+        if (selectedBookmark.value.type === BookmarkType.folder) {
+          // alert(1)
+        } else {
+          const linEditorConfigValue = linkEditorConfig.value
+          linEditorConfigValue.visible = true
+          linEditorConfigValue.type = 'edit'
+        }
+      },
+      handleLinkEditorConfirm({ name, value }) {
+        if (linkEditorConfig.value.type === 'edit') {
+          const bookmarkItem = selectedBookmark.value
+          bookmarkItem.name = name
+          bookmarkItem.value = value
+          bookmarkUpdateService(bookmarkItem)
+          linkEditorConfig.value.visible = false
+        } else {
+          const item = new Bookmark({
+            name,
+            sort: 0,
+            type: BookmarkType.link,
+            parent: props.parent,
+            value,
+          });
+          bookmarkInsertService(item).then(() => {
+            context.emit('after-insert')
+          });
+        }
       },
       handleOpen(bookmark) {
         if (bookmark.type === BookmarkType.folder) {
@@ -88,6 +149,17 @@ export default {
         } else if (bookmark.type === BookmarkType.link) {
           window.open(bookmark.value, '_blank')
         }
+      },
+      handleRemove() {
+        bookmarkRemoveService(selectedBookmark.value.id).then(() => {
+          for (let i = 0; i < bookmarkList.value.length; i++) {
+            if (bookmarkList.value[i].id === selectedBookmark.value.id) {
+              bookmarkList.value.splice(i, 1);
+              break;
+            }
+          }
+          context.emit('after-remove')
+        }).catch(e => alert(e.message || '删除失败！'));
       },
     };
   },

@@ -31,14 +31,20 @@
         :deep="1"
         :active="activeId"
         :expand="true"
-        :changed-id="changedParentId"
+        :changed-parent-id="changedParentId"
         @select="handleSelect"
         @create="handleCreate"
       >
       </folder-item>
     </div>
     <div class="bookmark-container">
-      <main-list :parent="activeId" @open-folder="handleSelect" />
+      <main-list
+        :parent="activeId"
+        :changed-parent-id="changedParentId"
+        @open-folder="handleSelect"
+        @after-remove="handleMainListRemove"
+        @after-insert="handleMainListInsert"
+      />
     </div>
   </div>
 </template>
@@ -58,6 +64,7 @@ export default {
   setup(props) {
     const activeId = ref('root')
     const changedParentId = ref('')
+    
     return {
       activeId,
       changedParentId,
@@ -65,22 +72,34 @@ export default {
         activeId.value = selectedId
       },
       handleCreate(parentId) {
-        console.log('handleCreate', parentId)
-        const item = new Bookmark({
-          name: '自定义组-' + new Date().getSeconds(),
-          sort: 0,
-          type: BookmarkType.folder,
-          parent: parentId,
-          value: '',
-        })
-        bookmarkInsertService(item)
-        .then(() => {
-          changedParentId.value = parentId
-          setTimeout(() => {
-            changedParentId.value = ''
-          }, 200)
-        })
-      }
+        // console.log('handleCreate', parentId)
+        // const item = new Bookmark({
+        //   name: '自定义组-' + new Date().getSeconds(),
+        //   sort: 0,
+        //   type: BookmarkType.folder,
+        //   parent: parentId,
+        //   value: '',
+        // })
+        // bookmarkInsertService(item)
+        // .then(() => {
+        //   changedParentId.value = parentId
+        //   setTimeout(() => {
+        //     changedParentId.value = ''
+        //   }, 200)
+        // })
+      },
+      handleMainListInsert() {
+        changedParentId.value = activeId.value
+        setTimeout(() => {
+          changedParentId.value = ''
+        }, 200)
+      },
+      handleMainListRemove() {
+        changedParentId.value = activeId.value
+        setTimeout(() => {
+          changedParentId.value = ''
+        }, 200)
+      },
     };
   },
 };

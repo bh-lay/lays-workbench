@@ -28,8 +28,8 @@
   background: rgba(0, 0, 0, .7)
 .modal-close
   position absolute
-  top 0
-  right -60px
+  top 5px
+  right 5px
   width 40px
   height 40px
   line-height 40px
@@ -38,12 +38,10 @@
   transition-delay .2s
   cursor pointer
   margin-left 5px
-  border-radius 100%
-  border 1px solid rgba(255, 255, 255, .2)
   transition .2s
   svg
     vertical-align text-bottom
-    fill #fff
+    fill #aaa
   &:hover
     background rgba(255, 255, 255, .2)
     border-color rgba(255, 255, 255, .5)

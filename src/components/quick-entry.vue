@@ -84,8 +84,8 @@ import {
   bookmarkRemoveService,
   bookmarkUpdateService,
   bookmarkResortService,
+  bookmarkListService,
 } from '@database/services/bookmark-service';
-import { bookmarkListService } from '@database/services/bookmark-service';
 import BookmarkItem from './bookmark-item.vue';
 import AddBookmark from './add-bookmark/index.vue';
 import CustomLink from './add-bookmark/custom-link.vue';
