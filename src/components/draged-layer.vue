@@ -50,7 +50,7 @@
 <teleport to="body">
   <div v-if="isStableStart" class="draged-layer">
     <div :class="['trash-area', triggeredType === 'delete' ? 'active' : '']">
-      <v-mdi name="mdi-trash-can-outline" :size="20" />
+      <v-mdi name="mdi-trash-can-outline" size="20" />
     </div>
     <transition name="fade-fast">
       <div

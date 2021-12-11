@@ -3,28 +3,30 @@
   position relative
   display flex
   align-items center
-  padding-right 15px
+  padding-right 20px
   min-height 40px
+  color #bdbdc7
+  .add
+    opacity 0
   &:before
     content ''
     position absolute
     top 0
-    left -2px
+    left 0
     width 4px
     height 100%
     border-radius 0 4px 4px 0
     transition .4s
   &:hover
-    .add-btn
+    .add
       opacity 1
   &.active
     &:before
-      left 0
       background-color #198ae6
     .label
       font-weight bold
       color #198ae6
-.expand-btn
+.icon-btn
   display flex
   align-items center
   justify-content center
@@ -34,7 +36,6 @@
   cursor pointer
   svg
     transition .2s
-    fill #aaa
   &:hover
     background #50505a
   &:active
@@ -48,7 +49,6 @@
   padding 0 6px
   border-radius 4px
   line-height 24px
-  color #aaa
   font-size 13px
   cursor pointer
   transition .15s
@@ -56,26 +56,7 @@
     color #ddd
   &:active,
   &.active
-    color #fff
-.add-btn
-  display flex
-  align-items center
-  justify-content center
-  width 30px
-  height 30px
-  margin-right 4px
-  border-radius 20px
-  cursor pointer
-  opacity 0
-  svg
-    width 18px
-    transition .2s
-    fill #aaa
-  &:hover
-    background #50505a
-  &:active
-    background #636780
-    color #243542
+    color #198ae6
 </style>
 <template>
   <div
@@ -85,17 +66,17 @@
     }"
   >
     <div
-      :class="['expand-btn', isExpand ? 'expand' : '', hasSubMenu ? '' : 'hidden']"
+      :class="[
+        'icon-btn',
+        hasSubMenu ? '' : 'hidden',
+      ]"
       @click="isExpand = !isExpand"
     >
-      <v-mdi
-        name="mdi-menu-down"
-        :rotate="isExpand ? 0 : -90"
-      />
+      <v-mdi :name="isExpand ? 'mdi-folder-open' : 'mdi-folder'" size="16" />
     </div>
     <div class="label" @click="$emit('select', data.id)">{{ data.name }}</div>
-    <div v-if="deep < 3" class="add-btn" @click="$emit('create', data.id)">
-      <v-mdi name="mdi-plus" />
+    <div v-if="deep <= 3" class="icon-btn add" @click="$emit('create', data.id)">
+      <v-mdi name="mdi-plus" size="20" />
     </div>
   </div>
   <div v-if="isExpand" class="sub-folder">
@@ -150,14 +131,14 @@ export default {
   setup(props) {
     const isExpand = ref(props.expand);
     const bookmarkList = ref([]);
-    const hasSubMenu = ref(true)
+    const hasSubMenu = ref(true);
     const loadList = () => {
       bookmarkListService({
         parent: props.data.id,
         type: BookmarkType.folder,
       }).then((list) => {
         bookmarkList.value = list;
-        hasSubMenu.value = list.length > 0
+        hasSubMenu.value = list.length > 0;
       });
     };
     watch(
@@ -179,6 +160,14 @@ export default {
           return;
         }
         loadList();
+      }
+    );
+    watch(
+      () => props.active,
+      (changedId) => {
+        if (changedId == props.data.id) {
+          isExpand.value = true;
+        }
       }
     );
     return {

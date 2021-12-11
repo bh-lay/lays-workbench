@@ -20,13 +20,13 @@
     background #ddd
     border-color #ccc
 .v-button-dark
-  background #444
-  border 1px solid #000
-  color #eee
+  background #2f2f37
+  border 1px solid #1c1c21
+  color #bdbdc7
   &:hover
-    background #333
+    background #3a3a40
   &:active
-    background #111
+    background #212126
 </style>
 
 <template>

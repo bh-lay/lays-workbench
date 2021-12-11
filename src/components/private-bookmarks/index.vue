@@ -2,7 +2,7 @@
 .bookmark-directory
   display flex
   height 100%
-  background #2f2f37
+  background #26262c
 .category-list
   width 280px
   flex-shrink 0
@@ -28,7 +28,7 @@
           id: 'root',
           name: '我的书签'
         }"
-        :deep="0.5"
+        :deep="1"
         :active="activeId"
         :expand="true"
         :changed-id="changedParentId"
@@ -38,7 +38,7 @@
       </folder-item>
     </div>
     <div class="bookmark-container">
-      <link-list :parent="activeId" />
+      <main-list :parent="activeId" @open-folder="handleSelect" />
     </div>
   </div>
 </template>
@@ -52,9 +52,9 @@ import {
 } from '@database/entity/bookmark';
 import { bookmarkInsertService } from '@database/services/bookmark-service';
 import FolderItem from './folder-item.vue'
-import LinkList from './link-list.vue'
+import MainList from './main-list.vue'
 export default {
-  components: { FolderItem, LinkList },
+  components: { FolderItem, MainList },
   setup(props) {
     const activeId = ref('root')
     const changedParentId = ref('')
