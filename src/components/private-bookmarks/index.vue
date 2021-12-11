@@ -11,14 +11,6 @@
   &::-webkit-scrollbar
     width 0
     height 0
-.bookmark-container
-  width 100px
-  flex-grow 1
-  padding 30px 50px
-  overflow auto
-  &::-webkit-scrollbar
-    width 0
-    height 0
 </style>
 <template>
   <div class="bookmark-directory">
@@ -37,15 +29,13 @@
       >
       </folder-item>
     </div>
-    <div class="bookmark-container">
-      <main-list
-        :parent="activeId"
-        :changed-parent-id="changedParentId"
-        @open-folder="handleSelect"
-        @after-remove="handleMainListRemove"
-        @after-insert="handleMainListInsert"
-      />
-    </div>
+    <main-list
+      :parent="activeId"
+      :changed-parent-id="changedParentId"
+      @open-folder="handleSelect"
+      @after-remove="handleMainListRemove"
+      @after-insert="handleMainListInsert"
+    />
   </div>
 </template>
 

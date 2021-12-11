@@ -1,4 +1,12 @@
 <style lang="stylus" scoped>
+.bookmark-container
+  width 100px
+  flex-grow 1
+  padding 30px 50px
+  overflow auto
+  &::-webkit-scrollbar
+    width 0
+    height 0
 .link-list-body
   border-radius 4px
   background #2f2f37
@@ -12,29 +20,35 @@
   color #545463
 </style>
 <template>
-  <div class="header">
-    <v-button type="dark" @click="handleCreate">添加链接</v-button>
+  <div class="bookmark-container" v-contextmenu:listMenu>
+    <div class="header">
+      <v-button type="dark" @click="handleCreateLink">添加链接</v-button>
+    </div>
+    <div v-if="bookmarkList.length === 0" class="empty">
+      万物皆空
+    </div>
+    <div v-else class="link-list-body">
+      <main-item
+        v-for="item in bookmarkList"
+        :key="item.id" :data="item"
+        :active="selectedBookmark.id === item.id"
+        v-contextmenu:itemMenu="{
+          onVisible() {
+            selectedBookmark = item
+          }
+        }"
+        @click="selectedBookmark = item"
+        @dblclick="handleOpen(item)"
+      />
+    </div>
   </div>
-  <div v-if="bookmarkList.length === 0" class="empty">
-    万物皆空
-  </div>
-  <div v-else class="link-list-body">
-    <main-item
-      v-for="item in bookmarkList"
-      :key="item.id" :data="item"
-      :active="selectedBookmark.id === item.id"
-      v-contextmenu:menu="{
-        onVisible() {
-          selectedBookmark = item
-        }
-      }"
-      @click="selectedBookmark = item"
-      @dblclick="handleOpen(item)"
-    />
-  </div>
-  <contextmenu ref="menu">
+  <contextmenu ref="itemMenu" theme="dark">
     <contextmenu-item @click="handleEdit">编辑</contextmenu-item>
     <contextmenu-item @click="handleRemove">删除</contextmenu-item>
+  </contextmenu>
+  <contextmenu ref="listMenu" theme="dark">
+    <contextmenu-item @click="handleCreateLink">添加新书签</contextmenu-item>
+    <contextmenu-item @click="handleCreateFolder">添加新文件夹</contextmenu-item>
   </contextmenu>
   <modal v-model="linkEditorConfig.visible" :width="440">
     <link-editor
@@ -43,6 +57,14 @@
       :link-value="selectedBookmark.value"
       @cancel="linkEditorConfig.visible = false"
       @confirm="handleLinkEditorConfirm"
+    />
+  </modal>
+  <modal v-model="folderEditorConfig.visible" :width="440">
+    <folder-editor
+      :type="folderEditorConfig.type"
+      :folder-name="selectedBookmark.name"
+      @cancel="folderEditorConfig.visible = false"
+      @confirm="handleFolderEditorConfirm"
     />
   </modal>
 </template>
@@ -62,8 +84,9 @@ import {
 } from '@database/services/bookmark-service';
 import MainItem from './main-item.vue';
 import LinkEditor from './link-editor.vue'
+import FolderEditor from './folder-editor.vue'
 export default {
-  components: { MainItem, LinkEditor },
+  components: { MainItem, LinkEditor, FolderEditor },
   emits: ['select', 'create', 'open-folder', 'after-insert', 'after-remove'],
   props: {
     parent: {
@@ -105,22 +128,34 @@ export default {
       visible: false,
       type: 'create'
     })
+    const folderEditorConfig = ref({
+      visible: false,
+      type: 'create'
+    })
     return {
       selectedBookmark,
       bookmarkList,
       linkEditorConfig,
-      handleCreate() {
-        const linEditorConfigValue = linkEditorConfig.value
-        linEditorConfigValue.visible = true
-        linEditorConfigValue.type = 'create'
+      folderEditorConfig,
+      handleCreateLink() {
+        const linkEditorConfigValue = linkEditorConfig.value
+        linkEditorConfigValue.visible = true
+        linkEditorConfigValue.type = 'create'
+      },
+      handleCreateFolder() {
+        const folderEditorConfigValue = folderEditorConfig.value
+        folderEditorConfigValue.visible = true
+        folderEditorConfigValue.type = 'create'
       },
       handleEdit() {
         if (selectedBookmark.value.type === BookmarkType.folder) {
-          // alert(1)
+          const folderEditorConfigValue = folderEditorConfig.value
+          folderEditorConfigValue.visible = true
+          folderEditorConfigValue.type = 'edit'
         } else {
-          const linEditorConfigValue = linkEditorConfig.value
-          linEditorConfigValue.visible = true
-          linEditorConfigValue.type = 'edit'
+          const linkEditorConfigValue = linkEditorConfig.value
+          linkEditorConfigValue.visible = true
+          linkEditorConfigValue.type = 'edit'
         }
       },
       handleLinkEditorConfirm({ name, value }) {
@@ -142,6 +177,24 @@ export default {
             context.emit('after-insert')
           });
         }
+      },
+      handleFolderEditorConfirm({ name }) {
+        if (folderEditorConfig.value.type === 'edit') {
+          const bookmarkItem = selectedBookmark.value
+          bookmarkItem.name = name
+          bookmarkUpdateService(bookmarkItem)
+        } else {
+          const item = new Bookmark({
+            name,
+            sort: 0,
+            type: BookmarkType.folder,
+            parent: props.parent,
+          });
+          bookmarkInsertService(item).then(() => {
+            context.emit('after-insert')
+          });
+        }
+        folderEditorConfig.value.visible = false
       },
       handleOpen(bookmark) {
         if (bookmark.type === BookmarkType.folder) {

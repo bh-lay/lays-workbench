@@ -8,10 +8,6 @@
   font-weight bold
   font-size 16px
   color #888
-.label
-  margin 15px 0 5px
-  font-size 12px
-  color #666
 input
   box-sizing border-box
   width 100%
@@ -34,14 +30,11 @@ input
 <template>
   <div class="link-editor">
     <div class="header">
-      <span v-if="type === 'edit'">修改书签</span>
-      <span v-else>添加书签</span>
+      <span v-if="type === 'edit'">修改文件夹</span>
+      <span v-else>添加文件夹</span>
     </div>
     <div class="body">
-      <div class="label">名称</div>
       <input type="text" v-model="name" />
-      <div class="label">网址</div>
-      <input type="text" v-model="value" />
     </div>
     <div class="footer">
       <v-button type="dark" @click="$emit('cancel')">取消</v-button>
@@ -60,29 +53,21 @@ export default {
       type: String,
       default: 'create'
     },
-    linkName: {
-      type: String,
-      default: '',
-    },
-    linkValue: {
+    folderName: {
       type: String,
       default: '',
     },
   },
   setup(props, context) {
     const name = ref('')
-    const value = ref('')
     if (props.type === 'edit') {
-      name.value = props.linkName
-      value.value = props.linkValue
+      name.value = props.folderName
     }
     return {
       name,
-      value,
       handleConfirm() {
         context.emit('confirm', {
           name: name.value,
-          value: value.value
         })
       }
     };
