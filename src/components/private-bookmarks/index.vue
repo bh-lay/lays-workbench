@@ -2,18 +2,23 @@
 .bookmark-directory
   display flex
   height 100%
-  background #3a3a40
+  background #2f2f37
 .category-list
   width 280px
   flex-shrink 0
   padding 30px 0 60px
-  background #4a4a50
   overflow auto
   &::-webkit-scrollbar
     width 0
     height 0
 .bookmark-container
+  width 100px
+  flex-grow 1
   padding 30px 50px
+  overflow auto
+  &::-webkit-scrollbar
+    width 0
+    height 0
 </style>
 <template>
   <div class="bookmark-directory">

@@ -1,12 +1,12 @@
 <style lang="stylus" scoped>
-.folder-list
-  background #4a4a50
+.active
+  background #1679ca
 </style>
 <template>
   <div class="folder-list">
     <v-button @click="handleCreate">添加链接</v-button>
     <div v-for="item in bookmarkList" :key="item.id">
-      {{ item.name }}
+      {{ item.name }} - {{ item.value }}
     </div>
   </div>
 </template>
@@ -52,7 +52,7 @@ export default {
           sort: 0,
           type: BookmarkType.link,
           parent: props.parent,
-          value: '',
+          value: 'http://bh-lay.com',
         });
         bookmarkInsertService(item).then(() => {
           loadList();
