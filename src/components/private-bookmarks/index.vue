@@ -5,6 +5,7 @@
   background #3a3a40
 .category-list
   width 280px
+  flex-shrink 0
   padding 30px 0 60px
   background #4a4a50
   overflow auto
@@ -20,37 +21,61 @@
       <folder-item
         :data="{
           id: 'root',
-          label: '我的书签'
+          name: '我的书签'
         }"
         :deep="0.5"
         :active="activeId"
         :expand="true"
-        @select="activeId = 'root'"
+        :changed-id="changedParentId"
+        @select="handleSelect"
+        @create="handleCreate"
       >
-        <folder-list
-          parent="root"
-          :active="activeId"
-          @select="activeId = $event"
-        />
       </folder-item>
     </div>
     <div class="bookmark-container">
-      {{ activeId }}
-      <h1 style="color: #aaa">开发中，就快好了！</h1>
+      <link-list :parent="activeId" />
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import FolderList from './folder-list.vue'
+import {
+  Bookmark,
+  BookmarkType,
+  BookmarkSize,
+} from '@database/entity/bookmark';
+import { bookmarkInsertService } from '@database/services/bookmark-service';
 import FolderItem from './folder-item.vue'
+import LinkList from './link-list.vue'
 export default {
-  components: { FolderList, FolderItem },
+  components: { FolderItem, LinkList },
   setup(props) {
     const activeId = ref('root')
+    const changedParentId = ref('')
     return {
       activeId,
+      changedParentId,
+      handleSelect(selectedId) {
+        activeId.value = selectedId
+      },
+      handleCreate(parentId) {
+        console.log('handleCreate', parentId)
+        const item = new Bookmark({
+          name: '自定义组-' + new Date().getSeconds(),
+          sort: 0,
+          type: BookmarkType.folder,
+          parent: parentId,
+          value: '',
+        })
+        bookmarkInsertService(item)
+        .then(() => {
+          changedParentId.value = parentId
+          setTimeout(() => {
+            changedParentId.value = ''
+          }, 200)
+        })
+      }
     };
   },
 };

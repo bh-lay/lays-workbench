@@ -1,4 +1,4 @@
-import { BookmarkType, BookmarkSize } from './entity/bookmark'
+import { BookmarkType, BookmarkSize } from '../entity/bookmark'
 
 export default [
   {

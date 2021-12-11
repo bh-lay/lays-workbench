@@ -1,7 +1,7 @@
 import { getIDBRequest } from '../db';
-import { Bookmark } from '../entity/bookmark';
-import bookmarkDefaultList from '../default-bookmark-data';
-import initBookmark2db from '../init-bookmark-to-db';
+import { Bookmark, BookmarkType } from '../entity/bookmark';
+import bookmarkDefaultList from '../utils/default-bookmark-data';
+import initBookmark2db from '../utils/init-bookmark-to-db';
 import {
   bookmarkInsertManager,
   bookmarkUpdateManager,
@@ -11,7 +11,7 @@ import {
   bookmarkCountManager,
   bookmarkResetSortManager,
 } from '../manager/bookmark-manager';
-import { BookmarkType } from '../entity/bookmark';
+import { queryOptions } from '../utils/types-define'
 
 function getDbFromParams(db?: IDBDatabase): Promise<IDBDatabase> {
   if (db) {
@@ -78,7 +78,7 @@ export async function bookmarkRemoveService(bookmarkId: string) {
   await bookmarkRemoveManager(db, bookmarkId);
 }
 
-export function bookmarkListService(params: {parent: string | null}) {
+export function bookmarkListService(params: queryOptions) {
   return getIDBRequest().then((db: IDBDatabase) => {
     return bookmarkListManager(db, params).then((data: Bookmark[]) => {
       if (!params || !params.parent) {
@@ -94,7 +94,6 @@ export function bookmarkListService(params: {parent: string | null}) {
     });
   });
 }
-
 
 export function bookmarkResortService(idList: string[]) {
   return getIDBRequest().then((db: IDBDatabase) => {

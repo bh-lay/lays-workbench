@@ -1,4 +1,5 @@
 import { Bookmark } from '../entity/bookmark'
+import { queryOptions } from '../utils/types-define'
 
 export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: any) {
   return new Promise((resolve, reject) => {
@@ -88,11 +89,30 @@ export function bookmarkRemoveManager(db: IDBDatabase, bookmarkId: string) {
   })
 }
 
-export function bookmarkListManager(db: IDBDatabase, params: {parent: string | null}): Promise<Bookmark[]> {
+// 判断当前查询条件跟 bookmark 是否匹配
+function isBookmarkMatchesQuery(item: any, query: queryOptions) {
+  let parentMatch = false
+  if (query.parent) {
+    parentMatch = query.parent === '*' || query.parent === item.parent
+  } else {
+    parentMatch = !item.parent
+  }
+  // parent 不一致，直接返回，避免后续的对比浪费性能
+  if (!parentMatch) {
+    return
+  }
+  let typeMatch = false
+  if (query.type) {
+    typeMatch = query.type === item.type
+  } else {
+    typeMatch = true
+  }
+  return parentMatch && typeMatch
+}
+export function bookmarkListManager(db: IDBDatabase, query: queryOptions): Promise<Bookmark[]> {
   return new Promise((resolve, reject) => {
     const objectStore = db.transaction('bookmark').objectStore('bookmark');
     const request = objectStore.openCursor()
-    const parentId = params.parent
     const bookmarkList: Bookmark[] = []
     request.onsuccess = function (event) {
       if (!event.target) {
@@ -102,16 +122,9 @@ export function bookmarkListManager(db: IDBDatabase, params: {parent: string | n
       var cursor: any = event.target.result;
       if (cursor) {
         const value: any = cursor.value
-        if (parentId) {
-          if (parentId === value.parent) {
-            bookmarkList.push(new Bookmark(value))
-          }
-        } else {
-          if (!value.parent) {
-            bookmarkList.push(new Bookmark(value))
-          }
+        if (isBookmarkMatchesQuery(value, query)) {
+          bookmarkList.push(new Bookmark(value))
         }
-        
         cursor.continue();
       } else {
         resolve(bookmarkList)

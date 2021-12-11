@@ -1,4 +1,4 @@
-import { Bookmark } from './entity/bookmark'
+import { Bookmark } from '../entity/bookmark'
 import bookmarkDefaultList from './default-bookmark-data'
 
 export default function initData(db: IDBDatabase) {
