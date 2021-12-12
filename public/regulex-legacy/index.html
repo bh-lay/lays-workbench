@@ -4,107 +4,124 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>正则可视化</title>
 <style>
-body,html * {
+body,html {
 margin:0;
 padding:0;
 font-family:sans-serif;
+background: #26262c;
 }
 .code,.code * {
   font-family: "DejaVu Sans Mono",monospace;
 }
-h1 {
-  height: 40px;
-  border-bottom: 1px solid #eee;
+.input-area {
+  margin-bottom: 20px;
+  padding: 10px 20px 20px;
+  border-bottom: 1px solid #16161d;
+  background: #33333d;
+}
+.caption {
+  margin-bottom: 10px;
+  line-height: 30px;
   text-align: center;
-  line-height: 40px;
-  font-size: 18px;
-  color: #666;
+  font-size: 16px;
+  color: #999;
 }
-#inputCt,#errorBox {
-margin:8px 16px;
+.main-input {
+  position: relative;
 }
-#inputCt div.re {
-background:#f8f8ff;
-font-size:1.2em;
-line-height: 1.4em;
-color:#333;
-border:1px solid #eee;
-padding:4px;
-font-weight: bold;
-word-break:break-all;
-word-wrap:break-word;
+.main-input:before,
+.main-input:after,
+#flagBox {
+  content: '/';
+  position: absolute;
+  width: 25px;
+  height: 30px;
+  top: 10px;
+  line-height: 30px;
+  font-size: 24px;
+  color: #2196f3
 }
-#inputCt div.re table {
-border:none;
-padding:0;
-margin:0;
-width:100%;
+.main-input:before {
+  left: 12px
 }
-#inputCt div.re .input {
-color:#3030C0;
-padding:0 2px;
-border:none;
-background:transparent;
-font-size:1.2em;
-line-height: 1.4em;
-height:1.4em;
-font-weight: bold;
-word-break:break-all;
-word-wrap:break-word;
-margin:0;
-width:auto;
+.main-input:after {
+  right: 30px
 }
-#inputCt div.re #input {
-display:table;
-width:100%;
+#flagBox {
+  width: 30px;
+  font-size: 14px;
+  right: 10px;
 }
-#inputCt label {
-  color:#333;
-  cursor:pointer;
-  display:inline-block;
+#input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 50px;
+  margin: 0;
+  padding: 10px 60px 10px 25px;
+  border-radius: 6px;
+  border: 1px solid #42474d;
+  background: #212126;
+  line-height: 24px;
+  color: #2196f3;
+  font-size: 20px;
+  font-weight: bold;
+  word-break: break-all;
+  word-wrap: break-word;
+  transition: .2s
 }
-#inputCt label input {
-  margin-right:4px;
+#input:focus {
+  border-color: #9494a8;
+  outline: none
 }
-#errorBox {
-background:#EEE;
-font-size:1.2em;
-line-height: 1.4em;
-border:1px solid black;
-padding:4px;
-color:darkred;
-white-space: pre;
-word-wrap:normal;
-word-break:keep-all;
-display: none;
-overflow:auto;
+.input-footer {
+  padding-top: 10px
 }
 button {
-font-size: 14px;
-line-height: 16px;
-display: inline-block;
-margin: 10px;
-margin-left:0;
-padding:8px;
-padding-bottom:10px;
-color:#fff;
-border:none;
-cursor:pointer;
-background: #40B0EF;
-background-image: #0af;
-border-radius: 4px;
-text-decoration: none;
+  display: inline-block;
+  margin-right: 10px;
+  padding: 6px 10px;
+  border:none;
+  background: #0b5b89;
+  border-radius: 4px;
+  cursor:pointer;
+  text-decoration: none;
+  color:#c5d7e2;
+  font-size: 13px;
+  line-height: 16px;
+  transition: .2s
 }
-#visualIt:hover,#embedIt:hover,#exportIt:hover {
-color:#FEF;
-background: #3CB0FD;
-background-image: linear-gradient(to bottom, #3CB0FD, #3498DF);
-text-decoration: none;
+button:hover {
+  background: #2093d9;
+  text-decoration: none;
 }
+.input-area label {
+  display:inline-block;
+  margin-right: 8px;
+  font-size: 14px;
+  color:#888;
+  cursor:pointer;
+}
+
+#errorBox {
+  margin:8px 16px;
+  padding: 10px;
+  background:#EEE;
+  font-size:14px;
+  line-height: 1.4em;
+  border:1px solid black;
+  color:darkred;
+  white-space: pre;
+  word-wrap:normal;
+  word-break:keep-all;
+  display: none;
+  overflow:auto;
+}
+
 #graphCt {
-padding:4px;
+  min-height: 180px;
+  padding:20px 15px;
 margin:0px 16px;
-border:1px solid #eee;
 background:#f8f8ff;
 overflow: auto;
 cursor:move;
@@ -119,10 +136,6 @@ user-select: none;
 display:block;
 margin:0 auto;
 }
-footer,footer a {
-font-size: 12px;
-color: #666
-}
 
 body.embed {
   background: #EEE;
@@ -133,23 +146,26 @@ body.embed,body.embed #graphCt {
   border:none;
 }
 body.embed h1,
-body.embed #inputCt,
+body.embed .input-area,
 body.embed #github {
   display:none !important;
 }
-body footer {
-  display:block;
-  width:auto;
-  margin:0;
-  padding:2px 10px;
-  background:#eee;
-  opacity: 0.85;
+.copyright {
   position:fixed;
+  padding: 0 10px 0 15px;
+  background:#31313a;
+  border-radius: 8px 0 0 0;
   right:0;
   bottom:0;
-  color:#555;
-  font-size: 14px;;
+  line-height: 20px;
+  text-decoration: none;
+  font-size: 12px;
+  color: #666
 }
+.copyright:hover {
+  background: #3f3f4b;
+}
+
 body.embed{height:100%;}
 body.embed #graphCt {
   height: 100vh;
@@ -190,26 +206,20 @@ function getParams() {
   return params;
 }
 </script>
-<h1>正则可视化</h1>
-<div id="inputCt">
-    <div class="re code">
-      <table>
-        <tr>
-          <td style="width:1em">/</td>
-          <td style="width:auto">
-            <input id="input" class="input" value="(?:http(?:|s):|)\/\/(?:[a-zA-Z0-9-]){1,26}(\.[a-zA-Z0-9-]+)+" />
-          </td>
-          <td style="width:1em">/</td>
-          <td style="width:3em" id="flagBox"></td>
-        </tr>
-      </table>
+<div class="input-area">
+    <div class="caption">请输入正则</div>
+    <div class="main-input">
+      <input id="input" class="input" value="(?:http(?:|s):|)\/\/(?:[a-zA-Z0-9-]){1,26}(\.[a-zA-Z0-9-]+)+" />
+      <div id="flagBox"></div>
     </div>
-    <button id="visualIt">可视化</button>
-    <button id="exportIt">导出图片</button>
-    <button id="embedIt">插入我的网站</button>
-    <label><input type="checkbox" name="flag" value="i" />忽略大小写</label>
-    <label><input type="checkbox" name="flag" value="m" />多行</label>
-    <label><input type="checkbox" name="flag" value="g" />全局匹配</label>
+    <div class="input-footer">
+      <button id="visualIt">可视化</button>
+      <button id="exportIt">导出图片</button>
+      <button id="embedIt">插入我的网站</button>
+      <label><input type="checkbox" name="flag" value="i" />忽略大小写</label>
+      <label><input type="checkbox" name="flag" value="m" />多行</label>
+      <label><input type="checkbox" name="flag" value="g" />全局匹配</label>
+    </div>
 </div>
 <p id="errorBox" class="code">Error Message</p>
 <div id="graphCt" class="code"></div>
@@ -245,13 +255,11 @@ if (params.debug) {
 function init(R,visualize,parse,K) {
 var paper = R('graphCt', 10, 10);
 var input=$('input');
-var inputCt=$('inputCt');
 var visualBtn=$('visualIt');
 var embedBtn=$('embedIt');
 var exportBtn=$('exportIt');
 var errorBox=$('errorBox');
 var flags=document.getElementsByName('flag');
-var flagBox=$('flagBox');
 var getInputValue=function () {
     return trim(input.value);
 };
@@ -272,11 +280,6 @@ if (params.cmd=='export') {
   initListeners();
   dragGraph($('graphCt'));
 }
-
-
-
-
-
 
 function visualIt(skipError) {
   var re=getInputValue();
@@ -360,23 +363,12 @@ function initListeners() {
     window.open(location.href.split('#!')[0]+hash,"_blank");
   });
 
-
-  /*
-  window.addEventListener('hashchange',function () {
-    if (manualHash) return;
-    var p=getParams();
-    if (p.re && p.re!==params.re) {
-      params.re=p.re;
-      setInputValue(p.re);
-      visualIt();
-    }
-  });*/
   for (var i=0,l=flags.length;i<l;i++) {
     flags[i].addEventListener('change',onChangeFlags);
   }
 
   function onChangeFlags(e) {
-    setInnerText(flagBox,getFlags());
+    setInnerText($('flagBox'), getFlags());
     visualIt();
     changeHash();
   }
@@ -415,7 +407,7 @@ function setFlags(fg) {
     if (~fg.indexOf(flags[i].value)) flags[i].checked=true;
     else flags[i].checked=false;
   }
-  setInnerText(flagBox,fg);
+  setInnerText($('flagBox'),fg);
 }
 
 function showExportImage() {
@@ -521,9 +513,6 @@ function clearSelect() {
 }
 </script>
 
-
-<footer>
-  <div class="embed" ><a href="https://jex.im/regulex/" target="_blank">By Regulex</a></div>
-</footer>
+<a class="copyright" href="https://jex.im/regulex/" target="_blank">By Regulex</a>
 </body>
 </html>
