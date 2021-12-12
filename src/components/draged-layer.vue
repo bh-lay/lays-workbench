@@ -70,8 +70,8 @@
 
 <script>
 import { ref, getCurrentInstance } from 'vue'
-import { getAppConfigItem } from '@/assets/js/app-config'
-import dragHandle from '@/assets/js/drag-handle';
+import { getAppConfigItem } from '@/assets/ts/app-config'
+import dragHandle from '@/assets/ts/drag-handle';
 import { Bookmark } from '@database/entity/bookmark';
 
 function getItemMap(internalInstance) {

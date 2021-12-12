@@ -57,7 +57,7 @@
 
 <script>
 import { ref, watch } from 'vue';
-import { getAppConfig, getAppConfigDefault } from '@/assets/js/app-config';
+import { getAppConfig, getAppConfigDefault } from '@/assets/ts/app-config';
 
 export default {
   setup() {

@@ -1,4 +1,4 @@
-import loadImage from '@/assets/js/load-image'
+import loadImage from '@/assets/ts/load-image'
 // 图片远程链接转换为base64
 export function imgToBase64(file: File,src: string) {
   // 创建 URL 对象

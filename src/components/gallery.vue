@@ -29,8 +29,8 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import loadImage from '@/assets/js/load-image'
-import { getAppConfigItem } from '@/assets/js/app-config'
+import loadImage from '@/assets/ts/load-image'
+import { getAppConfigItem } from '@/assets/ts/app-config'
 
 export default {
   props: {

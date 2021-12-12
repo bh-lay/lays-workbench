@@ -81,7 +81,7 @@
 
 <script>
 import { ref, watch } from 'vue';
-import dragHandle from '@/assets/js/drag-handle';
+import dragHandle from '@/assets/ts/drag-handle';
 export default {
   props: {
     modelValue: {
