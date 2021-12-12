@@ -2,6 +2,15 @@ import { BookmarkType, BookmarkSize } from '../entity/bookmark'
 
 export default [
   {
+    sort: 1001,
+    id: 'default-10',
+    name: '小书房',
+    type: BookmarkType.widgets,
+    size: BookmarkSize.medium,
+    undercoat: '#2196f3',
+    value: 'private-bookmarks',
+  },
+  {
     sort: 1000,
     id: 'default-0',
     name: '正则可视化',
@@ -69,15 +78,6 @@ export default [
     icon: 'mdi:electron-framework'
   },
   {
-    sort: 993,
-    id: 'default-7',
-    name: '书签快捷键',
-    type: BookmarkType.widgets,
-    size: BookmarkSize.three_one,
-    undercoat: '#e9eff6',
-    value: 'native-bookmark',
-  },
-  {
     sort: 992,
     id: 'default-8',
     name: 'webpack',
@@ -96,5 +96,15 @@ export default [
     undercoat: '#101418',
     value: 'https://bundlescanner.com/',
     icon: 'crab'
+  },
+  {
+    sort: 990,
+    id: 'default-11',
+    name: 'iconFont',
+    type: BookmarkType.link,
+    size: BookmarkSize.small,
+    undercoat: '#f3f8f1',
+    value: 'https://www.iconfont.cn/',
+    icon: 'mdi:star-face'
   },
 ]

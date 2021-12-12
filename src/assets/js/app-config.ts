@@ -1,5 +1,5 @@
 const APP_CONFIG_DEFAULT = {
-  maxContainerWidth: 1024,
+  maxContainerWidth: 1200,
   gridSize: 84,
   gridGap: 34,
   iconRadius: 8,
