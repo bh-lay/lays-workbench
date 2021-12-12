@@ -107,25 +107,31 @@ export default {
       type: [String, Number],
       default: ''
     },
+    undercoat: {
+      type: String,
+      default: '#fff'
+    },
   },
   setup(props) {
-      const size = {}
+      const modalBodyStyle = {
+        background: props.undercoat
+      }
       if (props.width) {
         if (typeof props.width === 'number') {
-          size.width = props.width + 'px'
+          modalBodyStyle.width = props.width + 'px'
         } else {
-          size.width = props.width
+          modalBodyStyle.width = props.width
         }
       }
       if (props.height) {
         if (typeof props.height === 'number') {
-          size.height = props.height + 'px'
+          modalBodyStyle.height = props.height + 'px'
         } else {
-          size.height = props.height
+          modalBodyStyle.height = props.height
         }
       }
       return {
-        modalBodyStyle: size
+        modalBodyStyle
       }
   },
   watch: {

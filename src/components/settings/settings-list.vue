@@ -22,7 +22,7 @@
   </div>
   <div class="setting-group">
     <div class="label">壁纸设置</div>
-    <wallpaper />
+    <wallpaper @next="$emit('wallpaper-setting')" />
   </div>
 </div>
 </template>
@@ -34,6 +34,7 @@ import Layout from './layout.vue'
 import Wallpaper from './wallpaper.vue'
 
 export default {
+  emits: ['wallpaper-setting'],
   components: { BookmarksEntrance, Layout, Wallpaper },
 };
 </script>

@@ -30,7 +30,8 @@
 <script>
 import { ref, onMounted } from 'vue';
 import loadImage from '@/assets/ts/load-image'
-import { getAppConfigItem } from '@/assets/ts/app-config'
+import imgRobber from '@/assets/ts/img-robber'
+import { getAppConfigItem, onAppConfigChange } from '@/assets/ts/app-config'
 
 export default {
   props: {
@@ -40,14 +41,23 @@ export default {
     }
   },
   setup() {
+    const bakgroundUrl = ref('')
     const isImageLoaded = ref(false)
-    const bakgroundUrl = getAppConfigItem('wallpaper')
-    onMounted(function () {
-      loadImage(bakgroundUrl)
+    const loadWallpaper = () => {
+      const currentUrl = getAppConfigItem('wallpaper')
+      const usedUrl = imgRobber(currentUrl)
+      isImageLoaded.value = false
+      bakgroundUrl.value = usedUrl
+      loadImage(usedUrl)
         .then(() => {
           isImageLoaded.value = true
         })
-    })
+    }
+    
+    // 当 APP 配置数据发生变动，重载
+    onAppConfigChange(loadWallpaper)
+    onMounted(loadWallpaper)
+
     return {
       isImageLoaded,
       bakgroundUrl,

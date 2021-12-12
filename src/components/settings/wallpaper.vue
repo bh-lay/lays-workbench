@@ -12,25 +12,24 @@
   <div
     class="img-container"
     :style="{
-      backgroundImage: `url(${usedWallpaper})`
+      backgroundImage: `url(${usedUrl})`
     }"
   >
-    <v-button @click="handleEdit">修改</v-button>
+    <v-button @click="$emit('next')">修改</v-button>
   </div>
 </template>
 
 <script>
 import { ref, watch } from 'vue';
-import { getAppConfig, getAppConfigItem } from '@/assets/ts/app-config'
+import imgRobber from '@/assets/ts/img-robber'
+import { getAppConfigItem } from '@/assets/ts/app-config'
 
 export default {
+  emits: ['next'],
   setup() {
-    const usedWallpaper = ref(getAppConfigItem('wallpaper'))
+    const usedUrl = imgRobber(getAppConfigItem('wallpaper'))
     return {
-      usedWallpaper,
-      handleEdit() {
-        alert('壁纸库正在开发中，请稍等几天哦～')
-      },
+      usedUrl,
     };
   },
 };

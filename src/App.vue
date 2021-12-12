@@ -109,7 +109,7 @@ textarea
           <v-mdi name="mdi-hail" />
           <span>小剧的上网首页</span>
         </div>
-        <settings />
+        <settings @wallpaper-setting="wallpaperGalleryVisible = true" />
       </div>
     </div>
     <div class="pager-body">
@@ -123,24 +123,36 @@ textarea
     </div>
     <div class="pager-footer">
       <div class="footer-copyright">
-        by：<a href="http://bh-lay.com" target="_blank">剧中人</a>
+        by: <a href="http://bh-lay.com" target="_blank">剧中人</a>
         <span>皖ICP备14001331号-1</span>
       </div>
     </div>
+    <modal
+      v-model="wallpaperGalleryVisible"
+      width="80%"
+      height="80%"
+      undercoat="transparent"
+    >
+      <wallpaper-gallery />
+    </modal>
   </div>
 </template>
 
 <script>
+import { ref } from 'vue';
 import Gallery from '@/components/gallery.vue';
 import SearchEntrance from '@/components/search-entrance.vue';
 import QuickEntry from '@/components/quick-entry.vue';
 import Settings from '@/components/settings/index.vue';
+import WallpaperGallery from '@/components/wallpaper-gallery/index.vue'
 
 export default {
-  components: { Gallery, SearchEntrance, QuickEntry, Settings },
+  components: { Gallery, SearchEntrance, QuickEntry, Settings, WallpaperGallery },
   data() {
+    const wallpaperGalleryVisible = ref(false)
     return {
       focused: false,
+      wallpaperGalleryVisible,
     };
   },
 };

@@ -53,7 +53,7 @@
   display flex
   justify-content space-between
   align-items center
-  height 36px
+  height 30px
   padding 10px 20px 10px 20px
   background #fff
   box-shadow 0 0 3px rgba(0, 0, 0, .2)
@@ -109,7 +109,9 @@
             </div>
           </div>
           <div class="scroll-body">
-            <settings-list />
+            <settings-list
+              @wallpaper-setting="handleSetWallpaper"
+            />
           </div>
         </div>
       </transition>
@@ -122,11 +124,16 @@ import { ref } from 'vue';
 import SettingsList from './settings-list.vue'
 
 export default {
+  emits: ['wallpaper-setting'],
   components: { SettingsList },
-  setup() {
+  setup(props, context) {
     const settingVisible = ref(false);
     return {
       settingVisible,
+      handleSetWallpaper() {
+        settingVisible.value = false
+        context.emit('wallpaper-setting')
+      }
     };
   },
 };
