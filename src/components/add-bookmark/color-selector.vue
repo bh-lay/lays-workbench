@@ -43,7 +43,7 @@
 
 <script>
 import { resolveComponent, h } from 'vue';
-import colorList from './color-list';
+import colorList from '@/assets/ts/color-list';
 export default {
   props: {
     modelValue: {

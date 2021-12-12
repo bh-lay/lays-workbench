@@ -1,8 +1,8 @@
 <style lang="stylus" scoped>
 .gallery
-  position absolute
-  width 100%
-  height 100%
+  position relative
+  min-width 100px
+  min-height 100px
 .img-container
   position relative
   height 100%
@@ -19,16 +19,16 @@
       <div
         v-if="isImageLoaded"
         class="img-container"
-        :style="{
-          backgroundImage: `url(${bakgroundUrl})`
-        }"
-      ><div class="mask"></div></div>
+        :style="styleValue"
+      ><div class="mask">
+      </div></div>
     </transition>
+    <slot />
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, nextTick } from 'vue';
 import loadImage from '@/assets/ts/load-image'
 import imgRobber from '@/assets/ts/img-robber'
 import { getAppConfigItem, onAppConfigChange } from '@/assets/ts/app-config'
@@ -41,19 +41,33 @@ export default {
     }
   },
   setup() {
-    const bakgroundUrl = ref('')
     const isImageLoaded = ref(false)
-
-    let lastWallpaperUrl = null
+    const styleValue = ref({})
+    let lastWallpaperValue = null
     const loadWallpaper = () => {
       const currentUrl = getAppConfigItem('wallpaper')
-      const usedUrl = imgRobber(currentUrl)
-      isImageLoaded.value = false
-      bakgroundUrl.value = usedUrl
-      loadImage(usedUrl)
-        .then(() => {
+      // 长度小于17，认定为是颜色值
+      // http://a.cn/1.jpg
+      if (currentUrl.length < 17) {
+        isImageLoaded.value = false
+        styleValue.value = {
+          backgroundColor: currentUrl
+        }
+        nextTick(() => {
           isImageLoaded.value = true
         })
+      } else {
+        const usedUrl = imgRobber(currentUrl)
+        isImageLoaded.value = false
+        styleValue.value = {
+          backgroundImage: `url(${usedUrl})`
+        }
+        loadImage(usedUrl)
+          .then(() => {
+            isImageLoaded.value = true
+          })
+      }
+      
       return currentUrl
     }
     
@@ -61,16 +75,17 @@ export default {
     onAppConfigChange(() => {
       const currentUrl = getAppConfigItem('wallpaper')
       // 数值未发生变化，不重新加载数据
-      if (lastWallpaperUrl === currentUrl) {
+      if (lastWallpaperValue === currentUrl) {
         return
       }
-      lastWallpaperUrl = loadWallpaper()
+      
+      lastWallpaperValue = loadWallpaper()
     })
-    lastWallpaperUrl = loadWallpaper()
+    lastWallpaperValue = loadWallpaper()
 
     return {
       isImageLoaded,
-      bakgroundUrl,
+      styleValue,
     }
   },
 };

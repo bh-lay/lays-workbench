@@ -47,6 +47,11 @@ const categoryList = [
     label: '壁纸库',
     icon: 'mdi-wallpaper',
   },
+  {
+    name: 'color',
+    label: '纯色',
+    icon: 'mdi-palette',
+  },
 ]
 export default {
   props: {

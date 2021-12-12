@@ -8,6 +8,7 @@
 .main
   width 100px
   flex-grow 1
+  margin-right 50px
   background rgba(0, 0, 0, .2)
   overflow auto
   &::-webkit-scrollbar
@@ -22,7 +23,8 @@
     </div>
     <div class="main">
       <custom v-if="activeCategory === 'define'"/>
-      <gallery v-else />
+      <gallery v-else-if="activeCategory === 'gallery'" />
+      <color v-else />
     </div>
   </div>
 </template>
@@ -31,9 +33,10 @@
 import { ref } from 'vue';
 import Category from './category.vue'
 import Custom from './custom.vue'
+import Color from './color.vue'
 import Gallery from './gallery.vue'
 export default {
-  components: { Category, Custom, Gallery },
+  components: { Category, Custom, Color, Gallery },
   setup() {
     const activeCategory = ref('gallery');
     return {

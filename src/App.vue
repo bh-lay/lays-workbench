@@ -19,6 +19,10 @@ textarea
   font-family inherit
 </style>
 <style lang="stylus" scoped>
+.gallery
+  position absolute
+  width 100%
+  height 100%
 .pager
   position relative
   display flex

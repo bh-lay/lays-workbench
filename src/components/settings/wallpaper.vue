@@ -1,31 +1,29 @@
 <style lang="stylus" scoped>
-.img-container
-  display flex
-  align-items center
-  justify-content center
+.gallery
   height 180px
-  background no-repeat center #444
-  background-size cover
+  background #333
+  .v-button
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
 </style>
 
 <template>
-  <div
-    class="img-container"
-    :style="{
-      backgroundImage: `url(${usedUrl})`
-    }"
-  >
+  <gallery>
     <v-button @click="$emit('next')">修改</v-button>
-  </div>
+  </gallery>
 </template>
 
 <script>
 import { ref, watch } from 'vue';
 import imgRobber from '@/assets/ts/img-robber'
 import { getAppConfigItem } from '@/assets/ts/app-config'
+import Gallery from '@/components/gallery.vue'
 
 export default {
   emits: ['next'],
+  components: { Gallery },
   setup() {
     const usedUrl = imgRobber(getAppConfigItem('wallpaper'))
     return {
