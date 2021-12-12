@@ -43,6 +43,8 @@ export default {
   setup() {
     const bakgroundUrl = ref('')
     const isImageLoaded = ref(false)
+
+    let lastWallpaperUrl = null
     const loadWallpaper = () => {
       const currentUrl = getAppConfigItem('wallpaper')
       const usedUrl = imgRobber(currentUrl)
@@ -52,11 +54,19 @@ export default {
         .then(() => {
           isImageLoaded.value = true
         })
+      return currentUrl
     }
     
     // 当 APP 配置数据发生变动，重载
-    onAppConfigChange(loadWallpaper)
-    onMounted(loadWallpaper)
+    onAppConfigChange(() => {
+      const currentUrl = getAppConfigItem('wallpaper')
+      // 数值未发生变化，不重新加载数据
+      if (lastWallpaperUrl === currentUrl) {
+        return
+      }
+      lastWallpaperUrl = loadWallpaper()
+    })
+    lastWallpaperUrl = loadWallpaper()
 
     return {
       isImageLoaded,
