@@ -198,8 +198,6 @@ export default {
         list.splice(fromIndex, 1)
         // 标记 parent
         fromBookmark.parent = targetBookmark.id
-        // 追加图标颜色
-        targetBookmark.value += '|' + fromBookmark.undercoat
         return Promise.all([
           bookmarkUpdateService(fromBookmark),
           bookmarkUpdateService(targetBookmark)
@@ -218,7 +216,6 @@ export default {
               type: BookmarkType.folder,
               size: BookmarkSize.small,
               undercoat: '#2196f3',
-              value: [targetBookmark.undercoat, fromBookmark.undercoat].join('|')
             })
             return bookmarkInsertService(item)
           })

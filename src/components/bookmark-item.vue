@@ -94,7 +94,7 @@
       </template>
       <folder-icon
         v-else-if="data.type === BookmarkType.folder"
-        :data="data.value"
+        :parent-id="data.id"
         @click="$emit('next')"
       />
     </div>

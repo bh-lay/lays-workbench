@@ -28,7 +28,6 @@ function applyVariables() {
   for (let variableItemKey in variables) {
     let cssKey = objectKeyToCssKey(variableItemKey)
     let cssValue = `${variables[variableItemKey]}px`
-    console.log('cssKey, cssValue', cssKey, cssValue)
     styleAtrribute.setProperty(cssKey, cssValue)
   }
 }

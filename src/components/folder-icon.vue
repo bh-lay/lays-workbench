@@ -1,57 +1,69 @@
 <style lang="stylus" scoped>
   .folder-icon
     box-sizing border-box
+    height 100%
+    transition .15s
+    cursor pointer
+    &:hover
+      background #fff
+  .origin-map
+    box-sizing border-box
+    width 200%
+    height 200%
+    transform scale(.5)
+    transform-origin top left
     display flex
     flex-wrap wrap
     justify-content space-between
     align-content space-between
-    height 100%
-    padding calc((var(--grid-size) - var(--grid-gap)) / 5.4)
-    transition .15s
-    cursor pointer
+    padding calc((var(--grid-size) - var(--grid-gap)) / 4.2)
     div
-      width calc((var(--grid-size) - var(--grid-gap)) / 3.5)
-      height calc((var(--grid-size) - var(--grid-gap)) / 3.5)
-      border-radius calc(var(--grid-size) / 25)
-    &:hover
-      background #fff
+      width calc((var(--grid-size) - var(--grid-gap)) * 0.7)
+      height calc((var(--grid-size) - var(--grid-gap)) * 0.7)
+      border-radius 4px
+      font-size calc((var(--grid-size) - var(--grid-gap)) * 0.15)
+
 </style>
 
 <template>
   <div class="folder-icon">
-    <div
-      v-for="(color ,index) in colorList"
-      :key="index"
-      :style="{
-        background: color
-      }"
-    ></div>
+    <div class="origin-map">
+      <bookmark-icon
+        v-for="item in bookmarkList"
+        :key="item.id"
+        :icon="item.icon"
+        :undercoat="item.undercoat"
+        :url="item.value"
+        :style="{
+          background: item.undercoat
+        }"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { ref, watch } from 'vue';
+import BookmarkIcon from './bookmark-icon.vue'
+import { bookmarkListService } from '@database/services/bookmark-service';
 
 export default {
+  components: { BookmarkIcon },
   props: {
-    data: {
+    parentId: {
       type: String,
       default: false,
     }
   },
   setup(props) {
-    const colorList = ref([])
-    watch(
-      () => props.data,
-      colorData => {
-        colorList.value = (colorData || '').split('|').slice(0, 4)
-      },
-      {
-        immediate: true,
-      }
-    )
+    let bookmarkList = ref([]);
+    bookmarkListService({
+      parent: props.parentId,
+    }).then((list) => {
+      bookmarkList.value = list.slice(0, 4)
+    });
     return {
-      colorList,
+      bookmarkList,
     }
   },
 };
