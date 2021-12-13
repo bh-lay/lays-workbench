@@ -11,19 +11,19 @@
   <div
     class="entrance"
   >
-    <v-button @click="modalVisible = true">修改</v-button>
+    <v-button @click="modalVisible = true">查看</v-button>
   </div>
   <modal v-model="modalVisible" width="80%" height="80%" >
-    <public-bookmarks />
+    <private-bookmarks />
   </modal>
 </template>
 
 <script>
 import { ref, watch } from 'vue';
-import PublicBookmarks from '@/components/public-bookmarks/index.vue'
+import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
 
 export default {
-  components: { PublicBookmarks },
+  components: { PrivateBookmarks },
   setup() {
     const modalVisible = ref(false)
     return {

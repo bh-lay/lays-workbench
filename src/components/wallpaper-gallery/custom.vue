@@ -1,4 +1,7 @@
 <style lang="stylus" scoped>
+.custom-wallpaper
+  padding 140px 0 200px
+  background rgba(0, 0, 0, .5)
 .caption
   margin-bottom 20px
   font-weight bold
@@ -36,17 +39,17 @@
       background #ddd
 .footer
   width 90%
-  max-width 500px
-  margin auto
-  font-size 13px
+  max-width 560px
+  margin 20px auto
+  font-size 14px
   color #666
   a
     margin-right 10px
-
+    color blue
 </style>
 
 <template>
-  <div style="padding: 100px">
+  <div class="custom-wallpaper">
     <div class="caption">填写图片地址</div>
     <div class="input-center">
       <input v-model="picUrl" />

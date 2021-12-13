@@ -4,12 +4,11 @@
   height 100%
 .side
   width 140px
-  margin-right 10px
+  padding-top 10px
 .main
   width 100px
   flex-grow 1
-  margin-right 50px
-  background rgba(0, 0, 0, .2)
+  padding 10px 50px 10px 10px
   overflow auto
   &::-webkit-scrollbar
     width 0

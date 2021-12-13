@@ -13,16 +13,16 @@
 <template>
 <div class="group-list">
   <div class="setting-group">
-    <div class="label">书签</div>
-    <bookmarks-entrance />
+    <div class="label">壁纸设置</div>
+    <wallpaper @next="$emit('wallpaper-setting')" />
   </div>
   <div class="setting-group">
     <div class="label">布局</div>
     <layout />
   </div>
   <div class="setting-group">
-    <div class="label">壁纸设置</div>
-    <wallpaper @next="$emit('wallpaper-setting')" />
+    <div class="label">小书房</div>
+    <bookmarks-entrance />
   </div>
 </div>
 </template>
