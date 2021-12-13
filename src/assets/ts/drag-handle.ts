@@ -9,6 +9,7 @@ type dragOptions = {
   stableStart: (startX: number, startY: number) => void;
   move: (a: dragParams) => void;
   end: (a: dragParams) => void;
+  cancel: () => void;
   stableDistance: number;
 };
 type dragParams = {
@@ -32,7 +33,7 @@ function getParam(e: MouseEvent, startX: number, startY: number) {
   return returns;
 }
 export default function (event: MouseEvent, options?: dragOptions) {
-  const { stableStart, move, end, stableDistance } = options || {};
+  const { stableStart, move, end, cancel, stableDistance } = options || {};
   const startX = event.clientX;
   const startY = event.clientY;
   let isTriggeredEvent = false;
@@ -61,8 +62,10 @@ export default function (event: MouseEvent, options?: dragOptions) {
   function up(e: MouseEvent) {
     document.removeEventListener('mousemove', mousemove, false);
     document.removeEventListener('mouseup', up, false);
-    if (isTriggeredEvent && end) {
-      end(getParam(e, startX, startY));
+    if (isTriggeredEvent) {
+      end && end(getParam(e, startX, startY));
+    } else {
+      cancel && cancel()
     }
   }
   document.addEventListener('mousemove', mousemove, false);
