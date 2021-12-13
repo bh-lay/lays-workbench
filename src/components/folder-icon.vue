@@ -12,6 +12,7 @@
     height 200%
     transform scale(.5)
     transform-origin top left
+    pointer-events none
     display flex
     flex-wrap wrap
     justify-content space-between
@@ -50,18 +51,28 @@ import { bookmarkListService } from '@database/services/bookmark-service';
 export default {
   components: { BookmarkIcon },
   props: {
-    parentId: {
-      type: String,
-      default: false,
+    data: {
+      type: Object,
+      default() {
+        return {}
+      },
     }
   },
   setup(props) {
     let bookmarkList = ref([]);
-    bookmarkListService({
-      parent: props.parentId,
-    }).then((list) => {
-      bookmarkList.value = list.slice(0, 4)
-    });
+    const parentId = props.data.id
+    const loadList = () => {
+      bookmarkListService({
+        parent: parentId,
+      }).then((list) => {
+        bookmarkList.value = list.slice(0, 4)
+      });
+    }
+    loadList()
+    console.log('props.data.value', `|${props.data.value}|` )
+    watch(() => props.data.value, () => {
+      loadList()
+    })
     return {
       bookmarkList,
     }

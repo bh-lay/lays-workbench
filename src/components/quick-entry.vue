@@ -64,6 +64,7 @@
     :name="selectedBookmarkItem.name"
     @name-change="handleFolderNameChange"
     @open-bookmark-editor="handleEditSubFolderBookmark"
+    @after-close="afterFolderClose"
   />
 </template>
 
@@ -179,6 +180,10 @@ export default {
     onMounted(() => {
       getList();
     });
+    function triggerFolderIconChange(bookmarkItem) {
+      // 用 value 触发重绘
+      bookmarkItem.value = bookmarkItem.value === '1' ? '2' : '1'
+    }
     function handleDragEnter(list, fromIndex, targetIndex){
       const fromBookmark = list[fromIndex]
       const targetBookmark = list[targetIndex]
@@ -196,12 +201,15 @@ export default {
         // 目标是目录，直接移入
         // 删除被拖拽的元素
         list.splice(fromIndex, 1)
+
         // 标记 parent
         fromBookmark.parent = targetBookmark.id
         return Promise.all([
           bookmarkUpdateService(fromBookmark),
           bookmarkUpdateService(targetBookmark)
-        ])
+        ]).then(() => {
+          triggerFolderIconChange(targetBookmark)
+        })
       } else {
         // 目标是链接或组件，先排个序，再合并，最后插入
         const idList = list.map(item => item.id)
@@ -220,12 +228,6 @@ export default {
             return bookmarkInsertService(item)
           })
           .then(folderBookmark => {
-            console.log('folderBookmark', folderBookmark)
-            // 用新的组替换掉 target 元素
-            list.splice(targetIndex, 1, folderBookmark)
-            // 删除被拖拽的元素
-            list.splice(fromIndex, 1)
-
             // 拖拽与目标元素的父级都标记为新的组
             fromBookmark.parent = folderBookmark.id
             targetBookmark.parent = folderBookmark.id
@@ -234,6 +236,12 @@ export default {
               bookmarkUpdateService(fromBookmark),
               bookmarkUpdateService(targetBookmark)
             ])
+            .then(() => {
+              // 用新的组替换掉 target 元素
+              list.splice(targetIndex, 1, folderBookmark)
+              // 删除被拖拽的元素
+              list.splice(fromIndex, 1)
+            })
           })
       }
       
@@ -317,6 +325,7 @@ export default {
       refreshList() {
         getList();
       },
+      triggerFolderIconChange,
       handleFolderNameChange(newName) {
         selectedBookmarkItem.value.name = newName
         bookmarkUpdateService(selectedBookmarkItem.value)
@@ -325,6 +334,14 @@ export default {
         mouseHandle.closeFolderLayer()
         selectedBookmarkItem.value = bookmarkItem
         mouseHandle.openEditModal()
+      },
+      afterFolderClose(opendFolderId) {
+        for (let i = 0; i < bookmarkList.value.length; i++) {
+          if (bookmarkList.value[i].id === opendFolderId) {
+            triggerFolderIconChange(bookmarkList.value[i])
+            break;
+          }
+        }
       },
       ...mouseHandle,
     };

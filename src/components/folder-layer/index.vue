@@ -70,7 +70,7 @@ import NameEditor from './name-editor.vue'
 import BookmarkList from './bookmark-list.vue'
 
 export default {
-  emits: ['update:visible', 'name-change', 'open-bookmark-editor'],
+  emits: ['update:visible', 'name-change', 'open-bookmark-editor', 'after-close'],
   props: {
     id: {
       type: String,
@@ -87,6 +87,11 @@ export default {
   },
   components: { NameEditor, BookmarkList },
   setup(props, context) {
+    watch(() => props.visible, visible => {
+      if (!visible) {
+        context.emit('after-close', props.id)
+      }
+    },)
     return {
       handleClickOutside() {
         context.emit('update:visible', false)
