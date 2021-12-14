@@ -10,7 +10,7 @@
   background #fff
   box-shadow 2px 2px 10px rgba(0, 0, 0, .2), 1px 1px 3px rgba(0, 0, 0, .2)
   overflow hidden
-  z-index 1000
+  z-index 1002
 </style>
 
 <template>

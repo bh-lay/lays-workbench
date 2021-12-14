@@ -11,23 +11,20 @@
   <div
     class="entrance"
   >
-    <v-button @click="modalVisible = true">查看</v-button>
+    <v-button @click="showPrivateBookmark">查看</v-button>
   </div>
-  <modal v-model="modalVisible" width="80%" height="80%" >
-    <private-bookmarks />
-  </modal>
+  
 </template>
 
 <script>
-import { ref, watch } from 'vue';
-import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
+import { ref } from 'vue';
 
 export default {
-  components: { PrivateBookmarks },
   setup() {
-    const modalVisible = ref(false)
     return {
-      modalVisible,
+      showPrivateBookmark() {
+        location.hash = 'widgets:private-bookmark'
+      },
     };
   },
 };

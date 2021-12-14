@@ -42,10 +42,10 @@
 <teleport to="body">
   <div :class="['folder-layer', visible ? 'visible' : 'hidden']">
     <transition name="fade-slow">
-      <div v-if="visible" class="mask"></div>
+      <div v-if="visible" class="mask" @click="$emit('update:visible', false)"></div>
     </transition>
     <transition name="zoom">
-      <div v-if="visible" class="container" v-clickoutside="handleClickOutside">
+      <div v-if="visible" class="container" @click.stop>
         <name-editor :modelValue="name" @update:modelValue="handleNameChange" />
         <div class="btn-list">
           <bookmark-list :parent-id="id"
@@ -93,9 +93,6 @@ export default {
       }
     },)
     return {
-      handleClickOutside() {
-        context.emit('update:visible', false)
-      },
       handleNameChange(newValue) {
         context.emit('name-change', newValue)
       },

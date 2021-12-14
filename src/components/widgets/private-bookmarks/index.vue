@@ -30,7 +30,7 @@ svg
   color rgba(255, 255, 255, .6)
 </style>
 <template>
-  <div class="bookmarks-widgets" @click="modalVisible = true">
+  <div class="bookmarks-widgets" @click="open">
     <v-mdi name="mdi-book-open-page-variant" :class="{
       small: widgetsSize === BookmarkSize.small
     }" />
@@ -39,17 +39,12 @@ svg
       <div class="desc">个人书签库</div>
     </template>
   </div>
-  <modal v-model="modalVisible" width="80%" height="80%" >
-    <private-bookmarks />
-  </modal>
 </template>
 
 <script>
 import { ref, computed } from "vue";
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
-import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
 export default {
-  components: { PrivateBookmarks },
   props: {
     data: {
       type: Bookmark,
@@ -59,12 +54,13 @@ export default {
     }
   },
   setup(props) {
-    const modalVisible = ref(false)
     const widgetsSize = computed(() => props.data.size)
     return {
       widgetsSize,
       BookmarkSize,
-      modalVisible,
+      open() {
+        location.hash = 'widgets:private-bookmark'
+      },
     };
   },
 };

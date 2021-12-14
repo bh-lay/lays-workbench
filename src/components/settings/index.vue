@@ -124,7 +124,7 @@ import { ref } from 'vue';
 import SettingsList from './settings-list.vue'
 
 export default {
-  emits: ['wallpaper-setting'],
+  emits: [],
   components: { SettingsList },
   setup(props, context) {
     const settingVisible = ref(false);
@@ -132,7 +132,6 @@ export default {
       settingVisible,
       handleSetWallpaper() {
         settingVisible.value = false
-        context.emit('wallpaper-setting')
       }
     };
   },

@@ -14,7 +14,7 @@
 <div class="group-list">
   <div class="setting-group">
     <div class="label">壁纸设置</div>
-    <wallpaper @next="$emit('wallpaper-setting')" />
+    <wallpaper @next="settingWallpaper" />
   </div>
   <div class="setting-group">
     <div class="label">布局</div>
@@ -36,5 +36,13 @@ import Wallpaper from './wallpaper.vue'
 export default {
   emits: ['wallpaper-setting'],
   components: { BookmarksEntrance, Layout, Wallpaper },
+  setup(props, context) {
+    return {
+      settingWallpaper() {
+        context.emit('wallpaper-setting')
+        location.hash = 'settings:wallpaer'
+      }
+    }
+  }
 };
 </script>

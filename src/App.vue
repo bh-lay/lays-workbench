@@ -113,7 +113,7 @@ textarea
           <v-mdi name="mdi-hail" />
           <span>小剧的上网首页</span>
         </div>
-        <settings @wallpaper-setting="wallpaperGalleryVisible = true" />
+        <settings />
       </div>
     </div>
     <div class="pager-body">
@@ -131,15 +131,8 @@ textarea
         <span>皖ICP备14001331号-1</span>
       </div>
     </div>
-    <modal
-      v-model="wallpaperGalleryVisible"
-      width="80%"
-      height="80%"
-      undercoat="transparent"
-    >
-      <wallpaper-gallery />
-    </modal>
   </div>
+  <easy-router />
 </template>
 
 <script>
@@ -148,15 +141,13 @@ import Gallery from '@/components/gallery.vue';
 import SearchEntrance from '@/components/search-entrance.vue';
 import QuickEntry from '@/components/quick-entry.vue';
 import Settings from '@/components/settings/index.vue';
-import WallpaperGallery from '@/components/wallpaper-gallery/index.vue'
+import EasyRouter from '@/components/easy-router.vue'
 
 export default {
-  components: { Gallery, SearchEntrance, QuickEntry, Settings, WallpaperGallery },
+  components: { Gallery, SearchEntrance, QuickEntry, Settings, EasyRouter },
   data() {
-    const wallpaperGalleryVisible = ref(false)
     return {
       focused: false,
-      wallpaperGalleryVisible,
     };
   },
 };

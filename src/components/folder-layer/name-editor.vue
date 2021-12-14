@@ -9,7 +9,7 @@ input
   transition .15s
   line-height 16px
   text-align center
-  font-size 14px
+  font-size 16px
   &:focus
     outline none
     background #fff
