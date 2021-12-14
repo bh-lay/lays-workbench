@@ -30,7 +30,7 @@ svg
   color rgba(255, 255, 255, .6)
 </style>
 <template>
-  <div class="formatter-widgets" @click="jsonFormatterVisible = true">
+  <div class="formatter-widgets" @click="open">
     <v-mdi name="mdi-code-json" :class="{
       small: widgetsSize === BookmarkSize.small
     }" />
@@ -39,17 +39,14 @@ svg
       <div class="desc">数据查看好帮手</div>
     </template>
   </div>
-  <modal v-model="jsonFormatterVisible" width="80%" height="80%" >
-    <main-function />
-  </modal>
 </template>
 
 <script>
 import { ref, computed } from "vue";
+import { replaceRouter } from '@/assets/ts/router'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
-import MainFunction from './main.vue'
+
 export default {
-  components: { MainFunction },
   props: {
     data: {
       type: Bookmark,
@@ -59,12 +56,13 @@ export default {
     }
   },
   setup(props) {
-    const jsonFormatterVisible = ref(false)
     const widgetsSize = computed(() => props.data.size)
     return {
       widgetsSize,
       BookmarkSize,
-      jsonFormatterVisible,
+      open() {
+        replaceRouter('widgets', 'json-formatter')
+      },
     };
   },
 };

@@ -43,6 +43,7 @@ svg
 
 <script>
 import { ref, computed } from "vue";
+import { replaceRouter } from '@/assets/ts/router'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
 export default {
   props: {
@@ -59,7 +60,7 @@ export default {
       widgetsSize,
       BookmarkSize,
       open() {
-        location.hash = 'widgets:private-bookmark'
+        replaceRouter('widgets', 'private-bookmark')
       },
     };
   },

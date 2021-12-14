@@ -100,14 +100,16 @@ iframe
     </div>
   </div>
   <modal v-model="regVisualVisible" width="80%" height="80%" undercoat="transparent" >
-    <iframe :src="iframeSrc" visible="0"></iframe>
+    <reg-visual :reg-text="quickInput" />
   </modal>
 </template>
 
 <script>
 import { ref, computed } from "vue";
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
+import RegVisual from './main.vue'
 export default {
+  components: { RegVisual },
   props: {
     data: {
       type: Bookmark,
@@ -119,22 +121,12 @@ export default {
   setup(props) {
     const regVisualVisible = ref(false)
     const quickInput = ref('')
-    const iframeSrc = ref('')
     const widgetsSize = computed(() => props.data.size)
     function showRegVisual() {
-      let quickInputValue = quickInput.value
-      let queryStr = ''
-      if (quickInputValue && quickInputValue.length) {
-        quickInputValue = quickInputValue.trim()
-        if (/^\/.+\/$/.test(quickInputValue)) {
-          quickInputValue = quickInputValue.replace(/^\/|\/$/g, '')
-        }
-        
-        queryStr = `#!re=${encodeURIComponent(quickInputValue)}`
-      }
-      iframeSrc.value = '/regulex-legacy/index.html' + queryStr
       regVisualVisible.value = true
-      quickInput.value = ''
+      setTimeout(() => {
+        quickInput.value = ''
+      })
     }
     return {
       BookmarkSize,
@@ -142,7 +134,6 @@ export default {
       regVisualVisible,
       quickInput,
       showRegVisual,
-      iframeSrc,
     };
   },
 };

@@ -18,12 +18,12 @@
 
 <script>
 import { ref } from 'vue';
-
+import { replaceRouter } from '@/assets/ts/router'
 export default {
   setup() {
     return {
       showPrivateBookmark() {
-        location.hash = 'widgets:private-bookmark'
+        replaceRouter('widgets', 'private-bookmark')
       },
     };
   },

@@ -29,6 +29,7 @@
 
 <script>
 import { ref, watch } from 'vue';
+import { replaceRouter } from '@/assets/ts/router'
 import BookmarksEntrance from './bookmarks-entrance.vue'
 import Layout from './layout.vue'
 import Wallpaper from './wallpaper.vue'
@@ -40,7 +41,7 @@ export default {
     return {
       settingWallpaper() {
         context.emit('wallpaper-setting')
-        location.hash = 'settings:wallpaer'
+        replaceRouter('settings', 'wallpaper')
       }
     }
   }

@@ -1,5 +1,10 @@
 <template>
-  <modal v-model="privateBookmarksVisible" width="80%" height="80%" @after-close="resetRouter">
+  <modal
+    v-model="privateBookmarksVisible"
+    width="80%"
+    height="80%"
+    @after-close="resetRouter"
+  >
     <private-bookmarks />
   </modal>
   <modal
@@ -11,65 +16,63 @@
   >
     <wallpaper-gallery />
   </modal>
+  <modal
+    v-model="jsonFormatterVisible"
+    width="80%"
+    height="80%"
+    @after-close="resetRouter"
+  >
+    <json-formatter />
+  </modal>
 </template>
 
 <script>
 import { ref, onBeforeUnmount } from 'vue'
 import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
 import WallpaperGallery from '@/components/wallpaper-gallery/index.vue'
-function parseRouter() {
-  const hash = location.hash.replace(/^\#/, '')
-  if (!hash) {
-    return null
-  }
-  const hashSplit = hash.split(':')
-  if (hashSplit.length !== 2) {
-    return null
-  }
-  return {
-    type: hashSplit[0],
-    detail: hashSplit[1],
-  }
-}
+import JsonFormatter from '@/components/widgets/json-formatter/main.vue'
+import { onRouterChange } from '@/assets/ts/router'
 export default {
   components: {
     PrivateBookmarks,
     WallpaperGallery,
+    JsonFormatter,
   },
   setup() {
     const privateBookmarksVisible = ref(false)
     const wallpaperGalleryVisible = ref(false)
-    function renderRouterByHash() {
-      const params = parseRouter()
-      console.log('params', params)
-      if (!params) {
-        return
-      }
-      if (params.type === 'widgets') {
-        switch(params.detail) {
+    const jsonFormatterVisible = ref(false)
+    
+    let unbindRouterListener = onRouterChange((moduleType, moduleName, state) => {
+      if (moduleType === 'widgets') {
+        switch(moduleName) {
           case 'private-bookmark':
             privateBookmarksVisible.value = true
           break
+          case 'json-formatter':
+            jsonFormatterVisible.value = true
+          break
         }
-      } else if (params.type === 'settings') {
-        switch(params.detail) {
-          case 'wallpaer':
+      } else if (moduleType === 'settings') {
+        switch(moduleName) {
+          case 'wallpaper':
             wallpaperGalleryVisible.value = true
           break
         }
       }
-    }
-    
-    renderRouterByHash()
-    window.addEventListener('hashchange', renderRouterByHash)
+    }, true)
     onBeforeUnmount(() => {
-      window.removeEventListener('hashchange', renderRouterByHash)
+      if (unbindRouterListener) {
+        unbindRouterListener()
+        unbindRouterListener = null
+      }
     })
     return {
       privateBookmarksVisible,
       wallpaperGalleryVisible,
+      jsonFormatterVisible,
       resetRouter() {
-        location.hash = ''
+        history.replaceState({}, '', location.pathname)
       }
     };
   },
