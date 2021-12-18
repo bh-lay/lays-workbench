@@ -11,7 +11,7 @@ declare module '*.vue' {
   export default componentOptions
 }
 
-declare interface EventTarget {
+declare interface CustomIDBEventTarget extends EventTarget {
   transaction: IDBTransaction
-  result: any
+  result: any,
 }

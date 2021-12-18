@@ -119,7 +119,7 @@ export function bookmarkListManager(db: IDBDatabase, query: queryOptions): Promi
         reject(new Error('could not find target'))
         return
       }
-      var cursor: any = event.target.result;
+      var cursor: any = (event.target as CustomIDBEventTarget).result;
       if (cursor) {
         const value: any = cursor.value
         if (isBookmarkMatchesQuery(value, query)) {
@@ -149,7 +149,7 @@ export function bookmarkCountManager(db: IDBDatabase): Promise<number> {
       if (!event.target) {
         reject(new Error('could not find target'))
       } else {
-        resolve(event.target.result)
+        resolve((event.target as CustomIDBEventTarget).result)
       }
     };
 
@@ -177,7 +177,7 @@ export function bookmarkResetSortManager(db: IDBDatabase, idList: string[]): Pro
         reject(new Error('could not find target'))
         return
       }
-      var cursor: any = event.target.result;
+      var cursor: any = (event.target as CustomIDBEventTarget).result;
       if (cursor) {
         const value: any = cursor.value
         const newSortValue = idSortMap.get(value.id)
