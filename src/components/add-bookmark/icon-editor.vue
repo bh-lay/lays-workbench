@@ -1,24 +1,25 @@
 <style lang="stylus" scoped>
 .icon-editor
   display flex
-  background #e7eaef
-  border 1px solid #e7eaef
+  background #1a1d23
 .dropdown-button
   display flex
   align-items center
   width 90px
-  background #f3f4f7
   line-height 38px
   text-align center
   font-size 12px
-  color #3d4c5c
+  color #565d6c
   transition .1s
   span
     width 50px
     flex-grow 1
     text-align center
   &:hover
-    background #fff
+    background #2e333e
+    color #c1c5cd
+:global(.dropdown-button svg)
+  fill currentColor !important
 .icon-type-selector
   width 120px
   padding 15px 0
@@ -38,6 +39,7 @@ input
   flex-grow 1
   background transparent
   border none
+  color #c1c5cd
   &:focus
     outline none
 .mdi-help

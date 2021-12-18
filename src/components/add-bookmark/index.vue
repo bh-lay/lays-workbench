@@ -9,7 +9,7 @@
     undercoat="#000"
     @click="addBookmarkVisible = true"
   />
-  <modal v-model="addBookmarkVisible" :width="400">
+  <modal v-model="addBookmarkVisible" :width="400" undercoat="transparent">
     <main-function @success="handleCreateSuccess" />
   </modal>
 </template>

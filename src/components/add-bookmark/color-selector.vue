@@ -2,28 +2,28 @@
 .color-outer
   display flex
   flex-wrap wrap
-  width 535px
-  height 300px
-  padding 20px 0 20px 20px
-  overflow auto
+  width 374px
+  border-radius 14px
+  padding 7px 0 5px 7px
+  overflow hidden
+  background #3b3b44
 .color-item
   box-sizing border-box
-  margin 2px
+  margin 0 3px 3px 0
   flex-shrink 0
-  width 60px
-  height 60px
-  border 4px solid transparent
-  border-radius 6px
+  width 50px
+  height 50px
+  border 6px solid transparent
+  border-radius 10px
   overflow hidden
   cursor pointer
   transition .15s
   span
     box-sizing border-box
-    width 30px
+    width 20px
     height 100%
-    padding-top 5px
     writing-mode vertical-lr
-    line-height 24px
+    line-height 12px
     font-size 12px
     color #a3b2c2
     background #1d232a

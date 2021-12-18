@@ -4,35 +4,37 @@
 .input-item
   margin-bottom 20px
   .label
-    height 12px
+    height 14px
     margin-bottom 6px
     line-height 14px
-    font-size 14px
+    font-size 12px
+    color #6f6f85
 .widgets-name-list
   display flex
   width 100%
   border-radius 4px
-  background #17202b
+  background #1a1d23
   overflow hidden
 .widgets-name-item
   flex-grow 1
-  width 100px
-  height 40px
-  line-height 40px
+  height 34px
+  line-height 34px
   text-align center
-  font-size 14px
-  color #fff
+  font-size 12px
+  color #c1c5cd
+  cursor pointer
+  transition .2s
   &:hover
-    background #064360
+    background #292e38
   &.active
-    background: #03a9f4
+    background: #157dac
 .preview-area
   display flex
   align-items center
   justify-content center
   height 180px
   padding-top 20px
-  background #17202b
+  background #1a1d23
 .footer
   padding-top 20px
   text-align right
@@ -62,7 +64,7 @@
       />
     </div>
     <div class="footer">
-      <v-button @click="confirm">确定</v-button>
+      <v-button @click="confirm" type="dark">确定</v-button>
     </div>
   </div>
 </template>

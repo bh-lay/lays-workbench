@@ -1,22 +1,21 @@
 <style lang="stylus" scoped>
 .tab-outer
   display flex
-  border-bottom 1px solid #e0e6eb
+  border-bottom 1px solid #3b3b44
 .tab-item
   margin-right 2px
   padding 8px 18px
   border-radius 4px 4px 0 0
   font-size 14px
-  color #a3b2c2
+  color #6b6b7b
   cursor pointer
   transition .15s
   &:hover
-    background #f6f7f8
-    color #6f869f
+    background #2f2f37
   &.active,
   &:active
-    background #e0e6eb
-    color #3d4c5c
+    background #3b3b44
+    color #c1c5cd
 </style>
 
 <script>

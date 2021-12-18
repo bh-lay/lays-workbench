@@ -2,23 +2,23 @@
 .size-selector
   display flex
   width 120px
-  height 40px
+  height 34px
   border-radius 4px
-  background #17202b
+  background #1a1d23
   overflow hidden
   div
     width 20px
     flex-grow 1
-    line-height 40px
+    line-height 34px
     text-align center
     cursor pointer
-    color #fff
+    color #c1c5cd
     font-size 14px
     transition .15s
     &:hover
-      background #064360
+      background #292e38
     &.active
-      background: #03a9f4
+      background: #157dac
 </style>
 
 <template>

@@ -7,31 +7,38 @@
     height 14px
     margin-bottom 6px
     line-height 14px
-    font-size 14px
+    font-size 12px
+    color #6f6f85
   input
     box-sizing border-box
     width 100%
     height 40px
     padding 0 10px
-    border 1px solid #eee
+    background #1a1d23
+    border none
     font-size 14px
+    color #c1c5cd
+    transition .4s
+    &:focus
+      background #111317
+      outline none
 .undercoat
   display inline-block
-  width 70px
-  height 32px
-  border 4px solid #17202b
+  width 50px
+  height 26px
+  border 4px solid #1a1d23
   border-radius 4px
   text-align center
   &:before
     content: '底色'
     display block
-    width 30px
+    width 24px
     height 100%
     writing-mode vertical-lr
-    background #17202b
-    line-height 24px
+    background #1a1d23
+    line-height 20px
     font-size 12px
-    color #fff
+    color #565d6c
 .size-selector
   margin-left 10px
 .undercoat-and-size
@@ -42,7 +49,7 @@
   justify-content center
   height 180px
   padding-top 20px
-  background #17202b
+  background #1a1d23
 .footer
   padding-top 20px
   text-align right
@@ -63,7 +70,7 @@
     </div>
     <div class="input-item">
       <div class="undercoat-and-size">
-        <dropdown class="undercoat" :style="{
+        <dropdown class="undercoat" undercoat="transparent" :style="{
           background: previewData.undercoat
         }">
           <template v-slot:body>
@@ -79,7 +86,7 @@
       />
     </div>
     <div class="footer">
-      <v-button @click="confirm">确定</v-button>
+      <v-button type="dark" @click="confirm">确定</v-button>
     </div>
   </div>
 </template>

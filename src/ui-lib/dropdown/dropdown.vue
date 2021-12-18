@@ -26,6 +26,7 @@
           :style="{
             top: top + 'px',
             left: left + 'px',
+            background: undercoat || '#fff'
           }"
         >
           <slot name="body" />
@@ -42,6 +43,10 @@ export default {
     arrow: {
       type: Boolean,
       default: false,
+    },
+    undercoat: {
+      type: String,
+      default: '#fff'
     },
   },
   data() {
