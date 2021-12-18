@@ -24,24 +24,37 @@
   >
     <json-formatter />
   </modal>
+  <modal
+    v-model="regVisualVisible"
+    width="80%"
+    height="80%"
+    undercoat="transparent"
+    @after-close="resetRouter"
+  >
+    <reg-visual :reg-text="regText" />
+  </modal>
 </template>
 
 <script>
 import { ref, onBeforeUnmount } from 'vue'
+import { onRouterChange } from '@/assets/ts/router'
 import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
 import WallpaperGallery from '@/components/wallpaper-gallery/index.vue'
 import JsonFormatter from '@/components/widgets/json-formatter/main.vue'
-import { onRouterChange } from '@/assets/ts/router'
+import RegVisual from '@/components/widgets/reg-visual/main.vue'
 export default {
   components: {
     PrivateBookmarks,
     WallpaperGallery,
     JsonFormatter,
+    RegVisual,
   },
   setup() {
     const privateBookmarksVisible = ref(false)
     const wallpaperGalleryVisible = ref(false)
     const jsonFormatterVisible = ref(false)
+    const regVisualVisible = ref(false)
+    const regText = ref('')
     
     let unbindRouterListener = onRouterChange((moduleType, moduleName, state) => {
       if (moduleType === 'widgets') {
@@ -51,6 +64,10 @@ export default {
           break
           case 'json-formatter':
             jsonFormatterVisible.value = true
+          break
+          case 'reg-visual':
+            regVisualVisible.value = true
+            regText.value = state.regText
           break
         }
       } else if (moduleType === 'settings') {
@@ -71,6 +88,8 @@ export default {
       privateBookmarksVisible,
       wallpaperGalleryVisible,
       jsonFormatterVisible,
+      regVisualVisible,
+      regText,
       resetRouter() {
         history.replaceState({}, '', location.pathname)
       }

@@ -41,10 +41,11 @@ svg
   </div>
 </template>
 
-<script>
-import { ref, computed } from "vue";
+<script lang="ts">
+import { computed } from "vue";
 import { replaceRouter } from '@/assets/ts/router'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
+
 export default {
   props: {
     data: {
@@ -54,7 +55,7 @@ export default {
       },
     }
   },
-  setup(props) {
+  setup(props: { data: Bookmark }) {
     const widgetsSize = computed(() => props.data.size)
     return {
       widgetsSize,

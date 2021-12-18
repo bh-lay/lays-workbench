@@ -90,12 +90,13 @@ export function onRouterChange(
     window.addEventListener('popstate', popstateHandle)
   }
   
-  routerChangeCallbackList.push(callback)
   // 若需立即触发，则立即执行一次
   if (immediateTrigger) {
     const params = parseRouterInfo()
-    callback(params.moduleType, params.moduleName, null)
+    callback(params.moduleType, params.moduleName, {})
   }
+  // 注册回调事件
+  routerChangeCallbackList.push(callback)
   // 解除事件监听
   return function() {
     let index = routerChangeCallbackList.indexOf(callback)

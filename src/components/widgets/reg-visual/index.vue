@@ -99,14 +99,12 @@ iframe
       <button @click="showRegVisual">查看</button>
     </div>
   </div>
-  <modal v-model="regVisualVisible" width="80%" height="80%" undercoat="transparent" >
-    <reg-visual :reg-text="quickInput" />
-  </modal>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed } from "vue";
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
+import { replaceRouter } from '@/assets/ts/router'
 import RegVisual from './main.vue'
 export default {
   components: { RegVisual },
@@ -118,20 +116,20 @@ export default {
       },
     }
   },
-  setup(props) {
-    const regVisualVisible = ref(false)
+  setup(props: { data: Bookmark }) {
     const quickInput = ref('')
     const widgetsSize = computed(() => props.data.size)
     function showRegVisual() {
-      regVisualVisible.value = true
       setTimeout(() => {
+        replaceRouter('widgets', 'reg-visual', {
+          regText: quickInput.value
+        })
         quickInput.value = ''
       })
     }
     return {
       BookmarkSize,
       widgetsSize,
-      regVisualVisible,
       quickInput,
       showRegVisual,
     };
