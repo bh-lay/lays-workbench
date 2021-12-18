@@ -26,8 +26,7 @@
   background rgba(0, 0, 0, .7)
 .container
   position relative
-  min-width 40%
-  max-width 50%
+  width 675px
   max-height 40%
   padding 40px
   border-radius 30px
@@ -36,6 +35,9 @@
   &::-webkit-scrollbar
     width 0
     height 0
+@media screen and (max-width:600px)
+  .container
+    width 90%
 </style>
 
 <template>

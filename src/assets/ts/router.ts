@@ -45,7 +45,7 @@ function handleRouterChange(
   state?: any
 ) {
   routerChangeCallbackList.forEach(callback => {
-    callback(moduleType, moduleName, state)
+    callback(moduleType, moduleName, state || {})
   })
 }
 

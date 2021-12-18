@@ -107,20 +107,12 @@
       @change="handleInputChange"
     />
   </div>
-  <modal
-    v-model="modalVisible"
-    width="80%"
-    height="80%"
-    @after-close="afterModalClose"
-  >
-    <main-function :base64-str="base64Str" />
-  </modal>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed } from "vue";
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
-import { imgToBase64 } from './image-base64'
+import { replaceRouter } from '@/assets/ts/router'
 import MainFunction from './main.vue'
 export default {
   components: { MainFunction },
@@ -132,13 +124,11 @@ export default {
       },
     }
   },
-  setup(props) {
-    const modalVisible = ref(false)
+  setup(props: { data: Bookmark }) {
     const isDragOver = ref(false)
     const base64Str = ref('')
     const widgetsSize = computed(() => props.data.size)
     return {
-      modalVisible,
       isDragOver,
       base64Str,
       widgetsSize,
@@ -146,48 +136,57 @@ export default {
     };
   },
   mounted() {
-    const dragAreaNode = this.$refs.drag_area
+    const dragAreaNode = this.$refs.drag_area as HTMLElement
     if (!dragAreaNode) {
       return
     }
-    dragAreaNode.addEventListener('dragover', e => {
+    dragAreaNode.addEventListener('dragover', (e: DragEvent) => {
       e.stopPropagation()
       e.preventDefault()
-      e.dataTransfer.dropEffect = 'copy'
+      if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = 'copy'
+      }
       this.isDragOver = true
     })
-    dragAreaNode.addEventListener('dragleave', e => {
+    dragAreaNode.addEventListener('dragleave', () => {
       this.isDragOver = false
     })
-    dragAreaNode.addEventListener("drop", e => {
+    dragAreaNode.addEventListener("drop", (e: DragEvent) => {
       e.stopPropagation()
       e.preventDefault()
-      var files = e.dataTransfer.files
-      this.handleSelectFile(files[0])
+      if (e.dataTransfer) {
+        var files = e.dataTransfer.files
+        this.handleSelectFile(files[0])
+      }
       this.isDragOver = false
     })
   },
   methods: {
-    handleInputChange(event) {
-      this.handleSelectFile(event.target.files[0])
-    },
-    handleSelectFile(file) {
-      console.log('file', file)
-      if (file.size > 2 * 1024 * 1024) {
-        alert('图片大于 2M，不建议使用 base64！')
+    handleInputChange(event: InputEvent) {
+      const eventTarget = event.target as null | {
+        files: File[]
+      }
+      if (!eventTarget) {
         return
       }
-      imgToBase64(file)
-        .then(base64 => {
-          console.log('base64', base64)
-          this.base64Str = base64
-          this.modalVisible = true
-        })
-        .catch(() => {})
+      if (!eventTarget.files) {
+        return
+      }
+      if (!eventTarget.files[0]) {
+        return
+      }
+      this.handleSelectFile(eventTarget.files[0])
     },
-    afterModalClose() {
-      this.base64Str = ''
-    }
+    handleSelectFile(file: File) {
+      console.log('file', file)
+      if (file.size > 2 * 1024 * 1024) {
+        alert('图片大于 2M，不建议使用 base64 !')
+        return
+      }
+      replaceRouter('widgets', 'img-to-base', {
+        file
+      })
+    },
   },
 };
 </script>

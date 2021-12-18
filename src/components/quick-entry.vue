@@ -134,7 +134,11 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
       }
       willStartDrag.value = false;
       if (data.type === BookmarkType.link) {
-        window.open(data.value, '_blank');
+        if (data.value && data.value.match(/^#/)) {
+          location.hash = data.value
+        } else {
+          window.open(data.value, '_blank');
+        }
       } else if (data.type === BookmarkType.folder) {
         folderLayerVisible.value = true
       }

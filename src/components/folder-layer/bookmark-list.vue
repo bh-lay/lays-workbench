@@ -116,7 +116,11 @@ export default {
         }
         willStartDrag.value = false;
         if (data.type === BookmarkType.link) {
-          window.open(data.value, '_blank');
+          if (data.value && data.value.match(/^#/)) {
+            location.hash = data.value
+          } else {
+            window.open(data.value, '_blank');
+          }
         }
       },
       handleDrag(event, bookmarkItem) {

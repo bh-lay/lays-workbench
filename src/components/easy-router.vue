@@ -33,6 +33,14 @@
   >
     <reg-visual :reg-text="regText" />
   </modal>
+  <modal
+    v-model="imgToBaseVisible"
+    width="80%"
+    height="80%"
+    @after-close="resetRouter"
+  >
+    <image-to-base :file="imgToBaseFile" />
+  </modal>
 </template>
 
 <script>
@@ -42,12 +50,14 @@ import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
 import WallpaperGallery from '@/components/wallpaper-gallery/index.vue'
 import JsonFormatter from '@/components/widgets/json-formatter/main.vue'
 import RegVisual from '@/components/widgets/reg-visual/main.vue'
+import ImageToBase from '@/components/widgets/img-to-base/main.vue'
 export default {
   components: {
     PrivateBookmarks,
     WallpaperGallery,
     JsonFormatter,
     RegVisual,
+    ImageToBase,
   },
   setup() {
     const privateBookmarksVisible = ref(false)
@@ -55,6 +65,8 @@ export default {
     const jsonFormatterVisible = ref(false)
     const regVisualVisible = ref(false)
     const regText = ref('')
+    const imgToBaseVisible = ref(false)
+    const imgToBaseFile = ref(null)
     
     let unbindRouterListener = onRouterChange((moduleType, moduleName, state) => {
       if (moduleType === 'widgets') {
@@ -69,6 +81,11 @@ export default {
             regVisualVisible.value = true
             regText.value = state.regText
           break
+          case 'img-to-base':
+            imgToBaseVisible.value = true
+            imgToBaseFile.value = state.file || null
+          break
+          
         }
       } else if (moduleType === 'settings') {
         switch(moduleName) {
@@ -90,7 +107,11 @@ export default {
       jsonFormatterVisible,
       regVisualVisible,
       regText,
+      imgToBaseVisible,
+      imgToBaseFile,
       resetRouter() {
+        regText.value = ''
+        imgToBaseFile.value = null
         history.replaceState({}, '', location.pathname)
       }
     };

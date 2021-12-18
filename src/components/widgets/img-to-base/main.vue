@@ -27,32 +27,41 @@ textarea
   <div class="imgtobase-main">
     <button @click="copy">复制</button>
     <textarea
-      v-model="value"
+      v-model="base64Str"
       ref="textarea"
       spellcheck="false"
     />
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { ref, computed } from "vue";
+import { imgToBase64 } from './image-base64'
+
 export default {
   props: {
-    base64Str: {
-      type: String,
+    file: {
+      type: File,
       default: '',
     },
   },
-  data() {
-    return {
-      value: ''
+  setup(props) {
+    const base64Str = ref('')
+    if (props.file) {
+      imgToBase64(props.file)
+        .then(base64 => {
+          console.log('base64', base64)
+          base64Str.value = base64
+        })
+        .catch(() => {})
     }
-  },
-  mounted() {
-    this.value = this.base64Str
+    return {
+      base64Str
+    }
   },
   methods: {
     copy() {
-      const textareaNode = this.$refs.textarea
+      const textareaNode = this.$refs.textarea as HTMLInputElement
       if (!textareaNode) {
         return
       }
