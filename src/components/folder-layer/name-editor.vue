@@ -1,7 +1,7 @@
 <style lang="stylus" scoped>
 input
   display block
-  width 200px
+  width 220px
   margin auto
   padding 10px 20px
   background transparent
@@ -9,10 +9,12 @@ input
   transition .15s
   line-height 16px
   text-align center
-  font-size 16px
+  font-size 18px
+  color #fff
+  transition .3s
   &:focus
     outline none
-    background #fff
+    background #1d2126
 </style>
 
 <template>

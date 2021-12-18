@@ -30,7 +30,7 @@
   max-height 40%
   padding 40px
   border-radius 30px
-  background rgba(255, 255, 255, .88)
+  background #252b31
   overflow auto
   &::-webkit-scrollbar
     width 0
