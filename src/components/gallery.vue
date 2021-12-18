@@ -10,7 +10,7 @@
   background-size cover
 .mask
   height 100%
-  background rgba(0, 0, 0, .2)
+  background rgba(0, 0, 0, .3)
 </style>
 
 <template>

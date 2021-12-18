@@ -6,7 +6,6 @@
   width 100%
   height 100%
   z-index 1000
-  background rgba(0, 0, 0, .4)
 .shadow-rect
   position relative
   box-sizing border-box

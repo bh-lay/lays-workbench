@@ -62,7 +62,7 @@ textarea
   svg
     height 34px
     vertical-align middle
-    margin-right 6px
+    margin-right 4px
     fill #fff
   span
     display inline-block
@@ -111,7 +111,7 @@ textarea
       <div class="pager-header-inner">
         <div class="page-title">
           <v-mdi name="mdi-hail" />
-          <span>小剧的上网首页</span>
+          <span>小剧起始页</span>
         </div>
         <settings />
       </div>
@@ -145,9 +145,10 @@ import EasyRouter from '@/components/easy-router.vue'
 
 export default {
   components: { Gallery, SearchEntrance, QuickEntry, Settings, EasyRouter },
-  data() {
+  setup() {
+    const focused = ref(false)
     return {
-      focused: false,
+      focused
     };
   },
 };

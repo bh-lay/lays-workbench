@@ -27,7 +27,7 @@
 .container
   position relative
   width 675px
-  max-height 40%
+  min-height 260px
   padding 40px
   border-radius 30px
   background #252b31
@@ -35,9 +35,10 @@
   &::-webkit-scrollbar
     width 0
     height 0
-@media screen and (max-width:600px)
+@media screen and (max-width: 770px)
   .container
-    width 90%
+    flex-shrink 1
+    margin 20px
 </style>
 
 <template>
