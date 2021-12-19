@@ -77,10 +77,6 @@
     cursor pointer
     &:hover
       background #eee
-iframe
-  width 100%
-  height 100%
-  border none
 </style>
 
 <template>

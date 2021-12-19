@@ -28,7 +28,6 @@
     v-model="regVisualVisible"
     width="80%"
     height="80%"
-    undercoat="transparent"
     @after-close="resetRouter"
   >
     <reg-visual :reg-text="regText" />
@@ -37,7 +36,6 @@
     v-model="imgToBaseVisible"
     width="80%"
     height="80%"
-    undercoat="transparent"
     @after-close="resetRouter"
   >
     <image-to-base :file="imgToBaseFile" />

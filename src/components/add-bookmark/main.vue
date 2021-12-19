@@ -1,7 +1,6 @@
 <style lang="stylus" scoped>
 .add-bookmark-modal
   padding 20px
-  background #26262c
 </style>
 
 <template>

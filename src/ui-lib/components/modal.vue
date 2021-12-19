@@ -109,7 +109,7 @@ export default {
     },
     undercoat: {
       type: String,
-      default: '#fff'
+      default: '#26262c'
     },
   },
   setup(props) {
