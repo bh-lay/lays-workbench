@@ -4,12 +4,13 @@
   flex-direction column
   height 100%
   .caption
-    height 40px
-    border-bottom 1px solid #eee
+    height 50px
+    background #2b2b31
+    border-bottom 1px solid #212126
     text-align center
-    line-height 40px
-    font-size 18px
-    color #666
+    line-height 50px
+    font-size 16px
+    color #777
   .content
     display flex
     height 100px
@@ -26,19 +27,23 @@
       height 100%
       padding 20px
       border none
+      border-right 1px solid #3e3e47
       resize none
       font-size 14px
-      background #f6f6f6
+      color #a2a2ae
+      background transparent
       transition .15s
       &:focus
         outline none
-        background #eaeaea
+        background #1c1c21
 .json-formatter-content
   box-sizing border-box
   flex-grow 1
   width 100%
   height 100%
   padding 20px 20px 20px 30px
+  // 临时使用滤镜兼容暗色模式
+  filter contrast(0.5) brightness(1.5)
   line-height: 1.2
   font-size 14px
   overflow auto
