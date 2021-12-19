@@ -6,11 +6,26 @@
     cursor pointer
     &:hover
       background #fff
-  .origin-map
+  .folder-icon-medium .origin-map
+    height 100%
     box-sizing border-box
+    transform-origin top left
+    pointer-events none
+    display flex
+    flex-wrap wrap
+    justify-content space-between
+    align-content space-between
+    padding calc((var(--grid-size) - var(--grid-gap)) / 4.2)
+    div
+      width calc(var(--grid-size) - var(--grid-gap))
+      height calc(var(--grid-size) - var(--grid-gap))
+      border-radius 8px
+      font-size calc((var(--grid-size) - var(--grid-gap)) * 0.2)
+  .folder-icon-small .origin-map
     width 200%
     height 200%
     transform scale(.5)
+    box-sizing border-box
     transform-origin top left
     pointer-events none
     display flex
@@ -23,11 +38,16 @@
       height calc((var(--grid-size) - var(--grid-gap)) * 0.7)
       border-radius 4px
       font-size calc((var(--grid-size) - var(--grid-gap)) * 0.15)
-
 </style>
 
 <template>
-  <div class="folder-icon">
+  <div
+    :class="[
+      'folder-icon',
+      data.size === BookmarkSize.small ? 'folder-icon-small' : '',
+      data.size === BookmarkSize.medium ? 'folder-icon-medium' : ''
+    ]"
+  >
     <div class="origin-map">
       <bookmark-icon
         v-for="item in bookmarkList"
@@ -46,6 +66,7 @@
 <script>
 import { ref, watch } from 'vue';
 import BookmarkIcon from './bookmark-icon.vue'
+import { BookmarkSize } from '@database/entity/bookmark'
 import { bookmarkListService } from '@database/services/bookmark-service';
 
 export default {
@@ -69,12 +90,12 @@ export default {
       });
     }
     loadList()
-    console.log('props.data.value', `|${props.data.value}|` )
     watch(() => props.data.value, () => {
       loadList()
     })
     return {
       bookmarkList,
+      BookmarkSize,
     }
   },
 };
