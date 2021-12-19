@@ -275,7 +275,7 @@ export default {
         return
       }
       bookmarkItem.size = size
-      bookmarkUpdateService(fromBookmark)
+      bookmarkUpdateService(bookmarkItem)
         .catch(e => alert(e.message || '设置尺寸失败！'));
     }
     const mouseHandle = mouseIntractive({

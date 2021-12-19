@@ -28,22 +28,22 @@
 .trash-area
   position absolute
   left 50%
-  bottom 5px
-  margin-left -20px
-  width 40px
-  height 40px
+  top 0
+  margin-left -160px
+  width 46px
+  height 50px
   display flex
   align-items center
   justify-content center
-  background rgba(0, 0, 0, .2)
-  border-radius 20px
-  border 1px solid rgba(255, 255, 255, .5)
-  transform-origin center bottom
+  background #26262c
+  border-radius 0 0 8px 8px
+  transform-origin center top
   transition .2s
-  color #fff
+  color #666
   &.active
     background red
-    transform scale(1.5)
+    transform scale(1.25)
+    color #fff
 .size-area
   position absolute
   top 0
@@ -188,11 +188,10 @@ function getMouseTriggered({ clientY, clientX }, map) {
   }
   // 是否拖拽删除
   const winWidth = window.innerWidth;
-  const winHeight = window.innerHeight;
   if (
-    clientX > winWidth / 2 - 50 &&
-    clientX < winWidth / 2 + 50 &&
-    clientY > winHeight - 100
+    clientX > winWidth / 2 - 170 &&
+    clientX < winWidth / 2 - 90 &&
+    clientY < 90
   ) {
     return {
       type: 'delete',
@@ -202,7 +201,7 @@ function getMouseTriggered({ clientY, clientX }, map) {
   if (
     clientX > winWidth / 2 - 75 &&
     clientX < winWidth / 2 + 75 &&
-    clientY < 70
+    clientY < 90
   ) {
     let size = BookmarkSize.small
     if (clientX < winWidth / 2 - 25) {

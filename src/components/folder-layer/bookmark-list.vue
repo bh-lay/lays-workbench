@@ -59,6 +59,7 @@ import {
   bookmarkListService,
   bookmarkRemoveService,
   bookmarkResortService,
+  bookmarkUpdateService,
 } from '@database/services/bookmark-service';
 import BookmarkItem from '../bookmark-item.vue';
 import AddBookmark from '../add-bookmark/index.vue';
@@ -108,7 +109,7 @@ export default {
         return
       }
       bookmarkItem.size = size
-      bookmarkUpdateService(fromBookmark)
+      bookmarkUpdateService(bookmarkItem)
         .catch(e => alert(e.message || '设置尺寸失败！'));
     }
     return {
