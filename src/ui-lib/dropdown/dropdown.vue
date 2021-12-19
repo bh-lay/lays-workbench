@@ -17,7 +17,7 @@
   <div :class="['dropdown-button', visible ? 'active' : '']" ref="button" @click="show">
     <slot />
     <v-mdi v-if="arrow" name="mdi-menu-down" :rotate="visible ? -180 : 0" />
-    <teleport to="body">
+    <teleport to="#v-ui">
       <transition name="slidedown">
         <div
           class="dropdown-body"

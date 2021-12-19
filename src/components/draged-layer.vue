@@ -76,7 +76,7 @@
 </style>
 
 <template>
-  <teleport to="body">
+  <teleport to="#v-ui">
     <transition name="fade-fast">
       <div v-if="isStableStart" class="draged-layer">
         <div class="size-area">

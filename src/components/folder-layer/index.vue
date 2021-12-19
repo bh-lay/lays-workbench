@@ -42,7 +42,7 @@
 </style>
 
 <template>
-<teleport to="body">
+<teleport to="#v-ui">
   <div :class="['folder-layer', visible ? 'visible' : 'hidden']">
     <transition name="fade-slow">
       <div v-if="visible" class="mask" @click="$emit('update:visible', false)"></div>

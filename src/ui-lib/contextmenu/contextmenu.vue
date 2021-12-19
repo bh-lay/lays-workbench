@@ -27,7 +27,7 @@
 </style>
 
 <template>
-  <teleport to="body">
+  <teleport to="#v-ui">
     <transition name="slidedown">
       <div
         :class="['contextmenu-body', 'theme-' + theme]"

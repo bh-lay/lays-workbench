@@ -71,7 +71,7 @@
 </style>
 
 <template>
-  <teleport to="body">"
+  <teleport to="#v-ui">"
     <div
       :class="['modal-outer', modelValue ? 'visible' : 'hidden']"
        @contextmenu.prevent

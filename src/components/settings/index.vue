@@ -91,7 +91,7 @@
   >
     <v-mdi name="mdi-tune" />
   </div>
-  <teleport to="body">
+  <teleport to="#v-ui">
     <div :class="['settings-modal', settingVisible ? '' : 'hidden']">
       <transition name="fade-slow">
         <div v-if="settingVisible" class="settings-mask"></div>
