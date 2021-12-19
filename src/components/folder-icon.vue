@@ -15,12 +15,12 @@
     flex-wrap wrap
     justify-content space-between
     align-content space-between
-    padding calc((var(--grid-size) - var(--grid-gap)) / 4.2)
+    padding calc((var(--grid-size) * 2 - var(--grid-gap)) / 10)
     div
-      width calc(var(--grid-size) - var(--grid-gap))
-      height calc(var(--grid-size) - var(--grid-gap))
+      width calc((var(--grid-size) * 2 - var(--grid-gap)) * .35)
+      height calc((var(--grid-size) * 2 - var(--grid-gap)) * .35)
       border-radius 8px
-      font-size calc((var(--grid-size) - var(--grid-gap)) * 0.2)
+      font-size calc((var(--grid-size) * 2 - var(--grid-gap)) * 0.07)
   .folder-icon-small .origin-map
     width 200%
     height 200%
