@@ -25,15 +25,15 @@
 
 <template>
   <div class="list">
-    <div
+    <wallpaper-item
       v-for="item in wallpaperList"
       :key="item.url"
-      :class="['item']"
-      :style="{
-        backgroundImage: `url(${item.thumb})`
-      }"
+      :url="item.thumb"
+      class="item"
       @click="applyWallpaper(item.url)"
-    ></div>
+    ></wallpaper-item>
+    <div class="empty"></div>
+    <div class="empty"></div>
     <div class="empty"></div>
     <div class="empty"></div>
     <div class="empty"></div>
@@ -45,8 +45,10 @@
 <script>
 import { ref } from 'vue';
 import { setAppConfigItem } from '@/assets/ts/app-config'
+import WallpaperItem from './wallpaper-item.vue'
 import wallpaperList from './wallpaper-list'
 export default {
+  components: { WallpaperItem },
   setup() {
     return {
       wallpaperList,
