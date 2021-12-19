@@ -99,6 +99,18 @@ export default {
     const willStartDrag = ref(false)
     const isStartDrag = ref(false)
 
+    function handleSetSize(bookmarkItem, size) {
+      if (
+        bookmarkItem.type === BookmarkType.folder &&
+        size === BookmarkSize.large
+      ) {
+        alert('目录不允许设置为最大模式！')
+        return
+      }
+      bookmarkItem.size = size
+      bookmarkUpdateService(fromBookmark)
+        .catch(e => alert(e.message || '设置尺寸失败！'));
+    }
     return {
       dragEvent: null,
       willStartDrag,
@@ -136,7 +148,7 @@ export default {
         needForbiddenClick = true;
         isStartDrag.value = true
       },
-      handleDragEnd({ type, from, to}) {
+      handleDragEnd({ type, from, to, size}) {
         willStartDrag.value = false;
         isStartDrag.value = false
         needForbiddenClick = false;
@@ -177,6 +189,8 @@ export default {
               }
             }
           }).catch(e => alert(e.message || '删除失败！'));
+        } else if (type === 'size') {
+          handleSetSize(selectedBookmarkItem.value, size)
         }
       },
       handleRemove() {

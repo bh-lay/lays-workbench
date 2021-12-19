@@ -157,14 +157,14 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
       needForbiddenClick = true;
       isStartDrag.value = true
     },
-    handleDragEnd({ type, from, to}) {
+    handleDragEnd({ type, from, to, size}) {
       willStartDrag.value = false;
       isStartDrag.value = false
       needForbiddenClick = false;
       if (type === 'cancel') {
         return
       }
-      onDragEnd(from, to, type)
+      onDragEnd(from, to, type, size)
     },
   };
 }
@@ -266,12 +266,24 @@ export default {
         }
       }).catch(e => alert(e.message || '删除失败！'));
     }
+    function handleSetSize(bookmarkItem, size) {
+      if (
+        bookmarkItem.type === BookmarkType.folder &&
+        size === BookmarkSize.large
+      ) {
+        alert('目录不允许设置为最大模式！')
+        return
+      }
+      bookmarkItem.size = size
+      bookmarkUpdateService(fromBookmark)
+        .catch(e => alert(e.message || '设置尺寸失败！'));
+    }
     const mouseHandle = mouseIntractive({
       setSelectedBookmarkItem(item) {
         selectedBookmarkItem.value = item;
       },
       // 处理拖拽完成
-      onDragEnd(from, to, method) {
+      onDragEnd(from, to, method, size) {
         // 找到拖放元素和目标元素的位置
         let fromIndex = -1;
         let targetIndex = -1;
@@ -300,6 +312,8 @@ export default {
           handleDragMove(list, fromIndex, targetIndex)
         } else if (method === 'delete') {
           handleRemove()
+        } else if (method === 'size') {
+          handleSetSize(list[fromIndex], size)
         }
       },
     });

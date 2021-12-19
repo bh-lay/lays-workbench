@@ -6,7 +6,7 @@
   width 100%
   height 100%
   z-index 1000
-.shadow-rect
+.target-shadow
   position relative
   box-sizing border-box
   border 0 solid #3d4c5c
@@ -44,52 +44,102 @@
   &.active
     background red
     transform scale(1.5)
+.size-area
+  position absolute
+  top 0
+  left 50%
+  margin-left -80px
+  width 160px
+  height 50px
+  display flex
+  align-items center
+  justify-content center
+  background #26262c
+  border-radius 0 0 8px 8px
+  .size
+    border 1px dashed #666
+    border-radius 4px
+    transition .2s
+    &.active
+      background #3f3f46
+      transform scale(1.25)
+  .size-large
+    width 60px
+    height 30px
+  .size-medium
+    width 30px
+    height 30px
+  .size-small
+    width 15px
+    height 15px
+    margin 0 15px
 </style>
 
 <template>
-<teleport to="body">
-  <div v-if="isStableStart" class="draged-layer">
-    <div :class="['trash-area', triggeredType === 'delete' ? 'active' : '']">
-      <v-mdi name="mdi-trash-can-outline" size="20" />
-    </div>
+  <teleport to="body">
     <transition name="fade-fast">
-      <div
-        v-if="triggeredType === 'enter' || triggeredType === 'before'"
-        :class="['shadow-rect', triggeredType === 'enter' ? 'block' : 'line']"
-        :style="shadowRectStyle"
-      ></div>
+      <div v-if="isStableStart" class="draged-layer">
+        <div class="size-area">
+          <div
+            v-for="size in sizeList"
+            :key="size.value"
+            :class="[
+              'size',
+              'size-' + size.class,
+              triggeredType === 'size' && activeSize === size.value ? 'active' : ''
+            ]"
+          ></div>
+        </div>
+        <div
+          :class="['trash-area', triggeredType === 'delete' ? 'active' : '']"
+        >
+          <v-mdi name="mdi-trash-can-outline" size="20" />
+        </div>
+        <transition name="fade-fast">
+          <div
+            v-if="triggeredType === 'enter' || triggeredType === 'before'"
+            :class="[
+              'target-shadow',
+              triggeredType === 'enter' ? 'block' : 'line',
+            ]"
+            :style="shadowRectStyle"
+          ></div>
+        </transition>
+        <div
+          class="draged-shadow"
+          :style="{
+            top: clientY + 'px',
+            left: clientX + 'px',
+            background: dragedBookmark.undercoat,
+          }"
+        ></div>
+      </div>
     </transition>
-    <div class="draged-shadow" :style="{
-      top: clientY + 'px',
-      left: clientX + 'px',
-      background: dragedBookmark.undercoat,
-    }"></div>
-  </div>
-</teleport>
+  </teleport>
 </template>
 
 <script>
-import { ref, getCurrentInstance } from 'vue'
-import { getAppConfigItem } from '@/assets/ts/app-config'
+import { ref, getCurrentInstance } from 'vue';
+import { getAppConfigItem } from '@/assets/ts/app-config';
 import dragHandle from '@/assets/ts/drag-handle';
-import { Bookmark } from '@database/entity/bookmark';
+import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
 
-function getItemMap(internalInstance) {
-  const thisVm = internalInstance.proxy
-  const parentVm = thisVm ? thisVm.$parent : null
+function getItemListMap(internalInstance) {
+  const thisVm = internalInstance.proxy;
+  const parentVm = thisVm ? thisVm.$parent : null;
   if (!parentVm) {
-    return []
+    return [];
   }
-  const parentEl = parentVm.$el
+  const parentEl = parentVm.$el;
   if (!parentEl) {
-    return []
+    return [];
   }
-  const itemEls = parentEl.parentNode.querySelectorAll('.bookmark-item')
-  const mapList = []
-  Array.prototype.forEach.call(itemEls, bookmarkItemNode => {
-    const bookmarkId = bookmarkItemNode.dataset.id
+  const itemEls = parentEl.parentNode.querySelectorAll('.bookmark-item');
+  const mapList = [];
+  Array.prototype.forEach.call(itemEls, (bookmarkItemNode) => {
+    const bookmarkId = bookmarkItemNode.dataset.id;
     if (!bookmarkId) {
-      return
+      return;
     }
     const nodeBCR = bookmarkItemNode.getBoundingClientRect();
     mapList.push({
@@ -98,12 +148,12 @@ function getItemMap(internalInstance) {
       left: nodeBCR.left,
       right: nodeBCR.right,
       bottom: nodeBCR.bottom,
-    })
+    });
   });
-  return mapList
+  return mapList;
 }
 function getMouseTriggered({ clientY, clientX }, map) {
-  const gridGap = getAppConfigItem('gridGap')
+  const gridGap = getAppConfigItem('gridGap');
   // 是否拖拽合并
   for (let i = 0; i < map.length; i++) {
     let mapItem = map[i];
@@ -148,6 +198,23 @@ function getMouseTriggered({ clientY, clientX }, map) {
       type: 'delete',
     };
   }
+  // 是否是调整大小
+  if (
+    clientX > winWidth / 2 - 75 &&
+    clientX < winWidth / 2 + 75 &&
+    clientY < 70
+  ) {
+    let size = BookmarkSize.small
+    if (clientX < winWidth / 2 - 25) {
+      size = BookmarkSize.medium
+    } else if (clientX > winWidth / 2 + 10) {
+      size = BookmarkSize.large
+    }
+    return {
+      type: 'size',
+      size
+    };
+  }
   // 拖拽取消
   return {
     type: 'cancel',
@@ -183,6 +250,7 @@ export default {
     });
     const internalInstance = getCurrentInstance();
     const triggeredType = ref('');
+    const activeSize = ref('');
     let itemSizeAndPositionMap = [];
     const dragedBookmark = props.dragedBookmark;
     dragHandle(props.event, {
@@ -190,7 +258,7 @@ export default {
       stableStart() {
         context.emit('beforeDrag');
         isStableStart.value = true;
-        itemSizeAndPositionMap = getItemMap(internalInstance);
+        itemSizeAndPositionMap = getItemListMap(internalInstance);
         // console.log('itemSizeAndPositionMap', itemSizeAndPositionMap)
       },
       move(params) {
@@ -203,15 +271,15 @@ export default {
         );
         // 增加 enter 检测
         if (props.disabledEnter && triggered.type === 'enter') {
-          triggered.type = 'cancel'
+          triggered.type = 'cancel';
         }
         triggeredType.value = triggered.type;
         clientX.value = params.clientX;
         clientY.value = params.clientY;
-        
+
         const enterPadding = 3;
         const beforeMarging = -4;
-        
+
         let triggeredTarget = triggered.target;
         if (triggered.type === 'enter' && triggeredTarget) {
           shadowRectStyle.value = {
@@ -242,6 +310,8 @@ export default {
               gridGap +
               'px',
           };
+        } else if (triggered.type === 'size') {
+          activeSize.value = triggered.size
         }
       },
       end(params) {
@@ -254,12 +324,13 @@ export default {
         );
         // 增加 enter 检测
         if (props.disabledEnter && triggered.type === 'enter') {
-          triggered.type = 'cancel'
+          triggered.type = 'cancel';
         }
         const dragData = {
           type: triggered.type,
           from: dragedBookmark.id,
           to: triggered.target ? triggered.target.id : null,
+          size: triggered.size,
         };
         if (dragData.from === dragData.to) {
           dragData.type = 'cancel';
@@ -268,9 +339,9 @@ export default {
       },
       cancel() {
         context.emit('dragEnd', {
-          type: 'cancel'
+          type: 'cancel',
         });
-      }
+      },
     });
     return {
       clientX,
@@ -278,6 +349,21 @@ export default {
       isStableStart,
       triggeredType,
       shadowRectStyle,
+      activeSize,
+      sizeList: [
+        {
+          value: BookmarkSize.medium,
+          class: 'medium',
+        },
+        {
+          value: BookmarkSize.small,
+          class: 'small',
+        },
+        {
+          value: BookmarkSize.large,
+          class: 'large',
+        },
+      ],
     };
   },
 };
