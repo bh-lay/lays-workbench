@@ -44,14 +44,12 @@
     fill #aaa
   &:hover
     background rgba(255, 255, 255, .2)
-    border-color rgba(255, 255, 255, .5)
   &:active
     background #aaa
 .modal-body
   position relative
   box-sizing border-box
   width 80%
-  background #fff
   z-index 101
 @media screen and (max-width:600px)
   .modal-close

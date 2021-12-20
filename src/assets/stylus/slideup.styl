@@ -1,0 +1,15 @@
+.slideup-enter-active
+  opacity 0
+  transform translateY(10px)
+  transition transform 0.1s ease-out, opacity 0.15s ease
+.slideup-enter-to
+  opacity 1
+  transform translateY(0)
+
+.slideup-leave-active
+  transition .1s ease-out
+  opacity 1
+  transform translateY(0)
+.slideup-leave-to
+  transform translateY(10px)
+  opacity 0
