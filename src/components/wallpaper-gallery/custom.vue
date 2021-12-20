@@ -83,11 +83,17 @@ export default {
         
         if (!picReg.test(picUrl.value)) {
           new Message({
-            message: '图片地址看起来不对呦，请核对一下！'
+            message: '图片地址看起来不对呦，请核对一下！',
+            duration: 0,
+            confirmText: '继续使用',
+            cancelText: '取消',
+            confirm() {
+              setAppConfigItem('wallpaper', picUrl.value)  
+            }
           })
-          if (confirm('地址没问题，继续使用')) {
-            setAppConfigItem('wallpaper', picUrl.value)
-          }
+          // if (confirm('地址没问题，继续使用')) {
+            
+          // }
         } else {
           setAppConfigItem('wallpaper', picUrl.value)
         }

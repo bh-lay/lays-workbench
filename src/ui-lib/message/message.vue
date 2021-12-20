@@ -14,9 +14,17 @@
   min-width 200px
   max-width 400px
   margin-right 20px
+.message-text
   line-height 1.5em
   font-size 14px
   color #d4d7dd
+.message-footer
+  padding-top 10px
+  .v-button
+    margin-right 10px
+    padding 3px 8px
+    line-height 14px
+    font-size 12px
 .message-close
   line-height 40px
   text-align center
@@ -34,7 +42,13 @@
 <template>
   <transition name="message-ani">
     <div v-if="visible" class="v-message">
-      <div class="message-body">{{ message }}</div>
+      <div class="message-body">
+        <div class="message-text">{{ message }}</div>
+        <div v-if="confirm" class="message-footer">
+          <v-button type="dark" @click="onConfirm">{{ confirmText }} </v-button>
+          <v-button type="dark" @click="visible = false">{{ cancelText }} </v-button>
+        </div>
+      </div>
       <div class="message-close" @click="visible = false">关闭</div>
     </div>
   </transition>
@@ -42,7 +56,9 @@
 
 <script>
 import { ref, watch, nextTick } from 'vue'
+import VButton from '../components/v-button.vue' 
 export default {
+  components: { VButton },
   props: {
     message: {
       type: String,
@@ -53,6 +69,17 @@ export default {
       default: 5000,
     },
     onClose: {
+      type: Function
+    },
+    confirmText: {
+      type: String,
+      default: '确定',
+    },
+    cancelText: {
+      type: String,
+      default: '取消',
+    },
+    confirm: {
       type: Function
     },
   },
@@ -85,7 +112,11 @@ export default {
       }, props.duration)
     }
     return {
-      visible
+      visible,
+      onConfirm() {
+        visible.value = false
+        props.confirm && props.confirm()
+      }
     }
   }
  };

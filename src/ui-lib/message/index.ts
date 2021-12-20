@@ -3,7 +3,10 @@ import MessageModule from './message.vue'
 
 type messageOptions = {
   message: string,
-  duration?: number
+  duration?: number,
+  confirm?: () => void,
+  confirmText?: string,
+  cancelText?: string,
 }
 export class Message {
   vNode: VNode
@@ -15,6 +18,9 @@ export class Message {
     const vNode = createVNode(MessageModule, {
       message: options.message,
       duration: options.duration,
+      confirm: options.confirm,
+      confirmText: options.confirmText,
+      cancelText: options.cancelText,
       onClose() {
         render(null, tempNode)
       }
