@@ -93,6 +93,7 @@
 
 <script>
 import { Bookmark } from '@database/entity/bookmark'
+import { Message } from '@/ui-lib/message/index'
 import BookmarkItem from '../bookmark-item.vue'
 import ColorSelector from './color-selector.vue'
 import SizeSelector from './size-selector.vue'
@@ -120,11 +121,15 @@ export default {
       previewData,
       confirm() {
         if (!previewData.name) {
-          alert('图标名字没写')
+          new Message({
+            message: '图标名字没写'
+          })
           return
         }
         if (!previewData.value) {
-          alert('链接没有填')
+          new Message({
+            message: '链接没有填'
+          })
           return
         }
         context.emit('confirm', previewData)

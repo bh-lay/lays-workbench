@@ -1,9 +1,9 @@
 <style lang="stylus" scoped>
 .v-message
   position fixed
-  bottom 40px
-  left 40px
-  padding 15px 20px
+  top 40px
+  right 40px
+  padding 12px 28px
   display flex
   align-items center
   border-radius 4px
@@ -32,7 +32,7 @@
 </style>
 
 <template>
-  <transition name="slideup">
+  <transition name="message-ani">
     <div v-if="visible" class="v-message">
       <div class="message-body">{{ message }}</div>
       <div class="message-close" @click="visible = false">关闭</div>

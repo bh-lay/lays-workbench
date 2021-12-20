@@ -85,6 +85,7 @@ import {
   bookmarkUpdateService,
   bookmarkRemoveService,
 } from '@database/services/bookmark-service';
+import { Message } from '@/ui-lib/message/index'
 import MainItem from './main-item.vue';
 import LinkEditor from './link-editor.vue'
 import FolderEditor from './folder-editor.vue'
@@ -215,7 +216,11 @@ export default {
             }
           }
           context.emit('after-remove')
-        }).catch(e => alert(e.message || '删除失败！'));
+        }).catch(e => {
+          new Message({
+            message: e.message || '删除失败！'
+          })
+        });
       },
     };
   },

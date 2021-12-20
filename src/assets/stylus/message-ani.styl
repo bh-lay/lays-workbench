@@ -1,0 +1,15 @@
+.message-ani-enter-active
+  opacity 0
+  transform translateY(-40px)
+  transition transform 0.15s ease-out, opacity 0.3s ease
+.message-ani-enter-to
+  opacity 1
+  transform translateY(0)
+
+.message-ani-leave-active
+  transition .1s ease-out
+  opacity 1
+  transform translateX(0)
+.message-ani-leave-to
+  transform translateX(50%)
+  opacity 0

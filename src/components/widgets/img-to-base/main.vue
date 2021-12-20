@@ -61,6 +61,7 @@ textarea
 <script lang="ts">
 import { ref } from "vue";
 import { imgToBase64 } from './image-base64'
+import { Message } from '@/ui-lib/message/index'
 
 export default {
   props: {
@@ -98,7 +99,9 @@ export default {
           return
         }
         if (file.size > 2 * 1024 * 1024) {
-          alert('图片大于 2M，不建议使用 base64 !')
+          new Message({
+            message: '图片大于 2M，不建议使用 base64 !'
+          })
           return
         }
         transformImage(file)
@@ -113,7 +116,10 @@ export default {
       }
       textareaNode.select()
       document.execCommand('Copy')
-      alert('已复制到剪切板！')
+
+      new Message({
+        message: '已复制到剪切板！'
+      })
     },
   },
 };

@@ -72,6 +72,7 @@
 <script>
 import { ref } from 'vue';
 import { setAppConfigItem } from '@/assets/ts/app-config'
+import { Message } from '@/ui-lib/message/index'
 export default {
   setup() {
     const picUrl = ref('')
@@ -81,7 +82,9 @@ export default {
       applyPic() {
         
         if (!picReg.test(picUrl.value)) {
-          alert('图片地址看起来不对呦，请核对一下！')
+          new Message({
+            message: '图片地址看起来不对呦，请核对一下！'
+          })
           if (confirm('地址没问题，继续使用')) {
             setAppConfigItem('wallpaper', picUrl.value)
           }

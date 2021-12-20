@@ -113,6 +113,7 @@
 import { ref, computed } from "vue";
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
 import { replaceRouter } from '@/assets/ts/router'
+import { Message } from '@/ui-lib/message/index'
 import MainFunction from './main.vue'
 export default {
   components: { MainFunction },
@@ -178,9 +179,10 @@ export default {
       this.handleSelectFile(eventTarget.files[0])
     },
     handleSelectFile(file: File) {
-      console.log('file', file)
       if (file.size > 2 * 1024 * 1024) {
-        alert('图片大于 2M，不建议使用 base64 !')
+        new Message({
+          message: '图片大于 2M，不建议使用 base64 !'
+        })
         return
       }
       replaceRouter('widgets', 'img-to-base', {

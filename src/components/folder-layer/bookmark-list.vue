@@ -61,6 +61,7 @@ import {
   bookmarkResortService,
   bookmarkUpdateService,
 } from '@database/services/bookmark-service';
+import { Message } from '@/ui-lib/message/index'
 import BookmarkItem from '../bookmark-item.vue';
 import AddBookmark from '../add-bookmark/index.vue';
 import CustomLink from '../add-bookmark/custom-link.vue';
@@ -105,12 +106,18 @@ export default {
         bookmarkItem.type === BookmarkType.folder &&
         size === BookmarkSize.large
       ) {
-        alert('目录不允许设置为最大模式！')
+        new Message({
+          message: '目录不允许设置为最大模式！'
+        })
         return
       }
       bookmarkItem.size = size
       bookmarkUpdateService(bookmarkItem)
-        .catch(e => alert(e.message || '设置尺寸失败！'));
+        .catch(e => {
+          new Message({
+            message: e.message || '设置尺寸失败！'
+          })
+        });
     }
     return {
       dragEvent: null,
@@ -189,7 +196,11 @@ export default {
                 break;
               }
             }
-          }).catch(e => alert(e.message || '删除失败！'));
+          }).catch(e => {
+            new Message({
+              message: e.message || '删除失败！'
+            })
+          });
         } else if (type === 'size') {
           handleSetSize(selectedBookmarkItem.value, size)
         }
@@ -202,7 +213,11 @@ export default {
               break;
             }
           }
-        }).catch(e => alert(e.message || '删除失败！'));
+        }).catch(e => {
+          new Message({
+            message: e.message || '删除失败！'
+          })
+        });
       },
     };
   },
