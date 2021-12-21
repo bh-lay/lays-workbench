@@ -13,10 +13,15 @@
   <link rel=apple-touch-icon sizes=72x72 href=/touch-icon-ipad.png>
   <link rel=apple-touch-icon sizes=114x114 href=/touch-icon-iphone-retina.png>
   <link rel=apple-touch-icon sizes=144x144 href=/touch-icon-ipad-retina.png>
-  <style>body{background:#1c3440}</style>
+  <style>
+  body{background:#3b4b54}
+  .app-mask{position: fixed;width: 100%;height: 100%;top: 0;left: 0;z-index: 20000;background: #3b4b54;}
+  .app-mask:before {content:'小剧起始页';position: absolute;top: 50%;left: 50%;width:100px;height: 60px;margin: -30px 0 0 -50px;border-radius: 4px;background:#13222a;line-height:60px;text-align:center;font-size: 14px;color:#b3bbcc}
+  </style>
 </head>
 <body>
   <div id="app"></div>
+  <div class="app-mask"></div>
   <script type="module" src="/src/main.ts"></script>
   <script>
     var _hmt = _hmt || [];
