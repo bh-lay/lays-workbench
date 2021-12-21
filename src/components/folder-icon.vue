@@ -2,10 +2,10 @@
   .folder-icon
     box-sizing border-box
     height 100%
-    transition .15s
+    transition .4s
     cursor pointer
     &:hover
-      background #fff
+      background rgba(255, 255, 255, .7)
   .folder-icon-medium .origin-map
     height 100%
     box-sizing border-box

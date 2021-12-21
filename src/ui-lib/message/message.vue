@@ -7,7 +7,7 @@
   display flex
   align-items center
   border-radius 4px
-  background #5d636f
+  background #2c313a
   box-shadow 1px 1px 3px rgba(0, 0, 0, .2), 1px 1px 10px rgba(0, 0, 0, .2)
   z-index 2001
 .message-body

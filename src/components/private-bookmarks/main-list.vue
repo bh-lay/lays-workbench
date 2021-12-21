@@ -45,11 +45,11 @@
       />
     </div>
   </div>
-  <contextmenu ref="itemMenu" theme="dark">
+  <contextmenu ref="itemMenu">
     <contextmenu-item @click="handleEdit">编辑</contextmenu-item>
     <contextmenu-item @click="handleRemove">删除</contextmenu-item>
   </contextmenu>
-  <contextmenu ref="listMenu" theme="dark">
+  <contextmenu ref="listMenu">
     <contextmenu-item @click="handleCreateLink">添加新书签</contextmenu-item>
     <contextmenu-item @click="handleCreateFolder">添加新文件夹</contextmenu-item>
   </contextmenu>

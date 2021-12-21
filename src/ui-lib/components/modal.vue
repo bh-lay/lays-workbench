@@ -72,7 +72,7 @@
   <teleport to="#v-ui">"
     <div
       :class="['modal-outer', modelValue ? 'visible' : 'hidden']"
-       @contextmenu.prevent
+      @contextmenu.prevent
     >
       <transition name="fade-slow">
         <div v-if="modelValue" class="modal-mask"></div>
