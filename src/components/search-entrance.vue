@@ -100,14 +100,13 @@
           'selected-engine',
           isActive ? 'active' : '',
         ]"
-        @mousedown.prevent
-        @click="toggleEngineList"
+        @click="showEngineList"
       >
         <img :src="selectedEngine.icon" :alt="selectedEngine.label" />
       </div>
       <input
         type="text"
-        ref="input"
+        ref="inputRef"
         v-model="searchText"
         :placeholder="selectedEngine.placeholder"
         @keydown="handleKeydown"
@@ -119,8 +118,7 @@
       <div
         class="engine-list"
         v-if="engineListVisible"
-        v-clickoutside="onClickoutside"
-        @mousedown.prevent
+        v-clickoutside="closeEngineList"
       >
         <div
           :class="[
@@ -139,108 +137,124 @@
   </div>
 </template>
 
-<script>
-import { ref } from 'vue';
-
+<script lang="ts" >
+import { ref, computed, nextTick } from 'vue';
+type searchEngine = {
+  name: string,
+  label: string,
+  placeholder: string,
+  url: string,
+  icon: string,
+}
+const searchEngineConfig: searchEngine[] = [
+  {
+    name: 'baidu',
+    label: '百度',
+    placeholder: '百度一下，你就知道了。',
+    url: 'https://www.baidu.com/s?ie=UTF-8&wd=[kw]',
+    icon: '/favicon/baidu.ico',
+  },
+  {
+    name: 'google',
+    label: '谷歌',
+    placeholder: '谷歌虽好，可不一定访问的了～',
+    url: 'https://www.google.com/search?q=[kw]',
+    icon: '/favicon/google.ico',
+  },
+  {
+    name: 'caniuse',
+    label: 'caniuse',
+    placeholder: '前端兼容小字典！',
+    url: 'https://www.caniuse.com/?search=[kw]',
+    icon: '/favicon/caniuse.png',
+  },
+  {
+    name: 'stackoverflow',
+    label: 'stackoverflow',
+    placeholder: '搜一搜歪果仁的技术讨论！',
+    url: 'https://stackoverflow.com/search?q=[kw]',
+    icon: '/favicon/stackoverflow.png',
+  },
+  {
+    name: 'github',
+    label: 'Github',
+    placeholder: '来，我们一起偷代码～',
+    url: 'https://github.com/search?q=[kw]',
+    icon: '/favicon/github.png',
+  },
+  {
+    name: 'npm',
+    label: 'NPM',
+    placeholder: '别硬撸了，找个好用的轮子吧！',
+    url: 'https://www.npmjs.com/search?q=[kw]',
+    icon: '/favicon/npm.png',
+  },
+];
 export default {
-  setup() {
-    const searchEngineConfig = [
-      {
-        name: 'baidu',
-        label: '百度',
-        placeholder: '百度一下，你就知道了。',
-        url: 'https://www.baidu.com/s?ie=UTF-8&wd=[kw]',
-        icon: '/favicon/baidu.ico',
-      },
-      {
-        name: 'google',
-        label: '谷歌',
-        placeholder: '谷歌虽好，可不一定访问的了～',
-        url: 'https://www.google.com/search?q=[kw]',
-        icon: '/favicon/google.ico',
-      },
-      {
-        name: 'caniuse',
-        label: 'caniuse',
-        placeholder: '前端兼容小字典！',
-        url: 'https://www.caniuse.com/?search=[kw]',
-        icon: '/favicon/caniuse.png',
-      },
-      {
-        name: 'stackoverflow',
-        label: 'stackoverflow',
-        placeholder: '搜一搜歪果仁的技术讨论！',
-        url: 'https://stackoverflow.com/search?q=[kw]',
-        icon: '/favicon/stackoverflow.png',
-      },
-      {
-        name: 'github',
-        label: 'Github',
-        placeholder: '来，我们一起偷代码～',
-        url: 'https://github.com/search?q=[kw]',
-        icon: '/favicon/github.png',
-      },
-      {
-        name: 'npm',
-        label: 'NPM',
-        placeholder: '别硬撸了，找个好用的轮子吧！',
-        url: 'https://www.npmjs.com/search?q=[kw]',
-        icon: '/favicon/npm.png',
-      },
-    ];
+  setup(props, context) {
+    const inputRef = ref(null)
     const selectedEngineName = ref(searchEngineConfig[0].name);
     const searchText = ref('');
     const engineListVisible = ref(false);
     const inputFocused = ref(false);
+
+    const isActive = computed(() => {
+      const isFocus = engineListVisible.value || inputFocused.value
+      context.emit(isFocus ? 'focus' : 'blur')
+      return isFocus
+    })
+    const selectedEngine = computed(() => {
+      return (
+        searchEngineConfig.filter(
+          (engine) => engine.name === selectedEngineName.value
+        )[0] || searchEngineConfig[0]
+      )
+    })
+    const showEngineList = () => {
+      if (engineListVisible.value) {
+        return
+      }
+      const inputNode = inputRef.value as HTMLInputElement | null
+      if (inputNode) {
+        inputNode.focus();
+      }
+      engineListVisible.value = true
+    }
+    const closeEngineList = () => {
+      engineListVisible.value = false
+    }
     return {
+      inputRef,
       searchEngineConfig,
       selectedEngineName,
+      selectedEngine,
       searchText,
       engineListVisible,
       inputFocused,
+      isActive,
+      selectEngine(engine: searchEngine) {
+        const inputNode = inputRef.value as HTMLInputElement | null
+        if (inputNode) {
+          inputNode.focus();
+        }
+        selectedEngineName.value = engine.name;
+        closeEngineList();
+      },
+      showEngineList,
+      closeEngineList,
+      handleKeydown(e: KeyboardEvent) {
+        if (e.key !== 'Enter') {
+          return
+        }
+        let searhKeyword = encodeURIComponent(searchText.value);
+        searchText.value = '';
+        window.open(selectedEngine.value.url.replace('[kw]', searhKeyword));
+        const inputNode = inputRef.value as HTMLInputElement | null
+        if (inputNode) {
+          inputNode.blur();
+        }
+      },
     };
-  },
-  computed: {
-    selectedEngine() {
-      return (
-        this.searchEngineConfig.filter(
-          (engine) => engine.name === this.selectedEngineName
-        )[0] || this.searchEngineConfig[0]
-      );
-    },
-    isActive() {
-      return this.engineListVisible || this.inputFocused
-    },
-  },
-  watch: {
-    isActive(isFocues) {
-      this.$emit(isFocues ? 'focus' : 'blur')
-    },
-  },
-  methods: {
-    handleKeydown(e) {
-      if (e.keyCode === 13) {
-        this.search();
-      }
-    },
-    search() {
-      let searhKeyword = encodeURIComponent(this.searchText);
-      this.searchText = '';
-      window.open(this.selectedEngine.url.replace('[kw]', searhKeyword));
-      this.$refs.input.blur();
-    },
-    onClickoutside() {
-      this.engineListVisible = false;
-    },
-    selectEngine(engine) {
-      this.$refs.input.focus();
-      this.selectedEngineName = engine.name;
-      this.engineListVisible = false;
-    },
-    toggleEngineList() {
-      this.$refs.input.focus();
-      this.engineListVisible = !this.engineListVisible
-    },
   },
 };
 </script>
