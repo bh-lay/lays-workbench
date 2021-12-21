@@ -4,8 +4,8 @@
   flex-wrap wrap
 .item
   position relative
-  width 120px
-  height 90px
+  width 180px
+  height 120px
   flex-grow 1
   background no-repeat center #000
   background-size cover
@@ -47,7 +47,7 @@
       transform translateY(0)
       opacity 1
 .empty
-  width 200px
+  width 180px
   height 0
   flex-grow 1
   overflow hidden

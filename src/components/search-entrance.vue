@@ -138,7 +138,7 @@
 </template>
 
 <script lang="ts" >
-import { ref, computed, nextTick } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
 import { getAppConfigItem, setAppConfigItem } from '@/assets/ts/app-config'
 
 type searchEngine = {
@@ -200,11 +200,22 @@ export default {
     const engineListVisible = ref(false);
     const inputFocused = ref(false);
 
-    const isActive = computed(() => {
-      const isFocus = engineListVisible.value || inputFocused.value
-      context.emit(isFocus ? 'focus' : 'blur')
-      return isFocus
+    const isActive = ref(false)
+    let delay: number | null = null
+    watch([engineListVisible, inputFocused], () => {
+      delay && clearTimeout(delay)
+      delay = setTimeout(() => {
+        const isFocus = engineListVisible.value || inputFocused.value
+        context.emit(isFocus ? 'focus' : 'blur')
+        isActive.value = isFocus
+      }, 200)
     })
+    const setInputFocused = () => {
+      const inputNode = inputRef.value as HTMLInputElement | null
+      if (inputNode) {
+        inputNode.focus();
+      }
+    }
     const selectedEngine = computed(() => {
       return (
         searchEngineConfig.filter(
@@ -213,12 +224,9 @@ export default {
       )
     })
     const showEngineList = () => {
+      setInputFocused()
       if (engineListVisible.value) {
         return
-      }
-      const inputNode = inputRef.value as HTMLInputElement | null
-      if (inputNode) {
-        inputNode.focus();
       }
       nextTick(() => {
         engineListVisible.value = true
@@ -237,10 +245,7 @@ export default {
       inputFocused,
       isActive,
       selectEngine(engine: searchEngine) {
-        const inputNode = inputRef.value as HTMLInputElement | null
-        if (inputNode) {
-          inputNode.focus();
-        }
+        setInputFocused()
         selectedEngineName.value = engine.name;
         setAppConfigItem('searchEngineName', engine.name)
         closeEngineList();

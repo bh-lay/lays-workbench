@@ -5,7 +5,7 @@
   height 14px
   line-height 14px
   font-size 12px
-  color #666
+  color #8f96a3
 </style>
 
 <template>

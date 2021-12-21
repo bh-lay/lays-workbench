@@ -35,10 +35,10 @@
   position absolute
   top 0
   right 0
-  width 380px
+  width 400px
   max-width: 100%
   height 100%
-  background rgba(255, 255, 255, .5)
+  background #16181d
   z-index 11
 .hidden
   // 各种方法保证视觉上弹窗不可见，且不影响动画显示
@@ -49,17 +49,16 @@
   height 0
   transition .1s 1s
 .header
+  display none
   position relative
   display flex
   justify-content space-between
   align-items center
   height 30px
-  padding 10px 20px 10px 20px
-  background #fff
-  box-shadow 0 0 3px rgba(0, 0, 0, .2)
+  padding 10px 20px 10px 25px
   .title
-    font-size 14px
-    color #333
+    font-size 16px
+    color #8f96a3
   .modal-close
     width 32px
     height 32px
@@ -70,10 +69,9 @@
     cursor pointer
     transition .15s
     &:hover
-      color #333
-      background #f4f4f4
+      background #2c303a
     &:active
-      background #eee
+      background #2f3746
 .scroll-body
   height 100px
   flex-grow 1
