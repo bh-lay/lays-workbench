@@ -4,6 +4,7 @@ const APP_CONFIG_DEFAULT = {
   gridGap: 34,
   iconRadius: 8,
   wallpaper: 'http://bh-lay.com/topic/me/imgs/xunfei.jpg',
+  searchEngineName: 'caniuse',
 }
 
 let APP_CONFIG: Record<string, unknown> = new Proxy({}, {})

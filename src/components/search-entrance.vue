@@ -7,7 +7,7 @@
   z-index 10
 .search-input
   display flex
-  height 54px
+  height 56px
   border-radius 4px
   background rgba(255, 255, 255, 0.2)
   backdrop-filter blur(2px)
@@ -19,23 +19,23 @@
     width 60px
     flex-shrink 0
     cursor pointer
-    img
+    svg
       width 24px
       height 24px
-      filter grayscale(1)
+      fill #c1c6d1
       transition 0.2s ease-in-out
-      opacity 0.5
-    &:hover img, &.active img
-      filter grayscale(0)
+    &:hover svg,
+    &.active svg
+      fill #182749
       opacity 1
   input
     box-sizing border-box
     width 100px
     flex-grow 1
-    height 54px
+    height 56px
     padding 15px 20px
     border none
-    line-height 24px
+    line-height 26px
     font-size 16px
     background transparent
     color #555
@@ -76,11 +76,11 @@
   border-radius 4px
   transition 0.2s ease-out
   cursor pointer
-  img
+  svg
     display inline-block
     vertical-align middle
-    width 16px
-    height 16px
+    width 18px
+    height 18px
   &:hover
     background #f4f4f4
   &.active
@@ -102,7 +102,7 @@
         ]"
         @click="showEngineList"
       >
-        <img :src="selectedEngine.icon" :alt="selectedEngine.label" />
+        <v-mdi :name="selectedEngine.icon" />
       </div>
       <input
         type="text"
@@ -129,7 +129,7 @@
           :key="engine.name"
           @click="selectEngine(engine)"
         >
-          <img :src="engine.icon" :alt="engine.label" />
+          <v-mdi :name="engine.icon" />
           {{ engine.label }}
         </div>
       </div>
@@ -139,6 +139,8 @@
 
 <script lang="ts" >
 import { ref, computed, nextTick } from 'vue';
+import { getAppConfigItem, setAppConfigItem } from '@/assets/ts/app-config'
+
 type searchEngine = {
   name: string,
   label: string,
@@ -152,48 +154,48 @@ const searchEngineConfig: searchEngine[] = [
     label: '百度',
     placeholder: '百度一下，你就知道了。',
     url: 'https://www.baidu.com/s?ie=UTF-8&wd=[kw]',
-    icon: '/favicon/baidu.ico',
+    icon: 'mdi-paw',
   },
   {
     name: 'google',
     label: '谷歌',
     placeholder: '谷歌虽好，可不一定访问的了～',
     url: 'https://www.google.com/search?q=[kw]',
-    icon: '/favicon/google.ico',
+    icon: 'mdi-google',
   },
   {
     name: 'caniuse',
     label: 'caniuse',
     placeholder: '前端兼容小字典！',
     url: 'https://www.caniuse.com/?search=[kw]',
-    icon: '/favicon/caniuse.png',
+    icon: 'mdi-layers-search',
   },
   {
     name: 'stackoverflow',
     label: 'stackoverflow',
     placeholder: '搜一搜歪果仁的技术讨论！',
     url: 'https://stackoverflow.com/search?q=[kw]',
-    icon: '/favicon/stackoverflow.png',
+    icon: 'mdi-stack-overflow',
   },
   {
     name: 'github',
     label: 'Github',
     placeholder: '来，我们一起偷代码～',
     url: 'https://github.com/search?q=[kw]',
-    icon: '/favicon/github.png',
+    icon: 'mdi-github',
   },
   {
     name: 'npm',
     label: 'NPM',
     placeholder: '别硬撸了，找个好用的轮子吧！',
     url: 'https://www.npmjs.com/search?q=[kw]',
-    icon: '/favicon/npm.png',
+    icon: 'mdi-npm',
   },
 ];
 export default {
   setup(props, context) {
     const inputRef = ref(null)
-    const selectedEngineName = ref(searchEngineConfig[0].name);
+    const selectedEngineName = ref(getAppConfigItem('searchEngineName'));
     const searchText = ref('');
     const engineListVisible = ref(false);
     const inputFocused = ref(false);
@@ -218,7 +220,9 @@ export default {
       if (inputNode) {
         inputNode.focus();
       }
-      engineListVisible.value = true
+      nextTick(() => {
+        engineListVisible.value = true
+      })
     }
     const closeEngineList = () => {
       engineListVisible.value = false
@@ -238,6 +242,7 @@ export default {
           inputNode.focus();
         }
         selectedEngineName.value = engine.name;
+        setAppConfigItem('searchEngineName', engine.name)
         closeEngineList();
       },
       showEngineList,
