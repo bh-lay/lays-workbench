@@ -17,12 +17,7 @@ function removeMask() {
   if (!maskNode) {
     return
   }
-
-  const styleAtrribute = maskNode.style
-  styleAtrribute.setProperty('transition', '0.8s')
-  nextTick(() => {
-    styleAtrribute.setProperty('opacity', '0')
-  })
+  maskNode.classList.add('hide')
   setTimeout(() => {
     maskNode.parentNode?.removeChild(maskNode)
   }, 1000)
