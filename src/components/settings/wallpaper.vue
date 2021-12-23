@@ -1,6 +1,6 @@
 <style lang="stylus" scoped>
 .gallery
-  height 180px
+  height 150px
   background #333
   .v-button
     position absolute
@@ -11,7 +11,7 @@
 
 <template>
   <gallery>
-    <v-button type="white" @click="$emit('next')">修改</v-button>
+    <dropdown-item-plain><v-button type="white" @click="$emit('next')">修改</v-button></dropdown-item-plain>
   </gallery>
 </template>
 

@@ -9,128 +9,67 @@
   border 1px solid rgba(255, 255, 255, .1)
   border-radius 4px
   transition .2s ease-in-out
-  svg
-    height 20px
-    fill #fff
+  color rgba(255, 255, 255, .7)
   &:hover
     border-color rgba(255, 255, 255, .5)
     background rgba(255, 255, 255, .2)
+    color #fff
   &:active
     border-color #fff
     background rgba(255, 255, 255, .35)
-.settings-modal
-  position fixed
-  width 100%
-  height 100%
-  top 0
-  left 0
-  z-index 10
-.settings-mask
-  position relative
-  height 100%
-  background rgba(0, 0, 0, .3)
-.settings-panel
-  display flex
-  flex-direction column
-  position absolute
-  top 0
-  right 0
-  width 400px
-  max-width: 100%
-  height 100%
-  background #16181d
-  z-index 11
-.hidden
-  // 各种方法保证视觉上弹窗不可见，且不影响动画显示
-  pointer-events none
-  visibility hidden
-  opacity 0
-  width 0
-  height 0
-  transition .1s 1s
-.header
-  display none
-  position relative
-  display flex
-  justify-content space-between
-  align-items center
-  height 30px
-  padding 10px 20px 10px 25px
-  .title
-    font-size 16px
-    color #8f96a3
-  .modal-close
-    width 32px
-    height 32px
-    display flex
-    align-items center
-    justify-content center
-    color #aaa
-    cursor pointer
-    transition .15s
-    &:hover
-      background #2c303a
-    &:active
-      background #2f3746
-.scroll-body
-  height 100px
-  flex-grow 1
-  overflow auto
-  &::-webkit-scrollbar
-    width 0
-    height 0
+.group-list
+  width 340px
+  margin-top 10px
+.setting-group
+  padding 18px 20px
+  background #3e4451
+.label
+  margin-bottom 15px
+  font-size 14px
+  color #949eb3
 </style>
 
 <template>
-  <div
+  <dropdown
     class="settings-btn"
-    @mousedown.prevent
-    @click="settingVisible = true"
+    undercoat="tranparent"
+    placement="bottom-right"
+    type="plain"
   >
-    <v-mdi name="mdi-tune" />
-  </div>
-  <teleport to="#v-ui">
-    <div :class="['settings-modal', settingVisible ? '' : 'hidden']">
-      <transition name="fade-slow">
-        <div v-if="settingVisible" class="settings-mask"></div>
-      </transition>
-      <transition name="side-layer">
-        <div
-          class="settings-panel"
-          v-if="settingVisible"
-          @mousedown.prevent
-        >
-          <div class="header">
-            <div class="title">应用配置</div>
-            <div class="modal-close" @click="settingVisible = false">
-              <v-mdi name="mdi-close" />
-            </div>
-          </div>
-          <div class="scroll-body">
-            <settings-list
-              @wallpaper-setting="handleSetWallpaper"
-            />
-          </div>
+    <v-mdi name="mdi-tune" size="18" />
+    <template v-slot:body>
+      <div class="group-list">
+        <div class="setting-group">
+          <div class="label">壁纸设置</div>
+          <wallpaper @next="settingWallpaper" />
         </div>
-      </transition>
-    </div>
-  </teleport>
+        <div class="setting-group">
+          <div class="label">布局</div>
+          <layout />
+        </div>
+        <div class="setting-group">
+          <div class="label">数据管理</div>
+          <data-io />
+        </div>
+      </div>
+    </template>
+  </dropdown>
 </template>
 
 <script>
 import { ref } from 'vue';
-import SettingsList from './settings-list.vue'
+import { replaceRouter } from '@/assets/ts/router';
+import Layout from './layout.vue';
+import Wallpaper from './wallpaper.vue';
+import DataIo from './data-io.vue';
 
 export default {
-  emits: [],
-  components: { SettingsList },
-  setup(props, context) {
-    const settingVisible = ref(false);
+  components: { Layout, Wallpaper, DataIo },
+  setup() {
     return {
-      settingVisible,
-      handleSetWallpaper() {
-        settingVisible.value = false
-      }
+      settingWallpaper() {
+        replaceRouter('settings', 'wallpaper');
+      },
     };
   },
 };

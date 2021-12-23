@@ -2,7 +2,7 @@
 .data-io
   position relative
   display flex
-  height 100px
+  height 60px
   border 1px dashed #656c7b
   border-radius 8px
   overflow hidden
@@ -16,26 +16,15 @@
   cursor pointer
   transition .2s
   color #afb8ca
-  svg
-    width 30px
-    height 30px
   .title
-    font-size 14px
+    line-height 14px
+    font-size 12px
   & + .half
     border-left 1px dashed #656c7b
   &:hover
     background #424957
   &:active
     background #29303d
-.download-layer
-  position absolute
-  top 0
-  left 0
-  width 100%
-  height 100%
-  background #29303d
-  line-height 100px
-  text-align center
 .loading
   position absolute
   top 0
@@ -44,9 +33,10 @@
   height 100%
   background #29303d
   animation loadingBreath 2s infinite
-  line-height 100px
+  line-height 60px
   text-align center
   color #8a94a8
+  font-size 12px
 
 @keyframes loadingBreath
 	0%,
@@ -56,6 +46,23 @@
 	60%,
 	64%
     background #29303d
+.download-layer
+  position absolute
+  top 0
+  left 0
+  width 100%
+  height 100%
+  background #424957
+  line-height 60px
+  text-align center
+  color #8a94a8
+  font-size 15px
+  cursor pointer
+  transition .2s
+  &:hover
+    background #29303d
+  &:active
+    background #424957
 
 </style>
 
@@ -63,25 +70,21 @@
   <div class="data-io">
     <div class="half" @click="importData">
       <div class="icon">
-        <v-mdi name="mdi-upload" />
+        <v-mdi name="mdi-upload" size="20" />
       </div>
       <div class="title">导入</div>
     </div>
     <div class="half" @click="exportData">
       <div class="icon">
-        <v-mdi name="mdi-download" />
+        <v-mdi name="mdi-download" size="20" />
       </div>
       <div class="title">导出</div>
     </div>
     <div v-if="isWorking" class="loading">
       正在处理，请稍后～
     </div>
-    <div v-if="downloadVisible" class="download-layer">
-      <v-button
-        v-if="downloadExportFile"
-        type="white"
-        @click="downloadExportFile"
-      >下载</v-button>
+    <div v-if="downloadVisible" class="download-layer" @click="downloadExportFile">
+      下载
     </div>
   </div>
 </template>
