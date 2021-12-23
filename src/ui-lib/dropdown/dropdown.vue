@@ -6,23 +6,29 @@
     fill #b6bcce
 .dropdown-body
   position fixed
+  overflow hidden
+  z-index 1002
+.dropdown-body-default
   border-radius 4px
   background #fff
   box-shadow 2px 2px 10px rgba(0, 0, 0, .2), 1px 1px 3px rgba(0, 0, 0, .2)
-  overflow hidden
-  z-index 1002
 </style>
 
 <template>
-  <div :class="['dropdown-button', visible ? 'active' : '']" ref="button" @click="show">
+  <div
+    :class="['dropdown-button', visible ? 'active' : '']"
+    ref="buttonRef"
+    @click="onClickButton"
+  >
     <slot />
     <v-mdi v-if="arrow" name="mdi-menu-down" :rotate="visible ? -180 : 0" />
     <teleport to="#v-ui">
       <transition name="slidedown">
         <div
-          class="dropdown-body"
           v-if="visible"
           v-clickoutside="onClickoutside"
+          ref="bodyRef"
+          :class="['dropdown-body', `dropdown-body-${type}`]"
           :style="{
             top: top + 'px',
             left: left + 'px',
@@ -36,7 +42,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { nextTick, ref, watch } from 'vue';
 export default {
   name: 'dropdown',
   props: {
@@ -48,27 +55,60 @@ export default {
       type: String,
       default: '#fff'
     },
+    placement: {
+      type: String,
+      default: 'bottom-left'
+    },
+    type: {
+      type: String,
+      // default、plain、dark
+      default: 'default'
+    },
   },
-  data() {
+  setup(props) {
+    const top = ref(0)
+    const left = ref(0)
+    const visible = ref(false)
+    const buttonRef = ref(null)
+    const bodyRef = ref(null)
     return {
-      left: 0,
-      right: 0,
-      visible: false,
+      top,
+      left,
+      visible,
+      buttonRef,
+      bodyRef,
+      onClickButton() {
+        if (visible.value) {
+          return;
+        }
+        visible.value = true;
+        const buttonNode = buttonRef.value as HTMLDivElement | null
+        
+        if (!buttonNode) {
+          return
+        }
+        const buttonBRC = buttonNode.getBoundingClientRect()
+        if (props.placement === 'bottom-right') {
+          nextTick(() => {
+            const bodyNode = bodyRef.value as HTMLDivElement | null
+            let bodyWidth = 300
+            if (bodyNode) {
+              bodyWidth = bodyNode.clientWidth
+            }
+            top.value = buttonBRC.top + buttonBRC.height;
+            left.value = buttonBRC.left + buttonBRC.width - bodyWidth;
+          })
+        } else {
+          // default
+          // if (props.placement === 'bottom-left')
+          top.value = buttonBRC.top + buttonBRC.height;
+          left.value = buttonBRC.left;
+        }
+      },
+      onClickoutside() {
+        visible.value = false;
+      },
     };
-  },
-  methods: {
-    onClickoutside() {
-      this.visible = false;
-    },
-    show() {
-      if (this.visible) {
-        return;
-      }
-      this.visible = true;
-      const buttonBRC = this.$refs.button.getBoundingClientRect();
-      this.left = buttonBRC.left;
-      this.top = buttonBRC.top + buttonBRC.height;
-    },
   },
 };
 </script>
