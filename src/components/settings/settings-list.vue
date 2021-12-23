@@ -21,6 +21,12 @@
     <div class="label">布局</div>
     <layout />
   </div>
+  <br />
+  <div class="setting-group">
+    <div class="label">数据管理</div>
+    <data-io />
+  </div>
+  
 </div>
 </template>
 
@@ -29,10 +35,11 @@ import { ref, watch } from 'vue';
 import { replaceRouter } from '@/assets/ts/router'
 import Layout from './layout.vue'
 import Wallpaper from './wallpaper.vue'
+import DataIo from './data-io.vue'
 
 export default {
   emits: ['wallpaper-setting'],
-  components: { Layout, Wallpaper },
+  components: { Layout, Wallpaper, DataIo },
   setup(props, context) {
     return {
       settingWallpaper() {
