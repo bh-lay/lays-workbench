@@ -39,8 +39,8 @@ textarea
 <template>
   <div class="imgtobase-main">
     <div class="header">
-      <v-button @click="copy" type="dark">复制</v-button>
-      <v-button @click="$refs.input.click()" type="dark">选择图片</v-button>
+      <v-button @click="copy">复制</v-button>
+      <v-button @click="$refs.input.click()">选择图片</v-button>
       <input
         ref="input"
         type="file"

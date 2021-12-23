@@ -64,7 +64,7 @@
       />
     </div>
     <div class="footer">
-      <v-button @click="confirm" type="dark">确定</v-button>
+      <v-button @click="confirm">确定</v-button>
     </div>
   </div>
 </template>

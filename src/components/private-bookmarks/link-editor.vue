@@ -44,8 +44,8 @@ input
       <input type="text" v-model="value" />
     </div>
     <div class="footer">
-      <v-button type="dark" @click="$emit('cancel')">取消</v-button>
-      <v-button type="dark" @click="handleConfirm">确定</v-button>
+      <v-button @click="$emit('cancel')">取消</v-button>
+      <v-button @click="handleConfirm">确定</v-button>
     </div>
   </div>
 </template>

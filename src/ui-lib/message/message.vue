@@ -45,8 +45,8 @@
       <div class="message-body">
         <div class="message-text">{{ message }}</div>
         <div v-if="confirm" class="message-footer">
-          <v-button type="dark" @click="onConfirm">{{ confirmText }} </v-button>
-          <v-button type="dark" @click="visible = false">{{ cancelText }} </v-button>
+          <v-button @click="onConfirm">{{ confirmText }} </v-button>
+          <v-button @click="visible = false">{{ cancelText }} </v-button>
         </div>
       </div>
       <div class="message-close" @click="visible = false">关闭</div>

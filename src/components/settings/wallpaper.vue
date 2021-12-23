@@ -11,7 +11,7 @@
 
 <template>
   <gallery>
-    <v-button @click="$emit('next')">修改</v-button>
+    <v-button type="white" @click="$emit('next')">修改</v-button>
   </gallery>
 </template>
 

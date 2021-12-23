@@ -24,8 +24,8 @@
 <template>
   <div class="bookmark-container" v-contextmenu:listMenu>
     <div class="header">
-      <v-button type="dark" @click="handleCreateLink">添加链接</v-button>
-      <v-button type="dark" @click="handleCreateFolder">添加文件夹</v-button>
+      <v-button @click="handleCreateLink">添加链接</v-button>
+      <v-button @click="handleCreateFolder">添加文件夹</v-button>
     </div>
     <div v-if="bookmarkList.length === 0" class="empty">
       万物皆空
