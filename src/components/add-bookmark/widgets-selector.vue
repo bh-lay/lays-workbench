@@ -101,13 +101,15 @@ export default {
   components: { BookmarkItem, SizeSelector },
   props: {
     data: {
-      type: Object,
+      type: Bookmark,
       default() {
         return null
       },
     },
   },
-  setup(props, context) {
+  setup(props: {
+    data: Bookmark
+  }, context) {
     const defaultWidgets = supportWidgetsList[0]
     const previewData = reactive(
       new Bookmark(props.data || {

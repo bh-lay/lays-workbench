@@ -3,6 +3,7 @@
   position relative
   min-width 100px
   min-height 100px
+  background #333
 .img-container
   position relative
   height 100%

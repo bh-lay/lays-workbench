@@ -85,7 +85,6 @@ export default {
         folderEditorConfigValue.parentId = parentId
       },
       handleFolderCreateConfirm({ name }: { name: string }){
-        debugger
         const folderEditorConfigValue = folderEditorConfig.value
 
         const item = new Bookmark({

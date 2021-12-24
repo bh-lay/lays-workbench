@@ -30,12 +30,12 @@ export function getIDBRequest(): Promise<IDBDatabase> {
     }
     request.onupgradeneeded = function(event) {
       const db = request.result
-      console.log('onupgradeneeded event', event)
+      const target = event.target as CustomIDBEventTarget
       // db = event.target.result;
-      if (!event.target) {
+      if (!target) {
         reject(new Error('could not find target'))
       } else {
-        const transaction = event.target.transaction;
+        const transaction = target.transaction;
         transaction.oncomplete = function() {    
           resolve(db)
         }

@@ -58,7 +58,9 @@ export default {
       },
     }
   },
-  setup(props) {
+  setup(props: {
+    data: Bookmark
+  }) {
     const modalVisible = ref(false)
     const widgetsSize = computed(() => props.data.size)
     return {

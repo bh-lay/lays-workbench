@@ -82,6 +82,7 @@
 <script lang="ts">
 import { ref, watch, Ref } from 'vue';
 import dragHandle from '@/assets/ts/drag-handle';
+
 export default {
   props: {
     modelValue: {
@@ -96,6 +97,7 @@ export default {
       type: Number,
       default: 100,
     },
+    // FIXME: 格式校验更严格一点
     marks: {
       type: Array,
       default() {
@@ -108,10 +110,7 @@ export default {
       modelValue: number,
       min: number,
       max: number,
-      marks: {
-        label: string,
-        value: number
-      }[],
+      marks: any[],
     },
     context
   ) {

@@ -104,13 +104,15 @@ export default {
   components: { BookmarkItem, ColorSelector, SizeSelector, IconEditor },
   props: {
     data: {
-      type: Object,
+      type: Bookmark,
       default() {
         return null
       },
     },
   },
-  setup(props, context) {
+  setup(props: {
+    data: Bookmark
+  }, context) {
     const previewData = reactive(
       new Bookmark(props.data || {
         undercoat: '#9D2932',

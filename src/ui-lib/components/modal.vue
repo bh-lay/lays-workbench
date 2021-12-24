@@ -90,6 +90,11 @@
 </template>
 
 <script lang="ts">
+type modalStyle = {
+  background: string,
+  width?: string,
+  height?: string
+}
 export default {
   emits: ['after-open', 'after-close', 'update:modelValue'],
   props: {
@@ -111,7 +116,7 @@ export default {
     },
   },
   setup(props) {
-      const modalBodyStyle = {
+      const modalBodyStyle: modalStyle = {
         background: props.undercoat
       }
       if (props.width) {

@@ -47,7 +47,9 @@
 import {
   ref,
   Ref,
+  shallowRef,
   onMounted,
+  ShallowUnwrapRef,
 } from 'vue';
 import {
   Bookmark,
@@ -118,8 +120,10 @@ export default {
           })
         });
     }
+    // : ShallowRef<MouseEvent | null>
+    const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
     return {
-      dragEvent: null,
+      dragEvent,
       willStartDrag,
       isStartDrag,
       bookmarkList,
@@ -148,7 +152,7 @@ export default {
           return
         }
         selectedBookmarkItem.value = bookmarkItem;
-        this.dragEvent = event
+        dragEvent.value = event
         willStartDrag.value = true;
       },
       handleBeforeDrag() {

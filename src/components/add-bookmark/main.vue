@@ -17,6 +17,7 @@ import { bookmarkInsertService } from '@database/services/bookmark-service'
 import Tab from './tab.vue'
 import CustomLink from './custom-link.vue'
 import WidgetsSelector from './widgets-selector.vue'
+import { Bookmark } from '@/database/entity/bookmark';
 export default {
   emits: ['success'],
   components: { Tab, CustomLink, WidgetsSelector },
@@ -24,7 +25,7 @@ export default {
     const activeCreateType = ref('custom')
     return {
       activeCreateType,
-      handleConfirm(data) {
+      handleConfirm(data: Bookmark) {
         bookmarkInsertService(data)
         .then(() => {
           context.emit('success')

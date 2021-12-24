@@ -1,14 +1,15 @@
 import { App as Application }  from 'vue'
-declare interface HTMLElement {
+declare interface customHTMLElement extends HTMLDivElement {
   _removeGloballistener: (() => void) | null
 }
 export default {
   install(app: Application) {
     app.directive('clickoutside', {
-      mounted (el: HTMLElement, binding) {
+      mounted (el: customHTMLElement, binding) {
         const callback = typeof binding.value === 'function' ? binding.value : null
         const bodyClickListener = (clickEvent: Event) => {
-          if (!el.contains(clickEvent.target)) {
+          const eventTarget = clickEvent.target as customHTMLElement
+          if (!el.contains(eventTarget)) {
               setTimeout(callback, 30)
           }
         }
@@ -22,7 +23,7 @@ export default {
           }
         }, 20)
       },
-      unmounted(el: HTMLElement) {
+      unmounted(el: customHTMLElement) {
         if (el._removeGloballistener) {
           el._removeGloballistener()
           el._removeGloballistener = null

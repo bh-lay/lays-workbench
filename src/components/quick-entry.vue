@@ -74,6 +74,7 @@ import {
   Ref,
   onMounted,
   onBeforeUpdate,
+  shallowRef,
 } from 'vue';
 import {
   Bookmark,
@@ -127,11 +128,12 @@ function mouseIntractive({
   }
   
   let needForbiddenClick = false;
+  const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
   return {
     folderLayerVisible,
     willStartDrag,
     isStartDrag,
-    dragEvent: null,
+    dragEvent,
     editModalVisible,
     openEditModal,
     closeEditModal,
@@ -152,13 +154,12 @@ function mouseIntractive({
       }
     },
     handleDrag(event: MouseEvent, bookmarkItem: Bookmark) {
-      // console.log('event, bookmarkItem', event, bookmarkItem)
       // 非左键不处理
       if (event.button !== 0) {
         return
       }
       setSelectedBookmarkItem(bookmarkItem);
-      this.dragEvent = event
+      dragEvent.value = event
       willStartDrag.value = true;
     },
     handleBeforeDrag() {
