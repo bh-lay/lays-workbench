@@ -91,7 +91,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { Bookmark } from '@database/entity/bookmark'
 import { Message } from '@/ui-lib/message/index'
 import BookmarkItem from '../bookmark-item.vue'

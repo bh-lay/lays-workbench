@@ -45,7 +45,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed } from "vue";
 export default {
   setup(props) {

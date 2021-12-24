@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, nextTick } from 'vue';
 import loadImage from '@/assets/ts/load-image'
 import imgRobber from '@/assets/ts/img-robber'
@@ -43,9 +43,9 @@ export default {
   setup() {
     const isImageLoaded = ref(false)
     const styleValue = ref({})
-    let lastWallpaperValue = null
+    let lastWallpaperValue: string | null = null
     const loadWallpaper = () => {
-      const currentUrl = getAppConfigItem('wallpaper')
+      const currentUrl = getAppConfigItem('wallpaper') as string
       // 长度小于17，认定为是颜色值
       // http://a.cn/1.jpg
       if (currentUrl.length < 17) {

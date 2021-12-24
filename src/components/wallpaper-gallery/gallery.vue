@@ -42,8 +42,7 @@
   </div>
 </template>
 
-<script>
-import { ref } from 'vue';
+<script lang="ts">
 import { setAppConfigItem } from '@/assets/ts/app-config'
 import WallpaperItem from './wallpaper-item.vue'
 import wallpaperList from './wallpaper-list'
@@ -52,7 +51,7 @@ export default {
   setup() {
     return {
       wallpaperList,
-      applyWallpaper(url) {
+      applyWallpaper(url: string) {
         setAppConfigItem('wallpaper', url)
       }
     };

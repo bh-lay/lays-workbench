@@ -18,7 +18,7 @@
     color #c1c5cd
 </style>
 
-<script>
+<script lang="ts">
 import { h } from 'vue';
 export default {
   props: {
@@ -28,7 +28,7 @@ export default {
     },
   },
   setup(props, context) {
-    function createTabItem(id, label) {
+    function createTabItem(id: string, label: string) {
       return h(
         'div',
         {

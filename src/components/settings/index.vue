@@ -56,8 +56,7 @@
   </dropdown>
 </template>
 
-<script>
-import { ref } from 'vue';
+<script lang="ts">
 import { replaceRouter } from '@/assets/ts/router';
 import Layout from './layout.vue';
 import Wallpaper from './wallpaper.vue';

@@ -43,12 +43,11 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import {
   ref,
-  nextTick,
+  Ref,
   onMounted,
-  onBeforeUpdate,
 } from 'vue';
 import {
   Bookmark,
@@ -66,7 +65,7 @@ import BookmarkItem from '../bookmark-item.vue';
 import AddBookmark from '../add-bookmark/index.vue';
 import CustomLink from '../add-bookmark/custom-link.vue';
 import DragedLayer from '../draged-layer.vue';
-function moveIndexTo(list, fromIndex, toIndex) {
+function moveIndexTo(list: Bookmark[], fromIndex: number, toIndex: number) {
   if (fromIndex > toIndex) {
     list.splice(toIndex, 0, list[fromIndex]);
     list.splice(fromIndex + 1, 1);
@@ -83,10 +82,10 @@ export default {
       default: ''
     },
   },
-  components: { BookmarkItem, AddBookmark, CustomLink, DragedLayer, DragedLayer },
+  components: { BookmarkItem, AddBookmark, CustomLink, DragedLayer },
   setup(props, context) {
-    let bookmarkList = ref([]);
-    const selectedBookmarkItem = ref(null)
+    let bookmarkList: Ref<Bookmark[]> = ref([]);
+    const selectedBookmarkItem: Ref<Bookmark | null> = ref(null)
     const getList = function () {
       bookmarkListService({
         parent: props.parentId
@@ -101,13 +100,13 @@ export default {
     const willStartDrag = ref(false)
     const isStartDrag = ref(false)
 
-    function handleSetSize(bookmarkItem, size) {
+    function handleSetSize(bookmarkItem: Bookmark, size: BookmarkSize) {
       if (
         bookmarkItem.type === BookmarkType.folder &&
         size === BookmarkSize.large
       ) {
         new Message({
-          message: '目录不允许设置为最大模式！'
+          message: '目录不允许设置为最大模式'
         })
         return
       }
@@ -115,7 +114,7 @@ export default {
       bookmarkUpdateService(bookmarkItem)
         .catch(e => {
           new Message({
-            message: e.message || '设置尺寸失败！'
+            message: e.message || '设置尺寸失败'
           })
         });
     }
@@ -130,7 +129,7 @@ export default {
       refreshList() {
         getList();
       },
-      openItem(data) {
+      openItem(data: Bookmark) {
         if (needForbiddenClick) {
           return;
         }
@@ -143,7 +142,7 @@ export default {
           }
         }
       },
-      handleDrag(event, bookmarkItem) {
+      handleDrag(event: MouseEvent, bookmarkItem: Bookmark) {
         // 非左键不处理
         if (event.button !== 0) {
           return
@@ -156,7 +155,12 @@ export default {
         needForbiddenClick = true;
         isStartDrag.value = true
       },
-      handleDragEnd({ type, from, to, size}) {
+      handleDragEnd({ type, from, to, size}: {
+        type: string,
+        from: string,
+        to: string,
+        size: BookmarkSize
+      }) {
         willStartDrag.value = false;
         isStartDrag.value = false
         needForbiddenClick = false;
@@ -189,9 +193,10 @@ export default {
           const idList = list.map(item => item.id)
           bookmarkResortService(idList)
         } else if (type === 'delete') {
-          bookmarkRemoveService(selectedBookmarkItem.value.id).then(() => {
+          const selectedBookmark = selectedBookmarkItem.value
+          bookmarkRemoveService(selectedBookmark!.id).then(() => {
             for (let i = 0; i < bookmarkList.value.length; i++) {
-              if (bookmarkList.value[i].id === selectedBookmarkItem.value.id) {
+              if (bookmarkList.value[i].id === selectedBookmark!.id) {
                 bookmarkList.value.splice(i, 1);
                 break;
               }
@@ -202,13 +207,18 @@ export default {
             })
           });
         } else if (type === 'size') {
-          handleSetSize(selectedBookmarkItem.value, size)
+          const selectedBookmark = selectedBookmarkItem.value
+          selectedBookmark && handleSetSize(selectedBookmark, size)
         }
       },
       handleRemove() {
-        bookmarkRemoveService(selectedBookmarkItem.value.id).then(() => {
+        const selectedBookmark = selectedBookmarkItem.value
+        if (!selectedBookmark) {
+          return
+        }
+        bookmarkRemoveService(selectedBookmark.id).then(() => {
           for (let i = 0; i < bookmarkList.value.length; i++) {
-            if (bookmarkList.value[i].id === selectedBookmarkItem.value.id) {
+            if (bookmarkList.value[i].id === selectedBookmark.id) {
               bookmarkList.value.splice(i, 1);
               break;
             }

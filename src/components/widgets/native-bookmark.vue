@@ -71,7 +71,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   setup() {
     var isMac = /macintosh|mac os x/i.test(navigator.userAgent)

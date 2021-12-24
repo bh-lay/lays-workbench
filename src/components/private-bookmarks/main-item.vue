@@ -33,9 +33,8 @@
   </div>
 </template>
 
-<script>
-import { ref, watch } from 'vue';
-import { Bookmark, BookmarkType, BookmarkSize } from '@database/entity/bookmark'
+<script lang="ts">
+import { BookmarkType } from '@database/entity/bookmark'
 export default {
   props: {
     active: {

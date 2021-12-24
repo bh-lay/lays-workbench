@@ -50,8 +50,8 @@ input
   </div>
 </template>
 
-<script>
-import { ref, watch } from 'vue';
+<script lang="ts">
+import { ref } from 'vue';
 export default {
   name: 'vue-folder-item',
   emits: ['confirm', 'cancel'],

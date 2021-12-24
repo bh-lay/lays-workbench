@@ -30,8 +30,8 @@ input
   </div>
 </template>
 
-<script>
-import { ref, watch } from 'vue'
+<script lang="ts">
+import { Ref, ref } from 'vue'
 
 export default {
   props: {
@@ -41,7 +41,7 @@ export default {
     },
   },
   setup(props, context) {
-    const inputRef = ref(null)
+    const inputRef: Ref<HTMLInputElement | null> = ref(null)
     const inputValue = ref(props.modelValue)
     return {
       inputValue,

@@ -54,7 +54,7 @@
   </transition>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, watch, nextTick } from 'vue'
 import VButton from '../components/v-button.vue' 
 export default {

@@ -5,10 +5,18 @@
         80,
         120
     ],
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false,
     "compile-hero.disable-compile-files-on-did-save-code": false,
     "stylusSupremacy.insertColons": false, // 是否插入冒号
     "stylusSupremacy.insertSemicolons": false, // 是否插入分号
     "stylusSupremacy.insertBraces": false, // 是否插入大括号
     "stylusSupremacy.insertNewLineAroundImports": false, // import之后是否换行
     "stylusSupremacy.insertNewLineAroundBlocks": false,
+    "eslint.validate": [
+      "javascript",
+      "vue"
+    ],
+    "html.format.wrapLineLength": 180,
+    "editor.wordWrap": "on",
 }

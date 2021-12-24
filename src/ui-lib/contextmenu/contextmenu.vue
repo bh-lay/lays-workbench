@@ -5,7 +5,7 @@
   border-radius 4px
   box-shadow 2px 2px 10px rgba(0, 0, 0, .2), 1px 1px 3px rgba(0, 0, 0, .2)
   overflow hidden
-  z-index 1000
+  z-index 2001
   background #2f2f37
   .contextmenu-item
     color #bdbdc7
@@ -40,7 +40,7 @@
   </teleport>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'contextmenu',
   props: {

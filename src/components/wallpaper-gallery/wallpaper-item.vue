@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue';
 import loadImage from '@/assets/ts/load-image'
 import imgRobber from '@/assets/ts/img-robber'

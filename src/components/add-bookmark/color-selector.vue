@@ -41,7 +41,7 @@
       transform translateX(0)
 </style>
 
-<script>
+<script lang="ts">
 import { resolveComponent, h } from 'vue';
 import colorList from '@/assets/ts/color-list';
 export default {
@@ -52,7 +52,7 @@ export default {
     },
   },
   setup(props, context) {
-    function createColorItem(colorItem) {
+    function createColorItem(colorItem: { label: string, value: string }) {
       return h(
         resolveComponent('dropdown-item'),
         {

@@ -2,8 +2,8 @@
   <div class="dropdown-item" @click="closeDropdown"><slot /></div>
 </template>
 
-<script>
-function tryToCloseDropdown(vm, maxDeep, deep) {
+<script lang="ts">
+function tryToCloseDropdown(vm: any, maxDeep: number, deep?: number) {
   deep = deep || 1
   if (vm.$options.name === 'dropdown') {
     vm.visible = false

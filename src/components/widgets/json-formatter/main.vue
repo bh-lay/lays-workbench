@@ -65,15 +65,21 @@
       <div class="half">
         <textarea cols="30" rows="10" v-model="sourceJson" ></textarea>
       </div>
-      <div class="json-formatter-content" ref="fomatter"></div>
+      <div class="json-formatter-content" ref="fomatterRef"></div>
     </div>
   </div>
 </template>
 
-<script>
-import { ref } from 'vue';
+<script lang="ts">
+import { Ref, ref, watch, onMounted } from 'vue';
 import JSONFormatter from 'json-formatter-js'
-function parseJSON(str) {
+const defaultText = `{
+  auth: "剧中人",
+  gender: "male",
+  website: "http://bh-lay.com",
+  hobbies: ["photography", "coding"]
+}`
+function parseJSON(str: string) {
   try{
     return (new Function("", "return " + str))()
   } catch (e) {
@@ -83,30 +89,28 @@ function parseJSON(str) {
 }
 export default {
   setup() {
-    const sourceJson = ref(`{
-  auth: "剧中人",
-  gender: "male",
-  website: "http://bh-lay.com",
-  hobbies: ["photography", "coding"]
-}`)
+    const sourceJson = ref(defaultText)
+    const fomatterRef: Ref<HTMLDivElement | null> = ref(null)
+    function render() {
+      const formatter = new JSONFormatter(parseJSON(sourceJson.value))
+      const fomatterNode = fomatterRef.value
+      if (!fomatterNode) {
+        return
+      }
+      fomatterNode.innerHTML = ''
+      fomatterNode.appendChild(formatter.render())
+    }
+
+    watch(sourceJson, () => {
+      render()
+    })
+    onMounted(() => {
+      render()
+    })
     return {
+      fomatterRef,
       sourceJson
     };
-  },
-  watch: {
-    sourceJson() {
-      this.render()
-    },
-  },
-  mounted() {
-    this.render()
-  },
-  methods: {
-    render() {
-      const formatter = new JSONFormatter(parseJSON(this.sourceJson))
-      this.$refs.fomatter.innerHTML = ''
-      this.$refs.fomatter.appendChild(formatter.render())
-    },
   },
 };
 </script>

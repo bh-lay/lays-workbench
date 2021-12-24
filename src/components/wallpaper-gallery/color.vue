@@ -74,15 +74,14 @@
   </div>
 </template>
 
-<script>
-import { ref } from 'vue';
+<script lang="ts">
 import colorList from '@/assets/ts/color-list'
 import { setAppConfigItem } from '@/assets/ts/app-config'
 export default {
   setup() {
     return {
       colorList,
-      applyWallpaper(url) {
+      applyWallpaper(url: string) {
         setAppConfigItem('wallpaper', url)
       }
     };

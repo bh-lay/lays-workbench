@@ -89,7 +89,7 @@
   </teleport>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   emits: ['after-open', 'after-close', 'update:modelValue'],
   props: {

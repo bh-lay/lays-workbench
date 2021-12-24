@@ -68,10 +68,10 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 import {
   ref,
-  nextTick,
+  Ref,
   onMounted,
   onBeforeUpdate,
 } from 'vue';
@@ -94,7 +94,7 @@ import CustomLink from './add-bookmark/custom-link.vue';
 import DragedLayer from './draged-layer.vue';
 import FolderLayer from './folder-layer/index.vue'
 
-function moveIndexTo(list, fromIndex, toIndex) {
+function moveIndexTo(list: Bookmark[], fromIndex: number, toIndex: number) {
   if (fromIndex > toIndex) {
     list.splice(toIndex, 0, list[fromIndex]);
     list.splice(fromIndex + 1, 1);
@@ -103,7 +103,14 @@ function moveIndexTo(list, fromIndex, toIndex) {
     list.splice(fromIndex, 1);
   }
 }
-function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
+function mouseIntractive({
+  setSelectedBookmarkItem,
+  onDragEnd
+  }: {
+    setSelectedBookmarkItem: (a: Bookmark) => void,
+    onDragEnd: (from: string, to: string, method: string, size: BookmarkSize) => void
+  }
+) {
   const editModalVisible = ref(false);
   const folderLayerVisible = ref(false)
   const willStartDrag = ref(false);
@@ -129,7 +136,7 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
     openEditModal,
     closeEditModal,
     closeFolderLayer,
-    openItem(data) {
+    openItem(data: Bookmark) {
       if (needForbiddenClick) {
         return;
       }
@@ -144,7 +151,7 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
         folderLayerVisible.value = true
       }
     },
-    handleDrag(event, bookmarkItem) {
+    handleDrag(event: MouseEvent, bookmarkItem: Bookmark) {
       // console.log('event, bookmarkItem', event, bookmarkItem)
       // 非左键不处理
       if (event.button !== 0) {
@@ -158,7 +165,12 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
       needForbiddenClick = true;
       isStartDrag.value = true
     },
-    handleDragEnd({ type, from, to, size}) {
+    handleDragEnd({ type, from, to, size}: {
+      type: string,
+      from: string,
+      to: string,
+      size: BookmarkSize
+    }) {
       willStartDrag.value = false;
       isStartDrag.value = false
       needForbiddenClick = false;
@@ -172,9 +184,9 @@ function mouseIntractive({ setSelectedBookmarkItem, onDragEnd }) {
 export default {
   components: { BookmarkItem, AddBookmark, CustomLink, DragedLayer, FolderLayer },
   setup(props, context) {
-    let bookmarkList = ref([]);
+    let bookmarkList: Ref<Bookmark[]> = ref([]);
 
-    const selectedBookmarkItem = ref({});
+    const selectedBookmarkItem: Ref<Bookmark> = ref(new Bookmark({}));
     const getList = function () {
       bookmarkListService({
         parent: null
@@ -185,11 +197,11 @@ export default {
     onMounted(() => {
       getList();
     });
-    function triggerFolderIconChange(bookmarkItem) {
+    function triggerFolderIconChange(bookmarkItem: Bookmark) {
       // 用 value 触发重绘
       bookmarkItem.value = bookmarkItem.value === '1' ? '2' : '1'
     }
-    function handleDragEnter(list, fromIndex, targetIndex){
+    function handleDragEnter(list: Bookmark[], fromIndex: number, targetIndex: number){
       const fromBookmark = list[fromIndex]
       const targetBookmark = list[targetIndex]
       // 找不到拖拽元素，或目标元素，退出
@@ -234,7 +246,7 @@ export default {
             })
             return bookmarkInsertService(item)
           })
-          .then(folderBookmark => {
+          .then((folderBookmark: Bookmark) => {
             // 拖拽与目标元素的父级都标记为新的组
             fromBookmark.parent = folderBookmark.id
             targetBookmark.parent = folderBookmark.id
@@ -253,7 +265,7 @@ export default {
       }
       
     }
-    function handleDragMove(list, fromIndex, targetIndex){
+    function handleDragMove(list: Bookmark[], fromIndex: number, targetIndex: number){
       moveIndexTo(list, fromIndex, targetIndex)
       const idList = list.map(item => item.id)
       bookmarkResortService(idList)
@@ -269,17 +281,17 @@ export default {
         }
       }).catch(e => {
         new Message({
-          message: e.message || '删除失败！'
+          message: e.message || '删除失败'
         })
       });
     }
-    function handleSetSize(bookmarkItem, size) {
+    function handleSetSize(bookmarkItem: Bookmark, size: BookmarkSize) {
       if (
         bookmarkItem.type === BookmarkType.folder &&
         size === BookmarkSize.large
       ) {
         new Message({
-          message: '目录不允许设置为最大模式！'
+          message: '目录不允许设置为最大模式'
         })
         return
       }
@@ -287,20 +299,20 @@ export default {
       bookmarkUpdateService(bookmarkItem)
         .catch(e => {
           new Message({
-            message: e.message || '设置尺寸失败！'
+            message: e.message || '设置尺寸失败'
           })
         });
     }
     const mouseHandle = mouseIntractive({
-      setSelectedBookmarkItem(item) {
+      setSelectedBookmarkItem(item: Bookmark) {
         selectedBookmarkItem.value = item;
       },
       // 处理拖拽完成
-      onDragEnd(from, to, method, size) {
+      onDragEnd(from: string, to: string, method: string, size: BookmarkSize) {
         // 找到拖放元素和目标元素的位置
         let fromIndex = -1;
         let targetIndex = -1;
-        const list = bookmarkList.value;
+        const list: Bookmark[] = bookmarkList.value;
         for (let i = 0; i < list.length; i++) {
           let id = list[i].id;
           if (id === from) {
@@ -342,7 +354,7 @@ export default {
       }),
       selectedBookmarkItem,
       handleRemove,
-      handleConfirmEdit(bookmarkItem) {
+      handleConfirmEdit(bookmarkItem: Bookmark) {
         bookmarkUpdateService(bookmarkItem).then(() => {
           mouseHandle.closeEditModal();
           for (let i = 0; i < bookmarkList.value.length; i++) {
@@ -357,16 +369,16 @@ export default {
         getList();
       },
       triggerFolderIconChange,
-      handleFolderNameChange(newName) {
+      handleFolderNameChange(newName: string) {
         selectedBookmarkItem.value.name = newName
         bookmarkUpdateService(selectedBookmarkItem.value)
       },
-      handleEditSubFolderBookmark(bookmarkItem) {
+      handleEditSubFolderBookmark(bookmarkItem: Bookmark) {
         mouseHandle.closeFolderLayer()
         selectedBookmarkItem.value = bookmarkItem
         mouseHandle.openEditModal()
       },
-      afterFolderClose(opendFolderId) {
+      afterFolderClose(opendFolderId: string) {
         for (let i = 0; i < bookmarkList.value.length; i++) {
           if (bookmarkList.value[i].id === opendFolderId) {
             triggerFolderIconChange(bookmarkList.value[i])

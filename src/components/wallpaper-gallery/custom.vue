@@ -69,7 +69,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue';
 import { setAppConfigItem } from '@/assets/ts/app-config'
 import { Message } from '@/ui-lib/message/index'
@@ -83,7 +83,7 @@ export default {
         
         if (!picReg.test(picUrl.value)) {
           new Message({
-            message: '图片地址看起来不对呦，请核对一下！',
+            message: '图片地址看起来不对呦，请核对一下',
             duration: 0,
             confirmText: '继续使用',
             cancelText: '取消',

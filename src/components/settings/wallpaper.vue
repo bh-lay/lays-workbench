@@ -15,8 +15,7 @@
   </gallery>
 </template>
 
-<script>
-import { ref, watch } from 'vue';
+<script lang="ts">
 import imgRobber from '@/assets/ts/img-robber'
 import { getAppConfigItem } from '@/assets/ts/app-config'
 import Gallery from '@/components/gallery.vue'
@@ -25,7 +24,8 @@ export default {
   emits: ['next'],
   components: { Gallery },
   setup() {
-    const usedUrl = imgRobber(getAppConfigItem('wallpaper'))
+    const wallpaper = getAppConfigItem('wallpaper')
+    const usedUrl = imgRobber(wallpaper.toString())
     return {
       usedUrl,
     };

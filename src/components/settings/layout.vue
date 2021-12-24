@@ -55,14 +55,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, watch } from 'vue';
 import { getAppConfig, getAppConfigDefault } from '@/assets/ts/app-config';
 
 export default {
   setup() {
     const appConfig = getAppConfig();
-    const settingVisible = ref(false);
     const gridSize = ref(appConfig.gridSize);
     const gridGap = ref(appConfig.gridGap);
     const maxContainerWidth = ref(appConfig.maxContainerWidth);
@@ -79,14 +78,10 @@ export default {
     });
     return {
       appConfigDefault,
-      settingVisible,
       gridSize,
       gridGap,
       maxContainerWidth,
       windowWidth,
-      handleClickoutSide() {
-        this.settingVisible = false;
-      },
     };
   },
 };

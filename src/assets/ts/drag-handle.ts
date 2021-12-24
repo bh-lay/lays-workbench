@@ -9,7 +9,7 @@ type dragOptions = {
   stableStart: (startX: number, startY: number) => void;
   move: (a: dragParams) => void;
   end: (a: dragParams) => void;
-  cancel: () => void;
+  cancel?: () => void;
   stableDistance: number;
 };
 type dragParams = {

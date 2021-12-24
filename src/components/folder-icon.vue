@@ -63,24 +63,26 @@
   </div>
 </template>
 
-<script>
-import { ref, watch } from 'vue';
+<script lang="ts">
+import { ref, watch, Ref } from 'vue';
 import BookmarkIcon from './bookmark-icon.vue'
-import { BookmarkSize } from '@database/entity/bookmark'
+import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 import { bookmarkListService } from '@database/services/bookmark-service';
 
 export default {
   components: { BookmarkIcon },
   props: {
     data: {
-      type: Object,
+      type: Bookmark,
       default() {
-        return {}
+        return new Bookmark({})
       },
     }
   },
-  setup(props) {
-    let bookmarkList = ref([]);
+  setup(props: {
+    data: Bookmark
+  }) {
+    let bookmarkList: Ref<Bookmark[]> = ref([]);
     const parentId = props.data.id
     const loadList = () => {
       bookmarkListService({

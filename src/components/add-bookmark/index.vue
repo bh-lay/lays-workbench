@@ -14,7 +14,7 @@
   </modal>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from "vue";
 import MainFunction from './main.vue'
 import BookmarkIcon from '../bookmark-icon.vue'

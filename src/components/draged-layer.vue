@@ -118,13 +118,22 @@
   </teleport>
 </template>
 
-<script>
-import { ref, getCurrentInstance } from 'vue';
+<script lang="ts">
+import { ref, getCurrentInstance, Ref, ComponentInternalInstance } from 'vue';
 import { getAppConfigItem } from '@/assets/ts/app-config';
 import dragHandle from '@/assets/ts/drag-handle';
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
-
-function getItemListMap(internalInstance) {
+type mapItem = {
+  id: string,
+  top: number,
+  left: number,
+  right: number,
+  bottom: number,
+}
+function getItemListMap(internalInstance: ComponentInternalInstance | null): mapItem[] {
+  if (!internalInstance) {
+    return []
+  }
   const thisVm = internalInstance.proxy;
   const parentVm = thisVm ? thisVm.$parent : null;
   if (!parentVm) {
@@ -135,7 +144,7 @@ function getItemListMap(internalInstance) {
     return [];
   }
   const itemEls = parentEl.parentNode.querySelectorAll('.bookmark-item');
-  const mapList = [];
+  const mapList: mapItem[] = [];
   Array.prototype.forEach.call(itemEls, (bookmarkItemNode) => {
     const bookmarkId = bookmarkItemNode.dataset.id;
     if (!bookmarkId) {
@@ -152,8 +161,22 @@ function getItemListMap(internalInstance) {
   });
   return mapList;
 }
-function getMouseTriggered({ clientY, clientX }, map) {
-  const gridGap = getAppConfigItem('gridGap');
+function getMouseTriggered(
+  {
+    clientY,
+    clientX
+  }:
+  {
+    clientY: number,
+    clientX: number
+  },
+  map: mapItem[]
+): {
+  type: string,
+  target?: mapItem,
+  size?: BookmarkSize,
+} {
+  const gridGap = getAppConfigItem('gridGap') as number;
   // 是否拖拽合并
   for (let i = 0; i < map.length; i++) {
     let mapItem = map[i];
@@ -230,27 +253,34 @@ export default {
     },
     dragedBookmark: {
       type: Bookmark,
+      default() {
+        return new Bookmark({})
+      }
     },
     disabledEnter: {
       type: Boolean,
       default: false,
     },
   },
-  setup(props, context) {
+  setup(props: {
+    event: MouseEvent,
+    dragedBookmark: Bookmark,
+    disabledEnter: Boolean
+  }, context) {
     const isStableStart = ref(false);
     const clientX = ref(0);
     const clientY = ref(0);
-    const gridGap = getAppConfigItem('gridGap');
+    const gridGap = getAppConfigItem('gridGap') as number;
     const shadowRectStyle = ref({
-      top: 0,
-      left: 0,
-      width: 0,
-      height: 0,
+      top: '',
+      left: '',
+      width: '',
+      height: '',
     });
     const internalInstance = getCurrentInstance();
     const triggeredType = ref('');
-    const activeSize = ref('');
-    let itemSizeAndPositionMap = [];
+    const activeSize: Ref<BookmarkSize | undefined> = ref(undefined);
+    let itemSizeAndPositionMap: mapItem[] = [];
     const dragedBookmark = props.dragedBookmark;
     dragHandle(props.event, {
       stableDistance: 20,
@@ -298,17 +328,19 @@ export default {
               'px',
           };
         } else if (triggered.type === 'before') {
-          shadowRectStyle.value = {
-            top: triggeredTarget.top + beforeMarging + 'px',
-            left: triggeredTarget.left + 3 + 'px',
-            width: 8 + 'px',
-            height:
-              triggeredTarget.bottom -
-              triggeredTarget.top -
-              beforeMarging * 2 -
-              gridGap +
-              'px',
-          };
+          if (triggeredTarget) {
+            shadowRectStyle.value = {
+              top: triggeredTarget.top + beforeMarging + 'px',
+              left: triggeredTarget.left + 3 + 'px',
+              width: 8 + 'px',
+              height:
+                triggeredTarget.bottom -
+                triggeredTarget.top -
+                beforeMarging * 2 -
+                gridGap +
+                'px',
+            };
+          }
         } else if (triggered.type === 'size') {
           activeSize.value = triggered.size
         }

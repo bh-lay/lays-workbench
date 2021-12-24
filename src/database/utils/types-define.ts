@@ -1,7 +1,7 @@
 import { Bookmark, BookmarkType } from '../entity/bookmark';
 
 export type queryOptions = {
-  parent?: string,
+  parent?: string | null,
   type?: BookmarkType,
   search?: string
 }

@@ -79,8 +79,8 @@
   </div>
 </template>
 
-<script>
-import { ref, watch } from 'vue';
+<script lang="ts">
+import { ref, watch, Ref } from 'vue';
 import dragHandle from '@/assets/ts/drag-handle';
 export default {
   props: {
@@ -103,10 +103,21 @@ export default {
       },
     },
   },
-  setup(props, context) {
+  setup(
+    props: {
+      modelValue: number,
+      min: number,
+      max: number,
+      marks: {
+        label: string,
+        value: number
+      }[],
+    },
+    context
+  ) {
     const screenWidthByValue = ref('0%');
     const screenWidthByDrag = ref('0px');
-    const trackRef = ref(null);
+    const trackRef: Ref<HTMLDivElement | null> = ref(null);
     const isInDragMode = ref(false);
     const dragValue = ref(0);
     watch(
@@ -125,15 +136,18 @@ export default {
       isInDragMode,
       screenWidthByValue,
       screenWidthByDrag,
-      dragHandleStart(event) {
+      dragHandleStart(event: MouseEvent) {
         const trackNode = trackRef.value;
+        if (trackNode === null) {
+          return
+        }
         const trackWidth = trackNode.clientWidth;
         // 开始值
         const startWidth =
           ((props.modelValue - props.min) / (props.max - props.min)) *
           trackWidth;
         // 获取吸附的数值
-        function sorptionValue(value) {
+        function sorptionValue(value: number) {
           // 不能超出最大、最小限制
           const newValue = Math.max(Math.min(props.max, value), props.min);
           if (newValue !== value) {
@@ -152,7 +166,7 @@ export default {
           return value
         }
         // 根据拖拽情况计算新值
-        function countValueByDrag(xOffset) {
+        function countValueByDrag(xOffset: number) {
           const newWidth = startWidth + xOffset;
           const widthRate = newWidth / trackWidth;
           const dragValue = widthRate * (props.max - props.min) + props.min;
@@ -171,9 +185,9 @@ export default {
             value: newValue,
           };
         }
-        let timer = null
-        function delayTriggerUpdate(value) {
-          clearTimeout(timer)
+        let timer: number | null = null
+        function delayTriggerUpdate(value: number) {
+          timer && clearTimeout(timer)
           timer = setTimeout(() => {
             context.emit('update:modelValue', value);
           }, 10) 

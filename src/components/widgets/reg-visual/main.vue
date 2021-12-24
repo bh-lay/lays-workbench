@@ -9,7 +9,7 @@ iframe
   <iframe :src="iframeSrc" visible="0"></iframe>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   props: {
     regText: {

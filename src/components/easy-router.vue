@@ -42,7 +42,7 @@
   </modal>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, onBeforeUnmount } from 'vue'
 import { onRouterChange } from '@/assets/ts/router'
 import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
@@ -67,7 +67,7 @@ export default {
     const imgToBaseVisible = ref(false)
     const imgToBaseFile = ref(null)
     
-    let unbindRouterListener = onRouterChange((moduleType, moduleName, state) => {
+    let unbindRouterListener: (() => void) | null = onRouterChange((moduleType, moduleName, state) => {
       if (moduleType === 'widgets') {
         switch(moduleName) {
           case 'private-bookmark':

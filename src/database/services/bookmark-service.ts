@@ -19,7 +19,7 @@ function getDbFromParams(db?: IDBDatabase): Promise<IDBDatabase> {
   }
   return getIDBRequest();
 }
-export function bookmarkInsertService(bookmarkItem: any, db?: IDBDatabase) {
+export function bookmarkInsertService(bookmarkItem: any, db?: IDBDatabase): Promise<Bookmark> {
   return getDbFromParams(db)
     .then((db: IDBDatabase) => {
       return bookmarkCountManager(db).then((count: number) => {
@@ -54,7 +54,6 @@ export function bookmarkUpdateService(bookmarkItem: any, db?: IDBDatabase) {
       });
     })
     .then((db: IDBDatabase) => {
-      console.log('update', bookmarkItem)
       return bookmarkUpdateManager(db, bookmarkItem);
     });
 }
@@ -78,7 +77,7 @@ export async function bookmarkRemoveService(bookmarkId: string) {
   await bookmarkRemoveManager(db, bookmarkId);
 }
 
-export function bookmarkListService(params: queryOptions) {
+export function bookmarkListService(params: queryOptions): Promise<Bookmark[]> {
   return getIDBRequest().then((db: IDBDatabase) => {
     return bookmarkListManager(db, params).then((data: Bookmark[]) => {
       if (!params || !params.parent) {

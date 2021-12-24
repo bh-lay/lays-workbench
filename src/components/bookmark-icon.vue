@@ -32,13 +32,14 @@
     </template>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { ref, watch } from 'vue';
 import {
   anyColorToHsl,
   formatHslToHex,
 } from '@/assets/ts/color-conversion';
 import loadImage from '@/assets/ts/load-image';
+import { BookmarkIcon } from '@/database/entity/bookmark';
 export default {
   props: {
     icon: {
@@ -79,7 +80,7 @@ export default {
           console.log('error', error);
         });
     }
-    function formatIconData(iconConfig) {
+    function formatIconData(iconConfig: BookmarkIcon) {
       const iconSplit = (iconConfig || '').split(':');
       if (iconSplit[0] === 'mdi') {
         iconType.value = 'mdi';
@@ -94,8 +95,8 @@ export default {
     }
     watch(
       () => props.icon,
-      (value) => {
-        formatIconData(value);
+      (value: string) => {
+        formatIconData(value as BookmarkIcon);
       },
       {
         immediate: true,

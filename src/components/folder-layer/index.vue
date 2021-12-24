@@ -61,14 +61,8 @@
 </teleport>
 </template>
 
-<script>
-import {
-  ref,
-  nextTick,
-  watch,
-  onMounted,
-  onBeforeUpdate,
-} from 'vue';
+<script lang="ts">
+import { watch } from 'vue';
 import NameEditor from './name-editor.vue'
 import BookmarkList from './bookmark-list.vue'
 
@@ -96,7 +90,7 @@ export default {
       }
     },)
     return {
-      handleNameChange(newValue) {
+      handleNameChange(newValue: string) {
         context.emit('name-change', newValue)
       },
     };

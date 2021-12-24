@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue';
 import Category from './category.vue'
 import Custom from './custom.vue'

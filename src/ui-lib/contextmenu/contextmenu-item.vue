@@ -4,10 +4,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { getCurrentInstance } from 'vue'
 
-function tryToCloseParent(vm, maxDeep, deep) {
+function tryToCloseParent(vm: any, maxDeep: number, deep?: number) {
   deep = deep || 1
   if (vm.$options.name === 'contextmenu') {
     vm.visible = false
@@ -22,7 +22,7 @@ export default {
     const internalInstance = getCurrentInstance()
     return {
       handleClick() {
-        tryToCloseParent(internalInstance.proxy.$parent, 10)
+        tryToCloseParent(internalInstance!.proxy!.$parent, 10)
       }
     }
   },

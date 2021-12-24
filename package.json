@@ -14,8 +14,9 @@
     "vue-mdijs": "^0.5.12"
   },
   "devDependencies": {
-    "@vue/compiler-sfc": "^3.0.4",
     "@vitejs/plugin-vue": "^1.10.1",
+    "@vue/compiler-sfc": "^3.0.4",
+    "eslint": "^8.5.0",
     "stylus": "^0.54.8",
     "stylus-loader": "^6.1.0",
     "vite": "^2.6.14"

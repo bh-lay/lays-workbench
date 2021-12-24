@@ -72,12 +72,11 @@
   </modal>
 </template>
 
-<script>
-import { ref, watch } from 'vue';
+<script lang="ts">
+import { Ref, ref, watch } from 'vue';
 import {
   Bookmark,
   BookmarkType,
-  BookmarkSize,
 } from '@database/entity/bookmark';
 import {
   bookmarkListService,
@@ -103,8 +102,8 @@ export default {
     },
   },
   setup(props, context) {
-    const bookmarkList = ref([]);
-    const selectedBookmark = ref({})
+    const bookmarkList: Ref<Bookmark[]> = ref([]);
+    const selectedBookmark: Ref<Bookmark> = ref(new Bookmark({}))
     const loadList = () => {
       bookmarkListService({
         parent: props.parent,
@@ -162,7 +161,7 @@ export default {
           linkEditorConfigValue.type = 'edit'
         }
       },
-      handleLinkEditorConfirm({ name, value }) {
+      handleLinkEditorConfirm({ name, value }: { name: string, value: string }) {
         if (linkEditorConfig.value.type === 'edit') {
           const bookmarkItem = selectedBookmark.value
           bookmarkItem.name = name
@@ -182,7 +181,7 @@ export default {
         }
         linkEditorConfig.value.visible = false
       },
-      handleFolderEditorConfirm({ name }) {
+      handleFolderEditorConfirm({ name }: {name: string}) {
         if (folderEditorConfig.value.type === 'edit') {
           const bookmarkItem = selectedBookmark.value
           bookmarkItem.name = name
@@ -200,7 +199,7 @@ export default {
         }
         folderEditorConfig.value.visible = false
       },
-      handleOpen(bookmark) {
+      handleOpen(bookmark: Bookmark) {
         if (bookmark.type === BookmarkType.folder) {
           context.emit('open-folder', bookmark.id)
         } else if (bookmark.type === BookmarkType.link) {
@@ -218,7 +217,7 @@ export default {
           context.emit('after-remove')
         }).catch(e => {
           new Message({
-            message: e.message || '删除失败！'
+            message: e.message || '删除失败，请重试'
           })
         });
       },

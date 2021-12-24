@@ -7,7 +7,7 @@ const APP_CONFIG_DEFAULT = {
   searchEngineName: 'caniuse',
 }
 
-let APP_CONFIG: Record<string, unknown> = new Proxy({}, {})
+let APP_CONFIG: Record<string, string | number> = new Proxy({}, {})
 
 type configKey = 'gridSize' | 'gridGap' | 'iconRadius' | 'maxContainerWidth'
 const localStorageKey = 'APP_CONFIG_V1'
@@ -73,7 +73,7 @@ export function getAppConfig() {
 export function getAppConfigDefault() {
   return Object.assign({}, APP_CONFIG_DEFAULT)
 }
-export function getAppConfigItem(key: string) {
+export function getAppConfigItem(key: string): string | Number  {
   return APP_CONFIG[key]
 }
 

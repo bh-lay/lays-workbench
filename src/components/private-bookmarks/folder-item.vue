@@ -93,8 +93,8 @@
   </div>
 </template>
 
-<script>
-import { ref, watch } from 'vue';
+<script lang="ts">
+import { Ref, ref, watch } from 'vue';
 import {
   Bookmark,
   BookmarkType,
@@ -106,7 +106,7 @@ export default {
   emits: ['select', 'create'],
   props: {
     data: {
-      type: Object,
+      type: Bookmark,
       default() {
         return {};
       },
@@ -128,9 +128,14 @@ export default {
       default: '',
     },
   },
-  setup(props) {
+  setup(props: {
+    expand: boolean,
+    data: Bookmark,
+    active: string,
+    changedParentId: string,
+  }) {
     const isExpand = ref(props.expand);
-    const bookmarkList = ref([]);
+    const bookmarkList: Ref<Bookmark[]> = ref([]);
     const hasSubMenu = ref(true);
     const loadList = () => {
       bookmarkListService({

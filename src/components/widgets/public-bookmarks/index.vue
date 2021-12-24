@@ -44,7 +44,7 @@ svg
   </modal>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, computed } from "vue";
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
 import PublicBookmarks from '@/components/public-bookmarks/index.vue'

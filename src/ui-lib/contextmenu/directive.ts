@@ -1,12 +1,14 @@
 import { App as Application, DirectiveBinding, nextTick, ComponentInternalInstance }  from 'vue'
-
+declare interface customMouseEvent extends MouseEvent {
+  _hasTriggered?: boolean
+}
 export default {
   install(app: Application) {
     app.directive('contextmenu', {
       mounted (el: HTMLElement, binding: DirectiveBinding) {
         const $refKey: string = binding.arg || ''
 
-        el.addEventListener('contextmenu', function(event: MouseEvent){
+        el.addEventListener('contextmenu', function(event: customMouseEvent){
           event.preventDefault();
           // event.stopPropagation();
           // 若已触发过右键菜单，则

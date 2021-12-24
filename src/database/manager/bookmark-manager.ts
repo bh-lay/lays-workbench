@@ -1,7 +1,7 @@
 import { Bookmark } from '../entity/bookmark'
 import { queryOptions } from '../utils/types-define'
 
-export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: any) {
+export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: any): Promise<Bookmark>  {
   return new Promise((resolve, reject) => {
     var bookmark = new Bookmark(bookmarkItem)
     var request = db.transaction(['bookmark'], 'readwrite')

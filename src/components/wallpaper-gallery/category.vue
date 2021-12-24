@@ -34,8 +34,7 @@
   </div>
 </template>
 
-<script>
-import { ref } from 'vue';
+<script lang="ts">
 const categoryList = [
   {
     name: 'define',

@@ -135,7 +135,7 @@ textarea
   <easy-router />
 </template>
 
-<script>
+<script lang="ts">
 import { ref } from 'vue';
 import Gallery from '@/components/gallery.vue';
 import SearchEntrance from '@/components/search-entrance.vue';

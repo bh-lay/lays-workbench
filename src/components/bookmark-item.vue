@@ -102,7 +102,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { Bookmark, BookmarkType, BookmarkSize } from '@database/entity/bookmark'
 import BookmarkIcon from './bookmark-icon.vue'
 import FolderIcon from './folder-icon.vue'
@@ -129,7 +129,7 @@ export default {
     data: {
       type: Bookmark,
       default() {
-        return new Bookmark()
+        return new Bookmark({})
       }
     },
   },

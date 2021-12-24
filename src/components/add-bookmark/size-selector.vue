@@ -34,7 +34,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { BookmarkSize } from '@database/entity/bookmark';
 export default {
   props: {

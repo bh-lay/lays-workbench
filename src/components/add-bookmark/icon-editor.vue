@@ -93,9 +93,10 @@ input
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, watch } from 'vue'
 import bookmarkItem from '../bookmark-item.vue';
+import { BookmarkIcon } from '@/database/entity/bookmark';
 const iconTypeList = [
   {
     value: 'text',
@@ -111,15 +112,15 @@ const iconTypeList = [
   }
 ]
 // 根据 icon type 获取对应文字说明
-function getIconTypeLabel (iconType) {
+function getIconTypeLabel (iconType: string) {
   for(let i = 0; i < iconTypeList.length; i++) {
     if (iconTypeList[i].value === iconType) {
       return iconTypeList[i].label
     }
   }
-  return 'text'
+  return '文字'
 }
-function formatIconData(iconConfig) {
+function formatIconData(iconConfig: BookmarkIcon) {
   const iconSplit = (iconConfig || '').split(':')
   let types = ''
   let value = ''
@@ -157,8 +158,8 @@ export default {
     const iconValue = ref('')
     const inputValue = ref('')
     // 从参数解析数据
-    function parseFromModelValue(newValue) {
-      const { types, value, userEditText } = formatIconData(newValue)
+    function parseFromModelValue(newValue: string) {
+      const { types, value, userEditText } = formatIconData(newValue as BookmarkIcon)
       if (types === iconType.value && value === iconValue.value) {
         return
       }
@@ -171,7 +172,7 @@ export default {
       // 获取对应的说明文字
       iconTypeLabel.value = getIconTypeLabel(newIconType)
       // 生成对应的默认值，并获取文本
-      let newModelValue = ''
+      let newModelValue: BookmarkIcon = 'crab'
       if (newIconType === 'mdi') {
         newModelValue = 'mdi:play'
       } else if (newIconType === 'text') {
@@ -198,7 +199,7 @@ export default {
       }
       context.emit('update:modelValue', newModelValue)
     })
-    watch(() => props.modelValue, newValue => {
+    watch(() => props.modelValue, (newValue: string) => {
       parseFromModelValue(newValue)
     })
     parseFromModelValue(props.modelValue)
