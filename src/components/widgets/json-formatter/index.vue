@@ -30,21 +30,31 @@ svg
   color rgba(255, 255, 255, .6)
 </style>
 <template>
-  <div class="formatter-widgets" @click="open">
-    <v-mdi name="mdi-code-json" :class="{
-      small: widgetsSize === BookmarkSize.small
-    }" />
+  <div
+    class="formatter-widgets"
+    @click="open"
+  >
+    <v-mdi
+      name="mdi-code-json"
+      :class="{
+        small: widgetsSize === BookmarkSize.small
+      }"
+    />
     <template v-if="widgetsSize !== BookmarkSize.small">
-      <div class="title">JSON格式化</div>
-      <div class="desc">数据查看好帮手</div>
+      <div class="title">
+        JSON格式化
+      </div>
+      <div class="desc">
+        数据查看好帮手
+      </div>
     </template>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, computed } from "vue";
+import { computed } from 'vue'
 import { replaceRouter } from '@/assets/ts/router'
-import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
+import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 
 export default {
   props: {
@@ -53,7 +63,7 @@ export default {
       default() {
         return new Bookmark({})
       },
-    }
+    },
   },
   setup(props: {
     data: Bookmark
@@ -65,7 +75,7 @@ export default {
       open() {
         replaceRouter('widgets', 'json-formatter')
       },
-    };
+    }
   },
-};
+}
 </script>

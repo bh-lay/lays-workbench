@@ -29,7 +29,10 @@
     :class="['item', modelValue === item.name ? 'active' : '']"
     @click="$emit('update:modelValue', item.name);"
   >
-    <v-mdi :name="item.icon" size="18" />
+    <v-mdi
+      :name="item.icon"
+      size="18"
+    />
     <span>{{ item.label }}</span>
   </div>
 </template>
@@ -59,10 +62,11 @@ export default {
       default: null,
     },
   },
+  emits: ['update:modelValue'],
   setup() {
     return {
       categoryList,
-    };
+    }
   },
-};
+}
 </script>

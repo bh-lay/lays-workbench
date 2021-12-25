@@ -31,14 +31,14 @@
       :url="item.thumb"
       class="item"
       @click="applyWallpaper(item.url)"
-    ></wallpaper-item>
-    <div class="empty"></div>
-    <div class="empty"></div>
-    <div class="empty"></div>
-    <div class="empty"></div>
-    <div class="empty"></div>
-    <div class="empty"></div>
-    <div class="empty"></div>
+    />
+    <div class="empty" />
+    <div class="empty" />
+    <div class="empty" />
+    <div class="empty" />
+    <div class="empty" />
+    <div class="empty" />
+    <div class="empty" />
   </div>
 </template>
 
@@ -53,8 +53,8 @@ export default {
       wallpaperList,
       applyWallpaper(url: string) {
         setAppConfigItem('wallpaper', url)
-      }
-    };
+      },
+    }
   },
-};
+}
 </script>

@@ -1,5 +1,10 @@
 <template>
-  <div class="dropdown-item" @click="closeDropdown"><slot /></div>
+  <div
+    class="dropdown-item"
+    @click="closeDropdown"
+  >
+    <slot />
+  </div>
 </template>
 
 <script lang="ts">
@@ -18,5 +23,5 @@ export default {
       tryToCloseDropdown(this.$parent, 10)
     },
   },
-};
+}
 </script>

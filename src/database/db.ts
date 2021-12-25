@@ -4,24 +4,24 @@ function getIDBObject() {
   return window.indexedDB ||
     window.mozIndexedDB ||
     window.webkitIndexedDB ||
-    window.msIndexedDB;
+    window.msIndexedDB
 }
 
 export function isSupportIDB() {
-  var indexedDB = getIDBObject()
+  const indexedDB = getIDBObject()
   return !!(indexedDB && indexedDB.open)
 }
 export function getIDBRequest(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    var indexedDB = getIDBObject()
-    var request = indexedDB.open('data-store', 1);
-    request.onerror = function(event) {
-      let error = new Error('建立数据库连接失败！')
+    const indexedDB = getIDBObject()
+    const request = indexedDB.open('data-store', 1)
+    request.onerror = function() {
+      const error = new Error('建立数据库连接失败！')
       // error.__detail = event
       reject(error)
     }
-    request.onerror = function(event) {
-      let error = new Error('建立数据库连接失败！')
+    request.onerror = function() {
+      const error = new Error('建立数据库连接失败！')
       // error.__detail = event
       reject(error)
     }
@@ -35,7 +35,7 @@ export function getIDBRequest(): Promise<IDBDatabase> {
       if (!target) {
         reject(new Error('could not find target'))
       } else {
-        const transaction = target.transaction;
+        const transaction = target.transaction
         transaction.oncomplete = function() {    
           resolve(db)
         }

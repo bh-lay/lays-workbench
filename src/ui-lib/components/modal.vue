@@ -69,18 +69,29 @@
 </style>
 
 <template>
-  <teleport to="#v-ui">"
+  <teleport to="#v-ui">
+    "
     <div
       :class="['modal-outer', modelValue ? 'visible' : 'hidden']"
       @contextmenu.prevent
     >
       <transition name="fade-slow">
-        <div v-if="modelValue" class="modal-mask"></div>
+        <div
+          v-if="modelValue"
+          class="modal-mask"
+        />
       </transition>
       <transition name="slidedown">
-        <div class="modal-body" v-if="modelValue" :style="modalBodyStyle">
-          <slot/>
-          <div class="modal-close" @click="$emit('update:modelValue', false)">
+        <div
+          v-if="modelValue"
+          class="modal-body"
+          :style="modalBodyStyle"
+        >
+          <slot />
+          <div
+            class="modal-close"
+            @click="$emit('update:modelValue', false)"
+          >
             <v-mdi name="mdi-close" />
           </div>
         </div>
@@ -96,7 +107,6 @@ type modalStyle = {
   height?: string
 }
 export default {
-  emits: ['after-open', 'after-close', 'update:modelValue'],
   props: {
     modelValue: {
       type: Boolean,
@@ -104,38 +114,39 @@ export default {
     },
     width: {
       type: [String, Number],
-      default: ''
+      default: '',
     },
     height: {
       type: [String, Number],
-      default: ''
+      default: '',
     },
     undercoat: {
       type: String,
-      default: '#26262c'
+      default: '#26262c',
     },
   },
+  emits: ['after-open', 'after-close', 'update:modelValue'],
   setup(props) {
-      const modalBodyStyle: modalStyle = {
-        background: props.undercoat
+    const modalBodyStyle: modalStyle = {
+      background: props.undercoat,
+    }
+    if (props.width) {
+      if (typeof props.width === 'number') {
+        modalBodyStyle.width = props.width + 'px'
+      } else {
+        modalBodyStyle.width = props.width as string
       }
-      if (props.width) {
-        if (typeof props.width === 'number') {
-          modalBodyStyle.width = props.width + 'px'
-        } else {
-          modalBodyStyle.width = props.width
-        }
+    }
+    if (props.height) {
+      if (typeof props.height === 'number') {
+        modalBodyStyle.height = props.height + 'px'
+      } else {
+        modalBodyStyle.height = props.height as string
       }
-      if (props.height) {
-        if (typeof props.height === 'number') {
-          modalBodyStyle.height = props.height + 'px'
-        } else {
-          modalBodyStyle.height = props.height
-        }
-      }
-      return {
-        modalBodyStyle
-      }
+    }
+    return {
+      modalBodyStyle,
+    }
   },
   watch: {
     modelValue(isVisible) {
@@ -146,5 +157,5 @@ export default {
       }
     },
   },
-};
+}
 </script>

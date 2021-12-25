@@ -1,5 +1,8 @@
 <template>
-  <div class="contextmenu-item" @click="handleClick">
+  <div
+    class="contextmenu-item"
+    @click="handleClick"
+  >
     <slot />
   </div>
 </template>
@@ -17,14 +20,14 @@ function tryToCloseParent(vm: any, maxDeep: number, deep?: number) {
   }
 }
 export default {
-  name: 'contextmenu-item',
+  name: 'ContextmenuItem',
   setup(props, context) {
     const internalInstance = getCurrentInstance()
     return {
       handleClick() {
         tryToCloseParent(internalInstance!.proxy!.$parent, 10)
-      }
+      },
     }
   },
-};
+}
 </script>

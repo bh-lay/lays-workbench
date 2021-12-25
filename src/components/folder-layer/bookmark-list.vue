@@ -9,38 +9,40 @@
 </style>
 
 <template>
-<div class="bookmark-map">
-  <bookmark-item
-    v-for="bookmarkItem in bookmarkList"
-    :key="bookmarkItem.id"
-    :data="bookmarkItem"
-    :data-id="bookmarkItem.id"
-    @next="openItem(bookmarkItem)"
-    @mousedown="handleDrag($event, bookmarkItem)"
-    v-contextmenu:menu="{
-      onVisible() {
-        selectedBookmarkItem = bookmarkItem
-      }
-    }"
-  />
-  <contextmenu ref="menu">
-    <contextmenu-item
-      v-if="selectedBookmarkItem.type === BookmarkType.link"
-      @click="$emit('open-bookmark-editor', selectedBookmarkItem)"
-    >
-      编辑
-    </contextmenu-item>
-    <contextmenu-item @click="handleRemove">删除</contextmenu-item>
-  </contextmenu>
-  <draged-layer
-    v-if="willStartDrag"
-    :event="dragEvent"
-    :draged-bookmark="selectedBookmarkItem"
-    :disabled-enter="true"
-    @beforeDrag="handleBeforeDrag"
-    @dragEnd="handleDragEnd"
-  />
-</div>
+  <div class="bookmark-map">
+    <bookmark-item
+      v-for="bookmarkItem in bookmarkList"
+      :key="bookmarkItem.id"
+      v-contextmenu:menu="{
+        onVisible() {
+          selectedBookmarkItem = bookmarkItem
+        }
+      }"
+      :data="bookmarkItem"
+      :data-id="bookmarkItem.id"
+      @next="openItem(bookmarkItem)"
+      @mousedown="handleDrag($event, bookmarkItem)"
+    />
+    <contextmenu ref="menu">
+      <contextmenu-item
+        v-if="selectedBookmarkItem.type === BookmarkType.link"
+        @click="$emit('open-bookmark-editor', selectedBookmarkItem)"
+      >
+        编辑
+      </contextmenu-item>
+      <contextmenu-item @click="handleRemove">
+        删除
+      </contextmenu-item>
+    </contextmenu>
+    <draged-layer
+      v-if="willStartDrag"
+      :event="dragEvent"
+      :draged-bookmark="selectedBookmarkItem"
+      :disabled-enter="true"
+      @beforeDrag="handleBeforeDrag"
+      @dragEnd="handleDragEnd"
+    />
+  </div>
 </template>
 
 <script lang="ts">
@@ -49,56 +51,53 @@ import {
   Ref,
   shallowRef,
   onMounted,
-  ShallowUnwrapRef,
-} from 'vue';
+} from 'vue'
 import {
   Bookmark,
   BookmarkType,
   BookmarkSize,
-} from '@database/entity/bookmark';
+} from '@database/entity/bookmark'
 import {
   bookmarkListService,
   bookmarkRemoveService,
   bookmarkResortService,
   bookmarkUpdateService,
-} from '@database/services/bookmark-service';
+} from '@database/services/bookmark-service'
 import { Message } from '@/ui-lib/message/index'
-import BookmarkItem from '../bookmark-item.vue';
-import AddBookmark from '../add-bookmark/index.vue';
-import CustomLink from '../add-bookmark/custom-link.vue';
-import DragedLayer from '../draged-layer.vue';
+import BookmarkItem from '../bookmark-item.vue'
+import DragedLayer from '../draged-layer.vue'
 function moveIndexTo(list: Bookmark[], fromIndex: number, toIndex: number) {
   if (fromIndex > toIndex) {
-    list.splice(toIndex, 0, list[fromIndex]);
-    list.splice(fromIndex + 1, 1);
+    list.splice(toIndex, 0, list[fromIndex])
+    list.splice(fromIndex + 1, 1)
   } else {
-    list.splice(toIndex, 0, list[fromIndex]);
-    list.splice(fromIndex, 1);
+    list.splice(toIndex, 0, list[fromIndex])
+    list.splice(fromIndex, 1)
   }
 }
 export default {
-  emits: ['open-bookmark-editor'],
+  components: { BookmarkItem, DragedLayer },
   props: {
     parentId: {
       type: String,
-      default: ''
+      default: '',
     },
   },
-  components: { BookmarkItem, AddBookmark, CustomLink, DragedLayer },
+  emits: ['open-bookmark-editor'],
   setup(props, context) {
-    let bookmarkList: Ref<Bookmark[]> = ref([]);
+    let bookmarkList: Ref<Bookmark[]> = ref([])
     const selectedBookmarkItem: Ref<Bookmark | null> = ref(null)
     const getList = function () {
       bookmarkListService({
-        parent: props.parentId
+        parent: props.parentId,
       }).then((list) => {
-        bookmarkList.value = list;
-      });
-    };
+        bookmarkList.value = list
+      })
+    }
     onMounted(() => {
-      getList();
-    });
-    let needForbiddenClick = false;
+      getList()
+    })
+    let needForbiddenClick = false
     const willStartDrag = ref(false)
     const isStartDrag = ref(false)
 
@@ -108,7 +107,7 @@ export default {
         size === BookmarkSize.large
       ) {
         new Message({
-          message: '目录不允许设置为最大模式'
+          message: '目录不允许设置为最大模式',
         })
         return
       }
@@ -116,9 +115,9 @@ export default {
       bookmarkUpdateService(bookmarkItem)
         .catch(e => {
           new Message({
-            message: e.message || '设置尺寸失败'
+            message: e.message || '设置尺寸失败',
           })
-        });
+        })
     }
     // : ShallowRef<MouseEvent | null>
     const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
@@ -131,18 +130,18 @@ export default {
       BookmarkSize,
       selectedBookmarkItem,
       refreshList() {
-        getList();
+        getList()
       },
       openItem(data: Bookmark) {
         if (needForbiddenClick) {
-          return;
+          return
         }
-        willStartDrag.value = false;
+        willStartDrag.value = false
         if (data.type === BookmarkType.link) {
           if (data.value && data.value.match(/^#/)) {
             location.hash = data.value
           } else {
-            window.open(data.value, '_blank');
+            window.open(data.value, '_blank')
           }
         }
       },
@@ -151,12 +150,12 @@ export default {
         if (event.button !== 0) {
           return
         }
-        selectedBookmarkItem.value = bookmarkItem;
+        selectedBookmarkItem.value = bookmarkItem
         dragEvent.value = event
-        willStartDrag.value = true;
+        willStartDrag.value = true
       },
       handleBeforeDrag() {
-        needForbiddenClick = true;
+        needForbiddenClick = true
         isStartDrag.value = true
       },
       handleDragEnd({ type, from, to, size}: {
@@ -165,31 +164,31 @@ export default {
         to: string,
         size: BookmarkSize
       }) {
-        willStartDrag.value = false;
+        willStartDrag.value = false
         isStartDrag.value = false
-        needForbiddenClick = false;
+        needForbiddenClick = false
         if (type === 'cancel' || type === 'enter') {
           return
         }
         if (type === 'before') {
-          let fromIndex = -1;
-          let targetIndex = -1;
-          const list = bookmarkList.value;
+          let fromIndex = -1
+          let targetIndex = -1
+          const list = bookmarkList.value
           for (let i = 0; i < list.length; i++) {
-            let id = list[i].id;
+            let id = list[i].id
             if (id === from) {
-              fromIndex = i;
+              fromIndex = i
             }
             if (to) {
               if (id === to) {
-                targetIndex = i;
+                targetIndex = i
               }
               if (fromIndex >= 0 && targetIndex >= 0) {
-                break;
+                break
               }
             } else {
               if (fromIndex >= 0) {
-                break;
+                break
               }
             }
           }
@@ -201,15 +200,15 @@ export default {
           bookmarkRemoveService(selectedBookmark!.id).then(() => {
             for (let i = 0; i < bookmarkList.value.length; i++) {
               if (bookmarkList.value[i].id === selectedBookmark!.id) {
-                bookmarkList.value.splice(i, 1);
-                break;
+                bookmarkList.value.splice(i, 1)
+                break
               }
             }
           }).catch(e => {
             new Message({
-              message: e.message || '删除失败！'
+              message: e.message || '删除失败！',
             })
-          });
+          })
         } else if (type === 'size') {
           const selectedBookmark = selectedBookmarkItem.value
           selectedBookmark && handleSetSize(selectedBookmark, size)
@@ -223,17 +222,17 @@ export default {
         bookmarkRemoveService(selectedBookmark.id).then(() => {
           for (let i = 0; i < bookmarkList.value.length; i++) {
             if (bookmarkList.value[i].id === selectedBookmark.id) {
-              bookmarkList.value.splice(i, 1);
-              break;
+              bookmarkList.value.splice(i, 1)
+              break
             }
           }
         }).catch(e => {
           new Message({
-            message: e.message || '删除失败！'
+            message: e.message || '删除失败！',
           })
-        });
+        })
       },
-    };
+    }
   },
-};
+}
 </script>

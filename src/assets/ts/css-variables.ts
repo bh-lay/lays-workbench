@@ -25,9 +25,9 @@ function applyVariables() {
   const variables = getCssVariables()
   const styleAtrribute = htmlNode.style
 
-  for (let variableItemKey in variables) {
-    let cssKey = objectKeyToCssKey(variableItemKey)
-    let cssValue = `${variables[variableItemKey]}px`
+  for (const variableItemKey in variables) {
+    const cssKey = objectKeyToCssKey(variableItemKey)
+    const cssValue = `${variables[variableItemKey]}px`
     styleAtrribute.setProperty(cssKey, cssValue)
   }
 }

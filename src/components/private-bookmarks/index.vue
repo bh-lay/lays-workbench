@@ -23,8 +23,7 @@
         :changed-parent-id="changedParentId"
         @select="handleSelect"
         @create="handleCreate"
-      >
-      </folder-item>
+      />
     </div>
     <main-list
       :parent="activeId"
@@ -34,7 +33,10 @@
       @after-insert="handleMainListInsert"
     />
   </div>
-  <modal v-model="folderEditorConfig.visible" :width="440">
+  <modal
+    v-model="folderEditorConfig.visible"
+    :width="440"
+  >
     <folder-editor
       :type="folderEditorConfig.type"
       :folder-name="folderEditorConfig.name"
@@ -45,18 +47,18 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 import FolderEditor from './folder-editor.vue'
 import {
   Bookmark,
   BookmarkType,
-} from '@database/entity/bookmark';
-import { bookmarkInsertService } from '@database/services/bookmark-service';
+} from '@database/entity/bookmark'
+import { bookmarkInsertService } from '@database/services/bookmark-service'
 import FolderItem from './folder-item.vue'
 import MainList from './main-list.vue'
 export default {
   components: { FolderItem, MainList, FolderEditor },
-  setup(props) {
+  setup() {
     const activeId = ref('root')
     const changedParentId = ref('')
     
@@ -73,7 +75,7 @@ export default {
       folderEditorConfig,
       rootFolder: new Bookmark({
         id: 'root',
-        name: '我的书签'
+        name: '我的书签',
       }),
       handleSelect(selectedId: string) {
         activeId.value = selectedId
@@ -113,7 +115,7 @@ export default {
           changedParentId.value = ''
         }, 200)
       },
-    };
+    }
   },
-};
+}
 </script>

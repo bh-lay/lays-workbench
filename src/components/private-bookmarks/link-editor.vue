@@ -38,27 +38,39 @@ input
       <span v-else>添加书签</span>
     </div>
     <div class="body">
-      <div class="label">名称</div>
-      <input type="text" v-model="name" />
-      <div class="label">网址</div>
-      <input type="text" v-model="value" />
+      <div class="label">
+        名称
+      </div>
+      <input
+        v-model="name"
+        type="text"
+      >
+      <div class="label">
+        网址
+      </div>
+      <input
+        v-model="value"
+        type="text"
+      >
     </div>
     <div class="footer">
-      <v-button @click="$emit('cancel')">取消</v-button>
-      <v-button @click="handleConfirm">确定</v-button>
+      <v-button @click="$emit('cancel')">
+        取消
+      </v-button>
+      <v-button @click="handleConfirm">
+        确定
+      </v-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 export default {
-  name: 'vue-folder-item',
-  emits: ['confirm', 'cancel'],
   props: {
     type: {
       type: String,
-      default: 'create'
+      default: 'create',
     },
     linkName: {
       type: String,
@@ -69,6 +81,7 @@ export default {
       default: '',
     },
   },
+  emits: ['confirm', 'cancel'],
   setup(props, context) {
     const name = ref('')
     const value = ref('')
@@ -82,10 +95,10 @@ export default {
       handleConfirm() {
         context.emit('confirm', {
           name: name.value,
-          value: value.value
+          value: value.value,
         })
-      }
-    };
+      },
+    }
   },
-};
+}
 </script>

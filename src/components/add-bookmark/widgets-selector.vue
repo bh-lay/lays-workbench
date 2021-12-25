@@ -43,18 +43,25 @@
 <template>
   <div class="widgets-selector">
     <div class="input-item">
-      <div class="label">选择工具</div>
-      <div class="widgets-name-list" >
-        <div class="widgets-name-item"
+      <div class="label">
+        选择工具
+      </div>
+      <div class="widgets-name-list">
+        <div
           v-for="widgetItem in supportWidgetsList"
           :key="widgetItem.name"
           :class="[previewData.value === widgetItem.name ? 'active' : '']"
+          class="widgets-name-item"
           @click="previewData.value = widgetItem.name; previewData.name = widgetItem.label"
-        >{{widgetItem.label}}</div>
+        >
+          {{ widgetItem.label }}
+        </div>
       </div>
     </div>
     <div class="input-item">
-      <div class="label">选择尺寸</div>
+      <div class="label">
+        选择尺寸
+      </div>
       <size-selector v-model="previewData.size" />
     </div>
 
@@ -64,13 +71,15 @@
       />
     </div>
     <div class="footer">
-      <v-button @click="confirm">确定</v-button>
+      <v-button @click="confirm">
+        确定
+      </v-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, reactive, watch } from 'vue';
+import { reactive } from 'vue'
 import { Bookmark, BookmarkType, BookmarkSize } from '@database/entity/bookmark'
 import BookmarkItem from '../bookmark-item.vue'
 import SizeSelector from './size-selector.vue'
@@ -85,19 +94,18 @@ const supportWidgetsList = [
   },
   {
     label: '图片base64',
-    name: 'img-to-base'
+    name: 'img-to-base',
   },
   {
     label: '藏经阁',
-    name: 'public-bookmarks'
+    name: 'public-bookmarks',
   },
   {
     label: '小书房',
-    name: 'private-bookmarks'
+    name: 'private-bookmarks',
   },
 ]
 export default {
-  emits: ['confirm'],
   components: { BookmarkItem, SizeSelector },
   props: {
     data: {
@@ -107,6 +115,7 @@ export default {
       },
     },
   },
+  emits: ['confirm'],
   setup(props: {
     data: Bookmark
   }, context) {
@@ -127,5 +136,5 @@ export default {
       },
     }
   },
-};
+}
 </script>

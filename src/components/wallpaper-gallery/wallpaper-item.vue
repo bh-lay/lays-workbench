@@ -13,13 +13,13 @@
         v-if="isImageLoaded"
         class="img-container"
         :style="styleValue"
-      ></div>
+      />
     </transition>
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 import loadImage from '@/assets/ts/load-image'
 import imgRobber from '@/assets/ts/img-robber'
 
@@ -28,7 +28,7 @@ export default {
     url: {
       type: String,
       default: '',
-    }
+    },
   },
   setup(props) {
     const usedUrl = imgRobber(props.url)
@@ -42,9 +42,9 @@ export default {
     return {
       isImageLoaded,
       styleValue: {
-        backgroundImage: `url(${usedUrl})`
+        backgroundImage: `url(${usedUrl})`,
       },
     }
   },
-};
+}
 </script>

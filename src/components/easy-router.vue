@@ -70,26 +70,25 @@ export default {
     let unbindRouterListener: (() => void) | null = onRouterChange((moduleType, moduleName, state) => {
       if (moduleType === 'widgets') {
         switch(moduleName) {
-          case 'private-bookmark':
-            privateBookmarksVisible.value = true
+        case 'private-bookmark':
+          privateBookmarksVisible.value = true
           break
-          case 'json-formatter':
-            jsonFormatterVisible.value = true
+        case 'json-formatter':
+          jsonFormatterVisible.value = true
           break
-          case 'reg-visual':
-            regVisualVisible.value = true
-            regText.value = state.regText
+        case 'reg-visual':
+          regVisualVisible.value = true
+          regText.value = state.regText
           break
-          case 'img-to-base':
-            imgToBaseVisible.value = true
-            imgToBaseFile.value = state.file || null
+        case 'img-to-base':
+          imgToBaseVisible.value = true
+          imgToBaseFile.value = state.file || null
           break
-          
         }
       } else if (moduleType === 'settings') {
         switch(moduleName) {
-          case 'wallpaper':
-            wallpaperGalleryVisible.value = true
+        case 'wallpaper':
+          wallpaperGalleryVisible.value = true
           break
         }
       }
@@ -112,8 +111,8 @@ export default {
         regText.value = ''
         imgToBaseFile.value = null
         history.replaceState({}, '', location.pathname)
-      }
-    };
+      },
+    }
   },
-};
+}
 </script>

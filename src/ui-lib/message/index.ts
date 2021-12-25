@@ -23,7 +23,7 @@ export class Message {
       cancelText: options.cancelText,
       onClose() {
         render(null, tempNode)
-      }
+      },
     }, null)
     
     render(vNode, tempNode)
@@ -34,11 +34,11 @@ export class Message {
     return vNode
   }
   close() {
-    var component = this.vNode.component!.proxy! as ComponentPublicInstance<{ visible: boolean }>
+    const component = this.vNode.component!.proxy! as ComponentPublicInstance<{ visible: boolean }>
     component.visible = false
   }
 }
-export default {
-  install(app: Application) {
-  }
-}
+// export default {
+//   install(app: Application) {
+//   }
+// }

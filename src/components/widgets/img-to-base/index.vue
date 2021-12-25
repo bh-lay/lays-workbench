@@ -82,18 +82,27 @@
     >
       <v-mdi name="mdi-image-move" />
     </div>
-    <div v-else :class="{
-      intro: true,
-      medium: widgetsSize === BookmarkSize.medium
-    }">
-      <div class="title">图片base64</div>
-      <div class="desc">小图嵌入更容易</div>
-      <button @click="$refs.input.click()">上传</button>
+    <div
+      v-else
+      :class="{
+        intro: true,
+        medium: widgetsSize === BookmarkSize.medium
+      }"
+    >
+      <div class="title">
+        图片base64
+      </div>
+      <div class="desc">
+        小图嵌入更容易
+      </div>
+      <button @click="$refs.input.click()">
+        上传
+      </button>
     </div>
     <template v-if="widgetsSize === BookmarkSize.large">
       <div
-        :class="['drag-area', isDragOver ? 'active' : '']"
         ref="drag_area"
+        :class="['drag-area', isDragOver ? 'active' : '']"
         @click="$refs.input.click()"
       >
         <span>拖拽图片至此处</span>
@@ -105,25 +114,23 @@
       accept="image/*"
       class="hidden-input"
       @change="handleInputChange"
-    />
+    >
   </div>
 </template>
 
 <script lang="ts">
-import { ref, computed } from "vue";
-import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
+import { ref, computed } from 'vue'
+import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 import { replaceRouter } from '@/assets/ts/router'
 import { Message } from '@/ui-lib/message/index'
-import MainFunction from './main.vue'
 export default {
-  components: { MainFunction },
   props: {
     data: {
       type: Bookmark,
       default() {
         return new Bookmark({})
       },
-    }
+    },
   },
   setup(props: { data: Bookmark }) {
     const isDragOver = ref(false)
@@ -134,7 +141,7 @@ export default {
       base64Str,
       widgetsSize,
       BookmarkSize,
-    };
+    }
   },
   mounted() {
     const dragAreaNode = this.$refs.drag_area as HTMLElement
@@ -152,7 +159,7 @@ export default {
     dragAreaNode.addEventListener('dragleave', () => {
       this.isDragOver = false
     })
-    dragAreaNode.addEventListener("drop", (e: DragEvent) => {
+    dragAreaNode.addEventListener('drop', (e: DragEvent) => {
       e.stopPropagation()
       e.preventDefault()
       if (e.dataTransfer) {
@@ -181,14 +188,14 @@ export default {
     handleSelectFile(file: File) {
       if (file.size > 2 * 1024 * 1024) {
         new Message({
-          message: '图片大于 2M，不建议使用 base64 !'
+          message: '图片大于 2M，不建议使用 base64 !',
         })
         return
       }
       replaceRouter('widgets', 'img-to-base', {
-        file
+        file,
       })
     },
   },
-};
+}
 </script>

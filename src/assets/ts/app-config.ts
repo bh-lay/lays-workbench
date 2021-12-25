@@ -50,7 +50,9 @@ export function initAppConfig() {
   if (localData) {
     try {
       configFromLocal = JSON.parse(localData)
-    } catch (e) {}
+    } catch (e) {
+      console.log('error', e)
+    }
   }
   // 合并本地数据与默认数据
   const appConfig = Object.assign({}, APP_CONFIG_DEFAULT, configFromLocal)
@@ -62,8 +64,8 @@ export function initAppConfig() {
         return false
       }
       afterDataChangeDelay()
-      return Reflect.set(target, key, value);
-    }
+      return Reflect.set(target, key, value)
+    },
   })
 }
 
@@ -73,10 +75,10 @@ export function getAppConfig() {
 export function getAppConfigDefault() {
   return Object.assign({}, APP_CONFIG_DEFAULT)
 }
-export function getAppConfigItem(key: string): string | Number  {
+export function getAppConfigItem(key: string): string | number  {
   return APP_CONFIG[key]
 }
 
-export function setAppConfigItem(key: string, value: any) {
+export function setAppConfigItem(key: string, value: string | number) {
   APP_CONFIG[key] = value
 }

@@ -72,14 +72,32 @@
       ]"
       @click="isExpand = !isExpand"
     >
-      <v-mdi :name="isExpand ? 'mdi-folder-open' : 'mdi-folder'" size="16" />
+      <v-mdi
+        :name="isExpand ? 'mdi-folder-open' : 'mdi-folder'"
+        size="16"
+      />
     </div>
-    <div class="label" @click="$emit('select', data.id)">{{ data.name }}</div>
-    <div v-if="deep <= 3" class="icon-btn add" @click="$emit('create', data.id)">
-      <v-mdi name="mdi-plus" size="20" />
+    <div
+      class="label"
+      @click="$emit('select', data.id)"
+    >
+      {{ data.name }}
+    </div>
+    <div
+      v-if="deep <= 3"
+      class="icon-btn add"
+      @click="$emit('create', data.id)"
+    >
+      <v-mdi
+        name="mdi-plus"
+        size="20"
+      />
     </div>
   </div>
-  <div v-if="isExpand" class="sub-folder">
+  <div
+    v-if="isExpand"
+    class="sub-folder"
+  >
     <vue-folder-item
       v-for="item in bookmarkList"
       :key="item.id"
@@ -94,21 +112,19 @@
 </template>
 
 <script lang="ts">
-import { Ref, ref, watch } from 'vue';
+import { Ref, ref, watch } from 'vue'
 import {
   Bookmark,
   BookmarkType,
-  BookmarkSize,
-} from '@database/entity/bookmark';
-import { bookmarkListService } from '@database/services/bookmark-service';
+} from '@database/entity/bookmark'
+import { bookmarkListService } from '@database/services/bookmark-service'
 export default {
-  name: 'vue-folder-item',
-  emits: ['select', 'create'],
+  name: 'VueFolderItem',
   props: {
     data: {
       type: Bookmark,
       default() {
-        return {};
+        return {}
       },
     },
     deep: {
@@ -128,58 +144,59 @@ export default {
       default: '',
     },
   },
+  emits: ['select', 'create'],
   setup(props: {
     expand: boolean,
     data: Bookmark,
     active: string,
     changedParentId: string,
   }) {
-    const isExpand = ref(props.expand);
-    const bookmarkList: Ref<Bookmark[]> = ref([]);
-    const hasSubMenu = ref(true);
+    const isExpand = ref(props.expand)
+    const bookmarkList: Ref<Bookmark[]> = ref([])
+    const hasSubMenu = ref(true)
     const loadList = () => {
       bookmarkListService({
         parent: props.data.id,
         type: BookmarkType.folder,
       }).then((list) => {
-        bookmarkList.value = list;
-        hasSubMenu.value = list.length > 0;
-      });
-    };
+        bookmarkList.value = list
+        hasSubMenu.value = list.length > 0
+      })
+    }
     watch(
       isExpand,
       (needLoadSub) => {
         if (!needLoadSub) {
-          return;
+          return
         }
-        loadList();
+        loadList()
       },
       {
         immediate: true,
       }
-    );
+    )
     watch(
       () => props.changedParentId,
       (changedParentId) => {
         if (changedParentId !== props.data.id || !isExpand.value) {
-          return;
+          return
         }
-        loadList();
+        loadList()
       }
-    );
+    )
     watch(
       () => props.active,
       (changedParentId) => {
         if (changedParentId == props.data.id) {
-          isExpand.value = true;
+          isExpand.value = true
         }
       }
-    );
+    )
     return {
       isExpand,
       hasSubMenu,
       bookmarkList,
-    };
+    }
   },
-};
+}
 </script>

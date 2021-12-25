@@ -71,9 +71,12 @@
 
 <template>
   <div :class="['bookmark-item', 'item-size-' + BookmarkSize[data.size]]">
-    <div class="card" :style="{
-      background: data.type === BookmarkType.folder ? 'rgba(255, 255, 255, .5)' : data.undercoat
-    }">
+    <div
+      class="card"
+      :style="{
+        background: data.type === BookmarkType.folder ? 'rgba(255, 255, 255, .5)' : data.undercoat
+      }"
+    >
       <template v-if="data.type === BookmarkType.link">
         <bookmark-icon
           :icon="data.icon"
@@ -83,14 +86,32 @@
         />
       </template>
       <template v-else-if="data.type === BookmarkType.widgets">
-        <reg-visual v-if="data.value === 'reg-visual'" :data="data" />
-        <json-formatter v-else-if="data.value === 'json-formatter'" :data="data" />
+        <reg-visual
+          v-if="data.value === 'reg-visual'"
+          :data="data"
+        />
+        <json-formatter
+          v-else-if="data.value === 'json-formatter'"
+          :data="data"
+        />
         <native-bookmark v-else-if="data.value === 'native-bookmark'" />
-        <img-to-base v-else-if="data.value === 'img-to-base'" :data="data" />
-        <public-bookmarks v-else-if="data.value === 'public-bookmarks'" :data="data" />
-        <private-bookmarks v-else-if="data.value === 'private-bookmarks'" :data="data" />
-        <slot v-else-if="$slots.body" name="body" />
-        <span v-else>unknown widgets type<br/>{{ data.name }} <small>{{ data.value }}</small></span>
+        <img-to-base
+          v-else-if="data.value === 'img-to-base'"
+          :data="data"
+        />
+        <public-bookmarks
+          v-else-if="data.value === 'public-bookmarks'"
+          :data="data"
+        />
+        <private-bookmarks
+          v-else-if="data.value === 'private-bookmarks'"
+          :data="data"
+        />
+        <slot
+          v-else-if="$slots.body"
+          name="body"
+        />
+        <span v-else>unknown widgets type<br>{{ data.name }} <small>{{ data.value }}</small></span>
       </template>
       <folder-icon
         v-else-if="data.type === BookmarkType.folder"
@@ -98,7 +119,9 @@
         @click="$emit('next')"
       />
     </div>
-    <div class="title">{{ data.name }}</div>
+    <div class="title">
+      {{ data.name }}
+    </div>
   </div>
 </template>
 
@@ -114,7 +137,6 @@ import PublicBookmarks from './widgets/public-bookmarks/index.vue'
 import PrivateBookmarks from './widgets/private-bookmarks/index.vue'
 
 export default {
-  emits: ['next'],
   components: {
     RegVisual,
     JsonFormatter,
@@ -130,14 +152,15 @@ export default {
       type: Bookmark,
       default() {
         return new Bookmark({})
-      }
+      },
     },
   },
+  emits: ['next'],
   setup() {
     return {
       BookmarkType,
       BookmarkSize,
-    };
+    }
   },
-};
+}
 </script>

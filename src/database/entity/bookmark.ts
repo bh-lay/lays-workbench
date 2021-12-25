@@ -5,17 +5,17 @@ export function bookmarkEntityInit (db: IDBDatabase) {
   }
   const objectStore = db.createObjectStore('bookmark', {
     keyPath: 'id',
-    autoIncrement: true
+    autoIncrement: true,
   })
-  objectStore.createIndex("id", "id", { unique: true })
-  objectStore.createIndex("name", "name", { unique: false })
-  objectStore.createIndex("type", "type", { unique: false })
-  objectStore.createIndex("parent", "parent", { unique: false })
-  objectStore.createIndex("size", "size", { unique: false })
-  objectStore.createIndex("undercoat", "undercoat", { unique: false })
-  objectStore.createIndex("value", "value", { unique: false })
-  objectStore.createIndex("icon", "icon", { unique: false })
-  objectStore.createIndex("desc", "desc", { unique: false })
+  objectStore.createIndex('id', 'id', { unique: true })
+  objectStore.createIndex('name', 'name', { unique: false })
+  objectStore.createIndex('type', 'type', { unique: false })
+  objectStore.createIndex('parent', 'parent', { unique: false })
+  objectStore.createIndex('size', 'size', { unique: false })
+  objectStore.createIndex('undercoat', 'undercoat', { unique: false })
+  objectStore.createIndex('value', 'value', { unique: false })
+  objectStore.createIndex('icon', 'icon', { unique: false })
+  objectStore.createIndex('desc', 'desc', { unique: false })
 }
 
 // 书签类型
@@ -40,7 +40,7 @@ export type BookmarkIcon = BookmarkIconCrab | BookmarkIconMdi | BookmarkIconText
 
 // 生成 ID
 function generateID() {
-  let randomNum = Math.floor(new Date().getTime() * 100 + Math.random() * 100)
+  const randomNum = Math.floor(new Date().getTime() * 100 + Math.random() * 100)
   return randomNum.toString(24)
 }
 /**
@@ -48,22 +48,22 @@ function generateID() {
  */
 export class Bookmark {
   id!: string
-  sort: number = 0
+  sort = 0
   // 收藏名称
-  name: string = '未命名'
+  name = '未命名'
   // 类型
   type: BookmarkType = BookmarkType.link
   size: BookmarkSize = BookmarkSize.small
-  undercoat: string = '#ffaa00'
-  value: string = 'http://bh-lay.com'
+  undercoat = '#ffaa00'
+  value = 'http://bh-lay.com'
   icon: BookmarkIcon = 'text:X'
-  parent: string = ''
+  parent = ''
   // 描述信息
-  desc: string = ''
+  desc = ''
   constructor(object: any) {
     this.fill(object)
   }
-  fill(object:any) {
+  fill(object: any) {
     if (typeof object !== 'object') {
       return
     }

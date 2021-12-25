@@ -40,16 +40,17 @@
       </div>
     </div>
     <div class="bookmark-container">
-      <h1 style="color: #aaa">开发中，就快好了！</h1>
+      <h1 style="color: #aaa">
+        开发中，就快好了！
+      </h1>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, computed } from "vue";
 export default {
-  setup(props) {
-    return {};
+  setup() {
+    return {}
   },
-};
+}
 </script>

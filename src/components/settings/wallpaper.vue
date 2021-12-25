@@ -11,7 +11,14 @@
 
 <template>
   <gallery>
-    <dropdown-item-plain><v-button type="white" @click="$emit('next')">修改</v-button></dropdown-item-plain>
+    <dropdown-item-plain>
+      <v-button
+        type="white"
+        @click="$emit('next')"
+      >
+        修改
+      </v-button>
+    </dropdown-item-plain>
   </gallery>
 </template>
 
@@ -21,14 +28,14 @@ import { getAppConfigItem } from '@/assets/ts/app-config'
 import Gallery from '@/components/gallery.vue'
 
 export default {
-  emits: ['next'],
   components: { Gallery },
+  emits: ['next'],
   setup() {
     const wallpaper = getAppConfigItem('wallpaper')
     const usedUrl = imgRobber(wallpaper.toString())
     return {
       usedUrl,
-    };
+    }
   },
-};
+}
 </script>

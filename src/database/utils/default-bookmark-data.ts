@@ -45,7 +45,7 @@ export default [
     size: BookmarkSize.small,
     undercoat: '#222',
     value: 'https://github.com/',
-    icon: 'mdi:github'
+    icon: 'mdi:github',
   },
   {
     sort: 996,
@@ -55,7 +55,7 @@ export default [
     size: BookmarkSize.small,
     undercoat: '#d06925',
     value: 'https://stackoverflow.com/',
-    icon: 'mdi:stack-overflow'
+    icon: 'mdi:stack-overflow',
   },
   {
     sort: 995,
@@ -65,7 +65,7 @@ export default [
     size: BookmarkSize.small,
     undercoat: '#4fc08d',
     value: 'https://cn.vuejs.org/',
-    icon: 'mdi:vuejs'
+    icon: 'mdi:vuejs',
   },
   {
     sort: 995,
@@ -75,7 +75,7 @@ export default [
     size: BookmarkSize.small,
     undercoat: '#2d8a9f',
     value: 'https://www.electronjs.org/',
-    icon: 'mdi:electron-framework'
+    icon: 'mdi:electron-framework',
   },
   {
     sort: 992,
@@ -85,7 +85,7 @@ export default [
     size: BookmarkSize.small,
     undercoat: '#539ac8',
     value: 'https://webpack.docschina.org/',
-    icon: 'mdi:webpack'
+    icon: 'mdi:webpack',
   },
   {
     sort: 991,
@@ -95,7 +95,7 @@ export default [
     size: BookmarkSize.small,
     undercoat: '#101418',
     value: 'https://bundlescanner.com/',
-    icon: 'crab'
+    icon: 'crab',
   },
   {
     sort: 990,
@@ -105,6 +105,6 @@ export default [
     size: BookmarkSize.small,
     undercoat: '#f3f8f1',
     value: 'https://www.iconfont.cn/',
-    icon: 'mdi:star-face'
+    icon: 'mdi:star-face',
   },
 ]

@@ -21,7 +21,7 @@
       <category v-model="activeCategory" />
     </div>
     <div class="main">
-      <custom v-if="activeCategory === 'define'"/>
+      <custom v-if="activeCategory === 'define'" />
       <gallery v-else-if="activeCategory === 'gallery'" />
       <color v-else />
     </div>
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 import Category from './category.vue'
 import Custom from './custom.vue'
 import Color from './color.vue'
@@ -37,10 +37,10 @@ import Gallery from './gallery.vue'
 export default {
   components: { Category, Custom, Color, Gallery },
   setup() {
-    const activeCategory = ref('gallery');
+    const activeCategory = ref('gallery')
     return {
       activeCategory,
-    };
+    }
   },
-};
+}
 </script>

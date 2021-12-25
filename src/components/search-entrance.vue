@@ -105,28 +105,28 @@
         <v-mdi :name="selectedEngine.icon" />
       </div>
       <input
-        type="text"
         ref="inputRef"
         v-model="searchText"
+        type="text"
         :placeholder="selectedEngine.placeholder"
         @keydown="handleKeydown"
         @focus="inputFocused = true"
         @blur="inputFocused = false"
-      />
+      >
     </div>
     <transition name="slidedown">
       <div
-        class="engine-list"
         v-if="engineListVisible"
         v-clickoutside="closeEngineList"
+        class="engine-list"
       >
         <div
+          v-for="engine in searchEngineConfig"
+          :key="engine.name"
           :class="[
             'tab-item',
             engine.name === selectedEngineName ? 'active' : '',
           ]"
-          v-for="engine in searchEngineConfig"
-          :key="engine.name"
           @click="selectEngine(engine)"
         >
           <v-mdi :name="engine.icon" />
@@ -138,7 +138,7 @@
 </template>
 
 <script lang="ts" >
-import { ref, computed, watch, nextTick } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue'
 import { getAppConfigItem, setAppConfigItem } from '@/assets/ts/app-config'
 
 type searchEngine = {
@@ -191,14 +191,14 @@ const searchEngineConfig: searchEngine[] = [
     url: 'https://www.npmjs.com/search?q=[kw]',
     icon: 'mdi-npm',
   },
-];
+]
 export default {
   setup(props, context) {
     const inputRef = ref(null)
-    const selectedEngineName = ref(getAppConfigItem('searchEngineName'));
-    const searchText = ref('');
-    const engineListVisible = ref(false);
-    const inputFocused = ref(false);
+    const selectedEngineName = ref(getAppConfigItem('searchEngineName'))
+    const searchText = ref('')
+    const engineListVisible = ref(false)
+    const inputFocused = ref(false)
 
     const isActive = ref(false)
     let delay: number | null = null
@@ -213,7 +213,7 @@ export default {
     const setInputFocused = () => {
       const inputNode = inputRef.value as HTMLInputElement | null
       if (inputNode) {
-        inputNode.focus();
+        inputNode.focus()
       }
     }
     const selectedEngine = computed(() => {
@@ -246,9 +246,9 @@ export default {
       isActive,
       selectEngine(engine: searchEngine) {
         setInputFocused()
-        selectedEngineName.value = engine.name;
+        selectedEngineName.value = engine.name
         setAppConfigItem('searchEngineName', engine.name)
-        closeEngineList();
+        closeEngineList()
       },
       showEngineList,
       closeEngineList,
@@ -256,15 +256,15 @@ export default {
         if (e.key !== 'Enter') {
           return
         }
-        let searhKeyword = encodeURIComponent(searchText.value);
-        searchText.value = '';
-        window.open(selectedEngine.value.url.replace('[kw]', searhKeyword));
+        let searhKeyword = encodeURIComponent(searchText.value)
+        searchText.value = ''
+        window.open(selectedEngine.value.url.replace('[kw]', searhKeyword))
         const inputNode = inputRef.value as HTMLInputElement | null
         if (inputNode) {
-          inputNode.blur();
+          inputNode.blur()
         }
       },
-    };
+    }
   },
-};
+}
 </script>

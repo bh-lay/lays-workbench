@@ -16,18 +16,22 @@
 
 <template>
   <div
-    :class="['dropdown-button', visible ? 'active' : '']"
     ref="buttonRef"
+    :class="['dropdown-button', visible ? 'active' : '']"
     @click="onClickButton"
   >
     <slot />
-    <v-mdi v-if="arrow" name="mdi-menu-down" :rotate="visible ? -180 : 0" />
+    <v-mdi
+      v-if="arrow"
+      name="mdi-menu-down"
+      :rotate="visible ? -180 : 0"
+    />
     <teleport to="#v-ui">
       <transition name="slidedown">
         <div
           v-if="visible"
-          v-clickoutside="onClickoutside"
           ref="bodyRef"
+          v-clickoutside="onClickoutside"
           :class="['dropdown-body', `dropdown-body-${type}`]"
           :style="{
             top: top + 'px',
@@ -43,9 +47,9 @@
 </template>
 
 <script lang="ts">
-import { nextTick, ref, watch } from 'vue';
+import { nextTick, ref } from 'vue'
 export default {
-  name: 'dropdown',
+  name: 'Dropdown',
   props: {
     arrow: {
       type: Boolean,
@@ -53,16 +57,16 @@ export default {
     },
     undercoat: {
       type: String,
-      default: '#fff'
+      default: '#fff',
     },
     placement: {
       type: String,
-      default: 'bottom-left'
+      default: 'bottom-left',
     },
     type: {
       type: String,
       // default、plain、dark
-      default: 'default'
+      default: 'default',
     },
   },
   setup(props) {
@@ -79,9 +83,9 @@ export default {
       bodyRef,
       onClickButton() {
         if (visible.value) {
-          return;
+          return
         }
-        visible.value = true;
+        visible.value = true
         const buttonNode = buttonRef.value as HTMLDivElement | null
         
         if (!buttonNode) {
@@ -95,20 +99,20 @@ export default {
             if (bodyNode) {
               bodyWidth = bodyNode.clientWidth
             }
-            top.value = buttonBRC.top + buttonBRC.height;
-            left.value = buttonBRC.left + buttonBRC.width - bodyWidth;
+            top.value = buttonBRC.top + buttonBRC.height
+            left.value = buttonBRC.left + buttonBRC.width - bodyWidth
           })
         } else {
           // default
           // if (props.placement === 'bottom-left')
-          top.value = buttonBRC.top + buttonBRC.height;
-          left.value = buttonBRC.left;
+          top.value = buttonBRC.top + buttonBRC.height
+          left.value = buttonBRC.left
         }
       },
       onClickoutside() {
-        visible.value = false;
+        visible.value = false
       },
-    };
+    }
   },
-};
+}
 </script>

@@ -42,58 +42,70 @@
 </style>
 
 <template>
-<teleport to="#v-ui">
-  <div :class="['folder-layer', visible ? 'visible' : 'hidden']">
-    <transition name="fade-slow">
-      <div v-if="visible" class="mask" @click="$emit('update:visible', false)"></div>
-    </transition>
-    <transition name="zoom">
-      <div v-if="visible" class="container" @click.stop>
-        <name-editor :modelValue="name" @update:modelValue="handleNameChange" />
-        <div class="btn-list">
-          <bookmark-list :parent-id="id"
-            @open-bookmark-editor="$emit('open-bookmark-editor', $event)"
+  <teleport to="#v-ui">
+    <div :class="['folder-layer', visible ? 'visible' : 'hidden']">
+      <transition name="fade-slow">
+        <div
+          v-if="visible"
+          class="mask"
+          @click="$emit('update:visible', false)"
+        />
+      </transition>
+      <transition name="zoom">
+        <div
+          v-if="visible"
+          class="container"
+          @click.stop
+        >
+          <name-editor
+            :model-value="name"
+            @update:modelValue="handleNameChange"
           />
+          <div class="btn-list">
+            <bookmark-list
+              :parent-id="id"
+              @open-bookmark-editor="$emit('open-bookmark-editor', $event)"
+            />
+          </div>
         </div>
-      </div>
-    </transition>
-  </div>
-</teleport>
+      </transition>
+    </div>
+  </teleport>
 </template>
 
 <script lang="ts">
-import { watch } from 'vue';
+import { watch } from 'vue'
 import NameEditor from './name-editor.vue'
 import BookmarkList from './bookmark-list.vue'
 
 export default {
-  emits: ['update:visible', 'name-change', 'open-bookmark-editor', 'after-close'],
+  components: { NameEditor, BookmarkList },
   props: {
     id: {
       type: String,
-      default: ''
+      default: '',
     },
     name: {
       type: String,
-      default: ''
+      default: '',
     },
     visible: {
       type: Boolean,
       default: false,
     },
   },
-  components: { NameEditor, BookmarkList },
+  emits: ['update:visible', 'name-change', 'open-bookmark-editor', 'after-close'],
   setup(props, context) {
     watch(() => props.visible, visible => {
       if (!visible) {
         context.emit('after-close', props.id)
       }
-    },)
+    })
     return {
       handleNameChange(newValue: string) {
         context.emit('name-change', newValue)
       },
-    };
+    }
   },
-};
+}
 </script>

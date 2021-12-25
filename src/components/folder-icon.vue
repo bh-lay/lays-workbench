@@ -64,10 +64,10 @@
 </template>
 
 <script lang="ts">
-import { ref, watch, Ref } from 'vue';
+import { ref, watch, Ref } from 'vue'
 import BookmarkIcon from './bookmark-icon.vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
-import { bookmarkListService } from '@database/services/bookmark-service';
+import { bookmarkListService } from '@database/services/bookmark-service'
 
 export default {
   components: { BookmarkIcon },
@@ -77,19 +77,19 @@ export default {
       default() {
         return new Bookmark({})
       },
-    }
+    },
   },
   setup(props: {
     data: Bookmark
   }) {
-    let bookmarkList: Ref<Bookmark[]> = ref([]);
+    let bookmarkList: Ref<Bookmark[]> = ref([])
     const parentId = props.data.id
     const loadList = () => {
       bookmarkListService({
         parent: parentId,
       }).then((list) => {
         bookmarkList.value = list.slice(0, 4)
-      });
+      })
     }
     loadList()
     watch(() => props.data.value, () => {
@@ -100,5 +100,5 @@ export default {
       BookmarkSize,
     }
   },
-};
+}
 </script>

@@ -78,7 +78,10 @@
 <template>
   <teleport to="#v-ui">
     <transition name="fade-fast">
-      <div v-if="isStableStart" class="draged-layer">
+      <div
+        v-if="isStableStart"
+        class="draged-layer"
+      >
         <div class="size-area">
           <div
             v-for="size in sizeList"
@@ -88,12 +91,15 @@
               'size-' + size.class,
               triggeredType === 'size' && activeSize === size.value ? 'active' : ''
             ]"
-          ></div>
+          />
         </div>
         <div
           :class="['trash-area', triggeredType === 'delete' ? 'active' : '']"
         >
-          <v-mdi name="mdi-trash-can-outline" size="20" />
+          <v-mdi
+            name="mdi-trash-can-outline"
+            size="20"
+          />
         </div>
         <transition name="fade-fast">
           <div
@@ -103,7 +109,7 @@
               triggeredType === 'enter' ? 'block' : 'line',
             ]"
             :style="shadowRectStyle"
-          ></div>
+          />
         </transition>
         <div
           class="draged-shadow"
@@ -112,17 +118,17 @@
             left: clientX + 'px',
             background: dragedBookmark.undercoat,
           }"
-        ></div>
+        />
       </div>
     </transition>
   </teleport>
 </template>
 
 <script lang="ts">
-import { ref, getCurrentInstance, Ref, ComponentInternalInstance } from 'vue';
-import { getAppConfigItem } from '@/assets/ts/app-config';
-import dragHandle from '@/assets/ts/drag-handle';
-import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
+import { ref, getCurrentInstance, Ref, ComponentInternalInstance } from 'vue'
+import { getAppConfigItem } from '@/assets/ts/app-config'
+import dragHandle from '@/assets/ts/drag-handle'
+import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 type mapItem = {
   id: string,
   top: number,
@@ -134,37 +140,37 @@ function getItemListMap(internalInstance: ComponentInternalInstance | null): map
   if (!internalInstance) {
     return []
   }
-  const thisVm = internalInstance.proxy;
-  const parentVm = thisVm ? thisVm.$parent : null;
+  const thisVm = internalInstance.proxy
+  const parentVm = thisVm ? thisVm.$parent : null
   if (!parentVm) {
-    return [];
+    return []
   }
-  const parentEl = parentVm.$el;
+  const parentEl = parentVm.$el
   if (!parentEl) {
-    return [];
+    return []
   }
-  const itemEls = parentEl.parentNode.querySelectorAll('.bookmark-item');
-  const mapList: mapItem[] = [];
+  const itemEls = parentEl.parentNode.querySelectorAll('.bookmark-item')
+  const mapList: mapItem[] = []
   Array.prototype.forEach.call(itemEls, (bookmarkItemNode) => {
-    const bookmarkId = bookmarkItemNode.dataset.id;
+    const bookmarkId = bookmarkItemNode.dataset.id
     if (!bookmarkId) {
-      return;
+      return
     }
-    const nodeBCR = bookmarkItemNode.getBoundingClientRect();
+    const nodeBCR = bookmarkItemNode.getBoundingClientRect()
     mapList.push({
       id: bookmarkId,
       top: nodeBCR.top,
       left: nodeBCR.left,
       right: nodeBCR.right,
       bottom: nodeBCR.bottom,
-    });
-  });
-  return mapList;
+    })
+  })
+  return mapList
 }
 function getMouseTriggered(
   {
     clientY,
-    clientX
+    clientX,
   }:
   {
     clientY: number,
@@ -176,10 +182,10 @@ function getMouseTriggered(
   target?: mapItem,
   size?: BookmarkSize,
 } {
-  const gridGap = getAppConfigItem('gridGap') as number;
+  const gridGap = getAppConfigItem('gridGap') as number
   // 是否拖拽合并
   for (let i = 0; i < map.length; i++) {
-    let mapItem = map[i];
+    let mapItem = map[i]
     if (
       mapItem.left + gridGap / 2 <= clientX &&
       mapItem.right - gridGap / 2 >= clientX &&
@@ -189,12 +195,12 @@ function getMouseTriggered(
       return {
         type: 'enter',
         target: mapItem,
-      };
+      }
     }
   }
   // 是否拖拽移动
   for (let t = 0; t < map.length; t++) {
-    let mapItem = map[t];
+    let mapItem = map[t]
     if (
       // 鼠标在当前卡片同水平线
       mapItem.top < clientY &&
@@ -206,11 +212,11 @@ function getMouseTriggered(
       return {
         type: 'before',
         target: mapItem,
-      };
+      }
     }
   }
   // 是否拖拽删除
-  const winWidth = window.innerWidth;
+  const winWidth = window.innerWidth
   if (
     clientX > winWidth / 2 - 170 &&
     clientX < winWidth / 2 - 90 &&
@@ -218,7 +224,7 @@ function getMouseTriggered(
   ) {
     return {
       type: 'delete',
-    };
+    }
   }
   // 是否是调整大小
   if (
@@ -234,60 +240,60 @@ function getMouseTriggered(
     }
     return {
       type: 'size',
-      size
-    };
+      size,
+    }
   }
   // 拖拽取消
   return {
     type: 'cancel',
-  };
+  }
 }
 export default {
-  emits: ['beforeDrag', 'dragEnd'],
   props: {
     event: {
       type: MouseEvent,
       default() {
-        return {};
+        return {}
       },
     },
     dragedBookmark: {
       type: Bookmark,
       default() {
         return new Bookmark({})
-      }
+      },
     },
     disabledEnter: {
       type: Boolean,
       default: false,
     },
   },
+  emits: ['beforeDrag', 'dragEnd'],
   setup(props: {
     event: MouseEvent,
     dragedBookmark: Bookmark,
-    disabledEnter: Boolean
+    disabledEnter: boolean,
   }, context) {
-    const isStableStart = ref(false);
-    const clientX = ref(0);
-    const clientY = ref(0);
-    const gridGap = getAppConfigItem('gridGap') as number;
+    const isStableStart = ref(false)
+    const clientX = ref(0)
+    const clientY = ref(0)
+    const gridGap = getAppConfigItem('gridGap') as number
     const shadowRectStyle = ref({
       top: '',
       left: '',
       width: '',
       height: '',
-    });
-    const internalInstance = getCurrentInstance();
-    const triggeredType = ref('');
-    const activeSize: Ref<BookmarkSize | undefined> = ref(undefined);
-    let itemSizeAndPositionMap: mapItem[] = [];
-    const dragedBookmark = props.dragedBookmark;
+    })
+    const internalInstance = getCurrentInstance()
+    const triggeredType = ref('')
+    const activeSize: Ref<BookmarkSize | undefined> = ref(undefined)
+    let itemSizeAndPositionMap: mapItem[] = []
+    const dragedBookmark = props.dragedBookmark
     dragHandle(props.event, {
       stableDistance: 20,
       stableStart() {
-        context.emit('beforeDrag');
-        isStableStart.value = true;
-        itemSizeAndPositionMap = getItemListMap(internalInstance);
+        context.emit('beforeDrag')
+        isStableStart.value = true
+        itemSizeAndPositionMap = getItemListMap(internalInstance)
         // console.log('itemSizeAndPositionMap', itemSizeAndPositionMap)
       },
       move(params) {
@@ -297,19 +303,19 @@ export default {
             clientX: params.clientX,
           },
           itemSizeAndPositionMap
-        );
+        )
         // 增加 enter 检测
         if (props.disabledEnter && triggered.type === 'enter') {
-          triggered.type = 'cancel';
+          triggered.type = 'cancel'
         }
-        triggeredType.value = triggered.type;
-        clientX.value = params.clientX;
-        clientY.value = params.clientY;
+        triggeredType.value = triggered.type
+        clientX.value = params.clientX
+        clientY.value = params.clientY
 
-        const enterPadding = 3;
-        const beforeMarging = -4;
+        const enterPadding = 3
+        const beforeMarging = -4
 
-        let triggeredTarget = triggered.target;
+        let triggeredTarget = triggered.target
         if (triggered.type === 'enter' && triggeredTarget) {
           shadowRectStyle.value = {
             top: triggeredTarget.top - enterPadding + 'px',
@@ -326,7 +332,7 @@ export default {
               enterPadding * 2 -
               gridGap +
               'px',
-          };
+          }
         } else if (triggered.type === 'before') {
           if (triggeredTarget) {
             shadowRectStyle.value = {
@@ -339,7 +345,7 @@ export default {
                 beforeMarging * 2 -
                 gridGap +
                 'px',
-            };
+            }
           }
         } else if (triggered.type === 'size') {
           activeSize.value = triggered.size
@@ -352,28 +358,28 @@ export default {
             clientX: params.clientX,
           },
           itemSizeAndPositionMap
-        );
+        )
         // 增加 enter 检测
         if (props.disabledEnter && triggered.type === 'enter') {
-          triggered.type = 'cancel';
+          triggered.type = 'cancel'
         }
         const dragData = {
           type: triggered.type,
           from: dragedBookmark.id,
           to: triggered.target ? triggered.target.id : null,
           size: triggered.size,
-        };
-        if (dragData.from === dragData.to) {
-          dragData.type = 'cancel';
         }
-        context.emit('dragEnd', dragData);
+        if (dragData.from === dragData.to) {
+          dragData.type = 'cancel'
+        }
+        context.emit('dragEnd', dragData)
       },
       cancel() {
         context.emit('dragEnd', {
           type: 'cancel',
-        });
+        })
       },
-    });
+    })
     return {
       clientX,
       clientY,
@@ -395,7 +401,7 @@ export default {
           class: 'large',
         },
       ],
-    };
+    }
   },
-};
+}
 </script>

@@ -23,23 +23,29 @@
       color: textColor,
     }"
   >
-    <v-mdi v-if="iconType === 'mdi'" :name="iconData" />
+    <v-mdi
+      v-if="iconType === 'mdi'"
+      :name="iconData"
+    />
     <span v-else-if="iconType === 'text'">{{ iconData }}</span>
     <template v-else>
       <transition name="fade-fast">
-        <img v-if="faviconLoaded" :src="faviconUrl" />
+        <img
+          v-if="faviconLoaded"
+          :src="faviconUrl"
+        >
       </transition>
     </template>
   </div>
 </template>
 <script lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch } from 'vue'
 import {
   anyColorToHsl,
   formatHslToHex,
-} from '@/assets/ts/color-conversion';
-import loadImage from '@/assets/ts/load-image';
-import { BookmarkIcon } from '@/database/entity/bookmark';
+} from '@/assets/ts/color-conversion'
+import loadImage from '@/assets/ts/load-image'
+import { BookmarkIcon } from '@/database/entity/bookmark'
 export default {
   props: {
     icon: {
@@ -57,60 +63,60 @@ export default {
   },
   setup(props) {
     // 解析 icon 数据
-    let iconType = ref('crab');
-    let iconData = ref('');
+    let iconType = ref('crab')
+    let iconData = ref('')
 
     // 处理抓取图标逻辑
-    let faviconLoaded = ref(false);
-    let faviconUrl = ref('');
+    let faviconLoaded = ref(false)
+    let faviconUrl = ref('')
     function loadFavicon() {
       // 不是完整 url，不抓取
       if(!/^http(s|)\:\/\/[^\.]+\.[^\.]+/.test(props.url)) {
         return
       }
-      faviconLoaded.value = false;
+      faviconLoaded.value = false
       faviconUrl.value = `http://www.getfavicon.org/get.pl?url=${encodeURIComponent(
         props.url
-      )}&submitget=get+favicon`;
+      )}&submitget=get+favicon`
       loadImage(faviconUrl.value)
         .then(() => {
-          faviconLoaded.value = true;
+          faviconLoaded.value = true
         })
         .catch((error) => {
-          console.log('error', error);
-        });
+          console.log('error', error)
+        })
     }
     function formatIconData(iconConfig: BookmarkIcon) {
-      const iconSplit = (iconConfig || '').split(':');
+      const iconSplit = (iconConfig || '').split(':')
       if (iconSplit[0] === 'mdi') {
-        iconType.value = 'mdi';
-        iconData.value = 'mdi-' + iconSplit[1];
+        iconType.value = 'mdi'
+        iconData.value = 'mdi-' + iconSplit[1]
       } else if (iconSplit[0] === 'text') {
-        iconType.value = 'text';
-        iconData.value = iconSplit[1];
+        iconType.value = 'text'
+        iconData.value = iconSplit[1]
       } else if (props.icon === 'crab') {
-        iconType.value = 'crab';
+        iconType.value = 'crab'
         loadFavicon()
       }
     }
     watch(
       () => props.icon,
       (value: string) => {
-        formatIconData(value as BookmarkIcon);
+        formatIconData(value as BookmarkIcon)
       },
       {
         immediate: true,
       }
-    );
+    )
 
-    const textColor = ref('#ffffff');
+    const textColor = ref('#ffffff')
     watch(
       () => props.undercoat,
       (value) => {
-        const [h, s, l] = anyColorToHsl(value);
+        const [h, s, l] = anyColorToHsl(value)
         if (l < 0.6) {
           // 区块亮度小于 60%，文本使用白色
-          textColor.value = '#fff';
+          textColor.value = '#fff'
         } else {
           // 区块亮度大于等于 60%，文本使用和区块同色系的深色
           textColor.value = formatHslToHex(h, 0.2, 0.2)
@@ -119,22 +125,22 @@ export default {
       {
         immediate: true,
       }
-    );
+    )
     watch(
       () => props.url,
-      (value) => {
+      () => {
         if (iconType.value === 'crab'){
           loadFavicon()
         }
-      },
-    );
+      }
+    )
     return {
       iconType,
       iconData,
       faviconUrl,
       faviconLoaded,
       textColor,
-    };
+    }
   },
-};
+}
 </script>

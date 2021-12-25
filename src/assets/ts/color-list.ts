@@ -49,4 +49,4 @@ export default [
 
   // { label: '炎', value: '#FF3300' },
   // { label: '柳黄', value: '#C9DD23' },
-];
+]

@@ -10,10 +10,10 @@ export default {
         const bodyClickListener = (clickEvent: Event) => {
           const eventTarget = clickEvent.target as customHTMLElement
           if (!el.contains(eventTarget)) {
-              setTimeout(callback, 30)
+            setTimeout(callback, 30)
           }
         }
-        let bodyNode = document.body || document.getElementsByTagName('body')[0]
+        const bodyNode = document.body || document.getElementsByTagName('body')[0]
         setTimeout(() => {
           bodyNode.addEventListener('click', bodyClickListener)
           bodyNode.addEventListener('contextmenu', bodyClickListener)
@@ -30,5 +30,5 @@ export default {
         }
       },
     })
-  }
+  },
 }

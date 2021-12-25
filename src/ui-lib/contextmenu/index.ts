@@ -6,7 +6,7 @@ import ContextmenuItem from './contextmenu-item.vue'
 export default {
   install(app: Application) {
     app.use(directive)
-    app.component('contextmenu', Contextmenu)
-    app.component('contextmenu-item', ContextmenuItem)
-  }
+    app.component('Contextmenu', Contextmenu)
+    app.component('ContextmenuItem', ContextmenuItem)
+  },
 }

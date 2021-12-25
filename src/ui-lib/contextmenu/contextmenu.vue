@@ -23,16 +23,16 @@
   <teleport to="#v-ui">
     <transition name="slidedown">
       <div
-        class="contextmenu-body"
         v-if="visible"
         v-clickoutside="onClickoutside"
-        @click.stop
-        @contextmenu.prevent
+        class="contextmenu-body"
         :style="{
           width: width + 'px',
           top: top + 'px',
           left: left + 'px',
         }"
+        @click.stop
+        @contextmenu.prevent
       >
         <slot />
       </div>
@@ -42,7 +42,7 @@
 
 <script lang="ts">
 export default {
-  name: 'contextmenu',
+  name: 'Contextmenu',
   props: {
     width: {
       type: [String, Number],
@@ -54,12 +54,12 @@ export default {
       top: 0,
       left: 0,
       visible: false,
-    };
+    }
   },
   methods: {
     onClickoutside() {
-      this.visible = false;
+      this.visible = false
     },
   },
-};
+}
 </script>

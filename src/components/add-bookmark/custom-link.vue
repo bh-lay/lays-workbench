@@ -58,22 +58,39 @@
 <template>
   <div class="custom-link">
     <div class="input-item">
-      <div class="label">名称</div>
-      <input type="text" v-model="previewData.name" placeholder="请输入链接名称" maxlength="20" />
+      <div class="label">
+        名称
+      </div>
+      <input
+        v-model="previewData.name"
+        type="text"
+        placeholder="请输入链接名称"
+        maxlength="20"
+      >
     </div>
     <div class="input-item">
-      <div class="label">链接地址</div>
-      <input type="text" v-model="previewData.value" placeholder="请输入链接地址" />
+      <div class="label">
+        链接地址
+      </div>
+      <input
+        v-model="previewData.value"
+        type="text"
+        placeholder="请输入链接地址"
+      >
     </div>
     <div class="input-item">
       <icon-editor v-model="previewData.icon" />
     </div>
     <div class="input-item">
       <div class="undercoat-and-size">
-        <dropdown class="undercoat" undercoat="transparent" :style="{
-          background: previewData.undercoat
-        }">
-          <template v-slot:body>
+        <dropdown
+          class="undercoat"
+          undercoat="transparent"
+          :style="{
+            background: previewData.undercoat
+          }"
+        >
+          <template #body>
             <color-selector v-model="previewData.undercoat" />
           </template>
         </dropdown>
@@ -86,7 +103,9 @@
       />
     </div>
     <div class="footer">
-      <v-button @click="confirm">确定</v-button>
+      <v-button @click="confirm">
+        确定
+      </v-button>
     </div>
   </div>
 </template>
@@ -98,9 +117,8 @@ import BookmarkItem from '../bookmark-item.vue'
 import ColorSelector from './color-selector.vue'
 import SizeSelector from './size-selector.vue'
 import IconEditor from './icon-editor.vue'
-import { reactive } from 'vue';
+import { reactive } from 'vue'
 export default {
-  emits: ['confirm'],
   components: { BookmarkItem, ColorSelector, SizeSelector, IconEditor },
   props: {
     data: {
@@ -110,13 +128,14 @@ export default {
       },
     },
   },
+  emits: ['confirm'],
   setup(props: {
     data: Bookmark
   }, context) {
     const previewData = reactive(
       new Bookmark(props.data || {
         undercoat: '#9D2932',
-        icon: 'text:好看'
+        icon: 'text:好看',
       })
     )
     return {
@@ -124,13 +143,13 @@ export default {
       confirm() {
         if (!previewData.name) {
           new Message({
-            message: '图标名字没写'
+            message: '图标名字没写',
           })
           return
         }
         if (!previewData.value) {
           new Message({
-            message: '链接没有填'
+            message: '链接没有填',
           })
           return
         }
@@ -138,5 +157,5 @@ export default {
       },
     }
   },
-};
+}
 </script>

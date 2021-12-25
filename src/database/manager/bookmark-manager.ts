@@ -3,20 +3,20 @@ import { queryOptions } from '../utils/types-define'
 
 export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: any): Promise<Bookmark>  {
   return new Promise((resolve, reject) => {
-    var bookmark = new Bookmark(bookmarkItem)
-    var request = db.transaction(['bookmark'], 'readwrite')
+    const bookmark = new Bookmark(bookmarkItem)
+    const request = db.transaction(['bookmark'], 'readwrite')
       .objectStore('bookmark')
-      .add(bookmark);
+      .add(bookmark)
 
-    request.onsuccess = function (event) {
+    request.onsuccess = function () {
       // console.log('insert event', event)
       // 数据写入成功
       resolve(bookmarkItem)
-    };
+    }
 
-    request.onerror = function (event) {
+    request.onerror = function () {
       // 数据写入失败
-      let error = new Error('数据写入失败')
+      const error = new Error('数据写入失败')
       // error.__detail = event
       reject(error)
     }
@@ -25,19 +25,19 @@ export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: any): Promi
 
 export function bookmarkUpdateManager(db: IDBDatabase, bookmarkItem: any) {
   return new Promise((resolve, reject) => {
-    var bookmark = new Bookmark(bookmarkItem)
-    var request = db.transaction(['bookmark'], 'readwrite')
+    const bookmark = new Bookmark(bookmarkItem)
+    const request = db.transaction(['bookmark'], 'readwrite')
       .objectStore('bookmark')
-      .put(bookmark);
+      .put(bookmark)
 
     request.onsuccess = function (event) {
       // 数据写入成功
       resolve(event)
-    };
+    }
 
-    request.onerror = function (event) {
+    request.onerror = function () {
       // 数据写入失败
-      let error = new Error('数据写入失败')
+      const error = new Error('数据写入失败')
       // error.__detail = event
       reject(error)
     }
@@ -46,25 +46,24 @@ export function bookmarkUpdateManager(db: IDBDatabase, bookmarkItem: any) {
 
 export function bookmarkGetManager(db: IDBDatabase, bookmarkId: any): Promise<Bookmark> {
   return new Promise((resolve, reject) => {
-    var transaction = db.transaction(['bookmark']);
-    var objectStore = transaction.objectStore('bookmark');
-    var request = objectStore.get(bookmarkId);
+    const transaction = db.transaction(['bookmark'])
+    const objectStore = transaction.objectStore('bookmark')
+    const request = objectStore.get(bookmarkId)
   
     request.onsuccess = function () {
       if (request.result) {
-        var bookmark = new Bookmark(request.result)
+        const bookmark = new Bookmark(request.result)
         // 数据读取成功
         resolve(bookmark)
       } else {
-        let error = new Error('数据读取失败')
+        const error = new Error('数据读取失败')
         // error.__detail = event
         reject(error)
       }
-      
-    };
-    request.onerror = function (event) {
+    }
+    request.onerror = function () {
       // 数据写入失败
-      let error = new Error('数据写入失败')
+      const error = new Error('数据写入失败')
       // error.__detail = event
       reject(error)
     }
@@ -72,17 +71,17 @@ export function bookmarkGetManager(db: IDBDatabase, bookmarkId: any): Promise<Bo
 }
 export function bookmarkRemoveManager(db: IDBDatabase, bookmarkId: string) {
   return new Promise((resolve, reject) => {
-    var transaction = db.transaction(['bookmark'], 'readwrite');
-    var objectStore = transaction.objectStore('bookmark');
-    var request = objectStore.delete(bookmarkId);
+    const transaction = db.transaction(['bookmark'], 'readwrite')
+    const objectStore = transaction.objectStore('bookmark')
+    const request = objectStore.delete(bookmarkId)
   
     request.onsuccess = function () {
       // 数据读取成功
       resolve(true)
-    };
+    }
     request.onerror = function (event) {
       // 数据写入失败
-      let error = new Error('数据删除失败')
+      const error = new Error('数据删除失败')
       // error.__detail = event
       reject(error)
     }
@@ -111,7 +110,7 @@ function isBookmarkMatchesQuery(item: any, query: queryOptions) {
 }
 export function bookmarkListManager(db: IDBDatabase, query: queryOptions): Promise<Bookmark[]> {
   return new Promise((resolve, reject) => {
-    const objectStore = db.transaction('bookmark').objectStore('bookmark');
+    const objectStore = db.transaction('bookmark').objectStore('bookmark')
     const request = objectStore.openCursor()
     const bookmarkList: Bookmark[] = []
     request.onsuccess = function (event) {
@@ -119,21 +118,21 @@ export function bookmarkListManager(db: IDBDatabase, query: queryOptions): Promi
         reject(new Error('could not find target'))
         return
       }
-      var cursor: any = (event.target as CustomIDBEventTarget).result;
+      const cursor: any = (event.target as CustomIDBEventTarget).result
       if (cursor) {
         const value: any = cursor.value
         if (isBookmarkMatchesQuery(value, query)) {
           bookmarkList.push(new Bookmark(value))
         }
-        cursor.continue();
+        cursor.continue()
       } else {
         resolve(bookmarkList)
       }
-    };
+    }
 
-    request.onerror = function (event) {
+    request.onerror = function () {
       // 数据写入失败
-      let error = new Error('数据读取失败')
+      const error = new Error('数据读取失败')
       // error.__detail = event
       reject(error)
     }
@@ -142,7 +141,7 @@ export function bookmarkListManager(db: IDBDatabase, query: queryOptions): Promi
 export function bookmarkCountManager(db: IDBDatabase): Promise<number> {
   return new Promise((resolve, reject) => {
     
-    const objectStore = db.transaction('bookmark').objectStore('bookmark');
+    const objectStore = db.transaction('bookmark').objectStore('bookmark')
     const request = objectStore.count()
   
     request.onsuccess = function (event) {
@@ -151,11 +150,11 @@ export function bookmarkCountManager(db: IDBDatabase): Promise<number> {
       } else {
         resolve((event.target as CustomIDBEventTarget).result)
       }
-    };
+    }
 
-    request.onerror = function (event) {
+    request.onerror = function () {
       // 数据写入失败
-      let error = new Error('数据读取失败')
+      const error = new Error('数据读取失败')
       // error.__detail = event
       reject(error)
     }
@@ -166,10 +165,10 @@ export function bookmarkResetSortManager(db: IDBDatabase, idList: string[]): Pro
     // id -> sort 值映射 Map
     const idSortMap = idList.reduce((result: Map<string, number>, id: string, index: number) => {
       result.set(id, idList.length - index)
-      return result;
-    }, new Map());
+      return result
+    }, new Map())
     // 创建数据库 store 对象
-    const objectStore = db.transaction('bookmark', 'readwrite').objectStore('bookmark');
+    const objectStore = db.transaction('bookmark', 'readwrite').objectStore('bookmark')
     // 打开游标
     const request = objectStore.openCursor()
     request.onsuccess = function (event) {
@@ -177,24 +176,24 @@ export function bookmarkResetSortManager(db: IDBDatabase, idList: string[]): Pro
         reject(new Error('could not find target'))
         return
       }
-      var cursor: any = (event.target as CustomIDBEventTarget).result;
+      const cursor: any = (event.target as CustomIDBEventTarget).result
       if (cursor) {
         const value: any = cursor.value
         const newSortValue = idSortMap.get(value.id)
         if (newSortValue) {
           // 如果当前书签在 map 中，则修改
           value.sort = newSortValue
-          objectStore.put(value);
+          objectStore.put(value)
         }
-        cursor.continue();
+        cursor.continue()
       } else {
         resolve(idSortMap)
       }
-    };
+    }
 
-    request.onerror = function (event) {
+    request.onerror = function () {
       // 数据写入失败
-      let error = new Error('数据设置失败')
+      const error = new Error('数据设置失败')
       // error.__detail = event
       reject(error)
     }

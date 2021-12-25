@@ -19,7 +19,7 @@
 </style>
 
 <script lang="ts">
-import { h } from 'vue';
+import { h } from 'vue'
 export default {
   props: {
     modelValue: {
@@ -27,6 +27,7 @@ export default {
       default: null,
     },
   },
+  emits: ['update:modelValue'],
   setup(props, context) {
     function createTabItem(id: string, label: string) {
       return h(
@@ -45,12 +46,12 @@ export default {
     }
     return function() {
       return h('div', {
-        class: 'tab-outer'
+        class: 'tab-outer',
       },[
         createTabItem('custom', '自定义链接'),
         createTabItem('widgets', '小工具'),
-      ]);
+      ])
     }
   },
-};
+}
 </script>

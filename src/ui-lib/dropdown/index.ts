@@ -5,8 +5,8 @@ import DropdownItemPlain from './dropdown-item-plain.vue'
 
 export default {
   install(app: Application) {
-    app.component('dropdown', Dropdown)
-    app.component('dropdown-item', DropdownItem)
-    app.component('dropdown-item-plain', DropdownItemPlain)
-  }
+    app.component('Dropdown', Dropdown)
+    app.component('DropdownItem', DropdownItem)
+    app.component('DropdownItemPlain', DropdownItemPlain)
+  },
 }

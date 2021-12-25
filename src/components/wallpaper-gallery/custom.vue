@@ -50,14 +50,20 @@
 
 <template>
   <div class="custom-wallpaper">
-    <div class="caption">填写图片地址</div>
+    <div class="caption">
+      填写图片地址
+    </div>
     <div class="input-center">
-      <input v-model="picUrl" />
-      <button @click="applyPic">设置</button>
+      <input v-model="picUrl">
+      <button @click="applyPic">
+        设置
+      </button>
     </div>
     <div class="footer">
-      <p>您可以借助于公开的图床，上传您的壁纸。<br/>
-      或者找到公开可访问的壁纸地址，获取图片访问地址。</p>
+      <p>
+        您可以借助于公开的图床，上传您的壁纸。<br>
+        或者找到公开可访问的壁纸地址，获取图片访问地址。
+      </p>
       <p>给您几个链接，尽情探索吧～</p>
       <p>
         <a href="https://imgtu.com/">路过图床</a>
@@ -70,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 import { setAppConfigItem } from '@/assets/ts/app-config'
 import { Message } from '@/ui-lib/message/index'
 export default {
@@ -89,7 +95,7 @@ export default {
             cancelText: '取消',
             confirm() {
               setAppConfigItem('wallpaper', picUrl.value)  
-            }
+            },
           })
           // if (confirm('地址没问题，继续使用')) {
             
@@ -98,7 +104,7 @@ export default {
           setAppConfigItem('wallpaper', picUrl.value)
         }
       },
-    };
+    }
   },
-};
+}
 </script>

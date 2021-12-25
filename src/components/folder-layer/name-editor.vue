@@ -21,12 +21,12 @@ input
   <div class="folder-name-editor">
     <input
       ref="inputRef"
-      maxlength="20"
       v-model="inputValue"
+      maxlength="20"
       type="text"
       @keydown.enter="blur"
       @focusout="handleChange"
-    />
+    >
   </div>
 </template>
 
@@ -54,7 +54,7 @@ export default {
       handleChange() {
         context.emit('update:modelValue', inputValue.value)
       },
-    };
+    }
   },
-};
+}
 </script>

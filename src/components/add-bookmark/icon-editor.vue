@@ -69,25 +69,36 @@ input
   <div class="icon-editor">
     <dropdown :arrow="true">
       <span>{{ iconTypeLabel }}</span>
-      <template v-slot:body>
+      <template #body>
         <div class="icon-type-selector">
           <dropdown-item
             v-for="iconTypeItem in iconTypeList"
             :key="iconTypeItem.value"
             :class="[iconType === iconTypeItem.value ? 'active' : '']"
             @click="iconType = iconTypeItem.value"
-          >{{iconTypeItem.label}}</dropdown-item>
+          >
+            {{ iconTypeItem.label }}
+          </dropdown-item>
         </div>
       </template>
     </dropdown>
     <input
       v-if="iconType !== 'crab'"
-      :maxlength="iconType === 'mdi' ? 30 : 6"
       v-model="inputValue"
+      :maxlength="iconType === 'mdi' ? 30 : 6"
       type="text"
-    />
-    <div v-else class="crab-message">将尝试自动抓取图标</div>
-    <div v-if="iconType === 'mdi'" class="mdi-help" @click="openMdiHelp">
+    >
+    <div
+      v-else
+      class="crab-message"
+    >
+      将尝试自动抓取图标
+    </div>
+    <div
+      v-if="iconType === 'mdi'"
+      class="mdi-help"
+      @click="openMdiHelp"
+    >
       <v-mdi name="mdi-help" />
     </div>
   </div>
@@ -95,8 +106,7 @@ input
 
 <script lang="ts">
 import { ref, watch } from 'vue'
-import bookmarkItem from '../bookmark-item.vue';
-import { BookmarkIcon } from '@/database/entity/bookmark';
+import { BookmarkIcon } from '@/database/entity/bookmark'
 const iconTypeList = [
   {
     value: 'text',
@@ -109,7 +119,7 @@ const iconTypeList = [
   {
     value: 'crab',
     label: '抓取图标',
-  }
+  },
 ]
 // 根据 icon type 获取对应文字说明
 function getIconTypeLabel (iconType: string) {
@@ -145,7 +155,6 @@ function formatIconData(iconConfig: BookmarkIcon) {
   }
 }
 export default {
-  components: { bookmarkItem },
   props: {
     modelValue: {
       type: String,
@@ -188,7 +197,7 @@ export default {
       // 生成对应的默认值，并获取文本
       let newModelValue = ''
       if (newIconType === 'mdi') {
-        iconValue.value = newValue.replace(/^mdi\-/, '')
+        iconValue.value = newValue.replace(/^mdi-/, '')
         newModelValue = 'mdi:' + iconValue.value
       } else if (newIconType === 'text') {
         iconValue.value = newValue
@@ -212,7 +221,7 @@ export default {
       openMdiHelp() {
         window.open('https://material.iconhelper.cn/', 'about:blank')
       },
-    };
+    }
   },
-};
+}
 </script>

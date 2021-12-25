@@ -9,18 +9,21 @@
     undercoat="#000"
     @click="addBookmarkVisible = true"
   />
-  <modal v-model="addBookmarkVisible" :width="400">
+  <modal
+    v-model="addBookmarkVisible"
+    :width="400"
+  >
     <main-function @success="handleCreateSuccess" />
   </modal>
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 import MainFunction from './main.vue'
 import BookmarkIcon from '../bookmark-icon.vue'
 export default {
-  emits: ['success'],
   components: { BookmarkIcon, MainFunction },
+  emits: ['success'],
   setup(props, context) {
     const addBookmarkVisible = ref(false)
     return {
@@ -29,7 +32,7 @@ export default {
         addBookmarkVisible.value = false
         context.emit('success')
       },
-    };
+    }
   },
-};
+}
 </script>

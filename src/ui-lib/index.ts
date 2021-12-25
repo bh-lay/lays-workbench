@@ -1,8 +1,8 @@
 import { App as Application }  from 'vue'
-import Components from './components/index';
-import clickOutSide from "./directives/click-out-side";
-import contextmenu from "./contextmenu/index";
-import dropdown from "./dropdown/index";
+import Components from './components/index'
+import clickOutSide from './directives/click-out-side'
+import contextmenu from './contextmenu/index'
+import dropdown from './dropdown/index'
 
 function initUiLayer() {
   const uiNode = document.querySelector('#v-ui')
@@ -20,6 +20,5 @@ export default {
     app.use(clickOutSide)
     app.use(contextmenu)
     app.use(dropdown)
-
-  }
+  },
 }

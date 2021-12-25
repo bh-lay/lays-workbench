@@ -80,37 +80,61 @@
 </style>
 
 <template>
-  <div class="reg-visual-small" v-if="widgetsSize === BookmarkSize.small" @click="showRegVisual">
+  <div
+    v-if="widgetsSize === BookmarkSize.small"
+    class="reg-visual-small"
+    @click="showRegVisual"
+  >
     <v-mdi name="mdi-regex" />
   </div>
-  <div class="reg-visual-medium" v-else-if="widgetsSize === BookmarkSize.medium" @click="showRegVisual" >
-    <div class="title">正则可视化</div>
-    <div class="desc">让晦涩的正则<br/>生动起来</div>
+  <div
+    v-else-if="widgetsSize === BookmarkSize.medium"
+    class="reg-visual-medium"
+    @click="showRegVisual"
+  >
+    <div class="title">
+      正则可视化
+    </div>
+    <div class="desc">
+      让晦涩的正则<br>生动起来
+    </div>
   </div>
-  <div class="reg-visual-widgets" v-else>
-    <div class="title">正则可视化</div>
-    <div class="desc"><span>让晦涩的正则</span><span>生动起来</span></div>
+  <div
+    v-else
+    class="reg-visual-widgets"
+  >
+    <div class="title">
+      正则可视化
+    </div>
+    <div class="desc">
+      <span>让晦涩的正则</span><span>生动起来</span>
+    </div>
     <div class="input-group">
-      <input type="text" placeholder="输入正则表达式" v-model="quickInput" @keydown.enter="showRegVisual">
-      <button @click="showRegVisual">查看</button>
+      <input
+        v-model="quickInput"
+        type="text"
+        placeholder="输入正则表达式"
+        @keydown.enter="showRegVisual"
+      >
+      <button @click="showRegVisual">
+        查看
+      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, computed } from "vue";
-import { Bookmark, BookmarkSize } from '@database/entity/bookmark';
+import { ref, computed } from 'vue'
+import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 import { replaceRouter } from '@/assets/ts/router'
-import RegVisual from './main.vue'
 export default {
-  components: { RegVisual },
   props: {
     data: {
       type: Bookmark,
       default() {
         return new Bookmark({})
       },
-    }
+    },
   },
   setup(props: { data: Bookmark }) {
     const quickInput = ref('')
@@ -118,7 +142,7 @@ export default {
     function showRegVisual() {
       setTimeout(() => {
         replaceRouter('widgets', 'reg-visual', {
-          regText: quickInput.value
+          regText: quickInput.value,
         })
         quickInput.value = ''
       })
@@ -128,7 +152,7 @@ export default {
       widgetsSize,
       quickInput,
       showRegVisual,
-    };
+    }
   },
-};
+}
 </script>

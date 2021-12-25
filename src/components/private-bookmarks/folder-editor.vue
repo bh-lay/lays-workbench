@@ -34,30 +34,36 @@ input
       <span v-else>添加文件夹</span>
     </div>
     <div class="body">
-      <input type="text" v-model="name" />
+      <input
+        v-model="name"
+        type="text"
+      >
     </div>
     <div class="footer">
-      <v-button @click="$emit('cancel')">取消</v-button>
-      <v-button @click="handleConfirm">确定</v-button>
+      <v-button @click="$emit('cancel')">
+        取消
+      </v-button>
+      <v-button @click="handleConfirm">
+        确定
+      </v-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 export default {
-  name: 'vue-folder-item',
-  emits: ['confirm', 'cancel'],
   props: {
     type: {
       type: String,
-      default: 'create'
+      default: 'create',
     },
     folderName: {
       type: String,
       default: '',
     },
   },
+  emits: ['confirm', 'cancel'],
   setup(props, context) {
     const name = ref('')
     if (props.type === 'edit') {
@@ -69,8 +75,8 @@ export default {
         context.emit('confirm', {
           name: name.value,
         })
-      }
-    };
+      },
+    }
   },
-};
+}
 </script>

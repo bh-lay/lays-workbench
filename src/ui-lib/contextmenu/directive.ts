@@ -9,8 +9,8 @@ export default {
         const $refKey: string = binding.arg || ''
 
         el.addEventListener('contextmenu', function(event: customMouseEvent){
-          event.preventDefault();
-          // event.stopPropagation();
+          event.preventDefault()
+          // event.stopPropagation()
           // 若已触发过右键菜单，则
           if (event._hasTriggered) {
             return
@@ -23,20 +23,19 @@ export default {
           if (!contextmenuVM) {
             return
           }
-          contextmenuVM.visible = false;
+          contextmenuVM.visible = false
 
           const bindingValue = binding.value
           if (bindingValue && bindingValue.onVisible) {
             bindingValue.onVisible()
           }
           nextTick(() => {
-            contextmenuVM.left = event.clientX;
-            contextmenuVM.top = event.clientY;
-            contextmenuVM.visible = true;
-          });
+            contextmenuVM.left = event.clientX
+            contextmenuVM.top = event.clientY
+            contextmenuVM.visible = true
+          })
         }, false)
       },
-      unmounted(el: HTMLElement) {},
     })
-  }
+  },
 }

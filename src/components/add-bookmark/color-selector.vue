@@ -42,8 +42,8 @@
 </style>
 
 <script lang="ts">
-import { resolveComponent, h } from 'vue';
-import colorList from '@/assets/ts/color-list';
+import { resolveComponent, h } from 'vue'
+import colorList from '@/assets/ts/color-list'
 export default {
   props: {
     modelValue: {
@@ -52,24 +52,26 @@ export default {
     },
   },
   setup(props, context) {
+    // 目前没有好的方法定义此类型，临时解析成字符串
+    const dropdownItemComponent = resolveComponent('dropdown-item') as string
     function createColorItem(colorItem: { label: string, value: string }) {
       return h(
-        resolveComponent('dropdown-item'),
+        dropdownItemComponent,
         {
           class: ['color-item', props.modelValue === colorItem.value ? 'active' : ''],
           onClick() {
-            context.emit('update:modelValue', colorItem.value);
+            context.emit('update:modelValue', colorItem.value)
           },
           style: {
-            background: colorItem.value
+            background: colorItem.value,
           },
         },
         {
           default() {
             return h('span', colorItem.label)
-          }
-        },
-      );
+          },
+        }
+      )
     }
     return function () {
       return h(
@@ -78,8 +80,8 @@ export default {
           class: 'color-outer',
         },
         colorList.map(createColorItem)
-      );
-    };
+      )
+    }
   },
-};
+}
 </script>

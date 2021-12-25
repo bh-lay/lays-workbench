@@ -64,13 +64,15 @@
       }"
       @click="applyWallpaper(item.value)"
     >
-      <div class="label">{{ item.label }}</div>
+      <div class="label">
+        {{ item.label }}
+      </div>
     </div>
-    <div class="empty"></div>
-    <div class="empty"></div>
-    <div class="empty"></div>
-    <div class="empty"></div>
-    <div class="empty"></div>
+    <div class="empty" />
+    <div class="empty" />
+    <div class="empty" />
+    <div class="empty" />
+    <div class="empty" />
   </div>
 </template>
 
@@ -83,8 +85,8 @@ export default {
       colorList,
       applyWallpaper(url: string) {
         setAppConfigItem('wallpaper', url)
-      }
-    };
+      },
+    }
   },
-};
+}
 </script>

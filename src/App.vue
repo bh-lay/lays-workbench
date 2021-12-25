@@ -106,7 +106,10 @@ textarea
 
 <template>
   <gallery />
-  <div class="pager" @contextmenu.prevent>
+  <div
+    class="pager"
+    @contextmenu.prevent
+  >
     <div class="pager-header">
       <div class="pager-header-inner">
         <div class="page-title">
@@ -118,8 +121,11 @@ textarea
     </div>
     <div class="pager-body">
       <div class="scroll-body">
-        <div :class="['screen-mask', focused ? 'defocus' : '']"></div>
-        <search-entrance @focus="focused = true" @blur="focused = false" />
+        <div :class="['screen-mask', focused ? 'defocus' : '']" />
+        <search-entrance
+          @focus="focused = true"
+          @blur="focused = false"
+        />
         <div class="fixed-height-pager">
           <quick-entry />
         </div>
@@ -127,7 +133,10 @@ textarea
     </div>
     <div class="pager-footer">
       <div class="footer-copyright">
-        by: <a href="http://bh-lay.com" target="_blank">剧中人</a>
+        by: <a
+          href="http://bh-lay.com"
+          target="_blank"
+        >剧中人</a>
         <span>皖ICP备14001331号-1</span>
       </div>
     </div>
@@ -136,11 +145,11 @@ textarea
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
-import Gallery from '@/components/gallery.vue';
-import SearchEntrance from '@/components/search-entrance.vue';
-import QuickEntry from '@/components/quick-entry.vue';
-import Settings from '@/components/settings/index.vue';
+import { ref } from 'vue'
+import Gallery from '@/components/gallery.vue'
+import SearchEntrance from '@/components/search-entrance.vue'
+import QuickEntry from '@/components/quick-entry.vue'
+import Settings from '@/components/settings/index.vue'
 import EasyRouter from '@/components/easy-router.vue'
 
 export default {
@@ -148,8 +157,8 @@ export default {
   setup() {
     const focused = ref(false)
     return {
-      focused
-    };
+      focused,
+    }
   },
-};
+}
 </script>

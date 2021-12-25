@@ -6,7 +6,10 @@ iframe
 </style>
 
 <template>
-  <iframe :src="iframeSrc" visible="0"></iframe>
+  <iframe
+    :src="iframeSrc"
+    visible="0"
+  />
 </template>
 
 <script lang="ts">
@@ -15,7 +18,7 @@ export default {
     regText: {
       type: String,
       default: '',
-    }
+    },
   },
   setup(props) {
     let queryStr = ''
@@ -30,7 +33,7 @@ export default {
     }
     return {
       iframeSrc: '/regulex-legacy/index.html?v1' + queryStr,
-    };
+    }
   },
-};
+}
 </script>

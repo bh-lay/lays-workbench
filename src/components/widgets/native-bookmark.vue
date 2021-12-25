@@ -57,16 +57,24 @@
 <template>
   <div class="bookmark-wrapper">
     <template v-if="isMac">
-      <div class="key-button mac-option"></div>
+      <div class="key-button mac-option" />
       <div class="key-button mac-command">
         <v-mdi name="mdi-apple-keyboard-command" />
       </div>
-      <div class="key-button key-button-text">B</div>
+      <div class="key-button key-button-text">
+        B
+      </div>
     </template>
     <template v-else>
-      <div class="key-button key-button-text mini-text">Ctrl</div>
-      <div class="key-button key-button-text mini-text">Shift</div>
-      <div class="key-button key-button-text">O</div>
+      <div class="key-button key-button-text mini-text">
+        Ctrl
+      </div>
+      <div class="key-button key-button-text mini-text">
+        Shift
+      </div>
+      <div class="key-button key-button-text">
+        O
+      </div>
     </template>
   </div>
 </template>
@@ -77,7 +85,7 @@ export default {
     var isMac = /macintosh|mac os x/i.test(navigator.userAgent)
     return {
       isMac,
-    };
+    }
   },
-};
+}
 </script>

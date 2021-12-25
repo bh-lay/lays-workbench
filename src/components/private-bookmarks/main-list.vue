@@ -22,38 +22,63 @@
   color #545463
 </style>
 <template>
-  <div class="bookmark-container" v-contextmenu:listMenu>
+  <div
+    v-contextmenu:listMenu
+    class="bookmark-container"
+  >
     <div class="header">
-      <v-button @click="handleCreateLink">添加链接</v-button>
-      <v-button @click="handleCreateFolder">添加文件夹</v-button>
+      <v-button @click="handleCreateLink">
+        添加链接
+      </v-button>
+      <v-button @click="handleCreateFolder">
+        添加文件夹
+      </v-button>
     </div>
-    <div v-if="bookmarkList.length === 0" class="empty">
+    <div
+      v-if="bookmarkList.length === 0"
+      class="empty"
+    >
       万物皆空
     </div>
-    <div v-else class="link-list-body">
+    <div
+      v-else
+      class="link-list-body"
+    >
       <main-item
         v-for="item in bookmarkList"
-        :key="item.id" :data="item"
-        :active="selectedBookmark.id === item.id"
+        :key="item.id"
         v-contextmenu:itemMenu="{
           onVisible() {
             selectedBookmark = item
           }
         }"
+        :data="item"
+        :active="selectedBookmark.id === item.id"
         @click="selectedBookmark = item"
         @dblclick="handleOpen(item)"
       />
     </div>
   </div>
   <contextmenu ref="itemMenu">
-    <contextmenu-item @click="handleEdit">编辑</contextmenu-item>
-    <contextmenu-item @click="handleRemove">删除</contextmenu-item>
+    <contextmenu-item @click="handleEdit">
+      编辑
+    </contextmenu-item>
+    <contextmenu-item @click="handleRemove">
+      删除
+    </contextmenu-item>
   </contextmenu>
   <contextmenu ref="listMenu">
-    <contextmenu-item @click="handleCreateLink">添加新书签</contextmenu-item>
-    <contextmenu-item @click="handleCreateFolder">添加新文件夹</contextmenu-item>
+    <contextmenu-item @click="handleCreateLink">
+      添加新书签
+    </contextmenu-item>
+    <contextmenu-item @click="handleCreateFolder">
+      添加新文件夹
+    </contextmenu-item>
   </contextmenu>
-  <modal v-model="linkEditorConfig.visible" :width="440">
+  <modal
+    v-model="linkEditorConfig.visible"
+    :width="440"
+  >
     <link-editor
       :type="linkEditorConfig.type"
       :link-name="selectedBookmark.name"
@@ -62,7 +87,10 @@
       @confirm="handleLinkEditorConfirm"
     />
   </modal>
-  <modal v-model="folderEditorConfig.visible" :width="440">
+  <modal
+    v-model="folderEditorConfig.visible"
+    :width="440"
+  >
     <folder-editor
       :type="folderEditorConfig.type"
       :folder-name="selectedBookmark.name"
@@ -73,24 +101,23 @@
 </template>
 
 <script lang="ts">
-import { Ref, ref, watch } from 'vue';
+import { Ref, ref, watch } from 'vue'
 import {
   Bookmark,
   BookmarkType,
-} from '@database/entity/bookmark';
+} from '@database/entity/bookmark'
 import {
   bookmarkListService,
   bookmarkInsertService,
   bookmarkUpdateService,
   bookmarkRemoveService,
-} from '@database/services/bookmark-service';
+} from '@database/services/bookmark-service'
 import { Message } from '@/ui-lib/message/index'
-import MainItem from './main-item.vue';
+import MainItem from './main-item.vue'
 import LinkEditor from './link-editor.vue'
 import FolderEditor from './folder-editor.vue'
 export default {
   components: { MainItem, LinkEditor, FolderEditor },
-  emits: ['select', 'create', 'open-folder', 'after-insert', 'after-remove'],
   props: {
     parent: {
       type: String,
@@ -101,8 +128,9 @@ export default {
       default: '',
     },
   },
+  emits: ['select', 'create', 'open-folder', 'after-insert', 'after-remove'],
   setup(props, context) {
-    const bookmarkList: Ref<Bookmark[]> = ref([]);
+    const bookmarkList: Ref<Bookmark[]> = ref([])
     const selectedBookmark: Ref<Bookmark> = ref(new Bookmark({}))
     const loadList = () => {
       bookmarkListService({
@@ -113,27 +141,27 @@ export default {
           let bValue = (B.type === BookmarkType.folder ? 10000 : 0) + B.sort
           return bValue - aValue
         })
-        bookmarkList.value = list;
-      });
-    };
-    loadList();
-    watch(() => props.parent, loadList);
+        bookmarkList.value = list
+      })
+    }
+    loadList()
+    watch(() => props.parent, loadList)
     watch(
       () => props.changedParentId,
       (changedParentId) => {
         if (changedParentId !== props.parent) {
-          return;
+          return
         }
-        loadList();
+        loadList()
       }
-    );
+    )
     const linkEditorConfig = ref({
       visible: false,
-      type: 'create'
+      type: 'create',
     })
     const folderEditorConfig = ref({
       visible: false,
-      type: 'create'
+      type: 'create',
     })
     return {
       selectedBookmark,
@@ -174,10 +202,10 @@ export default {
             type: BookmarkType.link,
             parent: props.parent,
             value,
-          });
+          })
           bookmarkInsertService(item).then(() => {
             context.emit('after-insert')
-          });
+          })
         }
         linkEditorConfig.value.visible = false
       },
@@ -192,10 +220,10 @@ export default {
             sort: 0,
             type: BookmarkType.folder,
             parent: props.parent,
-          });
+          })
           bookmarkInsertService(item).then(() => {
             context.emit('after-insert')
-          });
+          })
         }
         folderEditorConfig.value.visible = false
       },
@@ -210,18 +238,18 @@ export default {
         bookmarkRemoveService(selectedBookmark.value.id).then(() => {
           for (let i = 0; i < bookmarkList.value.length; i++) {
             if (bookmarkList.value[i].id === selectedBookmark.value.id) {
-              bookmarkList.value.splice(i, 1);
-              break;
+              bookmarkList.value.splice(i, 1)
+              break
             }
           }
           context.emit('after-remove')
         }).catch(e => {
           new Message({
-            message: e.message || '删除失败，请重试'
+            message: e.message || '删除失败，请重试',
           })
-        });
+        })
       },
-    };
+    }
   },
-};
+}
 </script>

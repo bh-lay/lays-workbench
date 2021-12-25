@@ -27,9 +27,16 @@
 </style>
 <template>
   <div :class="['main-item', active ? 'active' : '']">
-    <v-mdi :name="data.type === BookmarkType.folder ? 'mdi-folder' : 'mdi-link-variant'" size="14" />
-    <div class="label">{{ data.name }}</div>
-    <div class="value">{{ data.value }}</div>
+    <v-mdi
+      :name="data.type === BookmarkType.folder ? 'mdi-folder' : 'mdi-link-variant'"
+      size="14"
+    />
+    <div class="label">
+      {{ data.name }}
+    </div>
+    <div class="value">
+      {{ data.value }}
+    </div>
   </div>
 </template>
 
@@ -50,8 +57,8 @@ export default {
   },
   setup() {
     return {
-      BookmarkType
+      BookmarkType,
     }
   },
-};
+}
 </script>

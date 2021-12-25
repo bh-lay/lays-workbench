@@ -63,15 +63,22 @@
     </div>
     <div class="content">
       <div class="half">
-        <textarea cols="30" rows="10" v-model="sourceJson" ></textarea>
+        <textarea
+          v-model="sourceJson"
+          cols="30"
+          rows="10"
+        />
       </div>
-      <div class="json-formatter-content" ref="fomatterRef"></div>
+      <div
+        ref="fomatterRef"
+        class="json-formatter-content"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Ref, ref, watch, onMounted } from 'vue';
+import { Ref, ref, watch, onMounted } from 'vue'
 import JSONFormatter from 'json-formatter-js'
 const defaultText = `{
   auth: "剧中人",
@@ -81,7 +88,7 @@ const defaultText = `{
 }`
 function parseJSON(str: string) {
   try{
-    return (new Function("", "return " + str))()
+    return (new Function('', 'return ' + str))()
   } catch (e) {
     console.log('e', e)
     return str
@@ -109,8 +116,8 @@ export default {
     })
     return {
       fomatterRef,
-      sourceJson
-    };
+      sourceJson,
+    }
   },
-};
+}
 </script>

@@ -1,14 +1,14 @@
 <template>
   <svg 
-    viewBox="0 0 24 24" 
+    viewBox="0 0 24 24"
     :fill="fill"
     :height="size"
     :width="size"
     class="mdi-icon"
-    :style="{ transform: `rotate(${this.rotate}deg)`, display: 'inline-block' }"
+    :style="{ transform: `rotate(${rotate}deg)`, display: 'inline-block' }"
   >
     <title v-if="title">{{ title }}</title>
-    <path :d="icon"></path>
+    <path :d="icon" />
   </svg>
 </template>
 
@@ -18,13 +18,13 @@ let lib: libType = {}
 
 function toCamelCase(str: string) {
   const result = str.replace(/(?:^\w|[A-Z]|\b\w)/g, (letter, index) => {
-    return index === 0 ? letter.toLowerCase() : letter.toUpperCase();
-  });
+    return index === 0 ? letter.toLowerCase() : letter.toUpperCase()
+  })
 
-  return result.replace(/\s+|[-]/g, '');
+  return result.replace(/\s+|[-]/g, '')
 }
 export default {
-  name: 'v-mdi',
+  name: 'VMdi',
   props: {
     name: String,
     title: String,
@@ -38,7 +38,7 @@ export default {
     },
     rotate: {
       type: Number,
-      default: 0
+      default: 0,
     },
     path: {
       type: String,
@@ -47,20 +47,20 @@ export default {
   },
   add(icons: libType) {
     if (typeof icons === 'object' && icons !== null) {
-      lib = icons;
+      lib = icons
     }
   },
   computed: {
     icon() {
-      if (this.path) return this.path;
-      const icon = lib[toCamelCase(this.name as string)];
+      if (this.path) return this.path
+      const icon = lib[toCamelCase(this.name as string)]
       if (typeof icon === 'undefined') {
-        console.warn(`[${this.name}] Name of the icon is incorrect`);
-        return;
+        console.warn(`[${this.name}] Name of the icon is incorrect`)
+        return
       }
 
-      return icon;
-    }
+      return icon
+    },
   },
-};
+}
 </script>

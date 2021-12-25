@@ -39,19 +39,23 @@ textarea
 <template>
   <div class="imgtobase-main">
     <div class="header">
-      <v-button @click="copy">复制</v-button>
-      <v-button @click="$refs.input.click()">选择图片</v-button>
+      <v-button @click="copy">
+        复制
+      </v-button>
+      <v-button @click="$refs.input.click()">
+        选择图片
+      </v-button>
       <input
         ref="input"
         type="file"
         accept="image/*"
         class="hidden-input"
         @change="handleInputChange"
-      />
+      >
     </div>
     <textarea
-      v-model="base64Str"
       ref="textarea"
+      v-model="base64Str"
       spellcheck="false"
       placeholder="图片 Base64 后显示于此处 !"
     />
@@ -59,7 +63,7 @@ textarea
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 import { imgToBase64 } from './image-base64'
 import { Message } from '@/ui-lib/message/index'
 
@@ -77,7 +81,9 @@ export default {
         .then(base64 => {
           base64Str.value = base64
         })
-        .catch(() => {})
+        .catch(() => {
+          // nothing
+        })
     }
     if (props.file) {
       transformImage(props.file)
@@ -100,7 +106,7 @@ export default {
         }
         if (file.size > 2 * 1024 * 1024) {
           new Message({
-            message: '图片大于 2M，不建议使用 base64 !'
+            message: '图片大于 2M，不建议使用 base64 !',
           })
           return
         }
@@ -118,9 +124,9 @@ export default {
       document.execCommand('Copy')
 
       new Message({
-        message: '已复制到剪切板！'
+        message: '已复制到剪切板！',
       })
     },
   },
-};
+}
 </script>

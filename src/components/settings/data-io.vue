@@ -68,36 +68,57 @@
 
 <template>
   <div class="data-io">
-    <div class="half" @click="importData">
+    <div
+      class="half"
+      @click="importData"
+    >
       <div class="icon">
-        <v-mdi name="mdi-upload" size="20" />
+        <v-mdi
+          name="mdi-upload"
+          size="20"
+        />
       </div>
-      <div class="title">导入</div>
+      <div class="title">
+        导入
+      </div>
     </div>
-    <div class="half" @click="exportData">
+    <div
+      class="half"
+      @click="exportData"
+    >
       <div class="icon">
-        <v-mdi name="mdi-download" size="20" />
+        <v-mdi
+          name="mdi-download"
+          size="20"
+        />
       </div>
-      <div class="title">导出</div>
+      <div class="title">
+        导出
+      </div>
     </div>
-    <div v-if="isWorking" class="loading">
+    <div
+      v-if="isWorking"
+      class="loading"
+    >
       正在处理，请稍后～
     </div>
-    <div v-if="downloadVisible" class="download-layer" @click="downloadExportFile">
+    <div
+      v-if="downloadVisible"
+      class="download-layer"
+      @click="downloadExportFile"
+    >
       下载
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, watch } from 'vue';
-import Gallery from '@/components/gallery.vue'
-import { Message } from '@/ui-lib/message';
-import { bookmarkListService } from '@database/services/bookmark-service';
+import { ref } from 'vue'
+import { Message } from '@/ui-lib/message'
+import { bookmarkListService } from '@database/services/bookmark-service'
 
 export default {
   emits: ['next'],
-  components: { Gallery },
   setup() {
     const isWorking = ref(false)
     const downloadVisible = ref(false)
@@ -107,21 +128,21 @@ export default {
       downloadVisible,
       importData() {
         new Message({
-          message: '导入功能还在开发中～'
+          message: '导入功能还在开发中～',
         })
       },
       exportData() {
         isWorking.value = true
         const startTime = Date.now()
         return bookmarkListService({
-          parent: '*'
+          parent: '*',
         }).then((list) => {
           // 五秒导出，不能太快了
           return new Promise(resolve => {
             const now = Date.now()
             setTimeout(() => {
               resolve({
-                bookmarks: list
+                bookmarks: list,
               })
             }, 5000 - (now - startTime))
           })
@@ -129,28 +150,28 @@ export default {
           exportData = data
           isWorking.value = false
           downloadVisible.value = true
-        });
+        })
       },
       downloadExportFile() {
         const today = new Date().toLocaleDateString().replace(/\//g, '-')
-        const blob = new Blob([JSON.stringify(exportData)]);
-        const downloadUrl = URL.createObjectURL(blob);
+        const blob = new Blob([JSON.stringify(exportData)])
+        const downloadUrl = URL.createObjectURL(blob)
 
-        const linkNode: HTMLAnchorElement = document.createElement('a');
-        linkNode.download = `database-backup-${today}.json`;
+        const linkNode: HTMLAnchorElement = document.createElement('a')
+        linkNode.download = `database-backup-${today}.json`
         linkNode.style.setProperty('display', 'none')
         linkNode.href = downloadUrl
-        document.body.appendChild(linkNode);
-        linkNode.click();
+        document.body.appendChild(linkNode)
+        linkNode.click()
       
         setTimeout(function () {
-          document.body.removeChild(linkNode);
-          window.URL.revokeObjectURL(downloadUrl);
+          document.body.removeChild(linkNode)
+          window.URL.revokeObjectURL(downloadUrl)
           downloadVisible.value = false
           exportData = null
         }, 100)
-      }
-    };
+      },
+    }
   },
-};
+}
 </script>

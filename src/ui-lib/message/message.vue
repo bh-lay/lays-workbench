@@ -41,15 +41,32 @@
 
 <template>
   <transition name="message-ani">
-    <div v-if="visible" class="v-message">
+    <div
+      v-if="visible"
+      class="v-message"
+    >
       <div class="message-body">
-        <div class="message-text">{{ message }}</div>
-        <div v-if="confirm" class="message-footer">
-          <v-button @click="onConfirm">{{ confirmText }} </v-button>
-          <v-button @click="visible = false">{{ cancelText }} </v-button>
+        <div class="message-text">
+          {{ message }}
+        </div>
+        <div
+          v-if="confirm"
+          class="message-footer"
+        >
+          <v-button @click="onConfirm">
+            {{ confirmText }}
+          </v-button>
+          <v-button @click="visible = false">
+            {{ cancelText }}
+          </v-button>
         </div>
       </div>
-      <div class="message-close" @click="visible = false">关闭</div>
+      <div
+        class="message-close"
+        @click="visible = false"
+      >
+        关闭
+      </div>
     </div>
   </transition>
 </template>
@@ -69,7 +86,7 @@ export default {
       default: 5000,
     },
     onClose: {
-      type: Function
+      type: Function,
     },
     confirmText: {
       type: String,
@@ -80,7 +97,7 @@ export default {
       default: '取消',
     },
     confirm: {
-      type: Function
+      type: Function,
     },
   },
   setup(props) {
@@ -116,8 +133,8 @@ export default {
       onConfirm() {
         visible.value = false
         props.confirm && props.confirm()
-      }
+      },
     }
-  }
- };
+  },
+}
 </script>

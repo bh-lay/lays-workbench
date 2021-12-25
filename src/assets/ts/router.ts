@@ -9,12 +9,12 @@ type routerInfo = {
 type routerChangeCallback = (
   moduleType: moduleType,
   moduleName: string,
-  state: any
+  state: object
 ) => void
 
 // 根据当前 URL 获取路由数据
 function parseRouterInfo(): routerInfo {
-  const hash = location.hash.replace(/^\#!=/, '')
+  const hash = location.hash.replace(/^#!=/, '')
   const defaultReturns: routerInfo = {
     moduleType: 'widgets',
     moduleName: '',
@@ -42,7 +42,7 @@ const routerChangeCallbackList: routerChangeCallback[] = []
 function handleRouterChange(
   moduleType: moduleType,
   moduleName: string,
-  state?: any
+  state?: object
 ) {
   routerChangeCallbackList.forEach(callback => {
     callback(moduleType, moduleName, state || {})
@@ -99,7 +99,7 @@ export function onRouterChange(
   routerChangeCallbackList.push(callback)
   // 解除事件监听
   return function() {
-    let index = routerChangeCallbackList.indexOf(callback)
+    const index = routerChangeCallbackList.indexOf(callback)
     routerChangeCallbackList.splice(index, 1)
     // 若移除回调记录后，回调列表为空，则解除监听 history 事件
     if (routerChangeCallbackList.length === 0) {

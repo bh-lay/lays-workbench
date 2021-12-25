@@ -36,19 +36,28 @@
     placement="bottom-right"
     type="plain"
   >
-    <v-mdi name="mdi-tune" size="18" />
-    <template v-slot:body>
+    <v-mdi
+      name="mdi-tune"
+      size="18"
+    />
+    <template #body>
       <div class="group-list">
         <div class="setting-group">
-          <div class="label">壁纸设置</div>
+          <div class="label">
+            壁纸设置
+          </div>
           <wallpaper @next="settingWallpaper" />
         </div>
         <div class="setting-group">
-          <div class="label">布局</div>
+          <div class="label">
+            布局
+          </div>
           <layout />
         </div>
         <div class="setting-group">
-          <div class="label">数据管理</div>
+          <div class="label">
+            数据管理
+          </div>
           <data-io />
         </div>
       </div>
@@ -57,19 +66,19 @@
 </template>
 
 <script lang="ts">
-import { replaceRouter } from '@/assets/ts/router';
-import Layout from './layout.vue';
-import Wallpaper from './wallpaper.vue';
-import DataIo from './data-io.vue';
+import { replaceRouter } from '@/assets/ts/router'
+import Layout from './layout.vue'
+import Wallpaper from './wallpaper.vue'
+import DataIo from './data-io.vue'
 
 export default {
   components: { Layout, Wallpaper, DataIo },
   setup() {
     return {
       settingWallpaper() {
-        replaceRouter('settings', 'wallpaper');
+        replaceRouter('settings', 'wallpaper')
       },
-    };
+    }
   },
-};
+}
 </script>

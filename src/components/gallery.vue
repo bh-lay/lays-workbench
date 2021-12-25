@@ -21,15 +21,16 @@
         v-if="isImageLoaded"
         class="img-container"
         :style="styleValue"
-      ><div class="mask">
-      </div></div>
+      >
+        <div class="mask" />
+      </div>
     </transition>
     <slot />
   </div>
 </template>
 
 <script lang="ts">
-import { ref, nextTick } from 'vue';
+import { ref, nextTick } from 'vue'
 import loadImage from '@/assets/ts/load-image'
 import imgRobber from '@/assets/ts/img-robber'
 import { getAppConfigItem, onAppConfigChange } from '@/assets/ts/app-config'
@@ -39,7 +40,7 @@ export default {
     defocus: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   setup() {
     const isImageLoaded = ref(false)
@@ -52,7 +53,7 @@ export default {
       if (currentUrl.length < 17) {
         isImageLoaded.value = false
         styleValue.value = {
-          backgroundColor: currentUrl
+          backgroundColor: currentUrl,
         }
         nextTick(() => {
           isImageLoaded.value = true
@@ -61,7 +62,7 @@ export default {
         const usedUrl = imgRobber(currentUrl)
         isImageLoaded.value = false
         styleValue.value = {
-          backgroundImage: `url(${usedUrl})`
+          backgroundImage: `url(${usedUrl})`,
         }
         loadImage(usedUrl)
           .then(() => {
@@ -89,5 +90,5 @@ export default {
       styleValue,
     }
   },
-};
+}
 </script>

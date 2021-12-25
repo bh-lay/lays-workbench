@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { BookmarkSize } from '@database/entity/bookmark';
+import { BookmarkSize } from '@database/entity/bookmark'
 export default {
   props: {
     modelValue: {
@@ -43,6 +43,7 @@ export default {
       default: null,
     },
   },
+  emits: ['update:modelValue'],
   setup() {
     return {
       BookmarkSize,
@@ -60,7 +61,7 @@ export default {
           label: '小',
         },
       ],
-    };
+    }
   },
-};
+}
 </script>
