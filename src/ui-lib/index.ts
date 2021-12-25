@@ -4,9 +4,6 @@ import clickOutSide from "./directives/click-out-side";
 import contextmenu from "./contextmenu/index";
 import dropdown from "./dropdown/index";
 
-import VueMdijs from 'vue-mdijs';
-import * as mdiIcons from '@mdi/js';
-
 function initUiLayer() {
   const uiNode = document.querySelector('#v-ui')
   if (uiNode) {
@@ -23,8 +20,6 @@ export default {
     app.use(clickOutSide)
     app.use(contextmenu)
     app.use(dropdown)
-    // 全量引入 mdi 图标
-    VueMdijs.add(mdiIcons);
-    app.use(VueMdijs)
+
   }
 }
