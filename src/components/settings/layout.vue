@@ -66,6 +66,7 @@ import { ref, watch } from 'vue'
 import { getAppConfig, getAppConfigDefault } from '@/assets/ts/app-config'
 
 export default {
+  name: 'SettingsLayout',
   setup() {
     const appConfig = getAppConfig()
     const gridSize = ref(appConfig.gridSize)

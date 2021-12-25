@@ -49,7 +49,7 @@
 <script lang="ts">
 import { nextTick, ref } from 'vue'
 export default {
-  name: 'Dropdown',
+  name: 'VDropdown',
   props: {
     arrow: {
       type: Boolean,

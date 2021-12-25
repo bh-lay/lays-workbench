@@ -23,24 +23,24 @@
       @next="openItem(bookmarkItem)"
       @mousedown="handleDrag($event, bookmarkItem)"
     />
-    <contextmenu ref="menu">
-      <contextmenu-item
+    <v-contextmenu ref="menu">
+      <v-contextmenu-item
         v-if="selectedBookmarkItem.type === BookmarkType.link"
         @click="$emit('open-bookmark-editor', selectedBookmarkItem)"
       >
         编辑
-      </contextmenu-item>
-      <contextmenu-item @click="handleRemove">
+      </v-contextmenu-item>
+      <v-contextmenu-item @click="handleRemove">
         删除
-      </contextmenu-item>
-    </contextmenu>
+      </v-contextmenu-item>
+    </v-contextmenu>
     <draged-layer
       v-if="willStartDrag"
       :event="dragEvent"
       :draged-bookmark="selectedBookmarkItem"
       :disabled-enter="true"
-      @beforeDrag="handleBeforeDrag"
-      @dragEnd="handleDragEnd"
+      @before-drag="handleBeforeDrag"
+      @drag-end="handleDragEnd"
     />
   </div>
 </template>
@@ -84,7 +84,7 @@ export default {
     },
   },
   emits: ['open-bookmark-editor'],
-  setup(props, context) {
+  setup(props) {
     let bookmarkList: Ref<Bookmark[]> = ref([])
     const selectedBookmarkItem: Ref<Bookmark | null> = ref(null)
     const getList = function () {
@@ -197,16 +197,19 @@ export default {
           bookmarkResortService(idList)
         } else if (type === 'delete') {
           const selectedBookmark = selectedBookmarkItem.value
-          bookmarkRemoveService(selectedBookmark!.id).then(() => {
+          if (!selectedBookmark) {
+            return
+          }
+          bookmarkRemoveService(selectedBookmark.id).then(() => {
             for (let i = 0; i < bookmarkList.value.length; i++) {
-              if (bookmarkList.value[i].id === selectedBookmark!.id) {
+              if (bookmarkList.value[i].id === selectedBookmark.id) {
                 bookmarkList.value.splice(i, 1)
                 break
               }
             }
           }).catch(e => {
             new Message({
-              message: e.message || '删除失败！',
+              message: e.message || '删除失败',
             })
           })
         } else if (type === 'size') {
@@ -228,7 +231,7 @@ export default {
           }
         }).catch(e => {
           new Message({
-            message: e.message || '删除失败！',
+            message: e.message || '删除失败',
           })
         })
       },

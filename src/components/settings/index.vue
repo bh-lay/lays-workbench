@@ -30,7 +30,7 @@
 </style>
 
 <template>
-  <dropdown
+  <v-dropdown
     class="settings-btn"
     undercoat="tranparent"
     placement="bottom-right"
@@ -62,7 +62,7 @@
         </div>
       </div>
     </template>
-  </dropdown>
+  </v-dropdown>
 </template>
 
 <script lang="ts">
@@ -72,6 +72,7 @@ import Wallpaper from './wallpaper.vue'
 import DataIo from './data-io.vue'
 
 export default {
+  name: 'SettingsCenter',
   components: { Layout, Wallpaper, DataIo },
   setup() {
     return {

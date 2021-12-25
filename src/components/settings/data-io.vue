@@ -84,7 +84,7 @@
     </div>
     <div
       class="half"
-      @click="exportData"
+      @click="exportDataToMemeory"
     >
       <div class="icon">
         <v-mdi
@@ -116,13 +116,16 @@
 import { ref } from 'vue'
 import { Message } from '@/ui-lib/message'
 import { bookmarkListService } from '@database/services/bookmark-service'
-
+import { Bookmark } from '@/database/entity/bookmark'
+type backupData = {
+  bookmarks: Bookmark[]
+} | null
 export default {
   emits: ['next'],
   setup() {
     const isWorking = ref(false)
     const downloadVisible = ref(false)
-    let exportData: any = null
+    let exportData: backupData = null
     return {
       isWorking,
       downloadVisible,
@@ -131,7 +134,7 @@ export default {
           message: '导入功能还在开发中～',
         })
       },
-      exportData() {
+      exportDataToMemeory() {
         isWorking.value = true
         const startTime = Date.now()
         return bookmarkListService({
@@ -147,7 +150,7 @@ export default {
             }, 5000 - (now - startTime))
           })
         }).then(data => {
-          exportData = data
+          exportData = data as backupData
           isWorking.value = false
           downloadVisible.value = true
         })

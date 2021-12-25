@@ -42,7 +42,7 @@
 
 <script lang="ts">
 export default {
-  name: 'Contextmenu',
+  name: 'VContextmenu',
   props: {
     width: {
       type: [String, Number],

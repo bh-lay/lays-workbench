@@ -23,7 +23,7 @@
 .icon-type-selector
   width 120px
   padding 15px 0
-  .dropdown-item
+  .v-dropdown-item
     padding 0 20px
     line-height 34px
     font-size 14px
@@ -67,21 +67,21 @@ input
 
 <template>
   <div class="icon-editor">
-    <dropdown :arrow="true">
+    <v-dropdown :arrow="true">
       <span>{{ iconTypeLabel }}</span>
       <template #body>
         <div class="icon-type-selector">
-          <dropdown-item
+          <v-dropdown-item
             v-for="iconTypeItem in iconTypeList"
             :key="iconTypeItem.value"
             :class="[iconType === iconTypeItem.value ? 'active' : '']"
             @click="iconType = iconTypeItem.value"
           >
             {{ iconTypeItem.label }}
-          </dropdown-item>
+          </v-dropdown-item>
         </div>
       </template>
-    </dropdown>
+    </v-dropdown>
     <input
       v-if="iconType !== 'crab'"
       v-model="inputValue"
@@ -161,6 +161,7 @@ export default {
       default: null,
     },
   },
+  emits: ['update:modelValue'],
   setup(props, context) {
     const iconType = ref('')
     const iconTypeLabel = ref('')

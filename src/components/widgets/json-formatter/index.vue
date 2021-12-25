@@ -57,6 +57,7 @@ import { replaceRouter } from '@/assets/ts/router'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 
 export default {
+  name: 'JsonFormatterWidgetsButton',
   props: {
     data: {
       type: Bookmark,

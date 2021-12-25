@@ -1,9 +1,9 @@
 import { Bookmark } from '../entity/bookmark'
 import bookmarkDefaultList from './default-bookmark-data'
+import { bookmarkCountManager } from '../manager/bookmark-manager'
 
-export default function initData(db: IDBDatabase) {
+function initBookmark2db(db: IDBDatabase) {
   return new Promise(resolve => {
-
     const transaction = db.transaction(['bookmark'], 'readwrite')
     const bookmarkObjectStore = transaction.objectStore('bookmark')
       
@@ -11,8 +11,15 @@ export default function initData(db: IDBDatabase) {
       const bookmark = new Bookmark(bookmarkDefaultList[i])
       bookmarkObjectStore.add(bookmark)
     }
-    console.log('transaction', transaction)
-    
     resolve({})
   })
+}
+// 自动填充默认数据
+export async function autoInitDefaultData(db: IDBDatabase) {
+  const count = await bookmarkCountManager(db)
+  if (count > 0) {
+    return db
+  }
+  await initBookmark2db(db)
+  return db
 }

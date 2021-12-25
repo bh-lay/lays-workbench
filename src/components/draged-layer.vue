@@ -287,7 +287,7 @@ export default {
     const triggeredType = ref('')
     const activeSize: Ref<BookmarkSize | undefined> = ref(undefined)
     let itemSizeAndPositionMap: mapItem[] = []
-    const dragedBookmark = props.dragedBookmark
+
     dragHandle(props.event, {
       stableDistance: 20,
       stableStart() {
@@ -365,7 +365,7 @@ export default {
         }
         const dragData = {
           type: triggered.type,
-          from: dragedBookmark.id,
+          from: props.dragedBookmark.id,
           to: triggered.target ? triggered.target.id : null,
           size: triggered.size,
         }

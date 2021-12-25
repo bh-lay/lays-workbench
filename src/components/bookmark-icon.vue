@@ -71,7 +71,7 @@ export default {
     let faviconUrl = ref('')
     function loadFavicon() {
       // 不是完整 url，不抓取
-      if(!/^http(s|)\:\/\/[^\.]+\.[^\.]+/.test(props.url)) {
+      if(!/^http(s|):\/\/[^.]+\.[^.]+/.test(props.url)) {
         return
       }
       faviconLoaded.value = false
@@ -113,7 +113,7 @@ export default {
     watch(
       () => props.undercoat,
       (value) => {
-        const [h, s, l] = anyColorToHsl(value)
+        const [h, , l] = anyColorToHsl(value)
         if (l < 0.6) {
           // 区块亮度小于 60%，文本使用白色
           textColor.value = '#fff'

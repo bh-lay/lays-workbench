@@ -33,7 +33,7 @@
       @after-insert="handleMainListInsert"
     />
   </div>
-  <modal
+  <v-modal
     v-model="folderEditorConfig.visible"
     :width="440"
   >
@@ -43,7 +43,7 @@
       @cancel="folderEditorConfig.visible = false"
       @confirm="handleFolderCreateConfirm"
     />
-  </modal>
+  </v-modal>
 </template>
 
 <script lang="ts">
@@ -57,6 +57,7 @@ import { bookmarkInsertService } from '@database/services/bookmark-service'
 import FolderItem from './folder-item.vue'
 import MainList from './main-list.vue'
 export default {
+  name: 'PrivateBookmarkCenter',
   components: { FolderItem, MainList, FolderEditor },
   setup() {
     const activeId = ref('root')

@@ -49,6 +49,7 @@
 
 <script lang="ts">
 export default {
+  name: 'PublicBookmarkCenter',
   setup() {
     return {}
   },

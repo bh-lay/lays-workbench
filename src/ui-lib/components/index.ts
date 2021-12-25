@@ -12,7 +12,7 @@ export default {
   install(app: Application) {
     app.component('VButton', VButton)
     app.component('VSlider', VSlider)
-    app.component('Modal', Modal)
+    app.component('VModal', Modal)
     app.component('VMdi', VueMdijs)
   },
 }

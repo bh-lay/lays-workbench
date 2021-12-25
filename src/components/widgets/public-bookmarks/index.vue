@@ -49,13 +49,13 @@ svg
       </div>
     </template>
   </div>
-  <modal
+  <v-modal
     v-model="modalVisible"
     width="80%"
     height="80%"
   >
     <public-bookmarks />
-  </modal>
+  </v-modal>
 </template>
 
 <script lang="ts">
@@ -63,6 +63,7 @@ import { ref, computed } from 'vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 import PublicBookmarks from '@/components/public-bookmarks/index.vue'
 export default {
+  name: 'PublicBookmarkWidgetsButton',
   components: { PublicBookmarks },
   props: {
     data: {

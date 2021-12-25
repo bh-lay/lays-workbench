@@ -68,6 +68,7 @@ import { imgToBase64 } from './image-base64'
 import { Message } from '@/ui-lib/message/index'
 
 export default {
+  name: 'ImageBaseWidgets',
   props: {
     file: {
       type: File,

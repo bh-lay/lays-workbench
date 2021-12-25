@@ -83,10 +83,9 @@ export default {
     data: Bookmark
   }) {
     let bookmarkList: Ref<Bookmark[]> = ref([])
-    const parentId = props.data.id
     const loadList = () => {
       bookmarkListService({
-        parent: parentId,
+        parent: props.data.id,
       }).then((list) => {
         bookmarkList.value = list.slice(0, 4)
       })

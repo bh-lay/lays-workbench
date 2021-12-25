@@ -59,23 +59,23 @@
       />
     </div>
   </div>
-  <contextmenu ref="itemMenu">
-    <contextmenu-item @click="handleEdit">
+  <v-contextmenu ref="itemMenu">
+    <v-contextmenu-item @click="handleEdit">
       编辑
-    </contextmenu-item>
-    <contextmenu-item @click="handleRemove">
+    </v-contextmenu-item>
+    <v-contextmenu-item @click="handleRemove">
       删除
-    </contextmenu-item>
-  </contextmenu>
-  <contextmenu ref="listMenu">
-    <contextmenu-item @click="handleCreateLink">
+    </v-contextmenu-item>
+  </v-contextmenu>
+  <v-contextmenu ref="listMenu">
+    <v-contextmenu-item @click="handleCreateLink">
       添加新书签
-    </contextmenu-item>
-    <contextmenu-item @click="handleCreateFolder">
+    </v-contextmenu-item>
+    <v-contextmenu-item @click="handleCreateFolder">
       添加新文件夹
-    </contextmenu-item>
-  </contextmenu>
-  <modal
+    </v-contextmenu-item>
+  </v-contextmenu>
+  <v-modal
     v-model="linkEditorConfig.visible"
     :width="440"
   >
@@ -86,8 +86,8 @@
       @cancel="linkEditorConfig.visible = false"
       @confirm="handleLinkEditorConfirm"
     />
-  </modal>
-  <modal
+  </v-modal>
+  <v-modal
     v-model="folderEditorConfig.visible"
     :width="440"
   >
@@ -97,7 +97,7 @@
       @cancel="folderEditorConfig.visible = false"
       @confirm="handleFolderEditorConfirm"
     />
-  </modal>
+  </v-modal>
 </template>
 
 <script lang="ts">

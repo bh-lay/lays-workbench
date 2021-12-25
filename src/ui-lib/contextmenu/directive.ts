@@ -1,4 +1,4 @@
-import { App as Application, DirectiveBinding, nextTick, ComponentInternalInstance }  from 'vue'
+import { App as Application, DirectiveBinding, nextTick, ComponentPublicInstance }  from 'vue'
 declare interface customMouseEvent extends MouseEvent {
   _hasTriggered?: boolean
 }
@@ -19,7 +19,11 @@ export default {
           if (!binding.instance || !binding.instance.$refs) {
             return
           }
-          const contextmenuVM: any = binding.instance.$refs[$refKey]
+          const contextmenuVM = binding.instance.$refs[$refKey] as ComponentPublicInstance<{
+            visible?: boolean,
+            top: number,
+            left: number
+          }>
           if (!contextmenuVM) {
             return
           }

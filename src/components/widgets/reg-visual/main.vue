@@ -14,6 +14,7 @@ iframe
 
 <script lang="ts">
 export default {
+  name: 'RegVisualWidgets',
   props: {
     regText: {
       type: String,
@@ -22,9 +23,8 @@ export default {
   },
   setup(props) {
     let queryStr = ''
-    let quickInputValue = props.regText
-    if (quickInputValue && quickInputValue.length) {
-      quickInputValue = quickInputValue.trim()
+    if (props.regText && props.regText.length) {
+      let quickInputValue = props.regText.trim()
       if (/^\/.+\/$/.test(quickInputValue)) {
         quickInputValue = quickInputValue.replace(/^\/|\/$/g, '')
       }

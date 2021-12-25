@@ -36,6 +36,7 @@ import imgRobber from '@/assets/ts/img-robber'
 import { getAppConfigItem, onAppConfigChange } from '@/assets/ts/app-config'
 
 export default {
+  name: 'GalleryFrame',
   props: {
     defocus: {
       type: Boolean,

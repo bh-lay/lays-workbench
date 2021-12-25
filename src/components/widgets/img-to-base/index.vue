@@ -124,6 +124,7 @@ import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 import { replaceRouter } from '@/assets/ts/router'
 import { Message } from '@/ui-lib/message/index'
 export default {
+  name: 'ImageBaseWidgetsButton',
   props: {
     data: {
       type: Bookmark,

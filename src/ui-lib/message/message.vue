@@ -75,6 +75,7 @@
 import { ref, watch, nextTick } from 'vue'
 import VButton from '../components/v-button.vue' 
 export default {
+  name: 'VMessage',
   components: { VButton },
   props: {
     message: {
@@ -85,9 +86,6 @@ export default {
       type: Number,
       default: 5000,
     },
-    onClose: {
-      type: Function,
-    },
     confirmText: {
       type: String,
       default: '确定',
@@ -96,8 +94,21 @@ export default {
       type: String,
       default: '取消',
     },
+    onClose: {
+      type: Function,
+      default() {
+        return function() {
+          // nothing
+        }
+      },
+    },
     confirm: {
       type: Function,
+      default() {
+        return function() {
+          // nothing
+        }
+      },
     },
   },
   setup(props) {

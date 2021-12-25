@@ -1,13 +1,13 @@
 <template>
-  <modal
+  <v-modal
     v-model="privateBookmarksVisible"
     width="80%"
     height="80%"
     @after-close="resetRouter"
   >
     <private-bookmarks />
-  </modal>
-  <modal
+  </v-modal>
+  <v-modal
     v-model="wallpaperGalleryVisible"
     width="80%"
     height="80%"
@@ -15,31 +15,31 @@
     @after-close="resetRouter"
   >
     <wallpaper-gallery />
-  </modal>
-  <modal
+  </v-modal>
+  <v-modal
     v-model="jsonFormatterVisible"
     width="80%"
     height="80%"
     @after-close="resetRouter"
   >
     <json-formatter />
-  </modal>
-  <modal
+  </v-modal>
+  <v-modal
     v-model="regVisualVisible"
     width="80%"
     height="80%"
     @after-close="resetRouter"
   >
     <reg-visual :reg-text="regText" />
-  </modal>
-  <modal
+  </v-modal>
+  <v-modal
     v-model="imgToBaseVisible"
     width="80%"
     height="80%"
     @after-close="resetRouter"
   >
     <image-to-base :file="imgToBaseFile" />
-  </modal>
+  </v-modal>
 </template>
 
 <script lang="ts">

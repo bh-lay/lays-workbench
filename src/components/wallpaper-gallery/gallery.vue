@@ -47,6 +47,7 @@ import { setAppConfigItem } from '@/assets/ts/app-config'
 import WallpaperItem from './wallpaper-item.vue'
 import wallpaperList from './wallpaper-list'
 export default {
+  name: 'SettingsWallpaperGallery',
   components: { WallpaperItem },
   setup() {
     return {

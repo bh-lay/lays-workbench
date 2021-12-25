@@ -35,6 +35,7 @@ import Custom from './custom.vue'
 import Color from './color.vue'
 import Gallery from './gallery.vue'
 export default {
+  name: 'SettingsWallpaperCenter',
   components: { Category, Custom, Color, Gallery },
   setup() {
     const activeCategory = ref('gallery')

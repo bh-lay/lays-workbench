@@ -1,6 +1,6 @@
-import { BookmarkType, BookmarkSize } from '../entity/bookmark'
+import { BookmarkType, BookmarkSize, bookmarkOriginData } from '../entity/bookmark'
 
-export default [
+const defaultData: bookmarkOriginData[] = [
   {
     sort: 1001,
     id: 'default-10',
@@ -108,3 +108,5 @@ export default [
     icon: 'mdi:star-face',
   },
 ]
+
+export default defaultData

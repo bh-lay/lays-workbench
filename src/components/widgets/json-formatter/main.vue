@@ -95,6 +95,7 @@ function parseJSON(str: string) {
   }
 }
 export default {
+  name: 'JsonFormatterWidgets',
   setup() {
     const sourceJson = ref(defaultText)
     const fomatterRef: Ref<HTMLDivElement | null> = ref(null)

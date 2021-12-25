@@ -24,6 +24,7 @@ import loadImage from '@/assets/ts/load-image'
 import imgRobber from '@/assets/ts/img-robber'
 
 export default {
+  name: 'SettingsWallpaperItem',
   props: {
     url: {
       type: String,

@@ -40,6 +40,7 @@ export default {
       default: null,
     },
   },
+  emits: ['update:modelValue'],
   setup(props, context) {
     const inputRef: Ref<HTMLInputElement | null> = ref(null)
     const inputValue = ref(props.modelValue)

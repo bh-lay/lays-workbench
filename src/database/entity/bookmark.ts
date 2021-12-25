@@ -60,10 +60,10 @@ export class Bookmark {
   parent = ''
   // 描述信息
   desc = ''
-  constructor(object: any) {
+  constructor(object: bookmarkOriginData) {
     this.fill(object)
   }
-  fill(object: any) {
+  fill(object: bookmarkOriginData) {
     if (typeof object !== 'object') {
       return
     }
@@ -78,4 +78,32 @@ export class Bookmark {
     this.icon = object.icon || 'text:X'
     this.desc = object.desc || ''
   }
+  parse() {
+    return {
+      id: this.id,
+      sort: this.sort,
+      name: this.name,
+      type: this.type,
+      size: this.size,
+      undercoat: this.undercoat,
+      value: this.value,
+      parent: this.parent,
+      icon: this.icon,
+      desc: this.desc,
+    }
+  }
+}
+
+
+export type bookmarkOriginData = {
+  id?: string,
+  sort?: number,
+  name?: string,
+  type?: BookmarkType,
+  size?: BookmarkSize,
+  undercoat?: string,
+  value?: string,
+  parent?: string,
+  icon?: BookmarkIcon
+  desc?: string
 }

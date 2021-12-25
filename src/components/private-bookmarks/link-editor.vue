@@ -83,12 +83,11 @@ export default {
   },
   emits: ['confirm', 'cancel'],
   setup(props, context) {
-    const name = ref('')
-    const value = ref('')
-    if (props.type === 'edit') {
-      name.value = props.linkName
-      value.value = props.linkValue
-    }
+    const isEditMode = props.type === 'edit'
+
+    const name = ref(isEditMode ? props.linkName : '')
+    const value = ref(isEditMode ? props.linkValue : '')
+
     return {
       name,
       value,

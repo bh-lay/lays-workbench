@@ -1,8 +1,8 @@
 
 declare interface Window {
-  mozIndexedDB: any
-  webkitIndexedDB: any
-  msIndexedDB: any
+  mozIndexedDB?: IDBFactory
+  webkitIndexedDB?: IDBFactory
+  msIndexedDB?: IDBFactory
 }
 
 declare module '*.vue' {
@@ -11,7 +11,17 @@ declare module '*.vue' {
   export default componentOptions
 }
 
-declare interface CustomIDBEventTarget extends EventTarget {
+declare interface CustomIDBTransactionEventTarget extends EventTarget {
   transaction: IDBTransaction
-  result: any,
+}
+declare interface CustomIDBCountEventTarget extends EventTarget {
+  result: number,
+}
+declare interface CustomIDBCursorEventTarget extends EventTarget {
+  result: {
+    value: {
+      [key: string]: string | number | null | undefined
+    },
+    continue: () => void
+  },
 }

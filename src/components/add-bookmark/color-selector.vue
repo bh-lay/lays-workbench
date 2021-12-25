@@ -51,9 +51,10 @@ export default {
       default: null,
     },
   },
+  emits: ['update:modelValue'],
   setup(props, context) {
     // 目前没有好的方法定义此类型，临时解析成字符串
-    const dropdownItemComponent = resolveComponent('dropdown-item') as string
+    const dropdownItemComponent = resolveComponent('v-dropdown-item') as string
     function createColorItem(colorItem: { label: string, value: string }) {
       return h(
         dropdownItemComponent,

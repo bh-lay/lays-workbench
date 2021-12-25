@@ -64,11 +64,11 @@ export default {
     },
   },
   emits: ['confirm', 'cancel'],
-  setup(props, context) {
-    const name = ref('')
-    if (props.type === 'edit') {
-      name.value = props.folderName
-    }
+  setup(props: {
+    type: string,
+    folderName: string
+  }, context) {
+    const name = ref(props.type === 'edit' ? props.folderName : '')
     return {
       name,
       handleConfirm() {

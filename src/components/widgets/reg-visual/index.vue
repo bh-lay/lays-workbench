@@ -128,6 +128,7 @@ import { ref, computed } from 'vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 import { replaceRouter } from '@/assets/ts/router'
 export default {
+  name: 'RegVisualWidgetsButton',
   props: {
     data: {
       type: Bookmark,

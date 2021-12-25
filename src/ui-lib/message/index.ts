@@ -1,5 +1,5 @@
-import { createVNode, render, App as Application, ComponentPublicInstance, VNode }  from 'vue'
-import MessageModule from './message.vue'
+import { createVNode, render, ComponentPublicInstance, VNode }  from 'vue'
+import VMessage from './message.vue'
 
 type messageOptions = {
   message: string,
@@ -15,7 +15,7 @@ export class Message {
   }
   init (options: messageOptions) {
     const tempNode = document.createElement('div')
-    const vNode = createVNode(MessageModule, {
+    const vNode = createVNode(VMessage, {
       message: options.message,
       duration: options.duration,
       confirm: options.confirm,
@@ -29,13 +29,21 @@ export class Message {
     render(vNode, tempNode)
 
     const bodyNode: HTMLElement = document.body
-    bodyNode.appendChild(tempNode.firstElementChild!)
+
+    const vmNode = tempNode.firstElementChild
+    if (vmNode) {
+      bodyNode.appendChild(vmNode)
+    }
 
     return vNode
   }
   close() {
-    const component = this.vNode.component!.proxy! as ComponentPublicInstance<{ visible: boolean }>
-    component.visible = false
+    const component =  this.vNode.component
+    if (!component || !component.proxy) {
+      return
+    }
+    const componentVM = component.proxy as ComponentPublicInstance<{ visible: boolean }>
+    componentVM.visible = false
   }
 }
 // export default {

@@ -80,6 +80,7 @@
 import colorList from '@/assets/ts/color-list'
 import { setAppConfigItem } from '@/assets/ts/app-config'
 export default {
+  name: 'SettingsWallpaperColor',
   setup() {
     return {
       colorList,

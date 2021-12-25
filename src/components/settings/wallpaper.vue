@@ -11,14 +11,14 @@
 
 <template>
   <gallery>
-    <dropdown-item-plain>
+    <v-dropdown-item-plain>
       <v-button
         type="white"
         @click="$emit('next')"
       >
         修改
       </v-button>
-    </dropdown-item-plain>
+    </v-dropdown-item-plain>
   </gallery>
 </template>
 
@@ -28,6 +28,7 @@ import { getAppConfigItem } from '@/assets/ts/app-config'
 import Gallery from '@/components/gallery.vue'
 
 export default {
+  name: 'SettingsWallpaper',
   components: { Gallery },
   emits: ['next'],
   setup() {

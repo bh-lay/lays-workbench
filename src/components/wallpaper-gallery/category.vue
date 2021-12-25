@@ -56,6 +56,7 @@ const categoryList = [
   },
 ]
 export default {
+  name: 'SettingsWallpaperCategory',
   props: {
     modelValue: {
       type: String,

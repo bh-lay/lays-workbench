@@ -82,9 +82,12 @@
 </template>
 
 <script lang="ts">
-import { ref, watch, Ref } from 'vue'
+import { ref, watch, Ref, PropType } from 'vue'
 import dragHandle from '@/assets/ts/drag-handle'
-
+type markItem = {
+  value: number,
+  label?: string
+}
 export default {
   props: {
     modelValue: {
@@ -99,9 +102,8 @@ export default {
       type: Number,
       default: 100,
     },
-    // FIXME: 格式校验更严格一点
     marks: {
-      type: Array,
+      type: Array as PropType<markItem[]>,
       default() {
         return []
       },
@@ -113,7 +115,7 @@ export default {
       modelValue: number,
       min: number,
       max: number,
-      marks: any[],
+      marks: markItem[],
     },
     context
   ) {

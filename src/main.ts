@@ -1,4 +1,4 @@
-import { createApp, nextTick } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import uiLib from './ui-lib/index'
 import { initAppConfig } from './assets/ts/app-config'

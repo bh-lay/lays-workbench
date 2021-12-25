@@ -26,8 +26,14 @@ function toCamelCase(str: string) {
 export default {
   name: 'VMdi',
   props: {
-    name: String,
-    title: String,
+    name: {
+      type: String,
+      default: '',
+    },
+    title: {
+      type: String,
+      default: '',
+    },
     size: {
       type: [String, Number],
       default: 24,

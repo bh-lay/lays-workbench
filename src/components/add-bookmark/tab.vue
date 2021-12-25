@@ -21,6 +21,7 @@
 <script lang="ts">
 import { h } from 'vue'
 export default {
+  name: 'BookmarkTypeTab',
   props: {
     modelValue: {
       type: String,

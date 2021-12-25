@@ -34,18 +34,18 @@
       </template>
     </bookmark-item>
   </div>
-  <contextmenu ref="menu">
-    <contextmenu-item
+  <v-contextmenu ref="menu">
+    <v-contextmenu-item
       v-if="selectedBookmarkItem.type === BookmarkType.link"
       @click="openEditModal"
     >
       编辑
-    </contextmenu-item>
-    <contextmenu-item @click="handleRemove">
+    </v-contextmenu-item>
+    <v-contextmenu-item @click="handleRemove">
       删除
-    </contextmenu-item>
-  </contextmenu>
-  <modal
+    </v-contextmenu-item>
+  </v-contextmenu>
+  <v-modal
     v-model="editModalVisible"
     :width="400"
   >
@@ -55,13 +55,13 @@
         @confirm="handleConfirmEdit"
       />
     </div>
-  </modal>
+  </v-modal>
   <draged-layer
     v-if="willStartDrag"
     :event="dragEvent"
     :draged-bookmark="selectedBookmarkItem"
-    @beforeDrag="handleBeforeDrag"
-    @dragEnd="handleDragEnd"
+    @before-drag="handleBeforeDrag"
+    @drag-end="handleDragEnd"
   />
   <folder-layer
     :id="selectedBookmarkItem.id"
@@ -78,7 +78,6 @@ import {
   ref,
   Ref,
   onMounted,
-  onBeforeUpdate,
   shallowRef,
 } from 'vue'
 import {
@@ -189,7 +188,7 @@ function mouseIntractive({
 }
 export default {
   components: { BookmarkItem, AddBookmark, CustomLink, DragedLayer, FolderLayer },
-  setup(props, context) {
+  setup() {
     let bookmarkList: Ref<Bookmark[]> = ref([])
 
     const selectedBookmarkItem: Ref<Bookmark> = ref(new Bookmark({}))

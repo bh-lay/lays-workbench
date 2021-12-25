@@ -25,6 +25,7 @@ import CustomLink from './custom-link.vue'
 import WidgetsSelector from './widgets-selector.vue'
 import { Bookmark } from '@/database/entity/bookmark'
 export default {
+  name: 'AddBookmarkMain',
   components: { Tab, CustomLink, WidgetsSelector },
   emits: ['success'],
   setup(props, context) {

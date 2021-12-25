@@ -83,7 +83,7 @@
     </div>
     <div class="input-item">
       <div class="undercoat-and-size">
-        <dropdown
+        <v-dropdown
           class="undercoat"
           undercoat="transparent"
           :style="{
@@ -93,7 +93,7 @@
           <template #body>
             <color-selector v-model="previewData.undercoat" />
           </template>
-        </dropdown>
+        </v-dropdown>
         <size-selector v-model="previewData.size" />
       </div>
     </div>

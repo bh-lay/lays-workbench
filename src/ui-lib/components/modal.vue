@@ -107,6 +107,7 @@ type modalStyle = {
   height?: string
 }
 export default {
+  name: 'VModal',
   props: {
     modelValue: {
       type: Boolean,

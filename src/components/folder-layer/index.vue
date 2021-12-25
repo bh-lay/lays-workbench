@@ -59,7 +59,7 @@
         >
           <name-editor
             :model-value="name"
-            @update:modelValue="handleNameChange"
+            @update:model-value="handleNameChange"
           />
           <div class="btn-list">
             <bookmark-list
@@ -79,6 +79,7 @@ import NameEditor from './name-editor.vue'
 import BookmarkList from './bookmark-list.vue'
 
 export default {
+  name: 'BookmarkFolderLayer',
   components: { NameEditor, BookmarkList },
   props: {
     id: {

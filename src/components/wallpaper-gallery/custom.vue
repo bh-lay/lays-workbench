@@ -80,6 +80,7 @@ import { ref } from 'vue'
 import { setAppConfigItem } from '@/assets/ts/app-config'
 import { Message } from '@/ui-lib/message/index'
 export default {
+  name: 'SettingsWallpaperCustom',
   setup() {
     const picUrl = ref('')
     const picReg = /(?:http(?:|s):|)\/\/(?:[a-zA-Z0-9-]){1,26}(\.[a-zA-Z0-9-]+)+\/.+\.(jpg|png|gif|jpeg|bmp)/i
