@@ -15,10 +15,10 @@ export default {
         }
         const bodyNode = document.body || document.getElementsByTagName('body')[0]
         setTimeout(() => {
-          bodyNode.addEventListener('click', bodyClickListener)
+          bodyNode.addEventListener('mouseup', bodyClickListener)
           bodyNode.addEventListener('contextmenu', bodyClickListener)
           el._removeGloballistener = function() {
-            bodyNode.removeEventListener('click', bodyClickListener)
+            bodyNode.removeEventListener('mouseup', bodyClickListener)
             bodyNode.removeEventListener('contextmenu', bodyClickListener)
           }
         }, 20)

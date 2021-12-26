@@ -43,9 +43,11 @@ export default function (event: MouseEvent, options?: dragOptions) {
     event.preventDefault && event.preventDefault()
     event.stopPropagation && event.stopPropagation()
   }
-
+  const listenerConfig: AddEventListenerOptions = {
+    passive: true,
+    capture: true,
+  }
   function mousemove(e: MouseEvent) {
-    e.preventDefault && e.preventDefault()
     e.stopPropagation && e.stopPropagation()
     removeSelecteion()
     const param = getParam(e, startX, startY)
@@ -60,15 +62,17 @@ export default function (event: MouseEvent, options?: dragOptions) {
       move && move(param)
     }
   }
-  function up(e: MouseEvent) {
-    document.removeEventListener('mousemove', mousemove, false)
-    document.removeEventListener('mouseup', up, false)
+  function up(event: MouseEvent) {
+    event.stopPropagation()
+
+    document.removeEventListener('mousemove', mousemove, listenerConfig)
+    document.removeEventListener('mouseup', up, listenerConfig)
     if (isTriggeredEvent) {
-      end && end(getParam(e, startX, startY))
+      end && end(getParam(event, startX, startY))
     } else {
       cancel && cancel()
     }
   }
-  document.addEventListener('mousemove', mousemove, false)
-  document.addEventListener('mouseup', up, false)
+  document.addEventListener('mousemove', mousemove, listenerConfig)
+  document.addEventListener('mouseup', up, listenerConfig)
 }
