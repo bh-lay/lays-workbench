@@ -6,8 +6,12 @@
   grid-auto-flow dense
   justify-content center
   padding-top 40px
+  .bookmark-item
+    transition .2s
   .draged
     opacity 0
+  .selected
+    transform scale(0.9)
 </style>
 
 <template>
@@ -16,13 +20,14 @@
       v-for="bookmarkItem in bookmarkList"
       :key="bookmarkItem.id"
       v-contextmenu:menu="{
-        onVisible() {
+        beforeVisible() {
           selectedBookmarkItem = bookmarkItem
         }
       }"
       :data="bookmarkItem"
       :class="{
-        draged: isStartDrag && selectedBookmarkItem.id === bookmarkItem.id
+        draged: isStartDrag && selectedBookmarkItem.id === bookmarkItem.id,
+        selected: isContextmenuVisible && selectedBookmarkItem.id === bookmarkItem.id
       }"
       :data-id="bookmarkItem.id"
       @next="openItem"
@@ -34,7 +39,11 @@
       </template>
     </bookmark-item>
   </div>
-  <v-contextmenu ref="menu">
+  <v-contextmenu
+    ref="menu"
+    @before-visible="isContextmenuVisible = true"
+    @after-close="isContextmenuVisible = false"
+  >
     <v-contextmenu-item
       v-if="selectedBookmarkItem.type === BookmarkType.link"
       @click="openEditModal"
@@ -120,6 +129,7 @@ function mouseIntractive({
   const folderLayerVisible = ref(false)
   const willStartDrag = ref(false)
   const isStartDrag = ref(false)
+  const isContextmenuVisible = ref(false)
 
   function openEditModal() {
     editModalVisible.value = true
@@ -137,6 +147,7 @@ function mouseIntractive({
     folderLayerVisible,
     willStartDrag,
     isStartDrag,
+    isContextmenuVisible,
     dragEvent,
     editModalVisible,
     openEditModal,

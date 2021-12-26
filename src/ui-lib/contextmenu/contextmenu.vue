@@ -41,6 +41,7 @@
 </template>
 
 <script lang="ts">
+import { ref, watch } from 'vue'
 export default {
   name: 'VContextmenu',
   props: {
@@ -49,17 +50,20 @@ export default {
       default: 140,
     },
   },
-  data() {
+  emits: ['beforeVisible', 'afterClose'],
+  setup(props, context) {
+    const visible = ref(false)
+    watch(visible, isVisible => {
+      context.emit(isVisible ? 'beforeVisible' : 'afterClose')
+    })
     return {
       top: 0,
       left: 0,
-      visible: false,
+      visible,
+      onClickoutside() {
+        visible.value = false
+      },
     }
-  },
-  methods: {
-    onClickoutside() {
-      this.visible = false
-    },
   },
 }
 </script>

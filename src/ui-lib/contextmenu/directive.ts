@@ -30,8 +30,8 @@ export default {
           contextmenuVM.visible = false
 
           const bindingValue = binding.value
-          if (bindingValue && bindingValue.onVisible) {
-            bindingValue.onVisible()
+          if (bindingValue && bindingValue.beforeVisible) {
+            bindingValue.beforeVisible()
           }
           nextTick(() => {
             contextmenuVM.left = event.clientX

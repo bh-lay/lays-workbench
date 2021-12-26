@@ -48,7 +48,7 @@
         v-for="item in bookmarkList"
         :key="item.id"
         v-contextmenu:itemMenu="{
-          onVisible() {
+          beforeVisible() {
             selectedBookmark = item
           }
         }"

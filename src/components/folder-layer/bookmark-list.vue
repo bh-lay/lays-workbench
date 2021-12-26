@@ -6,8 +6,12 @@
   grid-auto-flow dense
   justify-content center
   padding-top 30px
+  .bookmark-item
+    transition .2s
   .draged
     opacity 0
+  .selected
+    transform scale(0.9)
 </style>
 
 <template>
@@ -16,19 +20,24 @@
       v-for="bookmarkItem in bookmarkList"
       :key="bookmarkItem.id"
       v-contextmenu:menu="{
-        onVisible() {
+        beforeVisible() {
           selectedBookmarkItem = bookmarkItem
         }
       }"
       :class="{
-        draged: isStartDrag && selectedBookmarkItem.id === bookmarkItem.id
+        draged: isStartDrag && selectedBookmarkItem.id === bookmarkItem.id,
+        selected: isContextmenuVisible && selectedBookmarkItem.id === bookmarkItem.id
       }"
       :data="bookmarkItem"
       :data-id="bookmarkItem.id"
       @next="openItem($event)"
       @mousedown="handleDrag($event, bookmarkItem)"
     />
-    <v-contextmenu ref="menu">
+    <v-contextmenu
+      ref="menu"
+      @before-visible="isContextmenuVisible = true"
+      @after-close="isContextmenuVisible = false"
+    >
       <v-contextmenu-item
         v-if="selectedBookmarkItem.type === BookmarkType.link"
         @click="$emit('open-bookmark-editor', selectedBookmarkItem)"
@@ -110,6 +119,7 @@ export default {
     let needForbiddenClick = false
     const willStartDrag = ref(false)
     const isStartDrag = ref(false)
+    const isContextmenuVisible = ref(false)
 
     function handleSetSize(bookmarkItem: Bookmark, size: BookmarkSize) {
       bookmarkItem.size = size
@@ -125,6 +135,7 @@ export default {
       dragEvent,
       willStartDrag,
       isStartDrag,
+      isContextmenuVisible,
       bookmarkList,
       BookmarkType,
       BookmarkSize,
