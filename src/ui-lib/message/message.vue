@@ -72,8 +72,9 @@
 </template>
 
 <script lang="ts">
-import { ref, watch, nextTick } from 'vue'
-import VButton from '../components/v-button.vue' 
+import { ref, watch, PropType, nextTick } from 'vue'
+import VButton from '../components/v-button.vue'
+type emptyFunction = () => void
 export default {
   name: 'VMessage',
   components: { VButton },
@@ -95,7 +96,7 @@ export default {
       default: '取消',
     },
     onClose: {
-      type: Function,
+      type: Function as emptyFunction,
       default() {
         return function() {
           // nothing
@@ -103,7 +104,7 @@ export default {
       },
     },
     confirm: {
-      type: Function,
+      type: Function as PropType<emptyFunction>,
       default() {
         return function() {
           // nothing
@@ -111,7 +112,10 @@ export default {
       },
     },
   },
-  setup(props) {
+  setup(props: {
+    duration: number,
+    confirm: emptyFunction
+  }) {
     // 初始显示
     const visible = ref(true)
     function triggerCallback() {
@@ -134,7 +138,7 @@ export default {
         triggerCallback()
       })
     })
-    if (props.duration > 0) {
+    if (props.duration > 0 && !props.confirm) {
       setTimeout(() => {
         visible.value = false
       }, props.duration)
