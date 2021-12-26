@@ -91,6 +91,9 @@ export default {
       bookmarkListService({
         parent: props.parentId,
       }).then((list) => {
+        list.forEach(item => {
+          item.size = BookmarkSize.small
+        })
         bookmarkList.value = list
       })
     }
@@ -102,15 +105,6 @@ export default {
     const isStartDrag = ref(false)
 
     function handleSetSize(bookmarkItem: Bookmark, size: BookmarkSize) {
-      if (
-        bookmarkItem.type === BookmarkType.folder &&
-        size === BookmarkSize.large
-      ) {
-        new Message({
-          message: '目录不允许设置为最大模式',
-        })
-        return
-      }
       bookmarkItem.size = size
       bookmarkUpdateService(bookmarkItem)
         .catch(e => {
@@ -119,7 +113,6 @@ export default {
           })
         })
     }
-    // : ShallowRef<MouseEvent | null>
     const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
     return {
       dragEvent,

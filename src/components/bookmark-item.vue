@@ -77,7 +77,11 @@
         background: data.type === BookmarkType.folder ? 'rgba(255, 255, 255, .5)' : data.undercoat
       }"
     >
-      <template v-if="data.type === BookmarkType.link">
+      <slot
+        v-if="$slots.body"
+        name="body"
+      />
+      <template v-else-if="data.type === BookmarkType.link">
         <bookmark-icon
           :icon="data.icon"
           :undercoat="data.undercoat"
@@ -85,34 +89,10 @@
           @click="$emit('next')"
         />
       </template>
-      <template v-else-if="data.type === BookmarkType.widgets">
-        <reg-visual
-          v-if="data.value === 'reg-visual'"
-          :data="data"
-        />
-        <json-formatter
-          v-else-if="data.value === 'json-formatter'"
-          :data="data"
-        />
-        <native-bookmark v-else-if="data.value === 'native-bookmark'" />
-        <img-to-base
-          v-else-if="data.value === 'img-to-base'"
-          :data="data"
-        />
-        <public-bookmarks
-          v-else-if="data.value === 'public-bookmarks'"
-          :data="data"
-        />
-        <private-bookmarks
-          v-else-if="data.value === 'private-bookmarks'"
-          :data="data"
-        />
-        <slot
-          v-else-if="$slots.body"
-          name="body"
-        />
-        <span v-else>unknown widgets type<br>{{ data.name }} <small>{{ data.value }}</small></span>
-      </template>
+      <bookmark-widgets-icon
+        v-else-if="data.type === BookmarkType.widgets"
+        :data="data"
+      />
       <folder-icon
         v-else-if="data.type === BookmarkType.folder"
         :data="data"
@@ -129,23 +109,13 @@
 import { Bookmark, BookmarkType, BookmarkSize } from '@database/entity/bookmark'
 import BookmarkIcon from './bookmark-icon.vue'
 import FolderIcon from './folder-icon.vue'
-import RegVisual from './widgets/reg-visual/index.vue'
-import JsonFormatter from './widgets/json-formatter/index.vue'
-import NativeBookmark from './widgets/native-bookmark.vue'
-import ImgToBase from './widgets/img-to-base/index.vue'
-import PublicBookmarks from './widgets/public-bookmarks/index.vue'
-import PrivateBookmarks from './widgets/private-bookmarks/index.vue'
+import BookmarkWidgetsIcon from './bookmark-widgets-icon.vue'
 
 export default {
   components: {
-    RegVisual,
-    JsonFormatter,
-    NativeBookmark,
-    ImgToBase,
+    BookmarkWidgetsIcon,
     BookmarkIcon,
     FolderIcon,
-    PublicBookmarks,
-    PrivateBookmarks,
   },
   props: {
     data: {

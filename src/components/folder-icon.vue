@@ -49,16 +49,24 @@
     ]"
   >
     <div class="origin-map">
-      <bookmark-icon
+      <div
         v-for="item in bookmarkList"
         :key="item.id"
-        :icon="item.icon"
-        :undercoat="item.undercoat"
-        :url="item.value"
-        :style="{
-          background: item.undercoat
-        }"
-      />
+      >
+        <bookmark-icon
+          v-if="item.type === BookmarkType.link"
+          :icon="item.icon"
+          :undercoat="item.undercoat"
+          :url="item.value"
+          :style="{
+            background: item.undercoat
+          }"
+        />
+        <bookmark-widgets-icon
+          v-else
+          :data="item"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -66,11 +74,12 @@
 <script lang="ts">
 import { ref, watch, Ref } from 'vue'
 import BookmarkIcon from './bookmark-icon.vue'
-import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
+import BookmarkWidgetsIcon from './bookmark-widgets-icon.vue'
+import { Bookmark, BookmarkSize, BookmarkType } from '@database/entity/bookmark'
 import { bookmarkListService } from '@database/services/bookmark-service'
 
 export default {
-  components: { BookmarkIcon },
+  components: { BookmarkIcon, BookmarkWidgetsIcon },
   props: {
     data: {
       type: Bookmark,
@@ -97,6 +106,7 @@ export default {
     return {
       bookmarkList,
       BookmarkSize,
+      BookmarkType,
     }
   },
 }
