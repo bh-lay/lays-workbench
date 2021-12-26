@@ -52,13 +52,6 @@
   width 80%
   z-index 101
 @media screen and (max-width:600px)
-  .modal-close
-    top 0
-    left auto
-    right 0
-    border none
-    svg
-      fill #333
   .modal-mask
     transition 0s !important
   .modal-body

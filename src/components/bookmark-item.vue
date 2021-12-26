@@ -81,22 +81,21 @@
         v-if="$slots.body"
         name="body"
       />
-      <template v-else-if="data.type === BookmarkType.link">
-        <bookmark-icon
-          :icon="data.icon"
-          :undercoat="data.undercoat"
-          :url="data.value"
-          @click="$emit('next')"
-        />
-      </template>
+      <bookmark-icon
+        v-else-if="data.type === BookmarkType.link"
+        :icon="data.icon"
+        :undercoat="data.undercoat"
+        :url="data.value"
+        @click="$emit('next', data)"
+      />
       <bookmark-widgets-icon
         v-else-if="data.type === BookmarkType.widgets"
         :data="data"
       />
-      <folder-icon
+      <folder-card
         v-else-if="data.type === BookmarkType.folder"
         :data="data"
-        @click="$emit('next')"
+        @next="$emit('next', $event)"
       />
     </div>
     <div class="title">
@@ -108,14 +107,14 @@
 <script lang="ts">
 import { Bookmark, BookmarkType, BookmarkSize } from '@database/entity/bookmark'
 import BookmarkIcon from './bookmark-icon.vue'
-import FolderIcon from './folder-icon.vue'
+import FolderCard from './folder-card/folder-card.vue'
 import BookmarkWidgetsIcon from './bookmark-widgets-icon.vue'
 
 export default {
   components: {
     BookmarkWidgetsIcon,
     BookmarkIcon,
-    FolderIcon,
+    FolderCard,
   },
   props: {
     data: {

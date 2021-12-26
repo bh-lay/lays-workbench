@@ -20,7 +20,7 @@
       }"
       :data="bookmarkItem"
       :data-id="bookmarkItem.id"
-      @next="openItem(bookmarkItem)"
+      @next="openItem($event)"
       @mousedown="handleDrag($event, bookmarkItem)"
     />
     <v-contextmenu ref="menu">
@@ -91,6 +91,7 @@ export default {
       bookmarkListService({
         parent: props.parentId,
       }).then((list) => {
+        // 强制更改为小组件模式
         list.forEach(item => {
           item.size = BookmarkSize.small
         })

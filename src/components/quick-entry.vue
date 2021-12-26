@@ -25,7 +25,7 @@
         draged: isStartDrag && selectedBookmarkItem.id === bookmarkItem.id
       }"
       :data-id="bookmarkItem.id"
-      @next="openItem(bookmarkItem)"
+      @next="openItem"
       @mousedown="handleDrag($event, bookmarkItem)"
     />
     <bookmark-item :data="addData">
@@ -154,6 +154,7 @@ function mouseIntractive({
           window.open(data.value, '_blank')
         }
       } else if (data.type === BookmarkType.folder) {
+        setSelectedBookmarkItem(data)
         folderLayerVisible.value = true
       }
     },
@@ -291,15 +292,6 @@ export default {
       })
     }
     function handleSetSize(bookmarkItem: Bookmark, size: BookmarkSize) {
-      if (
-        bookmarkItem.type === BookmarkType.folder &&
-        size === BookmarkSize.large
-      ) {
-        new Message({
-          message: '目录不允许设置为最大模式',
-        })
-        return
-      }
       bookmarkItem.size = size
       bookmarkUpdateService(bookmarkItem)
         .catch(e => {

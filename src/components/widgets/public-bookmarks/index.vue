@@ -48,14 +48,14 @@ svg
         典藏各类武林秘籍
       </div>
     </template>
+    <v-modal
+      v-model="modalVisible"
+      width="80%"
+      height="80%"
+    >
+      <public-bookmarks />
+    </v-modal>
   </div>
-  <v-modal
-    v-model="modalVisible"
-    width="80%"
-    height="80%"
-  >
-    <public-bookmarks />
-  </v-modal>
 </template>
 
 <script lang="ts">
