@@ -154,7 +154,6 @@ function mouseIntractive({
           window.open(data.value, '_blank')
         }
       } else if (data.type === BookmarkType.folder) {
-        setSelectedBookmarkItem(data)
         folderLayerVisible.value = true
       }
     },

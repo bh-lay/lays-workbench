@@ -6,6 +6,8 @@
   grid-auto-flow dense
   justify-content center
   padding-top 30px
+  .draged
+    opacity 0
 </style>
 
 <template>
@@ -17,6 +19,9 @@
         onVisible() {
           selectedBookmarkItem = bookmarkItem
         }
+      }"
+      :class="{
+        draged: isStartDrag && selectedBookmarkItem.id === bookmarkItem.id
       }"
       :data="bookmarkItem"
       :data-id="bookmarkItem.id"
@@ -39,6 +44,7 @@
       :event="dragEvent"
       :draged-bookmark="selectedBookmarkItem"
       :disabled-enter="true"
+      :disabled-size="true"
       @before-drag="handleBeforeDrag"
       @drag-end="handleDragEnd"
     />

@@ -31,8 +31,8 @@ export default {
   setup(props: {
     data: Bookmark
   }) {
-    const index = supportWidgetsTypes.indexOf(props.data.value)
     return function() {
+      const index = supportWidgetsTypes.indexOf(props.data.value)
       if (index >= 0) {
         return h(supportWidgets[index], {
           data: props.data,

@@ -56,6 +56,8 @@
   justify-content center
   background #26262c
   border-radius 0 0 8px 8px
+  &.disabled
+    opacity .5
   .size
     border 1px dashed #666
     border-radius 4px
@@ -82,7 +84,12 @@
         v-if="isStableStart"
         class="draged-layer"
       >
-        <div class="size-area">
+        <div
+          :class="{
+            'size-area': true,
+            disabled: disabledSize
+          }"
+        >
           <div
             v-for="size in sizeList"
             :key="size.value"
@@ -266,12 +273,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    disabledSize: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['beforeDrag', 'dragEnd'],
   setup(props: {
     event: MouseEvent,
     dragedBookmark: Bookmark,
     disabledEnter: boolean,
+    disabledSize: boolean,
   }, context) {
     const isStableStart = ref(false)
     const clientX = ref(0)
@@ -304,8 +316,12 @@ export default {
           },
           itemSizeAndPositionMap
         )
-        // 增加 enter 检测
+        // 增加 enter 禁用检测
         if (props.disabledEnter && triggered.type === 'enter') {
+          triggered.type = 'cancel'
+        }
+        // 增加 size 禁用检测
+        if (props.disabledSize && triggered.type === 'size') {
           triggered.type = 'cancel'
         }
         triggeredType.value = triggered.type
@@ -359,8 +375,12 @@ export default {
           },
           itemSizeAndPositionMap
         )
-        // 增加 enter 检测
+        // 增加 enter 禁用检测
         if (props.disabledEnter && triggered.type === 'enter') {
+          triggered.type = 'cancel'
+        }
+        // 增加 size 禁用检测
+        if (props.disabledSize && triggered.type === 'size') {
           triggered.type = 'cancel'
         }
         const dragData = {
