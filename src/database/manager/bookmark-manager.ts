@@ -38,7 +38,11 @@ export function bookmarkInsertListManager(
       const bookmark = new Bookmark(bookmarkList[i])
       if (useSalt) {
         bookmark.id = importSalt + bookmark.id
-        if (bookmark.parent) {
+        if (
+          bookmark.parent &&
+          bookmark.parent !== 'root' &&
+          bookmark.parent !== 'desktop'
+        ) {
           bookmark.parent = importSalt + bookmark.parent
         }
       }

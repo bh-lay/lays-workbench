@@ -3,28 +3,30 @@
   position fixed
   top 40px
   right 40px
-  padding 12px 28px
+  padding 16px 28px
   display flex
   align-items center
   border-radius 4px
   background #2c313a
   box-shadow 1px 1px 3px rgba(0, 0, 0, .2), 1px 1px 10px rgba(0, 0, 0, .2)
   z-index 2001
+  &.has-confirm
+    padding 40px 30px 30px
 .message-body
   min-width 200px
   max-width 400px
-  margin-right 20px
+  margin-right 40px
 .message-text
   line-height 1.5em
-  font-size 14px
+  font-size 15px
   color #d4d7dd
 .message-footer
-  padding-top 10px
+  padding-top 30px
   .v-button
     margin-right 10px
-    padding 3px 8px
+    padding 8px 15px
     line-height 14px
-    font-size 12px
+    font-size 13px
 .message-close
   line-height 40px
   text-align center
@@ -43,7 +45,10 @@
   <transition name="message-ani">
     <div
       v-if="visible"
-      class="v-message"
+      :class="{
+        'v-message': true,
+        'has-confirm': confirm,
+      }"
     >
       <div class="message-body">
         <div class="message-text">
@@ -96,20 +101,12 @@ export default {
       default: '取消',
     },
     onClose: {
-      type: Function as emptyFunction,
-      default() {
-        return function() {
-          // nothing
-        }
-      },
+      type: Function as PropType<emptyFunction>,
+      default: null,
     },
     confirm: {
       type: Function as PropType<emptyFunction>,
-      default() {
-        return function() {
-          // nothing
-        }
-      },
+      default: null,
     },
   },
   setup(props: {
@@ -138,6 +135,7 @@ export default {
         triggerCallback()
       })
     })
+    console.log('props.confirm', props.confirm)
     if (props.duration > 0 && !props.confirm) {
       setTimeout(() => {
         visible.value = false

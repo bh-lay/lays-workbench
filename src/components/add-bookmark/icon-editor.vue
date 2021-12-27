@@ -47,14 +47,15 @@ input
   width 40px
   align-items center
   justify-content center
-  background: #f3f4f7
   cursor pointer
-  color #3d4c5c
+  color #727e97
   transition .15s
   svg
     width 14px
   &:hover
-    background #fff
+    background #292e38
+  &:active
+    background #555e72
 .crab-message
   width 10px
   flex-grow 1

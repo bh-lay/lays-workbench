@@ -3,8 +3,8 @@
   position relative
   display flex
   height 50px
-  border 1px dashed #656c7b
-  border-radius 8px
+  border 1px dashed #575d6b
+  border-radius 6px
   overflow hidden
 .half
   display flex
@@ -20,9 +20,9 @@
     line-height 14px
     font-size 12px
   & + .half
-    border-left 1px dashed #656c7b
+    border-left 1px dashed #575d6b
   &:hover
-    background #424957
+    background #383d47
   &:active
     background #29303d
 .loading
@@ -90,6 +90,20 @@
     </div>
     <div
       class="half"
+      @click="clearData"
+    >
+      <div class="icon">
+        <v-mdi
+          name="mdi-delete-empty"
+          size="20"
+        />
+      </div>
+      <div class="title">
+        清空
+      </div>
+    </div>
+    <div
+      class="half"
       @click="exportDataToMemeory"
     >
       <div class="icon">
@@ -153,16 +167,9 @@ export default {
     const downloadVisible = ref(false)
     let exportData: backupData = null
 
-
-
     return {
       isWorking,
       downloadVisible,
-      importData() {
-        new Message({
-          message: '导入功能还在开发中～',
-        })
-      },
       exportDataToMemeory() {
         isWorking.value = true
         const startTime = Date.now()
@@ -227,6 +234,11 @@ export default {
               message: e.message || '导入失败，请重试',
             })
           })
+      },
+      clearData () {
+        new Message({
+          message: '清空功能还在开发中～',
+        })
       },
     }
   },
