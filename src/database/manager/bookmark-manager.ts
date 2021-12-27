@@ -21,7 +21,34 @@ export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: Bookmark): 
     }
   })
 }
+// 批量导入书签数据
+// FIXME: 此处 Promise 时序不严格，需要寻找更严谨的结束时间标识
+export function bookmarkInsertListManager(
+  db: IDBDatabase,
+  bookmarkList: bookmarkOriginData[],
+  useSalt: boolean
+) {
+  return new Promise(resolve => {
+    // 导入数据加盐处理，避免相同 id 导致导入失败
+    const importSalt = Math.ceil(Math.random() * 10000).toString(36) + '_'
+    const transaction = db.transaction(['bookmark'], 'readwrite')
+    const bookmarkObjectStore = transaction.objectStore('bookmark')
 
+    for(let i = 0, total = bookmarkList.length; i < total; i++) {
+      const bookmark = new Bookmark(bookmarkList[i])
+      if (useSalt) {
+        bookmark.id = importSalt + bookmark.id
+        if (bookmark.parent) {
+          bookmark.parent = importSalt + bookmark.parent
+        }
+      }
+      bookmarkObjectStore.add(bookmark)
+    }
+    setTimeout(() => {
+      resolve({})
+    }, 500)
+  })
+}
 export function bookmarkUpdateManager(db: IDBDatabase, bookmarkItem: Bookmark) {
   return new Promise((resolve, reject) => {
     const request = db.transaction(['bookmark'], 'readwrite')
@@ -36,7 +63,6 @@ export function bookmarkUpdateManager(db: IDBDatabase, bookmarkItem: Bookmark) {
     request.onerror = function () {
       // 数据写入失败
       const error = new Error('数据写入失败')
-      // error.__detail = event
       reject(error)
     }
   })

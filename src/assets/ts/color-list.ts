@@ -14,7 +14,7 @@ export default [
   { label: '霜色', value: '#E9F1F4' },
   { label: '素', value: '#E0F0E6' },
   { label: '荼白', value: '#F3F8F1' },
-  
+
   { label: '紫棠', value: '#54004E' },
   { label: '靛青', value: '#177CB0' },
   { label: '青葱', value: '#09A343' },

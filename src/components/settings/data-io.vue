@@ -2,7 +2,7 @@
 .data-io
   position relative
   display flex
-  height 60px
+  height 50px
   border 1px dashed #656c7b
   border-radius 8px
   overflow hidden
@@ -33,7 +33,7 @@
   height 100%
   background #29303d
   animation loadingBreath 2s infinite
-  line-height 60px
+  line-height 50px
   text-align center
   color #8a94a8
   font-size 12px
@@ -53,7 +53,7 @@
   width 100%
   height 100%
   background #424957
-  line-height 60px
+  line-height 50px
   text-align center
   color #8a94a8
   font-size 15px
@@ -64,13 +64,19 @@
   &:active
     background #424957
 
+.hidden-input
+  position absolute
+  width 0
+  height 0
+  opacity 0
+  visibility hidden
 </style>
 
 <template>
   <div class="data-io">
     <div
       class="half"
-      @click="importData"
+      @click="$refs.input.click()"
     >
       <div class="icon">
         <v-mdi
@@ -109,23 +115,46 @@
     >
       下载
     </div>
+    <input
+      ref="input"
+      type="file"
+      accept="application/json"
+      class="hidden-input"
+      @change="handleInputChange"
+    >
   </div>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
 import { Message } from '@/ui-lib/message'
-import { bookmarkListService } from '@database/services/bookmark-service'
+import { bookmarkListService, bookmarkImportService } from '@database/services/bookmark-service'
 import { Bookmark } from '@/database/entity/bookmark'
 type backupData = {
   bookmarks: Bookmark[]
 } | null
+
+function getFileContent(file: File):  Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = function() {
+      resolve(reader.result as string)
+    }
+    reader.onerror = function() {
+      reject(new Error('读取文件失败，请稍后再试'))
+    }
+    reader.readAsText(file)
+  })
+}
 export default {
   emits: ['next'],
   setup() {
     const isWorking = ref(false)
     const downloadVisible = ref(false)
     let exportData: backupData = null
+
+
+
     return {
       isWorking,
       downloadVisible,
@@ -166,13 +195,38 @@ export default {
         linkNode.href = downloadUrl
         document.body.appendChild(linkNode)
         linkNode.click()
-      
+
         setTimeout(function () {
           document.body.removeChild(linkNode)
           window.URL.revokeObjectURL(downloadUrl)
           downloadVisible.value = false
           exportData = null
         }, 100)
+      },
+      handleInputChange(event: InputEvent) {
+        const eventTarget = event.target as null | {
+          files: File[]
+        }
+        if (!eventTarget || !eventTarget.files || !eventTarget.files[0]) {
+          return
+        }
+        isWorking.value = true
+        getFileContent(eventTarget.files[0])
+          .then((contentStr: string) => {
+            return JSON.parse(contentStr)
+          })
+          .then(backupData => {
+            return bookmarkImportService(backupData.bookmarks)
+          })
+          .then(() => {
+            location.reload()
+          })
+          .catch(e => {
+            isWorking.value = false
+            new Message({
+              message: e.message || '导入失败，请重试',
+            })
+          })
       },
     }
   },

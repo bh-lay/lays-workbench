@@ -55,7 +55,6 @@
         <div
           v-if="visible"
           class="container"
-          @click.stop
         >
           <name-editor
             :model-value="name"

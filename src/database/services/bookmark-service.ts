@@ -1,9 +1,10 @@
 import { getIDBRequest } from '../db'
-import { Bookmark, BookmarkType } from '../entity/bookmark'
+import { Bookmark, BookmarkType, bookmarkOriginData } from '../entity/bookmark'
 import bookmarkDefaultList from '../utils/default-bookmark-data'
 import { autoInitDefaultData } from '../utils/init-bookmark-to-db'
 import {
   bookmarkInsertManager,
+  bookmarkInsertListManager,
   bookmarkUpdateManager,
   bookmarkGetManager,
   bookmarkRemoveManager,
@@ -79,4 +80,9 @@ export async function bookmarkResortService(idList: string[]) {
   const db: IDBDatabase = await getIDBRequest()
   await autoInitDefaultData(db)
   return await bookmarkResetSortManager(db, idList)
+}
+// 数据导入服务
+export async function bookmarkImportService(bookmarks: bookmarkOriginData[]) {
+  const db: IDBDatabase = await getIDBRequest()
+  return await bookmarkInsertListManager(db, bookmarks, true)
 }

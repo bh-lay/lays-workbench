@@ -38,6 +38,8 @@ type BookmarkIconMdi = `${'mdi:'}${string}`
 type BookmarkIconText = `${'text:'}${string}`
 export type BookmarkIcon = BookmarkIconCrab | BookmarkIconMdi | BookmarkIconText
 
+// 书签值类型
+export type BookmarkValue = string | boolean
 // 生成 ID
 function generateID() {
   const randomNum = Math.floor(new Date().getTime() * 100 + Math.random() * 100)
@@ -55,7 +57,7 @@ export class Bookmark {
   type: BookmarkType = BookmarkType.link
   size: BookmarkSize = BookmarkSize.small
   undercoat = '#ffaa00'
-  value = 'http://bh-lay.com'
+  value: BookmarkValue = 'http://bh-lay.com'
   icon: BookmarkIcon = 'text:X'
   parent = ''
   // 描述信息
