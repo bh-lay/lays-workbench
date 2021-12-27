@@ -36,7 +36,7 @@ export function getIDBRequest(): Promise<IDBDatabase> {
         reject(new Error('could not find target'))
       } else {
         const transaction = target.transaction
-        transaction.oncomplete = function() {    
+        transaction.oncomplete = function() {
           resolve(db)
         }
         // 此处处理数据库初始化、升级逻辑

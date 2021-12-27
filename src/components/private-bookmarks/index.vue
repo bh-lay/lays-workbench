@@ -62,7 +62,7 @@ export default {
   setup() {
     const activeId = ref('root')
     const changedParentId = ref('')
-    
+
     const folderEditorConfig = ref({
       visible: false,
       type: 'create',

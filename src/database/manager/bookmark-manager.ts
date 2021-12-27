@@ -47,7 +47,7 @@ export function bookmarkGetManager(db: IDBDatabase, bookmarkId: string): Promise
     const transaction = db.transaction(['bookmark'])
     const objectStore = transaction.objectStore('bookmark')
     const request = objectStore.get(bookmarkId)
-  
+
     request.onsuccess = function () {
       if (request.result) {
         const bookmark = new Bookmark(request.result)
@@ -72,7 +72,7 @@ export function bookmarkRemoveManager(db: IDBDatabase, bookmarkId: string) {
     const transaction = db.transaction(['bookmark'], 'readwrite')
     const objectStore = transaction.objectStore('bookmark')
     const request = objectStore.delete(bookmarkId)
-  
+
     request.onsuccess = function () {
       // 数据读取成功
       resolve(true)
@@ -138,10 +138,10 @@ export function bookmarkListManager(db: IDBDatabase, query: queryOptions): Promi
 }
 export function bookmarkCountManager(db: IDBDatabase): Promise<number> {
   return new Promise((resolve, reject) => {
-    
+
     const objectStore = db.transaction('bookmark').objectStore('bookmark')
     const request = objectStore.count()
-  
+
     request.onsuccess = function (event) {
       const target = event.target as CustomIDBCountEventTarget
       if (!target) {

@@ -17,7 +17,7 @@ export function imgToBase64(file: File) {
       if (ctx) {
         ctx.drawImage(image, 0, 0, image.width, image.height)
       }
-      
+
       return canvas.toDataURL('image/' + ext)
     })
 }

@@ -66,7 +66,7 @@ export default {
     const regText = ref('')
     const imgToBaseVisible = ref(false)
     const imgToBaseFile = ref(null)
-    
+
     let unbindRouterListener: (() => void) | null = onRouterChange((moduleType, moduleName, state) => {
       if (moduleType === 'widgets') {
         switch(moduleName) {

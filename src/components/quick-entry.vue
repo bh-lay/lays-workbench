@@ -140,7 +140,7 @@ function mouseIntractive({
   function closeFolderLayer() {
     folderLayerVisible.value = false
   }
-  
+
   let needForbiddenClick = false
   const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
   return {
@@ -266,7 +266,7 @@ export default {
             // 拖拽与目标元素的父级都标记为新的组
             fromBookmark.parent = folderBookmark.id
             targetBookmark.parent = folderBookmark.id
-            
+
             return Promise.all([
               bookmarkUpdateService(fromBookmark),
               bookmarkUpdateService(targetBookmark),
@@ -279,7 +279,7 @@ export default {
               })
           })
       }
-      
+
     }
     function handleDragMove(list: Bookmark[], fromIndex: number, targetIndex: number){
       moveIndexTo(list, fromIndex, targetIndex)

@@ -70,10 +70,10 @@ export default {
             isImageLoaded.value = true
           })
       }
-      
+
       return currentUrl
     }
-    
+
     // 当 APP 配置数据发生变动，重载
     onAppConfigChange(() => {
       const currentUrl = getAppConfigItem('wallpaper')
@@ -81,7 +81,7 @@ export default {
       if (lastWallpaperValue === currentUrl) {
         return
       }
-      
+
       lastWallpaperValue = loadWallpaper()
     })
     lastWallpaperValue = loadWallpaper()

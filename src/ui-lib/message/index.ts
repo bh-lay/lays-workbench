@@ -25,7 +25,7 @@ export class Message {
         render(null, tempNode)
       },
     }, null)
-    
+
     render(vNode, tempNode)
 
     const bodyNode: HTMLElement = document.body

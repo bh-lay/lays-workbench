@@ -90,7 +90,7 @@ const supportWidgetsList = [
   },
   {
     label: 'JSON格式化',
-    name: 'json-formatter', 
+    name: 'json-formatter',
   },
   {
     label: '图片base64',

@@ -89,7 +89,7 @@ export function onRouterChange(
   if (routerChangeCallbackList.length === 0) {
     window.addEventListener('popstate', popstateHandle)
   }
-  
+
   // 若需立即触发，则立即执行一次
   if (immediateTrigger) {
     const params = parseRouterInfo()

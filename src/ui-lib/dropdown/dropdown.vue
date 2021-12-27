@@ -87,7 +87,7 @@ export default {
         }
         visible.value = true
         const buttonNode = buttonRef.value as HTMLDivElement | null
-        
+
         if (!buttonNode) {
           return
         }

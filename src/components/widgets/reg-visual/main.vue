@@ -28,7 +28,7 @@ export default {
       if (/^\/.+\/$/.test(quickInputValue)) {
         quickInputValue = quickInputValue.replace(/^\/|\/$/g, '')
       }
-      
+
       queryStr = `#!re=${encodeURIComponent(quickInputValue)}`
     }
     return {

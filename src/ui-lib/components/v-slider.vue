@@ -194,7 +194,7 @@ export default {
           timer && clearTimeout(timer)
           timer = setTimeout(() => {
             context.emit('update:modelValue', value)
-          }, 10) 
+          }, 10)
         }
         dragHandle(event, {
           stableDistance: 20,

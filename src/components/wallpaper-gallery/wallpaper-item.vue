@@ -34,7 +34,7 @@ export default {
   setup(props) {
     const usedUrl = imgRobber(props.url)
     const isImageLoaded = ref(false)
-    
+
     loadImage(usedUrl)
       .then(() => {
         isImageLoaded.value = true
