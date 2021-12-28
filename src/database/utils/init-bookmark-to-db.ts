@@ -7,6 +7,6 @@ export async function autoInitDefaultData(db: IDBDatabase) {
   if (count > 0) {
     return db
   }
-  await bookmarkInsertListManager(db, bookmarkDefaultList, false)
+  await bookmarkInsertListManager(db, bookmarkDefaultList)
   return db
 }

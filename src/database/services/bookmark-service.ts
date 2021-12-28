@@ -84,5 +84,5 @@ export async function bookmarkResortService(idList: string[]) {
 // 数据导入服务
 export async function bookmarkImportService(bookmarks: bookmarkOriginData[]) {
   const db: IDBDatabase = await getIDBRequest()
-  return await bookmarkInsertListManager(db, bookmarks, true)
+  return await bookmarkInsertListManager(db, bookmarks)
 }

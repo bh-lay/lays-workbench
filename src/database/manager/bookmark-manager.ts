@@ -25,28 +25,27 @@ export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: Bookmark): 
 // FIXME: 此处 Promise 时序不严格，需要寻找更严谨的结束时间标识
 export function bookmarkInsertListManager(
   db: IDBDatabase,
-  bookmarkList: bookmarkOriginData[],
-  useSalt: boolean
+  bookmarkList: bookmarkOriginData[]
 ) {
   return new Promise(resolve => {
     // 导入数据加盐处理，避免相同 id 导致导入失败
-    const importSalt = Math.ceil(Math.random() * 10000).toString(36) + '_'
+    // const importSalt = Math.ceil(Math.random() * 10000).toString(36) + '_'
     const transaction = db.transaction(['bookmark'], 'readwrite')
     const bookmarkObjectStore = transaction.objectStore('bookmark')
 
     for(let i = 0, total = bookmarkList.length; i < total; i++) {
       const bookmark = new Bookmark(bookmarkList[i])
-      if (useSalt) {
-        bookmark.id = importSalt + bookmark.id
-        if (
-          bookmark.parent &&
-          bookmark.parent !== 'root' &&
-          bookmark.parent !== 'desktop'
-        ) {
-          bookmark.parent = importSalt + bookmark.parent
-        }
-      }
-      bookmarkObjectStore.add(bookmark)
+      // if (useSalt) {
+      //   bookmark.id = importSalt + bookmark.id
+      //   if (
+      //     bookmark.parent &&
+      //     bookmark.parent !== 'root' &&
+      //     bookmark.parent !== 'desktop'
+      //   ) {
+      //     bookmark.parent = importSalt + bookmark.parent
+      //   }
+      // }
+      bookmarkObjectStore.put(bookmark)
     }
     setTimeout(() => {
       resolve({})
