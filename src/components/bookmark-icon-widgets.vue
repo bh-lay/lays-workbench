@@ -32,7 +32,7 @@ export default {
     data: Bookmark
   }) {
     return function() {
-      const index = supportWidgetsTypes.indexOf(props.data.value)
+      const index = supportWidgetsTypes.indexOf(props.data.value as string)
       if (index >= 0) {
         return h(supportWidgets[index], {
           data: props.data,

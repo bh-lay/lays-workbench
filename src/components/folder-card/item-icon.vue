@@ -1,11 +1,11 @@
 <script lang="ts">
 import { h } from 'vue'
-import BookmarkIcon from '../bookmark-icon.vue'
-import BookmarkWidgetsIcon from '../bookmark-widgets-icon.vue'
+import BookmarkIconLink from '../bookmark-icon-link.vue'
+import BookmarkIconWidgets from '../bookmark-icon-widgets.vue'
 import { Bookmark, BookmarkType } from '@database/entity/bookmark'
 
 export default {
-  components: { BookmarkIcon, BookmarkWidgetsIcon },
+  components: { BookmarkIconLink, BookmarkIconWidgets },
   props: {
     data: {
       type: Bookmark,
@@ -21,7 +21,7 @@ export default {
     return function () {
       const bookmark = props.data
       if (bookmark.type === BookmarkType.link) {
-        return h(BookmarkIcon, {
+        return h(BookmarkIconLink, {
           icon: bookmark.icon,
           undercoat: bookmark.undercoat,
           url: bookmark.value,
@@ -33,7 +33,7 @@ export default {
           },
         })
       }
-      return h(BookmarkWidgetsIcon, {
+      return h(BookmarkIconWidgets, {
         data: bookmark,
       })
     }

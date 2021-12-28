@@ -81,14 +81,14 @@
         v-if="$slots.body"
         name="body"
       />
-      <bookmark-icon
+      <bookmark-icon-link
         v-else-if="data.type === BookmarkType.link"
         :icon="data.icon"
         :undercoat="data.undercoat"
         :url="data.value"
         @click="$emit('next', data)"
       />
-      <bookmark-widgets-icon
+      <bookmark-icon-widgets
         v-else-if="data.type === BookmarkType.widgets"
         :data="data"
       />
@@ -106,14 +106,14 @@
 
 <script lang="ts">
 import { Bookmark, BookmarkType, BookmarkSize } from '@database/entity/bookmark'
-import BookmarkIcon from './bookmark-icon.vue'
+import BookmarkIconLink from './bookmark-icon-link.vue'
 import FolderCard from './folder-card/folder-card.vue'
-import BookmarkWidgetsIcon from './bookmark-widgets-icon.vue'
+import BookmarkIconWidgets from './bookmark-icon-widgets.vue'
 
 export default {
   components: {
-    BookmarkWidgetsIcon,
-    BookmarkIcon,
+    BookmarkIconWidgets,
+    BookmarkIconLink,
     FolderCard,
   },
   props: {

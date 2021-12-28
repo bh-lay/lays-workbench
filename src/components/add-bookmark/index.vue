@@ -3,7 +3,7 @@
   font-size 12px
 </style>
 <template>
-  <bookmark-icon
+  <bookmark-icon-link
     class="icon"
     icon="mdi:plus"
     undercoat="#000"
@@ -20,10 +20,10 @@
 <script lang="ts">
 import { ref } from 'vue'
 import MainFunction from './main.vue'
-import BookmarkIcon from '../bookmark-icon.vue'
+import BookmarkIconLink from '../bookmark-icon-link.vue'
 export default {
   name: 'AddBookmarkIndex',
-  components: { BookmarkIcon, MainFunction },
+  components: { BookmarkIconLink, MainFunction },
   emits: ['success'],
   setup(props, context) {
     const addBookmarkVisible = ref(false)
