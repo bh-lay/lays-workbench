@@ -5,7 +5,7 @@
   align-items center
   justify-content center
   cursor pointer
-  transition .2s
+  transition .4s
   svg,
   img
     width 2.6em
@@ -13,7 +13,7 @@
   span
     font-size 1.6em
   &:hover
-    background rgba(0, 0, 0, .2)
+    filter brightness(0.8) grayscale(0.2) contrast(.7)
 </style>
 
 <template>
@@ -21,6 +21,7 @@
     class="bookmark-icon"
     :style="{
       color: textColor,
+      background: undercoat
     }"
   >
     <v-mdi

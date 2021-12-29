@@ -9,7 +9,6 @@
     height calc(var(--grid-size) - var(--grid-gap))
     margin 0 auto
     border-radius var(--icon-radius)
-    background #333
     overflow hidden
     transition 0.15s
   .title
@@ -34,10 +33,8 @@
     visibility hidden
     transition .15s
   .bookmark-icon
-    font-size 10px
+    font-size calc((var(--grid-size) - var(--grid-gap)) * 0.2)
   &:hover
-    .card
-      box-shadow 2px 2px 8px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.3)
     .popover
       visibility visible
       transform translateX(-50%) scale(1)
@@ -48,7 +45,7 @@
   width calc(var(--grid-size) * 2)
   height calc(var(--grid-size) * 2)
   .bookmark-icon
-    font-size 18px
+    font-size calc((var(--grid-size) * 2 - var(--grid-gap)) * 0.2)
   .card
     width calc(var(--grid-size) * 2 - var(--grid-gap))
     height calc(var(--grid-size) * 2 - var(--grid-gap))
@@ -57,7 +54,7 @@
   width calc(var(--grid-size) * 4)
   height calc(var(--grid-size) * 2)
   .bookmark-icon
-    font-size 26px
+    font-size calc((var(--grid-size) * 4 - var(--grid-gap)) * 0.17)
   .card
     width calc(var(--grid-size) * 4 - var(--grid-gap))
     height calc(var(--grid-size) * 2 - var(--grid-gap))
@@ -71,12 +68,7 @@
 
 <template>
   <div :class="['bookmark-item', 'item-size-' + BookmarkSize[data.size]]">
-    <div
-      class="card"
-      :style="{
-        background: data.type === BookmarkType.folder ? 'rgba(255, 255, 255, .5)' : data.undercoat
-      }"
-    >
+    <div class="card">
       <slot
         v-if="$slots.body"
         name="body"

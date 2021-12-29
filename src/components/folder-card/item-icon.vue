@@ -24,10 +24,7 @@ export default {
         return h(BookmarkIconLink, {
           icon: bookmark.icon,
           undercoat: bookmark.undercoat,
-          url: bookmark.value,
-          style: {
-            background: bookmark.undercoat,
-          },
+          url: bookmark.value as string,
           onClick() {
             context.emit('next')
           },

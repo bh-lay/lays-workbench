@@ -5,15 +5,12 @@
     transition .4s
     height 100%
     box-sizing border-box
-    transform-origin top left
-    display flex
-    flex-wrap wrap
-    justify-content space-between
-    align-content space-between
+    background rgba(255, 255, 255, .3)
     & > div
       overflow hidden
   .mini-icon
     cursor pointer
+    transition .2s
     .origin-map
       width 200%
       height 200%
@@ -29,43 +26,31 @@
         border-radius 8px
         overflow hidden
     &:hover
-      background rgba(255, 255, 255, .7)
+      background rgba(255, 255, 255, .5)
   .folder-card-small
     .mini-icon
       width 100%
       height 100%
-      .origin-map
-        padding calc((var(--grid-size) - var(--grid-gap)) / 4)
-        div
-          width calc((var(--grid-size) - var(--grid-gap)) * 0.7)
-          height calc((var(--grid-size) - var(--grid-gap)) * 0.7)
-          font-size calc((var(--grid-size) - var(--grid-gap)) * 0.12)
+  .origin-map
+    padding calc((var(--grid-size) - var(--grid-gap)) / 5)
+    div
+      width calc((var(--grid-size) - var(--grid-gap)) * 0.75)
+      height calc((var(--grid-size) - var(--grid-gap)) * 0.75)
+      font-size calc((var(--grid-size) - var(--grid-gap)) * 0.12)
+  .folder-card-large,
   .folder-card-medium
-    padding calc((var(--grid-size) * 2 - var(--grid-gap)) / 9)
+    display grid
+    grid-template-rows repeat(auto-fill, calc((var(--grid-size) - var(--grid-gap) / 2)))
+    grid-template-columns repeat(auto-fill, calc((var(--grid-size) - var(--grid-gap) / 2)))
+    grid-auto-flow dense
+    justify-content space-between
+    align-items center
+    justify-items center
     & > div
-      width calc((var(--grid-size) * 2 - var(--grid-gap)) * .35)
-      height calc((var(--grid-size) * 2 - var(--grid-gap)) * .35)
+      width calc((var(--grid-size) - var(--grid-gap)))
+      height calc((var(--grid-size) - var(--grid-gap)))
       border-radius 8px
-      font-size calc((var(--grid-size) * 2 - var(--grid-gap)) * 0.06)
-    .mini-icon .origin-map
-        padding calc((var(--grid-size) * 2 - var(--grid-gap)) / 18)
-        div
-          width calc((var(--grid-size) * 2 - var(--grid-gap)) * 0.27)
-          height calc((var(--grid-size) * 2 - var(--grid-gap)) * 0.27)
-          font-size calc((var(--grid-size) * 2 - var(--grid-gap)) * 0.05)
-  .folder-card-large
-    padding calc((var(--grid-size) * 3 - var(--grid-gap)) / 13)
-    & > div
-      width calc((var(--grid-size) * 3 - var(--grid-gap)) * .21)
-      height calc((var(--grid-size) * 3 - var(--grid-gap)) * .21)
-      border-radius 8px
-      font-size calc((var(--grid-size) * 3 - var(--grid-gap)) * 0.04)
-    .origin-map
-      padding calc((var(--grid-size) * 3 - var(--grid-gap)) / 25)
-      div
-        width calc((var(--grid-size) * 3 - var(--grid-gap)) * 0.16)
-        height calc((var(--grid-size) * 3 - var(--grid-gap)) * 0.16)
-        font-size calc((var(--grid-size) * 3 - var(--grid-gap)) * 0.035)
+      font-size calc((var(--grid-size) - var(--grid-gap)) * 0.17)
 </style>
 
 <template>
@@ -82,6 +67,7 @@
       v-for="item in bookmarkListNormal"
       :key="item.id"
       :data="item"
+      class="folder-card-item"
       @next="$emit('next', item)"
     />
     <div
@@ -127,14 +113,13 @@ export default {
         parent: props.data.id,
       }).then((list) => {
         const cardSize = props.data.size
-        console.log('list', list)
         // 强制更改为小组件模式
         list.forEach(item => {
           item.size = BookmarkSize.small
         })
         let normalIconCount = 0
         if (cardSize === BookmarkSize.large) {
-          normalIconCount = 9
+          normalIconCount = 7
         } else if (cardSize === BookmarkSize.medium) {
           normalIconCount = 3
         } else if (cardSize === BookmarkSize.small) {
