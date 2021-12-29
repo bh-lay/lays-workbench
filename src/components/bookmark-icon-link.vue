@@ -5,7 +5,7 @@
   align-items center
   justify-content center
   cursor pointer
-  transition .4s
+  transition filter .4s
   svg,
   img
     width 2.6em

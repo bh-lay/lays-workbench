@@ -2,7 +2,6 @@
   .folder-card
     box-sizing border-box
     height 100%
-    transition .4s
     height 100%
     box-sizing border-box
     background rgba(255, 255, 255, .3)
@@ -10,7 +9,7 @@
       overflow hidden
   .mini-icon
     cursor pointer
-    transition .2s
+    transition background .2s
     .origin-map
       width 200%
       height 200%
@@ -40,8 +39,9 @@
   .folder-card-large,
   .folder-card-medium
     display grid
-    grid-template-rows repeat(auto-fill, calc((var(--grid-size) - var(--grid-gap) / 2)))
-    grid-template-columns repeat(auto-fill, calc((var(--grid-size) - var(--grid-gap) / 2)))
+    padding calc(var(--grid-gap) / 4)
+    grid-template-rows repeat(auto-fill, calc((var(--grid-size) - var(--grid-gap) * 3 / 4)))
+    grid-template-columns repeat(auto-fill, calc((var(--grid-size) - var(--grid-gap) * 3 / 4)))
     grid-auto-flow dense
     justify-content space-between
     align-items center

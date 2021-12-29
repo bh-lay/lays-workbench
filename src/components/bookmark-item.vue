@@ -10,7 +10,6 @@
     margin 0 auto
     border-radius var(--icon-radius)
     overflow hidden
-    transition 0.15s
   .title
     height 16px
     padding-top 4px

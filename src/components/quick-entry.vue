@@ -7,7 +7,7 @@
   justify-content center
   padding-top 40px
   .bookmark-item
-    transition .2s
+    transition opacity, transform .2s
   .draged
     opacity 0
   .selected
