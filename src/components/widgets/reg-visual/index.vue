@@ -1,119 +1,125 @@
 <style lang="stylus" scoped>
-.reg-visual-small
+.reg-visual
   background #2196f3
   display flex
+  flex-direction column
   align-items center
   justify-content center
   height 100%
-  color #fff
-  cursor pointer
-  transition .2s
-  &:hover
-    background #2d77b4
-.reg-visual-medium
-  height 100%
-  background #2196f3
-  cursor pointer
-  text-align center
-  transition .2s
+.main-text
+  height 10px
+  flex-grow 1
+  display flex
+  flex-direction column
+  justify-content center
+  align-items center
   .title
-    padding-top 38px
-    line-height 26px
-    letter-spacing 2px
-    font-weight bold
-    font-size 18px
-    color #fff
-  .desc
-    padding-top 6px
-    line-height 16px
-    letter-spacing 1px
-    font-size 12px
-    color #9ed1fa
-  &:hover
-    background #2d77b4
-
-.reg-visual-widgets
-  height 100%
-  background #2196f3
-  text-align center
-  .title
-    padding-top 18px
+    margin-bottom 6px
     line-height 26px
     letter-spacing 2px
     font-weight bold
     font-size 20px
     color #fff
   .desc
-    padding-top 6px
+    padding 0 10px
     line-height 16px
     letter-spacing 1px
+    text-align center
     font-size 13px
     color #9ed1fa
+    span
+      display inline-block
 .input-group
+  position relative
   display flex
-  width 240px
-  height 30px
-  margin 18px auto 0
-  background: #fff
+  width 100%
+  height 44px
+  border-top 1px solid #0b75cb
+  background #177fd3
+  &:before,
+  &:after
+    content '/'
+    position absolute
+    top 0
+    width 20px
+    height 44px
+    text-align center
+    line-height 44px
+    font-size 16px
+    color #c9d5e8
+  &:before
+    left 10px
+  &:after
+    right 90px
   input,
   button
     box-sizing border-box
     border none
-    height 30px
-    line-height 30px
-    font-size 12px
-    transition .15s
+    height 44px
+    line-height 44px
+    font-size 14px
+    background transparent
+    transition .2s
     &:active,
     &:focus
       outline none
+      background #0b75cb
   input
-    padding 0 15px
+    padding 0 28px
     flex-grow 1
+    color #fff
+    &::-webkit-input-placeholder
+      color rgba(255, 255, 255, .5)
   button
-    width 60px
-    background #fff
+    width 80px
     text-align center
-    color #555
     cursor pointer
+    color #c9d5e8
     &:hover
-      background #eee
+      background #0b75cb
+      color #fff
+.reg-visual-small,
+.reg-visual-medium
+  color #fff
+  cursor pointer
+  transition .2s
+  &:hover
+    background #1571bc
 </style>
 
 <template>
   <div
-    v-if="widgetsSize === BookmarkSize.small"
-    class="reg-visual-small"
-    @click="showRegVisual"
+    :class="{
+      'reg-visual': true,
+      'reg-visual-small': widgetsSize === BookmarkSize.small,
+      'reg-visual-medium': widgetsSize === BookmarkSize.medium,
+      'reg-visual-large': widgetsSize === BookmarkSize.large,
+    }"
+    @click="handleClick"
   >
-    <v-mdi name="mdi-regex" />
-  </div>
-  <div
-    v-else-if="widgetsSize === BookmarkSize.medium"
-    class="reg-visual-medium"
-    @click="showRegVisual"
-  >
-    <div class="title">
-      正则可视化
+    <v-mdi
+      v-if="widgetsSize === BookmarkSize.small"
+      name="mdi-regex"
+    />
+    <div
+      v-else
+      class="main-text"
+    >
+      <div class="title">
+        正则可视化
+      </div>
+      <div class="desc">
+        <span>让晦涩的正则</span><span>生动起来</span>
+      </div>
     </div>
-    <div class="desc">
-      让晦涩的正则<br>生动起来
-    </div>
-  </div>
-  <div
-    v-else
-    class="reg-visual-widgets"
-  >
-    <div class="title">
-      正则可视化
-    </div>
-    <div class="desc">
-      <span>让晦涩的正则</span><span>生动起来</span>
-    </div>
-    <div class="input-group">
+    <div
+      v-if="widgetsSize === BookmarkSize.large"
+      class="input-group"
+    >
       <input
         v-model="quickInput"
         type="text"
-        placeholder="输入正则表达式"
+        placeholder="(?:http(?:|s):|)\/\/(?:[a-zA-Z0-9-]){1,26}(\.[a-zA-Z0-9-]+)+"
         @keydown.enter="showRegVisual"
       >
       <button @click="showRegVisual">
@@ -153,6 +159,12 @@ export default {
       widgetsSize,
       quickInput,
       showRegVisual,
+      handleClick() {
+        if (widgetsSize.value === BookmarkSize.large) {
+          return
+        }
+        showRegVisual()
+      },
     }
   },
 }
