@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "strict": true,
     "jsx": "preserve",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],
       "@database/*": ["./src/database/*"]
