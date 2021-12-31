@@ -149,10 +149,14 @@ export default {
         }
         willStartDrag.value = false
         if (data.type === BookmarkType.link) {
-          if (data.value && data.value.match(/^#/)) {
-            location.hash = data.value
+          const bookmarkValue = data.value
+          if (typeof bookmarkValue !== 'string') {
+            return
+          }
+          if (bookmarkValue && bookmarkValue.match(/^#/)) {
+            location.hash = bookmarkValue
           } else {
-            window.open(data.value, '_blank')
+            window.open(bookmarkValue, '_blank')
           }
         }
       },

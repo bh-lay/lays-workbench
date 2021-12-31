@@ -95,7 +95,7 @@ export default {
       default: false,
     },
   },
-  emits: ['update:visible', 'name-change', 'open-bookmark-editor', 'after-close'],
+  emits: ['update:visible', 'name-change', 'open-bookmark-editor', 'after-close', 'after-drop-to-desktop'],
   setup(props, context) {
     watch(() => props.visible, visible => {
       if (!visible) {
