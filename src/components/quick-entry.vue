@@ -257,13 +257,12 @@ export default {
         return bookmarkResortService(idList)
           .then(idSortMap => {
             const targetSortValue = idSortMap.get(targetBookmark.id)
-            console.log('idSortMap', idSortMap, targetSortValue)
             const item = new Bookmark({
               name: '自定义组',
               // 和目标排序值相同
               sort: targetSortValue,
               type: BookmarkType.folder,
-              size: BookmarkSize.small,
+              size: BookmarkSize.medium,
               undercoat: '#2196f3',
             })
             return bookmarkInsertService(item)

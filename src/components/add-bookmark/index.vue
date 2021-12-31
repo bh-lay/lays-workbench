@@ -6,7 +6,7 @@
   <bookmark-icon-link
     class="icon"
     icon="mdi:plus"
-    undercoat="#000"
+    undercoat="#334"
     @click="addBookmarkVisible = true"
   />
   <v-modal

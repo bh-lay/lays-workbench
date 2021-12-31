@@ -30,7 +30,7 @@
   left 50%
   top 0
   margin-left -160px
-  width 46px
+  width 50px
   height 50px
   display flex
   align-items center
@@ -81,7 +81,7 @@
   left 50%
   width 140px
   height 50px
-  margin-left 100px
+  margin-left 110px
   background #26262c
   border-radius 0 0 8px 8px
   line-height 50px
