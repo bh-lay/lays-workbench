@@ -75,6 +75,27 @@
     width 15px
     height 15px
     margin 0 15px
+.back-to-desktop
+  position absolute
+  top 0
+  left 50%
+  width 140px
+  height 50px
+  margin-left 100px
+  background #26262c
+  border-radius 0 0 8px 8px
+  line-height 50px
+  text-align center
+  font-size 14px
+  color #888
+  transform-origin center top
+  transition .2s
+  &:before
+    content '放回桌面'
+  &.active
+    transform scale(1.25)
+    background #4d636f
+    color #bac8cf
 </style>
 
 <template>
@@ -108,6 +129,10 @@
             size="20"
           />
         </div>
+        <div
+          v-if="!disabledDesktop"
+          :class="['back-to-desktop', triggeredType === 'desktop' ? 'active' : '']"
+        />
         <transition name="fade-fast">
           <div
             v-if="triggeredType === 'enter' || triggeredType === 'before'"
@@ -250,6 +275,16 @@ function getMouseTriggered(
       size,
     }
   }
+  // 是否拖拽回桌面
+  if (
+    clientX > winWidth / 2 + 80 &&
+    clientX < winWidth / 2 + 260 &&
+    clientY < 90
+  ) {
+    return {
+      type: 'desktop',
+    }
+  }
   // 拖拽取消
   return {
     type: 'cancel',
@@ -277,6 +312,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    disabledDesktop: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['beforeDrag', 'dragEnd'],
   setup(props: {
@@ -284,6 +323,7 @@ export default {
     dragedBookmark: Bookmark,
     disabledEnter: boolean,
     disabledSize: boolean,
+    disabledDesktop: boolean,
   }, context) {
     const isStableStart = ref(false)
     const clientX = ref(0)
@@ -324,6 +364,11 @@ export default {
         if (props.disabledSize && triggered.type === 'size') {
           triggered.type = 'cancel'
         }
+        // 增加放回桌面禁用检测
+        if (props.disabledDesktop && triggered.type === 'desktop') {
+          triggered.type = 'cancel'
+        }
+
         triggeredType.value = triggered.type
         clientX.value = params.clientX
         clientY.value = params.clientY
@@ -381,6 +426,10 @@ export default {
         }
         // 增加 size 禁用检测
         if (props.disabledSize && triggered.type === 'size') {
+          triggered.type = 'cancel'
+        }
+        // 增加放回桌面禁用检测
+        if (props.disabledDesktop && triggered.type === 'desktop') {
           triggered.type = 'cancel'
         }
         const dragData = {

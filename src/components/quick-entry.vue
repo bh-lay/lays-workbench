@@ -69,6 +69,7 @@
     v-if="willStartDrag"
     :event="dragEvent"
     :draged-bookmark="selectedBookmarkItem"
+    :disabled-desktop="true"
     @before-drag="handleBeforeDrag"
     @drag-end="handleDragEnd"
   />
@@ -79,6 +80,7 @@
     @name-change="handleFolderNameChange"
     @open-bookmark-editor="handleEditSubFolderBookmark"
     @after-close="afterFolderClose"
+    @after-drop-to-desktop="handleDropToDesktop"
   />
 </template>
 
@@ -373,6 +375,9 @@ export default {
         })
       },
       refreshList() {
+        getList()
+      },
+      handleDropToDesktop() {
         getList()
       },
       triggerFolderIconChange,

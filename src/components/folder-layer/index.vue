@@ -64,6 +64,7 @@
             <bookmark-list
               :parent-id="id"
               @open-bookmark-editor="$emit('open-bookmark-editor', $event)"
+              @after-drop-to-desktop="$emit('after-drop-to-desktop', $event)"
             />
           </div>
         </div>

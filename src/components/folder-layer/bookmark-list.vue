@@ -98,8 +98,8 @@ export default {
       default: '',
     },
   },
-  emits: ['open-bookmark-editor'],
-  setup(props) {
+  emits: ['open-bookmark-editor', 'after-drop-to-desktop'],
+  setup(props, context) {
     let bookmarkList: Ref<Bookmark[]> = ref([])
     const selectedBookmarkItem: Ref<Bookmark | null> = ref(null)
     const getList = function () {
@@ -226,6 +226,27 @@ export default {
         } else if (type === 'size') {
           const selectedBookmark = selectedBookmarkItem.value
           selectedBookmark && handleSetSize(selectedBookmark, size)
+        } else if (type === 'desktop') {
+          const selectedBookmark = selectedBookmarkItem.value
+          if (!selectedBookmark) {
+            return
+          }
+          selectedBookmark.parent = ''
+          bookmarkUpdateService(selectedBookmark)
+            .then(() => {
+              for (let i = 0; i < bookmarkList.value.length; i++) {
+                if (bookmarkList.value[i].id === selectedBookmark.id) {
+                  bookmarkList.value.splice(i, 1)
+                  break
+                }
+              }
+              context.emit('after-drop-to-desktop')
+            })
+            .catch(e => {
+              new Message({
+                message: e.message || '放回桌面失败',
+              })
+            })
         }
       },
       handleRemove() {
