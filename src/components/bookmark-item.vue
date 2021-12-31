@@ -67,28 +67,31 @@
 
 <template>
   <div :class="['bookmark-item', 'item-size-' + BookmarkSize[data.size]]">
-    <div class="card">
-      <slot
-        v-if="$slots.body"
-        name="body"
-      />
-      <bookmark-icon-link
-        v-else-if="data.type === BookmarkType.link"
-        :icon="data.icon"
-        :undercoat="data.undercoat"
-        :url="data.value"
-        @click="$emit('next', data)"
-      />
-      <bookmark-icon-widgets
-        v-else-if="data.type === BookmarkType.widgets"
-        :data="data"
-      />
-      <folder-card
-        v-else-if="data.type === BookmarkType.folder"
-        :data="data"
-        @next="$emit('next', $event)"
-      />
+    <div
+      v-if="$slots.body"
+      class="card"
+    >
+      <slot name="body" />
     </div>
+    <bookmark-icon-link
+      v-else-if="data.type === BookmarkType.link"
+      class="card"
+      :icon="data.icon"
+      :undercoat="data.undercoat"
+      :url="data.value"
+      @click="$emit('next', data)"
+    />
+    <bookmark-icon-widgets
+      v-else-if="data.type === BookmarkType.widgets"
+      class="card"
+      :data="data"
+    />
+    <folder-card
+      v-else-if="data.type === BookmarkType.folder"
+      class="card"
+      :data="data"
+      @next="$emit('next', $event)"
+    />
     <div class="title">
       {{ data.name }}
     </div>
