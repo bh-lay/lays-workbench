@@ -9,7 +9,7 @@ type routerInfo = {
 type routerChangeCallback = (
   moduleType: moduleType,
   moduleName: string,
-  state: object
+  state: routerState
 ) => void
 
 // 根据当前 URL 获取路由数据
@@ -42,19 +42,19 @@ const routerChangeCallbackList: routerChangeCallback[] = []
 function handleRouterChange(
   moduleType: moduleType,
   moduleName: string,
-  state?: object
+  state?: routerState
 ) {
   routerChangeCallbackList.forEach(callback => {
     callback(moduleType, moduleName, state || {})
   })
 }
 
-
+type routerState = {[key:string]: unknown}
 // replace 路由
 export function replaceRouter(
   moduleType: moduleType,
   moduleName: string,
-  state?: object
+  state?: routerState
 ) {
   history.replaceState(state || {}, '', routerInfoToUrl(moduleType, moduleName))
   handleRouterChange(moduleType, moduleName, state)
@@ -64,7 +64,7 @@ export function replaceRouter(
 export function pushRouter(
   moduleType: moduleType,
   moduleName: string,
-  state?: object
+  state?: routerState
 ) {
   history.pushState(state || {}, '', routerInfoToUrl(moduleType, moduleName))
   handleRouterChange(moduleType, moduleName, state)

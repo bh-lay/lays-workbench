@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, Ref, onBeforeUnmount } from 'vue'
 import { onRouterChange } from '@/assets/ts/router'
 import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
 import WallpaperGallery from '@/components/wallpaper-gallery/index.vue'
@@ -65,7 +65,7 @@ export default {
     const regVisualVisible = ref(false)
     const regText = ref('')
     const imgToBaseVisible = ref(false)
-    const imgToBaseFile = ref(null)
+    const imgToBaseFile: Ref<File | null> = ref(null)
 
     let unbindRouterListener: (() => void) | null = onRouterChange((moduleType, moduleName, state) => {
       if (moduleType === 'widgets') {
@@ -78,11 +78,11 @@ export default {
           break
         case 'reg-visual':
           regVisualVisible.value = true
-          regText.value = state.regText
+          regText.value = state.regText as string || ''
           break
         case 'img-to-base':
           imgToBaseVisible.value = true
-          imgToBaseFile.value = state.file || null
+          imgToBaseFile.value = state.file as File || null
           break
         }
       } else if (moduleType === 'settings') {
