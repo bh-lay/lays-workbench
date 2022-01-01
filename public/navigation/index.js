@@ -1,4 +1,4 @@
-
+/* eslint-disable @typescript-eslint/no-this-alias */
 
 function getBodyScrollTop() {
   var bodyScrollTop = (document.body || {}).scrollTop || 0
@@ -88,3 +88,14 @@ CategoryPage.prototype.setActiveNav = function () {
 }
 
 new CategoryPage()
+
+
+var bookmarkElList = document.querySelectorAll('.bookmark')
+bookmarkElList.forEach(function (el) {
+  el.addEventListener('click', function () {
+    var url = el.getAttribute('data-url')
+    if (url) {
+      window.open(url, 'about:blank')
+    }
+  })
+})
