@@ -1,7 +1,6 @@
 import { getIDBRequest } from '../db'
 import { Bookmark, BookmarkType, bookmarkOriginData } from '../entity/bookmark'
-import bookmarkDefaultList from '../utils/default-bookmark-data'
-import { autoInitDefaultData } from '../utils/init-bookmark-to-db'
+import { autoInitDefaultData, loadDefaultData } from '../utils/init-bookmark-to-db'
 import {
   bookmarkInsertManager,
   bookmarkInsertListManager,
@@ -11,8 +10,9 @@ import {
   bookmarkListManager,
   bookmarkResetSortManager,
   bookmarkClearManager,
+  bookmarkCountManager,
 } from '../manager/bookmark-manager'
-import { queryOptions } from '../utils/types-define'
+import { isBookmarkMatchesQuery, queryOptions } from '../utils/types-define'
 
 function getDbFromParams(db?: IDBDatabase): Promise<IDBDatabase> {
   if (db) {
@@ -62,15 +62,30 @@ export async function bookmarkRemoveService(bookmarkId: string) {
   return await bookmarkRemoveManager(db, bookmarkId)
 }
 
+// 通过默认数据加载数据
+async function getListByDefault(db: IDBDatabase, params: queryOptions) {
+  const data: Bookmark[] = []
+  // 若数据库中有数据，则放弃查找
+  const count = await bookmarkCountManager(db)
+  if (count > 0) {
+    return data
+  }
+  // 加载远端数据
+  const defaultData = await loadDefaultData()
+  defaultData.bookmarks.forEach(item => {
+    // 判断是否匹配
+    if (isBookmarkMatchesQuery(item, params)) {
+      data.push(new Bookmark(item))
+    }
+  })
+  return data
+}
 export async function bookmarkListService(params: queryOptions): Promise<Bookmark[]> {
   const db: IDBDatabase = await getIDBRequest()
-  const data: Bookmark[] = await bookmarkListManager(db, params)
-  // 若没有 parent 参数，则认为是请求桌面
-  // 若此时数据为空，则将使用默认数据填充
-  if ((!params || !params.parent) && data.length === 0) {
-    bookmarkDefaultList.forEach(item => {
-      data.push(new Bookmark(item))
-    })
+  let data: Bookmark[] = await bookmarkListManager(db, params)
+  // 若此时数据为空，则尝试使用默认数据填充
+  if (data.length === 0) {
+    data = await getListByDefault(db, params)
   }
   // 处理好排序，返回
   data.sort((A, B) => B.sort - A.sort)

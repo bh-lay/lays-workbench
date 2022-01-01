@@ -98,9 +98,6 @@ export default {
               setAppConfigItem('wallpaper', picUrl.value)
             },
           })
-          // if (confirm('地址没问题，继续使用')) {
-
-          // }
         } else {
           setAppConfigItem('wallpaper', picUrl.value)
         }

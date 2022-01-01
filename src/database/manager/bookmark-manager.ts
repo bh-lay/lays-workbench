@@ -1,5 +1,5 @@
 import { Bookmark, bookmarkOriginData } from '../entity/bookmark'
-import { queryOptions } from '../utils/types-define'
+import { isBookmarkMatchesQuery, queryOptions } from '../utils/types-define'
 
 export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: Bookmark): Promise<Bookmark>  {
   return new Promise((resolve, reject) => {
@@ -114,26 +114,7 @@ export function bookmarkRemoveManager(db: IDBDatabase, bookmarkId: string) {
     }
   })
 }
-// 判断当前查询条件跟 bookmark 是否匹配
-function isBookmarkMatchesQuery(item: bookmarkOriginData, query: queryOptions) {
-  let parentMatch = false
-  if (query.parent) {
-    parentMatch = query.parent === '*' || query.parent === item.parent
-  } else {
-    parentMatch = !item.parent
-  }
-  // parent 不一致，直接返回，避免后续的对比浪费性能
-  if (!parentMatch) {
-    return
-  }
-  let typeMatch = false
-  if (query.type) {
-    typeMatch = query.type === item.type
-  } else {
-    typeMatch = true
-  }
-  return parentMatch && typeMatch
-}
+
 export function bookmarkListManager(db: IDBDatabase, query: queryOptions): Promise<Bookmark[]> {
   return new Promise((resolve, reject) => {
     const objectStore = db.transaction('bookmark').objectStore('bookmark')
