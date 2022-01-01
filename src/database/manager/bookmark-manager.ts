@@ -1,5 +1,5 @@
 import { Bookmark, bookmarkOriginData } from '../entity/bookmark'
-import { isBookmarkMatchesQuery, queryOptions } from '../utils/types-define'
+import { isBookmarkMatchesQuery, queryOptions } from '../utils/bookmark-query-matches'
 
 export function bookmarkInsertManager(db: IDBDatabase, bookmarkItem: Bookmark): Promise<Bookmark>  {
   return new Promise((resolve, reject) => {

@@ -12,7 +12,7 @@ import {
   bookmarkClearManager,
   bookmarkCountManager,
 } from '../manager/bookmark-manager'
-import { isBookmarkMatchesQuery, queryOptions } from '../utils/types-define'
+import { isBookmarkMatchesQuery, queryOptions } from '../utils/bookmark-query-matches'
 
 function getDbFromParams(db?: IDBDatabase): Promise<IDBDatabase> {
   if (db) {
@@ -63,7 +63,7 @@ export async function bookmarkRemoveService(bookmarkId: string) {
 }
 
 // 通过默认数据加载数据
-async function getListByDefault(db: IDBDatabase, params: queryOptions) {
+async function getListByDefault(db: IDBDatabase, query: queryOptions) {
   const data: Bookmark[] = []
   // 若数据库中有数据，则放弃查找
   const count = await bookmarkCountManager(db)
@@ -74,18 +74,18 @@ async function getListByDefault(db: IDBDatabase, params: queryOptions) {
   const defaultData = await loadDefaultData()
   defaultData.bookmarks.forEach(item => {
     // 判断是否匹配
-    if (isBookmarkMatchesQuery(item, params)) {
+    if (isBookmarkMatchesQuery(item, query)) {
       data.push(new Bookmark(item))
     }
   })
   return data
 }
-export async function bookmarkListService(params: queryOptions): Promise<Bookmark[]> {
+export async function bookmarkListService(query: queryOptions): Promise<Bookmark[]> {
   const db: IDBDatabase = await getIDBRequest()
-  let data: Bookmark[] = await bookmarkListManager(db, params)
+  let data: Bookmark[] = await bookmarkListManager(db, query)
   // 若此时数据为空，则尝试使用默认数据填充
   if (data.length === 0) {
-    data = await getListByDefault(db, params)
+    data = await getListByDefault(db, query)
   }
   // 处理好排序，返回
   data.sort((A, B) => B.sort - A.sort)
