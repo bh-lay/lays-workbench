@@ -82,6 +82,7 @@ body {
   width: 260px;
   padding: 15px 15px 15px 5px;
   border-radius: 4px;
+  cursor: pointer;
 }
 .bookmark .icon {
   flex-shrink: 0;
@@ -96,9 +97,11 @@ body {
   line-height: 20px;
   font-weight: bold;
   font-size: 16px;
+  color: #dedede;
 }
 .bookmark .desc {
   font-size: 13px;
+  color: #aaa;
 }
 .bookmark:hover {
   background: #445;
