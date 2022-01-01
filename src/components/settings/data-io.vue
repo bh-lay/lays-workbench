@@ -142,7 +142,11 @@
 <script lang="ts">
 import { ref } from 'vue'
 import { Message } from '@/ui-lib/message'
-import { bookmarkListService, bookmarkImportService } from '@database/services/bookmark-service'
+import {
+  bookmarkListService,
+  bookmarkImportService,
+  bookmarkClearService,
+} from '@database/services/bookmark-service'
 import { Bookmark } from '@/database/entity/bookmark'
 type backupData = {
   bookmarks: Bookmark[]
@@ -237,7 +241,19 @@ export default {
       },
       clearData () {
         new Message({
-          message: '清空功能还在开发中～',
+          message: '清空会彻底删除，建议使用导出备份后操作！',
+          duration: 0,
+          confirmText: '继续清空',
+          cancelText: '取消',
+          confirm() {
+            bookmarkClearService()
+              .then(() => {
+                // 一秒后重载界面
+                setTimeout(() => {
+                  location.reload()
+                }, 1000)
+              })
+          },
         })
       },
     }

@@ -230,3 +230,34 @@ export function bookmarkResetSortManager(db: IDBDatabase, idList: string[]): Pro
     }
   })
 }
+// 清空数据
+export function bookmarkClearManager(db: IDBDatabase): Promise<string> {
+  return new Promise((resolve, reject) => {
+    // 创建数据库 store 对象
+    const objectStore = db.transaction('bookmark', 'readwrite').objectStore('bookmark')
+    // 打开游标
+    const request = objectStore.openCursor()
+    request.onsuccess = function (event) {
+      if (!event.target) {
+        reject(new Error('could not find target'))
+        return
+      }
+      const cursor = (event.target as CustomIDBCursorEventTarget).result
+      if (cursor) {
+        const cursorValue = cursor.value as bookmarkOriginData
+        if (cursorValue.id) {
+          objectStore.delete(cursorValue.id)
+        }
+        cursor.continue()
+      } else {
+        resolve('success')
+      }
+    }
+
+    request.onerror = function () {
+      // 数据写入失败
+      const error = new Error('清空失败')
+      reject(error)
+    }
+  })
+}

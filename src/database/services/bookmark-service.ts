@@ -10,6 +10,7 @@ import {
   bookmarkRemoveManager,
   bookmarkListManager,
   bookmarkResetSortManager,
+  bookmarkClearManager,
 } from '../manager/bookmark-manager'
 import { queryOptions } from '../utils/types-define'
 
@@ -86,3 +87,11 @@ export async function bookmarkImportService(bookmarks: bookmarkOriginData[]) {
   const db: IDBDatabase = await getIDBRequest()
   return await bookmarkInsertListManager(db, bookmarks)
 }
+
+// 数据清空服务
+export async function bookmarkClearService() {
+  const db: IDBDatabase = await getIDBRequest()
+  return await bookmarkClearManager(db)
+}
+
+
