@@ -8,6 +8,14 @@
     <private-bookmarks />
   </v-modal>
   <v-modal
+    v-model="publicBookmarksVisible"
+    width="80%"
+    height="80%"
+    @after-close="resetRouter"
+  >
+    <public-bookmarks />
+  </v-modal>
+  <v-modal
     v-model="wallpaperGalleryVisible"
     width="80%"
     height="80%"
@@ -46,6 +54,7 @@
 import { ref, Ref, onBeforeUnmount } from 'vue'
 import { onRouterChange } from '@/assets/ts/router'
 import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
+import PublicBookmarks from '@/components/public-bookmarks/index.vue'
 import WallpaperGallery from '@/components/wallpaper-gallery/index.vue'
 import JsonFormatter from '@/components/widgets/json-formatter/main.vue'
 import RegVisual from '@/components/widgets/reg-visual/main.vue'
@@ -53,6 +62,7 @@ import ImageToBase from '@/components/widgets/img-to-base/main.vue'
 export default {
   components: {
     PrivateBookmarks,
+    PublicBookmarks,
     WallpaperGallery,
     JsonFormatter,
     RegVisual,
@@ -60,6 +70,7 @@ export default {
   },
   setup() {
     const privateBookmarksVisible = ref(false)
+    const publicBookmarksVisible = ref(false)
     const wallpaperGalleryVisible = ref(false)
     const jsonFormatterVisible = ref(false)
     const regVisualVisible = ref(false)
@@ -72,6 +83,9 @@ export default {
         switch(moduleName) {
         case 'private-bookmark':
           privateBookmarksVisible.value = true
+          break
+        case 'public-bookmark':
+          publicBookmarksVisible.value = true
           break
         case 'json-formatter':
           jsonFormatterVisible.value = true
@@ -101,6 +115,7 @@ export default {
     })
     return {
       privateBookmarksVisible,
+      publicBookmarksVisible,
       wallpaperGalleryVisible,
       jsonFormatterVisible,
       regVisualVisible,

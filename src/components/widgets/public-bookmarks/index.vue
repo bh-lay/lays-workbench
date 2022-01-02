@@ -32,7 +32,7 @@ svg
 <template>
   <div
     class="bookmarks-widgets"
-    @click="modalVisible = true"
+    @click="openModal"
   >
     <v-mdi
       name="mdi-book-open-page-variant"
@@ -48,23 +48,15 @@ svg
         典藏各类武林秘籍
       </div>
     </template>
-    <v-modal
-      v-model="modalVisible"
-      width="80%"
-      height="80%"
-    >
-      <public-bookmarks />
-    </v-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
-import PublicBookmarks from '@/components/public-bookmarks/index.vue'
+import { replaceRouter } from '@/assets/ts/router'
 export default {
   name: 'PublicBookmarkWidgetsButton',
-  components: { PublicBookmarks },
   props: {
     data: {
       type: Bookmark,
@@ -76,12 +68,13 @@ export default {
   setup(props: {
     data: Bookmark
   }) {
-    const modalVisible = ref(false)
     const widgetsSize = computed(() => props.data.size)
     return {
       widgetsSize,
       BookmarkSize,
-      modalVisible,
+      openModal() {
+        replaceRouter('widgets', 'public-bookmark')
+      },
     }
   },
 }
