@@ -30,7 +30,7 @@
     />
     <span v-else-if="iconType === 'text'">{{ iconData }}</span>
     <template v-else>
-      <transition name="fade-fast">
+      <transition name="fade-slow">
         <img
           v-if="faviconLoaded"
           :src="faviconUrl"

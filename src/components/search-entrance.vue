@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+search-height = 56px
 .search-entrance
   position relative
   width 90%
@@ -7,7 +8,7 @@
   z-index 10
 .search-input
   display flex
-  height 56px
+  height search-height
   border-radius 4px
   background rgba(255, 255, 255, 0.2)
   backdrop-filter blur(2px)
@@ -32,7 +33,7 @@
     box-sizing border-box
     width 100px
     flex-grow 1
-    height 56px
+    height search-height
     padding 15px 20px
     border none
     line-height 26px
@@ -55,36 +56,29 @@
       opacity 1
 
 .engine-list
-  box-sizing border-box
   position absolute
   top 100%
-  width 100%
-  display flex
-  flex-wrap wrap
-  padding 16px 0 10px 16px
-  margin-top 10px
-  border-radius 4px
-  background #fff
-.tab-item
-  width 130px
-  height 40px
-  margin 0 10px 10px 0
-  padding 0 0 0 15px
-  line-height 40px
-  font-size 12px
-  color #555
-  border-radius 4px
+  left 0
+  width 200px
+.engine-item
+  height search-height
+  padding-left 20px
+  line-height search-height
+  font-size 14px
+  font-weight bold
+  color #8c95a6
   transition 0.2s ease-out
   cursor pointer
   svg
     display inline-block
     vertical-align middle
-    width 18px
-    height 18px
+    width 24px
+    height 24px
+    margin-right 15px
   &:hover
-    background #f4f4f4
+    color #fff
   &.active
-    background #ddd
+    opacity 0
 </style>
 
 <template>
@@ -119,12 +113,15 @@
         v-if="engineListVisible"
         v-clickoutside="closeEngineList"
         class="engine-list"
+        :style="{
+          top: -activeEngineIndex * 56 + 'px'
+        }"
       >
         <div
           v-for="engine in searchEngineConfig"
           :key="engine.name"
           :class="[
-            'tab-item',
+            'engine-item',
             engine.name === selectedEngineName ? 'active' : '',
           ]"
           @click="selectEngine(engine)"
@@ -165,14 +162,14 @@ const searchEngineConfig: searchEngine[] = [
   },
   {
     name: 'caniuse',
-    label: 'caniuse',
+    label: 'Can I Use',
     placeholder: '前端兼容小字典！',
     url: 'https://www.caniuse.com/?search=[kw]',
     icon: 'mdi-layers-search',
   },
   {
     name: 'stackoverflow',
-    label: 'stackoverflow',
+    label: 'StackOverflow',
     placeholder: '搜一搜歪果仁的技术讨论！',
     url: 'https://stackoverflow.com/search?q=[kw]',
     icon: 'mdi-stack-overflow',
@@ -223,6 +220,14 @@ export default {
         )[0] || searchEngineConfig[0]
       )
     })
+    const activeEngineIndex = computed(() => {
+      for (let i = 0; i < searchEngineConfig.length; i++) {
+        if (searchEngineConfig[i].name === selectedEngineName.value) {
+          return i
+        }
+      }
+      return -1
+    })
     const showEngineList = () => {
       setInputFocused()
       if (engineListVisible.value) {
@@ -240,6 +245,7 @@ export default {
       searchEngineConfig,
       selectedEngineName,
       selectedEngine,
+      activeEngineIndex,
       searchText,
       engineListVisible,
       inputFocused,

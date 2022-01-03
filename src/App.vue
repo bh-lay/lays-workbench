@@ -99,7 +99,7 @@ textarea
   transition backdrop-filter .4s ease-out, background .6s ease
   &.defocus
     background rgba(0, 0, 0, .6)
-    backdrop-filter blur(1px)
+    backdrop-filter blur(2px)
     pointer-events all
     transition backdrop-filter .15s ease-out, background .3s ease
 </style>
