@@ -87,6 +87,7 @@ CategoryPage.prototype.setActiveNav = function () {
   })
 }
 
+
 new CategoryPage()
 
 
@@ -99,3 +100,10 @@ bookmarkElList.forEach(function (el) {
     }
   })
 })
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script')
+  hm.src = 'https://hm.baidu.com/hm.js?a6a3007c8d84b41515a79293b8bdb63f'
+  var s = document.getElementsByTagName('script')[0]
+  s.parentNode.insertBefore(hm, s)
+})()
