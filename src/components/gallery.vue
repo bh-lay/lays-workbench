@@ -9,9 +9,15 @@
   height 100%
   background no-repeat center #444
   background-size cover
-.mask
-  height 100%
-  background rgba(0, 0, 0, .3)
+  &:before
+    content ''
+    display block
+    height 100%
+  &.pure-color:before
+    background url('/images/paper-texture.png')
+    background-size 250px auto
+  &.image:before
+    background rgba(0, 0, 0, .3)
 </style>
 
 <template>
@@ -19,11 +25,9 @@
     <transition name="fade-slow">
       <div
         v-if="isImageLoaded"
-        class="img-container"
+        :class="['img-container', isPureColor ? 'pure-color' : 'image']"
         :style="styleValue"
-      >
-        <div class="mask" />
-      </div>
+      />
     </transition>
     <slot />
   </div>
@@ -46,13 +50,15 @@ export default {
   setup() {
     const isImageLoaded = ref(false)
     const styleValue = ref({})
+    const isPureColor = ref(false)
     let lastWallpaperValue: string | null = null
     const loadWallpaper = () => {
       const currentUrl = getAppConfigItem('wallpaper') as string
+      isImageLoaded.value = false
       // 长度小于17，认定为是颜色值
       // http://a.cn/1.jpg
       if (currentUrl.length < 17) {
-        isImageLoaded.value = false
+        isPureColor.value = true
         styleValue.value = {
           backgroundColor: currentUrl,
         }
@@ -60,8 +66,8 @@ export default {
           isImageLoaded.value = true
         })
       } else {
+        isPureColor.value = false
         const usedUrl = imgRobber(currentUrl)
-        isImageLoaded.value = false
         styleValue.value = {
           backgroundImage: `url(${usedUrl})`,
         }
@@ -89,6 +95,7 @@ export default {
     return {
       isImageLoaded,
       styleValue,
+      isPureColor,
     }
   },
 }
