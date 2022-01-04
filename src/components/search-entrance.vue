@@ -106,6 +106,8 @@ search-height = 56px
         @keydown="handleKeydown"
         @focus="inputFocused = true"
         @blur="inputFocused = false"
+        @compositionstart="isComposing = true"
+        @compositionend="isComposing = false"
       >
     </div>
     <transition name="slidedown">
@@ -190,12 +192,14 @@ const searchEngineConfig: searchEngine[] = [
   },
 ]
 export default {
+  emits: ['focus', 'blur'],
   setup(props, context) {
     const inputRef = ref(null)
     const selectedEngineName = ref(getAppConfigItem('searchEngineName'))
     const searchText = ref('')
     const engineListVisible = ref(false)
     const inputFocused = ref(false)
+    const isComposing = ref(false)
 
     const isActive = ref(false)
     let delay: number | null = null
@@ -250,6 +254,7 @@ export default {
       engineListVisible,
       inputFocused,
       isActive,
+      isComposing,
       selectEngine(engine: searchEngine) {
         setInputFocused()
         selectedEngineName.value = engine.name
@@ -259,7 +264,7 @@ export default {
       showEngineList,
       closeEngineList,
       handleKeydown(e: KeyboardEvent) {
-        if (e.key !== 'Enter') {
+        if (e.key !== 'Enter' || isComposing.value) {
           return
         }
         let searhKeyword = encodeURIComponent(searchText.value)
