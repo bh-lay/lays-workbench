@@ -1,88 +1,52 @@
 <style lang="stylus" scoped>
 .widgets-selector
-  padding 20px 0
-.input-item
-  margin-bottom 20px
-  .label
-    height 14px
-    margin-bottom 6px
-    line-height 14px
-    font-size 12px
-    color #6f6f85
-.widgets-name-list
-  display flex
-  width 100%
-  border-radius 4px
-  background #1a1d23
-  overflow hidden
-.widgets-name-item
-  flex-grow 1
-  height 34px
-  line-height 34px
-  text-align center
-  font-size 12px
-  color #c1c5cd
+  padding-top 20px
+.size-selector
+  margin 0 auto 20px
+.scroll-area
+  height 500px
+  overflow auto
+  &::-webkit-scrollbar
+    width 0
+    height 0
+.bookmark-item
   cursor pointer
-  transition .2s
+  /deep/.card
+    pointer-events none
+    transition .2s
   &:hover
-    background #292e38
-  &.active
-    background: #157dac
-.preview-area
-  display flex
-  align-items center
+    /deep/.card
+      transform scale(.9)
+.widgets-selector-body
+  display grid
+  grid-template-columns repeat(auto-fill, var(--grid-size))
+  grid-template-rows repeat(auto-fill, var(--grid-size))
+  grid-auto-flow dense
   justify-content center
-  height 180px
-  padding-top 20px
-  background #1a1d23
-.footer
-  padding-top 20px
-  text-align right
 </style>
 
 <template>
   <div class="widgets-selector">
-    <div class="input-item">
-      <div class="label">
-        选择工具
+    <size-selector v-model="previewSize" />
+    <div class="scroll-area">
+      <div class="widgets-selector-body">
+        <bookmark-item
+          v-for="item in widgetsList"
+          :key="item.id"
+          :data="item"
+          @click="$emit('confirm', item)"
+        />
       </div>
-      <div class="widgets-name-list">
-        <div
-          v-for="widgetItem in supportWidgetsList"
-          :key="widgetItem.name"
-          :class="[previewData.value === widgetItem.name ? 'active' : '']"
-          class="widgets-name-item"
-          @click="previewData.value = widgetItem.name; previewData.name = widgetItem.label"
-        >
-          {{ widgetItem.label }}
-        </div>
-      </div>
-    </div>
-    <div class="input-item">
-      <div class="label">
-        选择尺寸
-      </div>
-      <size-selector v-model="previewData.size" />
-    </div>
-
-    <div class="preview-area">
-      <bookmark-item
-        :data="previewData"
-      />
-    </div>
-    <div class="footer">
-      <v-button @click="confirm">
-        确定
-      </v-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { reactive } from 'vue'
+import { Ref, ref, watch } from 'vue'
 import { Bookmark, BookmarkType, BookmarkSize } from '@database/entity/bookmark'
 import BookmarkItem from '../bookmark-item.vue'
 import SizeSelector from './size-selector.vue'
+
 const supportWidgetsList = [
   {
     label: '正则可视化',
@@ -105,35 +69,32 @@ const supportWidgetsList = [
     name: 'private-bookmarks',
   },
 ]
+
 export default {
   components: { BookmarkItem, SizeSelector },
-  props: {
-    data: {
-      type: Bookmark,
-      default() {
-        return null
-      },
-    },
-  },
   emits: ['confirm'],
-  setup(props: {
-    data: Bookmark
-  }, context) {
-    const defaultWidgets = supportWidgetsList[0]
-    const previewData = reactive(
-      new Bookmark(props.data || {
-        type: BookmarkType.widgets,
-        size: BookmarkSize.large,
-        value: defaultWidgets.name,
-        name: defaultWidgets.label,
+  setup() {
+    const previewSize = ref(BookmarkSize.large)
+    const widgetsList: Ref<Bookmark[]> = ref([])
+    watch(previewSize, size => {
+      widgetsList.value.forEach(item => {
+        item.size = size
       })
-    )
+    })
+
+    supportWidgetsList.forEach(item => {
+      widgetsList.value.push(
+        new Bookmark({
+          type: BookmarkType.widgets,
+          size: BookmarkSize.large,
+          value: item.name,
+          name: item.label,
+        })
+      )
+    })
     return {
-      supportWidgetsList,
-      previewData,
-      confirm() {
-        context.emit('confirm', previewData)
-      },
+      previewSize,
+      widgetsList,
     }
   },
 }
