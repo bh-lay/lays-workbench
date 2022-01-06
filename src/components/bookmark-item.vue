@@ -53,7 +53,7 @@
   width calc(var(--grid-size) * 4)
   height calc(var(--grid-size) * 2)
   .bookmark-icon
-    font-size calc((var(--grid-size) * 4 - var(--grid-gap)) * 0.17)
+    font-size calc((var(--grid-size) * 4 - var(--grid-gap)) * 0.14)
   .card
     width calc(var(--grid-size) * 4 - var(--grid-gap))
     height calc(var(--grid-size) * 2 - var(--grid-gap))

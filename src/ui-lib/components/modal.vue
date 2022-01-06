@@ -43,9 +43,9 @@
     vertical-align text-bottom
     fill #aaa
   &:hover
-    background rgba(255, 255, 255, .2)
+    background #212127
   &:active
-    background #aaa
+    background #16181d
 .modal-body
   position relative
   box-sizing border-box
