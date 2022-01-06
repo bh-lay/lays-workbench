@@ -14,6 +14,9 @@
     font-size 1.6em
   &:hover
     filter brightness(0.8) grayscale(0.2) contrast(.7)
+  &:active
+    transition filter .2s
+    filter brightness(0.3) grayscale(0.2) contrast(.7)
 </style>
 
 <template>
