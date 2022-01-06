@@ -16,6 +16,16 @@
   &.pure-color:before
     background url('/images/paper-texture.png')
     background-size 250px auto
+    position relative
+  &.pure-color:after
+    content ''
+    position absolute
+    width 100%
+    height 100%
+    left 0
+    bottom 0
+    background linear-gradient(rgba(0, 0, 0, .2), transparent 10%, transparent 60%, rgba(0, 0, 0, .15) 90%, rgba(0, 0, 0, .3))
+    z-index 0
   &.image:before
     background rgba(0, 0, 0, .3)
 </style>
