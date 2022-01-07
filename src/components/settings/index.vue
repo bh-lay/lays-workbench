@@ -20,9 +20,9 @@
 .group-list
   width 340px
   margin-top 10px
+  background #3e4451
 .setting-group
   padding 18px 20px
-  background #3e4451
 .label
   margin-bottom 15px
   font-size 14px
@@ -32,9 +32,8 @@
 <template>
   <v-dropdown
     class="settings-btn"
-    undercoat="tranparent"
-    placement="bottom-right"
     type="plain"
+    placement="bottom-right"
   >
     <v-mdi
       name="mdi-tune"

@@ -47,7 +47,7 @@
   line-height: 1.2
   font-size 14px
   overflow auto
-:global(.json-formatter-row .json-formatter-toggler)
+:deep(.json-formatter-row .json-formatter-toggler)
     position absolute
     margin-left -15px
 

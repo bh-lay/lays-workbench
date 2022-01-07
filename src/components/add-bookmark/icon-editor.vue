@@ -19,8 +19,6 @@
   &.active
     background #2e333e
     color #c1c5cd
-:global(.dropdown-button svg)
-  fill currentColor !important
 input
   display block
   width 20px

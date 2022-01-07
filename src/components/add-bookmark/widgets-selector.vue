@@ -11,11 +11,11 @@
     height 0
 .bookmark-item
   cursor pointer
-  /deep/.card
+  :deep(.card)
     pointer-events none
     transition .2s
   &:hover
-    /deep/.card
+    :deep(.card)
       transform scale(.9)
 .widgets-selector-body
   display grid

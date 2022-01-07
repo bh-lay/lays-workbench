@@ -3,7 +3,7 @@
   cursor pointer
   svg
     transition .2s
-    fill #b6bcce
+    fill currentColor
 .dropdown-body
   position fixed
   overflow hidden

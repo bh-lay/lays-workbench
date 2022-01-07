@@ -8,7 +8,7 @@
   transition .15s
   color #bdbdc7
   &:hover
-    background: #26262c
+    background #26262c
 </style>
 <template>
   <div
