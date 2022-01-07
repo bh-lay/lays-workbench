@@ -1,3 +1,15 @@
+<style lang="stylus" scoped>
+.v-dropdown-item
+  padding 0 20px
+  line-height 42px
+  font-size 14px
+  color #555
+  cursor pointer
+  transition .15s
+  color #bdbdc7
+  &:hover
+    background: #26262c
+</style>
 <template>
   <div
     class="v-dropdown-item"

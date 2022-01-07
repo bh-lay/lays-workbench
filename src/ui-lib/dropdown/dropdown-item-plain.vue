@@ -1,6 +1,6 @@
 <template>
   <div
-    class="v-dropdown-item"
+    class="v-dropdown-item-plain"
     @click="closeDropdown"
   >
     <slot />

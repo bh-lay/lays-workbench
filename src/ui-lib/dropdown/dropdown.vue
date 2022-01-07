@@ -8,10 +8,12 @@
   position fixed
   overflow hidden
   z-index 1002
+  min-width 140px
 .dropdown-body-default
   border-radius 4px
-  background #fff
+  background #2f2f37
   box-shadow 2px 2px 10px rgba(0, 0, 0, .2), 1px 1px 3px rgba(0, 0, 0, .2)
+  padding 15px 0
 </style>
 
 <template>
@@ -36,7 +38,6 @@
           :style="{
             top: top + 'px',
             left: left + 'px',
-            background: undercoat || '#fff'
           }"
         >
           <slot name="body" />
@@ -54,10 +55,6 @@ export default {
     arrow: {
       type: Boolean,
       default: false,
-    },
-    undercoat: {
-      type: String,
-      default: '#fff',
     },
     placement: {
       type: String,
