@@ -85,7 +85,7 @@
       <div class="undercoat-and-size">
         <v-dropdown
           class="undercoat"
-          undercoat="transparent"
+          type="plain"
           :style="{
             background: previewData.undercoat
           }"

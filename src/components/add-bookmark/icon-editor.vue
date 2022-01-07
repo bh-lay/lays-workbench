@@ -15,23 +15,12 @@
     width 50px
     flex-grow 1
     text-align center
-  &:hover
+  &:hover,
+  &.active
     background #2e333e
     color #c1c5cd
 :global(.dropdown-button svg)
   fill currentColor !important
-.icon-type-selector
-  width 120px
-  padding 15px 0
-  .v-dropdown-item
-    padding 0 20px
-    line-height 34px
-    font-size 14px
-    color #555
-    cursor pointer
-    transition .15s
-    &:hover
-      background: #f4f4f4
 input
   display block
   width 20px
@@ -63,7 +52,6 @@ input
   line-height 38px
   font-size 12px
   color #666
-
 </style>
 
 <template>
@@ -71,16 +59,14 @@ input
     <v-dropdown :arrow="true">
       <span>{{ iconTypeLabel }}</span>
       <template #body>
-        <div class="icon-type-selector">
-          <v-dropdown-item
-            v-for="iconTypeItem in iconTypeList"
-            :key="iconTypeItem.value"
-            :class="[iconType === iconTypeItem.value ? 'active' : '']"
-            @click="iconType = iconTypeItem.value"
-          >
-            {{ iconTypeItem.label }}
-          </v-dropdown-item>
-        </div>
+        <v-dropdown-item
+          v-for="iconTypeItem in iconTypeList"
+          :key="iconTypeItem.value"
+          :class="[iconType === iconTypeItem.value ? 'active' : '']"
+          @click="iconType = iconTypeItem.value"
+        >
+          {{ iconTypeItem.label }}
+        </v-dropdown-item>
       </template>
     </v-dropdown>
     <input
