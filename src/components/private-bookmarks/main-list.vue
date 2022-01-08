@@ -20,6 +20,8 @@
   padding 100px 20px
   text-align center
   color #545463
+.draged
+  opacity 0
 </style>
 <template>
   <div
@@ -52,8 +54,12 @@
             selectedBookmark = item
           }
         }"
+        :class="{
+          draged: isDraging && selectedBookmark.id === item.id,
+        }"
         :data="item"
         :active="selectedBookmark.id === item.id"
+        @mousedown="handleDrag($event, item)"
         @click="selectedBookmark = item"
         @dblclick="handleOpen(item)"
       />
@@ -98,10 +104,18 @@
       @confirm="handleFolderEditorConfirm"
     />
   </v-modal>
+  <main-draged-layer
+    v-if="willStartDrag"
+    :event="dragEvent"
+    :draged-bookmark="selectedBookmark"
+    :disabled-desktop="true"
+    @before-drag="handleBeforeDrag"
+    @drag-end="handleDragEnd"
+  />
 </template>
 
 <script lang="ts">
-import { Ref, ref, watch } from 'vue'
+import { Ref, ref, watch, shallowRef } from 'vue'
 import {
   Bookmark,
   BookmarkType,
@@ -116,8 +130,79 @@ import { Message } from '@/ui-lib/message/index'
 import MainItem from './main-item.vue'
 import LinkEditor from './link-editor.vue'
 import FolderEditor from './folder-editor.vue'
+import MainDragedLayer from './main-draged-layer.vue'
+
+// 加载数据处理方法
+function loadListHandler(props: {
+  parent: string,
+  changedParentId: string
+}, bookmarkList: Ref<Bookmark[]>) {
+  const loadList = () => {
+    bookmarkListService({
+      parent: props.parent,
+    }).then((list) => {
+      list.sort((A, B) => {
+        let aValue = (A.type === BookmarkType.folder ? 10000 : 0) + A.sort
+        let bValue = (B.type === BookmarkType.folder ? 10000 : 0) + B.sort
+        return bValue - aValue
+      })
+      bookmarkList.value = list
+    })
+  }
+  loadList()
+  watch(() => props.parent, loadList)
+  watch(
+    () => props.changedParentId,
+    (changedParentId) => {
+      if (changedParentId !== props.parent) {
+        return
+      }
+      loadList()
+    }
+  )
+}
+
+// 拖拽处理方法
+function dragHandler(selectedBookmark: Ref<Bookmark | null>) {
+  const willStartDrag = ref(false)
+  const isDraging = ref(false)
+  const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
+  let willSelectedBookmark: Bookmark | null = null
+  return {
+    dragEvent,
+    willStartDrag,
+    isDraging,
+    handleDrag(event: MouseEvent, bookmark: Bookmark) {
+      // asas
+      console.log('event', event)
+      dragEvent.value = event
+      willStartDrag.value = true
+      willSelectedBookmark = bookmark
+    },
+    handleBeforeDrag() {
+      selectedBookmark.value = willSelectedBookmark
+      isDraging.value = true
+    },
+    handleDragEnd({ type, from, to }: {
+      type: string,
+      from: string,
+      to: string,
+    }) {
+      isDraging.value = false
+      willStartDrag.value = false
+      if (type === 'cancel') {
+        return
+      }
+      new Message({
+        message: '拖拽排序、移动功能尚在开发中～',
+      })
+      console.log(from, to, type)
+      // onDragEnd(from, to, type)
+    },
+  }
+}
 export default {
-  components: { MainItem, LinkEditor, FolderEditor },
+  components: { MainItem, LinkEditor, FolderEditor, MainDragedLayer },
   props: {
     parent: {
       type: String,
@@ -132,29 +217,10 @@ export default {
   setup(props, context) {
     const bookmarkList: Ref<Bookmark[]> = ref([])
     const selectedBookmark: Ref<Bookmark> = ref(new Bookmark({}))
-    const loadList = () => {
-      bookmarkListService({
-        parent: props.parent,
-      }).then((list) => {
-        list.sort((A, B) => {
-          let aValue = (A.type === BookmarkType.folder ? 10000 : 0) + A.sort
-          let bValue = (B.type === BookmarkType.folder ? 10000 : 0) + B.sort
-          return bValue - aValue
-        })
-        bookmarkList.value = list
-      })
-    }
-    loadList()
-    watch(() => props.parent, loadList)
-    watch(
-      () => props.changedParentId,
-      (changedParentId) => {
-        if (changedParentId !== props.parent) {
-          return
-        }
-        loadList()
-      }
-    )
+
+    // 处理列表数据加载
+    loadListHandler(props, bookmarkList)
+    const dragHandlerReturns = dragHandler(selectedBookmark)
     const linkEditorConfig = ref({
       visible: false,
       type: 'create',
@@ -163,7 +229,7 @@ export default {
       visible: false,
       type: 'create',
     })
-    return {
+    const setupObject = {
       selectedBookmark,
       bookmarkList,
       linkEditorConfig,
@@ -231,7 +297,7 @@ export default {
         if (bookmark.type === BookmarkType.folder) {
           context.emit('open-folder', bookmark.id)
         } else if (bookmark.type === BookmarkType.link) {
-          window.open(bookmark.value, '_blank')
+          window.open(bookmark.value as string, '_blank')
         }
       },
       handleRemove() {
@@ -250,6 +316,7 @@ export default {
         })
       },
     }
+    return Object.assign(setupObject, dragHandlerReturns)
   },
 }
 </script>

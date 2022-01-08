@@ -61,6 +61,7 @@
 <template>
   <div
     :class="['folder-item', active === data.id ? 'active' : '']"
+    :data-id="data.id"
     :style="{
       paddingLeft: deep * 15 + 'px',
     }"

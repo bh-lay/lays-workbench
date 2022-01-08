@@ -26,7 +26,10 @@
     color #dde
 </style>
 <template>
-  <div :class="['main-item', active ? 'active' : '']">
+  <div
+    :class="['main-item', active ? 'active' : '']"
+    :data-id="data.id"
+  >
     <v-mdi
       :name="data.type === BookmarkType.folder ? 'mdi-folder' : 'mdi-link-variant'"
       size="14"
