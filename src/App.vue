@@ -29,7 +29,7 @@ textarea
   flex-direction column
   height 100%
 .pager-header
-  height 40px
+  height 60px
   flex-shrink 0
 .pager-body
   height 100px
@@ -47,7 +47,7 @@ textarea
   display flex
   align-items center
   justify-content space-between
-  padding 0 20px
+  padding 0 15px
 .scroll-body
   position relative
   display flex
@@ -56,21 +56,24 @@ textarea
   align-items center
   min-height 100%
 .page-title
-  height 40px
+  height 36px
   display flex
   align-items center
+  border-radius 4px
+  color #c2c9d6
   svg
-    height 34px
+    width 30px
+    height 26px
     vertical-align middle
-    margin-right 4px
-    fill #fff
+    fill rgba(255, 255, 255, .8)
   span
     display inline-block
     vertical-align middle
     height 20px
+    padding-left 8px
     line-height 20px
-    font-size 15px
-    color rgba(255, 255, 255, .6)
+    font-size 16px
+    color rgba(255, 255, 255, .5)
 .fixed-height-pager
   width 90%
   max-width var(--max-container-width)

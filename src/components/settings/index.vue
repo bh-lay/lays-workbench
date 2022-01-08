@@ -6,20 +6,18 @@
   align-items center
   justify-content center
   cursor pointer
-  border 1px solid rgba(255, 255, 255, .1)
   border-radius 4px
   transition .2s ease-in-out
-  color rgba(255, 255, 255, .7)
+  background #333b4d
+  color #c2c9d6
   &:hover
-    border-color rgba(255, 255, 255, .5)
-    background rgba(255, 255, 255, .2)
-    color #fff
-  &:active
-    border-color #fff
-    background rgba(255, 255, 255, .35)
+    background #252b37
+  &:active,
+  &.active
+    background #181d25
 .group-list
   width 340px
-  margin-top 10px
+  margin-top 5px
   background #3e4451
 .setting-group
   padding 18px 20px
