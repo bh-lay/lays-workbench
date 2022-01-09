@@ -111,7 +111,7 @@
 </template>
 
 <script lang="ts">
-import { Bookmark } from '@database/entity/bookmark'
+import { Bookmark, bookmarkOriginData } from '@database/entity/bookmark'
 import { Message } from '@/ui-lib/message/index'
 import BookmarkItem from '../bookmark-item.vue'
 import ColorSelector from './color-selector.vue'
@@ -132,8 +132,9 @@ export default {
   setup(props: {
     data: Bookmark
   }, context) {
+    const propsBookmark = props.data as bookmarkOriginData
     const previewData = reactive(
-      new Bookmark(props.data || {
+      new Bookmark(propsBookmark || {
         undercoat: '#9D2932',
         icon: 'text:好看',
       })
