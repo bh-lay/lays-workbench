@@ -9,10 +9,16 @@
   color #bdbdc7
   &:hover
     background #26262c
+  &:active,
+  &.active
+    background #202228
 </style>
 <template>
   <div
-    class="v-dropdown-item"
+    :class="{
+      'v-dropdown-item': true,
+      active: active,
+    }"
     @click="closeDropdown"
   >
     <slot />
@@ -36,6 +42,12 @@ function tryToCloseDropdown(vm: customComponent, maxDeep: number, deep?: number)
   }
 }
 export default {
+  props: {
+    active: {
+      type: Boolean,
+      default: false,
+    },
+  },
   methods: {
     closeDropdown() {
       tryToCloseDropdown(this.$parent as ComponentPublicInstance, 10)
