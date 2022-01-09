@@ -366,12 +366,13 @@ export default {
       }),
       selectedBookmarkItem,
       handleRemove,
-      handleConfirmEdit(bookmarkItem: Bookmark) {
-        bookmarkUpdateService(bookmarkItem).then(() => {
+      handleConfirmEdit(newBookmark: Bookmark) {
+        bookmarkUpdateService(newBookmark).then(() => {
           mouseHandle.closeEditModal()
           for (let i = 0; i < bookmarkList.value.length; i++) {
-            if (bookmarkList.value[i].id === bookmarkItem.id) {
-              bookmarkList.value[i] = bookmarkItem
+            if (bookmarkList.value[i].id === newBookmark.id) {
+              // 更新书签数据
+              bookmarkList.value[i].fill(newBookmark)
               break
             }
           }

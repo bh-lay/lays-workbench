@@ -34,8 +34,8 @@ export enum BookmarkSize {
 }
 // 书签图标类型
 type BookmarkIconCrab = 'crab'
-type BookmarkIconMdi = `${'mdi:'}${string}`
-type BookmarkIconText = `${'text:'}${string}`
+type BookmarkIconMdi = `mdi:${string}`
+type BookmarkIconText = `text:${string}`
 export type BookmarkIcon = BookmarkIconCrab | BookmarkIconMdi | BookmarkIconText
 
 // 书签值类型
@@ -65,7 +65,7 @@ export class Bookmark {
   constructor(object: bookmarkOriginData) {
     this.fill(object)
   }
-  fill(object: bookmarkOriginData) {
+  fill(object: bookmarkOriginData | Bookmark) {
     if (typeof object !== 'object') {
       return
     }
