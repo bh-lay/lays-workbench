@@ -31,6 +31,7 @@
       @open-folder="handleSelect"
       @after-remove="handleMainListRemove"
       @after-insert="handleMainListInsert"
+      @after-drag="handleMainListDrag"
     />
   </div>
   <v-modal
@@ -112,6 +113,12 @@ export default {
       },
       handleMainListRemove() {
         changedParentId.value = activeId.value
+        setTimeout(() => {
+          changedParentId.value = ''
+        }, 200)
+      },
+      handleMainListDrag() {
+        changedParentId.value = '*'
         setTimeout(() => {
           changedParentId.value = ''
         }, 200)

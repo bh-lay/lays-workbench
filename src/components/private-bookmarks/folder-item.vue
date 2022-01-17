@@ -179,10 +179,9 @@ export default {
     watch(
       () => props.changedParentId,
       (changedParentId) => {
-        if (changedParentId !== props.data.id || !isExpand.value) {
-          return
+        if ((changedParentId === props.data.id || changedParentId === '*') && isExpand.value) {
+          loadList()
         }
-        loadList()
       }
     )
     watch(

@@ -189,85 +189,82 @@ function moveIndexTo(list: Bookmark[], fromIndex: number, toIndex: number) {
     list.splice(fromIndex, 1)
   }
 }
+function handleDragEnter(list: Bookmark[], fromIndex: number, targetIndex: number): Promise<unknown>{
+  const fromBookmark = list[fromIndex]
+  const targetBookmark = list[targetIndex]
+  // 找不到拖拽元素，或目标元素，退出
+  if (!targetBookmark || !fromBookmark) {
+    return Promise.reject(new Error('找不到源或目标书签！'))
+  }
+  if (targetBookmark.type === BookmarkType.folder) {
+    // 目标是目录，直接移入
+    // 删除被拖拽的元素
+    list.splice(fromIndex, 1)
+
+    // 标记 parent
+    fromBookmark.parent = targetBookmark.id
+    return Promise.all([
+      bookmarkUpdateService(fromBookmark),
+      bookmarkUpdateService(targetBookmark),
+    ])
+  } else {
+    // 目标是链接，先排个序，再合并，最后插入
+    const idList = list.map(item => item.id)
+    return bookmarkResortService(idList)
+      .then(idSortMap => {
+        const targetSortValue = idSortMap.get(targetBookmark.id)
+        const item = new Bookmark({
+          name: '自定义组',
+          // 和目标排序值相同
+          sort: targetSortValue,
+          type: BookmarkType.folder,
+        })
+        return bookmarkInsertService(item)
+      })
+      .then((folderBookmark: Bookmark) => {
+        // 拖拽与目标元素的父级都标记为新的组
+        fromBookmark.parent = folderBookmark.id
+        targetBookmark.parent = folderBookmark.id
+
+        return Promise.all([
+          bookmarkUpdateService(fromBookmark),
+          bookmarkUpdateService(targetBookmark),
+        ])
+          .then(() => {
+          // 用新的组替换掉 target 元素
+            list.splice(targetIndex, 1, folderBookmark)
+            // 删除被拖拽的元素
+            list.splice(fromIndex, 1)
+          })
+      })
+  }
+}
+function handleDragMove(list: Bookmark[], fromIndex: number, targetIndex: number): Promise<unknown>{
+  moveIndexTo(list, fromIndex, targetIndex)
+  const idList = list.map(item => item.id)
+  return bookmarkResortService(idList)
+}
 // 拖拽处理方法
-function dragHandler(selectedBookmark: Ref<Bookmark | null>, bookmarkListRef: Ref<Bookmark[]>) {
+function dragHandler(selectedBookmarkRef: Ref<Bookmark | null>, bookmarkListRef: Ref<Bookmark[]>, onDragSuccess: () => void) {
   const willStartDrag = ref(false)
   const isDraging = ref(false)
   const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
   let willSelectedBookmark: Bookmark | null = null
-  function handleDragEnter(list: Bookmark[], fromIndex: number, targetIndex: number){
-    const fromBookmark = list[fromIndex]
-    const targetBookmark = list[targetIndex]
-    // 找不到拖拽元素，或目标元素，退出
-    if (!targetBookmark || !fromBookmark) {
-      return
-    }
-    if (targetBookmark.type === BookmarkType.folder) {
-      // 目标是目录，直接移入
-      // 删除被拖拽的元素
-      list.splice(fromIndex, 1)
 
-      // 标记 parent
-      fromBookmark.parent = targetBookmark.id
-      return Promise.all([
-        bookmarkUpdateService(fromBookmark),
-        bookmarkUpdateService(targetBookmark),
-      ]).then(() => {
-        // 触发 UI 更新
-      })
-    } else {
-      // 目标是链接，先排个序，再合并，最后插入
-      const idList = list.map(item => item.id)
-      return bookmarkResortService(idList)
-        .then(idSortMap => {
-          const targetSortValue = idSortMap.get(targetBookmark.id)
-          const item = new Bookmark({
-            name: '自定义组',
-            // 和目标排序值相同
-            sort: targetSortValue,
-            type: BookmarkType.folder,
-          })
-          return bookmarkInsertService(item)
-        })
-        .then((folderBookmark: Bookmark) => {
-          // 拖拽与目标元素的父级都标记为新的组
-          fromBookmark.parent = folderBookmark.id
-          targetBookmark.parent = folderBookmark.id
-
-          return Promise.all([
-            bookmarkUpdateService(fromBookmark),
-            bookmarkUpdateService(targetBookmark),
-          ])
-            .then(() => {
-            // 用新的组替换掉 target 元素
-              list.splice(targetIndex, 1, folderBookmark)
-              // 删除被拖拽的元素
-              list.splice(fromIndex, 1)
-            })
-        })
-    }
-  }
-  function handleDragMove(list: Bookmark[], fromIndex: number, targetIndex: number){
-    moveIndexTo(list, fromIndex, targetIndex)
-    const idList = list.map(item => item.id)
-    bookmarkResortService(idList)
-  }
   return {
     dragEvent,
     willStartDrag,
     isDraging,
     handleDrag(event: MouseEvent, bookmark: Bookmark) {
-      // asas
-      console.log('event', event)
       dragEvent.value = event
       willStartDrag.value = true
       willSelectedBookmark = bookmark
     },
     handleBeforeDrag() {
-      selectedBookmark.value = willSelectedBookmark
+      selectedBookmarkRef.value = willSelectedBookmark
       isDraging.value = true
     },
-    handleDragEnd({ type, from, to }: {
+    async handleDragEnd({ type, from, to }: {
       type: string,
       from: string,
       to: string,
@@ -281,10 +278,15 @@ function dragHandler(selectedBookmark: Ref<Bookmark | null>, bookmarkListRef: Re
       const bookmarkList = bookmarkListRef.value
       // 处理拖拽完成
       const [fromIndex, targetIndex] = getFromTargetIndex(bookmarkList, from, to)
-      if (type === 'enter') {
-        handleDragEnter(bookmarkList, fromIndex, targetIndex)
-      } else if (type === 'before') {
-        handleDragMove(bookmarkList, fromIndex, targetIndex)
+      try {
+        if (type === 'enter') {
+          await handleDragEnter(bookmarkList, fromIndex, targetIndex)
+        } else if (type === 'before') {
+          await handleDragMove(bookmarkList, fromIndex, targetIndex)
+        }
+        onDragSuccess()
+      } catch (e) {
+        console.log('drag error', e)
       }
     },
   }
@@ -302,14 +304,16 @@ export default {
       default: '',
     },
   },
-  emits: ['select', 'create', 'open-folder', 'after-insert', 'after-remove'],
+  emits: ['open-folder', 'after-insert', 'after-remove', 'after-drag'],
   setup(props, context) {
     const bookmarkList: Ref<Bookmark[]> = ref([])
     const selectedBookmark: Ref<Bookmark> = ref(new Bookmark({}))
 
     // 处理列表数据加载
     loadListHandler(props, bookmarkList)
-    const dragHandlerReturns = dragHandler(selectedBookmark, bookmarkList)
+    const dragHandlerReturns = dragHandler(selectedBookmark, bookmarkList, () => {
+      context.emit('after-drag')
+    })
     const linkEditorConfig = ref({
       visible: false,
       type: 'create',
