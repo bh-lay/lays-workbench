@@ -140,7 +140,6 @@ function getMouseTriggered(
 ): {
   type: string,
   target?: mapItem,
-  size?: BookmarkSize,
 } {
 
   // 是否拖拽移动
@@ -220,7 +219,6 @@ export default {
     })
     const internalInstance = getCurrentInstance()
     const triggeredType = ref('')
-    const activeSize: Ref<BookmarkSize | undefined> = ref(undefined)
     let itemSizeAndPositionMap: mapItem[] = []
 
     dragHandle(props.event, {
@@ -269,8 +267,6 @@ export default {
               height: '4px',
             }
           }
-        } else if (triggered.type === 'size') {
-          activeSize.value = triggered.size
         }
       },
       end(params) {
@@ -285,7 +281,6 @@ export default {
           type: triggered.type,
           from: props.dragedBookmark.id,
           to: triggered.target ? triggered.target.id : null,
-          size: triggered.size,
         }
         if (dragData.from === dragData.to) {
           dragData.type = 'cancel'
@@ -304,7 +299,6 @@ export default {
       isStableStart,
       triggeredType,
       shadowRectStyle,
-      activeSize,
       sizeList: [
         {
           value: BookmarkSize.medium,

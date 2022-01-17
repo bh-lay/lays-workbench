@@ -261,6 +261,8 @@ export default {
               name: '自定义组',
               // 和目标排序值相同
               sort: targetSortValue,
+              // 和目标同 parent
+              parent: targetBookmark.parent,
               type: BookmarkType.folder,
               size: BookmarkSize.medium,
               undercoat: '#2196f3',
