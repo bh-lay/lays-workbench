@@ -241,13 +241,31 @@ function handleDragEnter(list: Bookmark[], fromIndex: number, targetIndex: numbe
       })
   }
 }
+function handleDragEnterSide(list: Bookmark[], fromIndex: number, targetId: string): Promise<unknown>{
+  const fromBookmark = list[fromIndex]
+  // 找不到拖拽元素，退出
+  if (!fromBookmark) {
+    return Promise.reject(new Error('找不到书签数据！'))
+  }
+  // 删除被拖拽的元素
+  list.splice(fromIndex, 1)
+
+  // 标记 parent
+  fromBookmark.parent = targetId
+  return bookmarkUpdateService(fromBookmark)
+}
 function handleDragMove(list: Bookmark[], fromIndex: number, targetIndex: number): Promise<unknown>{
   moveIndexTo(list, fromIndex, targetIndex)
   const idList = list.map(item => item.id)
   return bookmarkResortService(idList)
 }
 // 拖拽处理方法
-function dragHandler(selectedBookmarkRef: Ref<Bookmark | null>, bookmarkListRef: Ref<Bookmark[]>, onDragSuccess: () => void) {
+function dragHandler(
+  selectedBookmarkRef: Ref<Bookmark | null>,
+  bookmarkListRef: Ref<Bookmark[]>,
+  onDragSuccess: () => void,
+  removeBookmark: (bookmarkID: string, bookmarkList: Bookmark[]) => void
+) {
   const willStartDrag = ref(false)
   const isDraging = ref(false)
   const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
@@ -280,11 +298,16 @@ function dragHandler(selectedBookmarkRef: Ref<Bookmark | null>, bookmarkListRef:
       const bookmarkList = bookmarkListRef.value
       // 处理拖拽完成
       const [fromIndex, targetIndex] = getFromTargetIndex(bookmarkList, from, to)
+      console.log('fromIndex, targetIndex', fromIndex, targetIndex)
       try {
         if (type === 'enter') {
           await handleDragEnter(bookmarkList, fromIndex, targetIndex)
+        } else if (type === 'enter-side') {
+          await handleDragEnterSide(bookmarkList, fromIndex, to)
         } else if (type === 'before') {
           await handleDragMove(bookmarkList, fromIndex, targetIndex)
+        } else if (type === 'delete') {
+          await removeBookmark(from, bookmarkList)
         }
         onDragSuccess()
       } catch (e) {
@@ -293,7 +316,6 @@ function dragHandler(selectedBookmarkRef: Ref<Bookmark | null>, bookmarkListRef:
     },
   }
 }
-
 export default {
   components: { MainItem, LinkEditor, FolderEditor, MainDragedLayer },
   props: {
@@ -313,9 +335,29 @@ export default {
 
     // 处理列表数据加载
     loadListHandler(props, bookmarkList)
-    const dragHandlerReturns = dragHandler(selectedBookmark, bookmarkList, () => {
-      context.emit('after-drag')
-    })
+
+    function removeBookmark(bookmarkID: string, bookmarkList: Bookmark[]) {
+      bookmarkRemoveService(bookmarkID).then(() => {
+        for (let i = 0; i < bookmarkList.length; i++) {
+          if (bookmarkList[i].id === bookmarkID) {
+            bookmarkList.splice(i, 1)
+            break
+          }
+        }
+        context.emit('after-remove')
+      }).catch(e => {
+        new Message({
+          message: e.message || '删除失败，请重试',
+        })
+      })
+    }
+    const dragHandlerReturns = dragHandler(
+      selectedBookmark,
+      bookmarkList, () => {
+        context.emit('after-drag')
+      },
+      removeBookmark
+    )
     const linkEditorConfig = ref({
       visible: false,
       type: 'create',
@@ -396,19 +438,7 @@ export default {
         }
       },
       handleRemove() {
-        bookmarkRemoveService(selectedBookmark.value.id).then(() => {
-          for (let i = 0; i < bookmarkList.value.length; i++) {
-            if (bookmarkList.value[i].id === selectedBookmark.value.id) {
-              bookmarkList.value.splice(i, 1)
-              break
-            }
-          }
-          context.emit('after-remove')
-        }).catch(e => {
-          new Message({
-            message: e.message || '删除失败，请重试',
-          })
-        })
+        removeBookmark(selectedBookmark.value.id, bookmarkList.value)
       },
     }
     return Object.assign(setupObject, dragHandlerReturns)

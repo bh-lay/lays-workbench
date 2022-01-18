@@ -65,7 +65,7 @@
         </div>
         <transition name="fade-fast">
           <div
-            v-if="triggeredType === 'enter' || triggeredType === 'before'"
+            v-if="triggeredType === 'enter' || triggeredType === 'enter-side' || triggeredType === 'before'"
             class="target-shadow"
             :style="shadowRectStyle"
           />
@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts">
-import { ref, getCurrentInstance, Ref, ComponentInternalInstance } from 'vue'
+import { ref, getCurrentInstance, ComponentInternalInstance } from 'vue'
 import dragHandle from '@/assets/ts/drag-handle'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 type mapItem = {
@@ -96,22 +96,13 @@ type mapItem = {
   right: number,
   bottom: number,
 }
-function getItemListMap(internalInstance: ComponentInternalInstance | null): mapItem[] {
-  if (!internalInstance) {
-    return []
-  }
-  const thisVm = internalInstance.proxy
-  const parentVm = thisVm ? thisVm.$parent : null
-  if (!parentVm) {
-    return []
-  }
-  const parentEl = parentVm.$el
-  if (!parentEl) {
-    return []
-  }
-  const itemEls = parentEl.parentNode.querySelectorAll('.main-item')
+type mousePoint = {
+  clientY: number,
+  clientX: number
+}
+function getRectMapFromNodeList(node: NodeList): mapItem[] {
   const mapList: mapItem[] = []
-  Array.prototype.forEach.call(itemEls, (bookmarkItemNode) => {
+  Array.prototype.map.call(node, (bookmarkItemNode) => {
     const bookmarkId = bookmarkItemNode.dataset.id
     if (!bookmarkId) {
       return
@@ -127,24 +118,42 @@ function getItemListMap(internalInstance: ComponentInternalInstance | null): map
   })
   return mapList
 }
+function getCurrentRectMap(internalInstance: ComponentInternalInstance | null): mapItem[] {
+  if (!internalInstance) {
+    return []
+  }
+  const thisVm = internalInstance.proxy
+  const parentVm = thisVm ? thisVm.$parent : null
+  if (!parentVm) {
+    return []
+  }
+  const parentEl = parentVm.$el
+  if (!parentEl) {
+    return []
+  }
+  const itemEls = parentEl.parentNode.querySelectorAll('.main-item')
+
+  return getRectMapFromNodeList(itemEls)
+}
+function getSideRectMap(): mapItem[] {
+  const itemEls = document.querySelectorAll('.bookmark-directory .folder-item')
+  return getRectMapFromNodeList(itemEls)
+}
 function getMouseTriggered(
   {
     clientY,
     clientX,
-  }:
-  {
-    clientY: number,
-    clientX: number
-  },
-  map: mapItem[]
+  }: mousePoint,
+  currentMap: mapItem[],
+  sideMap: mapItem[]
 ): {
   type: string,
   target?: mapItem,
 } {
 
   // 是否拖拽移动
-  for (let t = 0; t < map.length; t++) {
-    let mapItem = map[t]
+  for (let t = 0; t < currentMap.length; t++) {
+    let mapItem = currentMap[t]
     if (
       clientX > mapItem.left &&
       clientX < mapItem.right &&
@@ -158,8 +167,8 @@ function getMouseTriggered(
     }
   }
   // 是否拖拽合并
-  for (let i = 0; i < map.length; i++) {
-    let mapItem = map[i]
+  for (let i = 0; i < currentMap.length; i++) {
+    let mapItem = currentMap[i]
     if (
       mapItem.left < clientX &&
       mapItem.right > clientX &&
@@ -181,6 +190,21 @@ function getMouseTriggered(
   ) {
     return {
       type: 'delete',
+    }
+  }
+  // 是否拖拽合并到侧边
+  for (let i = 0; i < sideMap.length; i++) {
+    let mapItem = sideMap[i]
+    if (
+      mapItem.left < clientX &&
+      mapItem.right > clientX &&
+      mapItem.top <= clientY &&
+      mapItem.bottom >= clientY
+    ) {
+      return {
+        type: 'enter-side',
+        target: mapItem,
+      }
     }
   }
   // 拖拽取消
@@ -219,15 +243,16 @@ export default {
     })
     const internalInstance = getCurrentInstance()
     const triggeredType = ref('')
-    let itemSizeAndPositionMap: mapItem[] = []
+    let currentRectList: mapItem[] = []
+    let sideRectList: mapItem[] = []
 
     dragHandle(props.event, {
       stableDistance: 20,
       stableStart() {
         context.emit('beforeDrag')
         isStableStart.value = true
-        itemSizeAndPositionMap = getItemListMap(internalInstance)
-        console.log('itemSizeAndPositionMap', itemSizeAndPositionMap)
+        currentRectList = getCurrentRectMap(internalInstance)
+        sideRectList = getSideRectMap()
       },
       move(params) {
         const triggered = getMouseTriggered(
@@ -235,7 +260,8 @@ export default {
             clientY: params.clientY,
             clientX: params.clientX,
           },
-          itemSizeAndPositionMap
+          currentRectList,
+          sideRectList
         )
 
         triggeredType.value = triggered.type
@@ -243,7 +269,7 @@ export default {
         clientY.value = params.clientY
 
         let triggeredTarget = triggered.target
-        if (triggered.type === 'enter' && triggeredTarget) {
+        if ((triggered.type === 'enter' || triggered.type === 'enter-side') && triggeredTarget) {
           shadowRectStyle.value = {
             top: triggeredTarget.top + 'px',
             left: triggeredTarget.left + 'px',
@@ -275,7 +301,8 @@ export default {
             clientY: params.clientY,
             clientX: params.clientX,
           },
-          itemSizeAndPositionMap
+          currentRectList,
+          sideRectList
         )
         const dragData = {
           type: triggered.type,
