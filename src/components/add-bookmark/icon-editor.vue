@@ -194,8 +194,9 @@ export default {
     function watchUserIntractive() {
       // 监听图标类型变化
       const unWatchIconType = watch(iconType, newIconType => {
+        // 获取默认填充值
         let defaultInputValue = getIconTypeConfig(newIconType).default
-        let newModelValue: BookmarkIcon = encodeModelValue(newIconType, defaultInputValue)
+        let newModelValue = encodeModelValue(newIconType, defaultInputValue)
         applyBookmarkIcon(newModelValue)
         context.emit('update:modelValue', newModelValue)
       })
