@@ -50,6 +50,8 @@
   position relative
   box-sizing border-box
   width 80%
+  max-width 1400px
+  max-height 900px
   z-index 101
 @media screen and (max-width:600px)
   .modal-mask
@@ -98,6 +100,12 @@ type modalStyle = {
   width?: string,
   height?: string
 }
+function inputSize2Style(input: string | number): string {
+  if (typeof input === 'number') {
+    return input + 'px'
+  }
+  return input
+}
 export default {
   name: 'VModal',
   props: {
@@ -124,18 +132,10 @@ export default {
       background: props.undercoat,
     }
     if (props.width) {
-      if (typeof props.width === 'number') {
-        modalBodyStyle.width = props.width + 'px'
-      } else {
-        modalBodyStyle.width = props.width as string
-      }
+      modalBodyStyle.width = inputSize2Style(props.width)
     }
     if (props.height) {
-      if (typeof props.height === 'number') {
-        modalBodyStyle.height = props.height + 'px'
-      } else {
-        modalBodyStyle.height = props.height as string
-      }
+      modalBodyStyle.height = inputSize2Style(props.height)
     }
     return {
       modalBodyStyle,
