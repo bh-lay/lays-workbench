@@ -7,7 +7,7 @@
   width 300px
   height 200px
   flex-grow 1
-  background no-repeat center #000
+  background no-repeat center #26262c
   background-size cover
   cursor pointer
   z-index 0

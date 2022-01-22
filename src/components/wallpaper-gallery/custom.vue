@@ -1,66 +1,73 @@
 <style lang="stylus" scoped>
 .custom-wallpaper
-  padding 140px 0 200px
-  background rgba(0, 0, 0, .5)
+  padding 100px 0 200px
+  background #26262c
 .caption
-  margin-bottom 20px
-  font-weight bold
-  font-size 24px
+  margin-bottom 40px
+  font-size 38px
+  letter-spacing 2px
   text-align center
-  color #ddd
+  font-weight bold
+  color #2196f3
 .input-center
   display flex
   width 90%
   max-width 600px
   height 50px
   margin auto
-  border-radius 8px
-  background #fff
   overflow hidden
   input
     width 100px
+    margin-right 15px
     padding 0 20px
     border none
     flex-grow 1
-    background #fff
-    font-size 14px
+    background #16181d
+    border-radius 8px
+    font-size 16px
+    color #a8aebd
+    &::placeholder
+      color #586074
     &:focus
       outline none
-      background #ddd
+      background #0f1114
   button
     width 80px
     border none
     outline none
-    background #fff
+    background #16181d
+    border-radius 8px
     font-size 14px
+    color #586074
+    cursor pointer
     &:hover
-      background #eee
+      background #0f1114
     &:active
-      background #ddd
+      background #000
 .footer
   width 90%
-  max-width 560px
+  max-width 600px
   margin 20px auto
-  font-size 14px
-  color #666
+  font-size 15px
+  color #444a5a
   a
     margin-right 10px
-    color blue
+    color #444a5a
 </style>
 
 <template>
   <div class="custom-wallpaper">
     <div class="caption">
-      填写图片地址
+      网络图片
     </div>
     <div class="input-center">
       <input
         v-model="picUrl"
         v-focus
-        placeholder="图片链接"
+        placeholder="填写图片地址"
       >
       <button @click="applyPic">
-        设置
+        使用
       </button>
     </div>
     <div class="footer">
