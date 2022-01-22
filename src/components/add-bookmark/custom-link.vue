@@ -74,6 +74,7 @@
       </div>
       <input
         v-model="previewData.value"
+        v-focus
         type="text"
         placeholder="请输入链接地址"
       >

@@ -43,6 +43,7 @@ input
       </div>
       <input
         v-model="name"
+        v-focus
         type="text"
       >
       <div class="label">

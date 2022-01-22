@@ -1,6 +1,6 @@
 import { App as Application }  from 'vue'
 import Components from './components/index'
-import clickOutSide from './directives/click-out-side'
+import Directives from './directives/index'
 import contextmenu from './contextmenu/index'
 import dropdown from './dropdown/index'
 
@@ -17,7 +17,7 @@ export default {
   install(app: Application) {
     initUiLayer()
     app.use(Components)
-    app.use(clickOutSide)
+    app.use(Directives)
     app.use(contextmenu)
     app.use(dropdown)
   },

@@ -54,7 +54,10 @@
       填写图片地址
     </div>
     <div class="input-center">
-      <input v-model="picUrl">
+      <input
+        v-model="picUrl"
+        v-focus
+      >
       <button @click="applyPic">
         设置
       </button>
