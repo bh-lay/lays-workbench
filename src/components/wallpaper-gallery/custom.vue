@@ -57,6 +57,7 @@
       <input
         v-model="picUrl"
         v-focus
+        placeholder="图片链接"
       >
       <button @click="applyPic">
         设置

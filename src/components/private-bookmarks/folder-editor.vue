@@ -38,6 +38,7 @@ input
         v-model="name"
         v-focus
         type="text"
+        placeholder="目录名"
       >
     </div>
     <div class="footer">

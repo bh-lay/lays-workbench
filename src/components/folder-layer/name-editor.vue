@@ -24,6 +24,7 @@ input
       v-model="inputValue"
       maxlength="20"
       type="text"
+      placeholder="分组名"
       @keydown.enter="blur"
       @focusout="handleChange"
     >

@@ -64,7 +64,7 @@
       <input
         v-model="previewData.name"
         type="text"
-        placeholder="请输入链接名称"
+        placeholder="输入链接名称"
         maxlength="20"
       >
     </div>
@@ -76,7 +76,7 @@
         v-model="previewData.value"
         v-focus
         type="text"
-        placeholder="请输入链接地址"
+        placeholder="输入链接地址"
       >
     </div>
     <div class="input-item">

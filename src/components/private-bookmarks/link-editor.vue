@@ -45,6 +45,7 @@ input
         v-model="name"
         v-focus
         type="text"
+        placeholder="书签名"
       >
       <div class="label">
         网址
@@ -52,6 +53,7 @@ input
       <input
         v-model="value"
         type="text"
+        placeholder="网址"
       >
     </div>
     <div class="footer">
