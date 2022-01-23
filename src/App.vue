@@ -104,7 +104,7 @@ textarea
     background rgba(0, 0, 0, .6)
     backdrop-filter blur(2px)
     pointer-events all
-    transition backdrop-filter .15s ease-out, background .3s ease
+    transition backdrop-filter .1s ease-out, background .15s ease
 </style>
 
 <template>

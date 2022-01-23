@@ -59,25 +59,29 @@ search-height = 56px
   position absolute
   top 100%
   left 0
-  width 200px
+  width 160px
 .engine-item
-  height search-height
-  padding-left 20px
-  line-height search-height
-  font-size 14px
+  height 38px
+  padding-left 22px
+  border-radius 4px
+  line-height 38px
+  font-size 12px
   font-weight bold
-  color #8c95a6
+  color #e0e4eb
   transition 0.2s ease-out
   cursor pointer
   svg
     display inline-block
     vertical-align middle
-    width 24px
-    height 24px
-    margin-right 15px
+    width 16px
+    height 16px
+    margin-right 12px
   &:hover
-    color #fff
+    background rgba(0, 0, 0, .2)
+  &:active
+    background rgba(0, 0, 0, .4)
   &.active
+    height search-height
     opacity 0
 </style>
 
@@ -110,13 +114,13 @@ search-height = 56px
         @compositionend="isComposing = false"
       >
     </div>
-    <transition name="slidedown">
+    <transition name="zoom">
       <div
         v-if="engineListVisible"
         v-clickoutside="closeEngineList"
         class="engine-list"
         :style="{
-          top: -activeEngineIndex * 56 + 'px'
+          top: -activeEngineIndex * 38 + 'px'
         }"
       >
         <div
@@ -209,7 +213,7 @@ export default {
         const isFocus = engineListVisible.value || inputFocused.value
         context.emit(isFocus ? 'focus' : 'blur')
         isActive.value = isFocus
-      }, 200)
+      }, 140)
     })
     const setInputFocused = () => {
       const inputNode = inputRef.value as HTMLInputElement | null
