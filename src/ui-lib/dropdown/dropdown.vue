@@ -6,7 +6,6 @@
     fill currentColor
 .dropdown-body
   position fixed
-  overflow hidden
   z-index 1002
   min-width 140px
 .dropdown-body-default
