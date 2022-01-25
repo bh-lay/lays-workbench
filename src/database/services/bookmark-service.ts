@@ -109,4 +109,11 @@ export async function bookmarkClearService() {
   return await bookmarkClearManager(db)
 }
 
+// 数据是否为空检查服务
+export async function bookmarkIsEmptyService(): Promise<boolean> {
+  const db: IDBDatabase = await getIDBRequest()
+  const count = await bookmarkCountManager(db)
+  return count === 0
+}
+
 

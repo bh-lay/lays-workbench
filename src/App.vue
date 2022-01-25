@@ -144,6 +144,7 @@ textarea
       </div>
     </div>
   </div>
+  <https-upgrade-tips v-if="upgradeVisible" />
   <easy-router />
 </template>
 
@@ -154,13 +155,28 @@ import SearchEntrance from '@/components/search-entrance.vue'
 import QuickEntry from '@/components/quick-entry.vue'
 import Settings from '@/components/settings/index.vue'
 import EasyRouter from '@/components/easy-router.vue'
-
+import httpsUpgradeTips from '@/components/https-upgrade-tips.vue'
+import { bookmarkIsEmptyService } from '@database/services/bookmark-service'
 export default {
-  components: { Gallery, SearchEntrance, QuickEntry, Settings, EasyRouter },
+  components: { Gallery, SearchEntrance, QuickEntry, Settings, EasyRouter, httpsUpgradeTips },
   setup() {
     const focused = ref(false)
+    const upgradeVisible = ref(false)
+    // 若当前为 http 协议，且为线上版本，则选择性跳转或提示用户
+    if (location.protocol.indexOf('http:') >= 0 && import.meta.env.PROD) {
+      bookmarkIsEmptyService().then(isEmpty => {
+        if (isEmpty) {
+          // 若当前用户数据为空，则直接跳转至 https 协议
+          location.protocol = 'https'
+        } else {
+          // 否则显示升级指引
+          upgradeVisible.value = true
+        }
+      })
+    }
     return {
       focused,
+      upgradeVisible,
     }
   },
 }

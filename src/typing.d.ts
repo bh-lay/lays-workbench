@@ -25,3 +25,11 @@ declare interface CustomIDBCursorEventTarget extends EventTarget {
     continue: () => void
   },
 }
+
+interface ImportMetaEnv {
+  readonly PROD: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
