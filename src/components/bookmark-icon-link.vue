@@ -49,7 +49,13 @@ import {
   formatHslToHex,
 } from '@/assets/ts/color-conversion'
 import loadImage from '@/assets/ts/load-image'
+import imgRobber from '@/assets/ts/img-robber'
 import { BookmarkIcon } from '@/database/entity/bookmark'
+
+function urlToFavicon(url: string) {
+  const getfaviconUrl = `http://www.getfavicon.org/get.pl?url=${encodeURIComponent(url)}&submitget=get+favicon`
+  return imgRobber(getfaviconUrl)
+}
 export default {
   props: {
     icon: {
@@ -79,9 +85,7 @@ export default {
         return
       }
       faviconLoaded.value = false
-      faviconUrl.value = `http://www.getfavicon.org/get.pl?url=${encodeURIComponent(
-        props.url
-      )}&submitget=get+favicon`
+      faviconUrl.value = urlToFavicon(props.url)
       loadImage(faviconUrl.value)
         .then(() => {
           faviconLoaded.value = true
