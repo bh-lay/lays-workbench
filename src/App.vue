@@ -130,7 +130,7 @@ textarea
           @blur="focused = false"
         />
         <div class="fixed-height-pager">
-          <quick-entry />
+          <bookmark-desktop />
         </div>
       </div>
     </div>
@@ -152,13 +152,13 @@ textarea
 import { ref } from 'vue'
 import Gallery from '@/components/gallery.vue'
 import SearchEntrance from '@/components/search-entrance.vue'
-import QuickEntry from '@/components/quick-entry.vue'
+import BookmarkDesktop from '@/components/bookmark-desktop.vue'
 import Settings from '@/components/settings/index.vue'
 import EasyRouter from '@/components/easy-router.vue'
 import httpsUpgradeTips from '@/components/https-upgrade-tips.vue'
 import { bookmarkIsEmptyService } from '@database/services/bookmark-service'
 export default {
-  components: { Gallery, SearchEntrance, QuickEntry, Settings, EasyRouter, httpsUpgradeTips },
+  components: { Gallery, SearchEntrance, BookmarkDesktop, Settings, EasyRouter, httpsUpgradeTips },
   setup() {
     const focused = ref(false)
     const upgradeVisible = ref(false)
