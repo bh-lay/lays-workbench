@@ -68,6 +68,10 @@ const supportWidgetsList = [
     label: '小书房',
     name: 'private-bookmarks',
   },
+  {
+    label: '三角形生成器',
+    name: 'triangle-maker',
+  },
 ]
 
 export default {

@@ -7,9 +7,10 @@ import NativeBookmark from './widgets/native-bookmark.vue'
 import ImgToBase from './widgets/img-to-base/index.vue'
 import PublicBookmarks from './widgets/public-bookmarks/index.vue'
 import PrivateBookmarks from './widgets/private-bookmarks/index.vue'
+import TriangleMaker from './widgets/triangle-maker/index.vue'
 
-const supportWidgetsTypes = ['reg-visual', 'json-formatter', 'native-bookmark', 'img-to-base', 'public-bookmarks', 'private-bookmarks']
-const supportWidgets = [RegVisual, JsonFormatter, NativeBookmark, ImgToBase, PublicBookmarks, PrivateBookmarks]
+const supportWidgetsTypes = ['reg-visual', 'json-formatter', 'native-bookmark', 'img-to-base', 'public-bookmarks', 'private-bookmarks', 'triangle-maker']
+const supportWidgets = [RegVisual, JsonFormatter, NativeBookmark, ImgToBase, PublicBookmarks, PrivateBookmarks, TriangleMaker]
 
 export default {
   components: {
@@ -19,6 +20,7 @@ export default {
     ImgToBase,
     PublicBookmarks,
     PrivateBookmarks,
+    TriangleMaker,
   },
   props: {
     data: {
