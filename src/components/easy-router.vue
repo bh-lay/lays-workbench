@@ -40,10 +40,11 @@ export default {
     let activeComponent: VNode = h('div')
     // 监听路由变动
     let unbindRouterListener: (() => void) | null = onRouterChange((moduleType, moduleName, state) => {
+      // 弹窗先隐藏，再选择性显示
       modalVisible.value = false
       const matchedComponent = createSubVNode(moduleType, moduleName, state)
       if (matchedComponent) {
-        activeComponent = h(matchedComponent)
+        activeComponent = matchedComponent
         nextTick(() => {
           modalVisible.value = true
         })
