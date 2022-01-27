@@ -2,6 +2,7 @@
 type moduleTypeWidgets = 'widgets'
 type moduleTypeSettings = 'settings'
 type moduleType = moduleTypeWidgets | moduleTypeSettings
+export type routerState = {[key:string]: unknown}
 type routerInfo = {
   moduleType: moduleType,
   moduleName: string
@@ -49,7 +50,6 @@ function handleRouterChange(
   })
 }
 
-type routerState = {[key:string]: unknown}
 // replace 路由
 export function replaceRouter(
   moduleType: moduleType,

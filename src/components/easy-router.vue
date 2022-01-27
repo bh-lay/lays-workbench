@@ -1,132 +1,81 @@
-<template>
-  <v-modal
-    v-model="privateBookmarksVisible"
-    width="80%"
-    height="80%"
-    @after-close="resetRouter"
-  >
-    <private-bookmarks />
-  </v-modal>
-  <v-modal
-    v-model="publicBookmarksVisible"
-    width="80%"
-    height="80%"
-    @after-close="resetRouter"
-  >
-    <public-bookmarks />
-  </v-modal>
-  <v-modal
-    v-model="wallpaperGalleryVisible"
-    width="80%"
-    height="80%"
-    undercoat="transparent"
-    @after-close="resetRouter"
-  >
-    <wallpaper-gallery />
-  </v-modal>
-  <v-modal
-    v-model="jsonFormatterVisible"
-    width="80%"
-    height="80%"
-    @after-close="resetRouter"
-  >
-    <json-formatter />
-  </v-modal>
-  <v-modal
-    v-model="regVisualVisible"
-    width="80%"
-    height="80%"
-    @after-close="resetRouter"
-  >
-    <reg-visual :reg-text="regText" />
-  </v-modal>
-  <v-modal
-    v-model="imgToBaseVisible"
-    width="80%"
-    height="80%"
-    @after-close="resetRouter"
-  >
-    <image-to-base :file="imgToBaseFile" />
-  </v-modal>
-</template>
-
 <script lang="ts">
-import { ref, Ref, onBeforeUnmount } from 'vue'
-import { onRouterChange } from '@/assets/ts/router'
+import { ref, h, onBeforeUnmount, resolveComponent, nextTick, VNode } from 'vue'
+import { routerState, onRouterChange } from '@/assets/ts/router'
 import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
 import PublicBookmarks from '@/components/public-bookmarks/index.vue'
 import WallpaperGallery from '@/components/wallpaper-gallery/index.vue'
 import JsonFormatter from '@/components/widgets/json-formatter/main.vue'
 import RegVisual from '@/components/widgets/reg-visual/main.vue'
 import ImageToBase from '@/components/widgets/img-to-base/main.vue'
-export default {
-  components: {
-    PrivateBookmarks,
-    PublicBookmarks,
-    WallpaperGallery,
-    JsonFormatter,
-    RegVisual,
-    ImageToBase,
-  },
-  setup() {
-    const privateBookmarksVisible = ref(false)
-    const publicBookmarksVisible = ref(false)
-    const wallpaperGalleryVisible = ref(false)
-    const jsonFormatterVisible = ref(false)
-    const regVisualVisible = ref(false)
-    const regText = ref('')
-    const imgToBaseVisible = ref(false)
-    const imgToBaseFile: Ref<File | null> = ref(null)
 
+function createSubVNode(moduleType: string, moduleName: string, state: routerState): VNode | null {
+  if (moduleType === 'widgets') {
+    switch(moduleName) {
+    case 'private-bookmark':
+      return h(PrivateBookmarks)
+    case 'public-bookmark':
+      return h(PublicBookmarks)
+    case 'json-formatter':
+      return h(JsonFormatter)
+    case 'reg-visual':
+      return h(RegVisual, {
+        regText: state.regText as string,
+      })
+    case 'img-to-base':
+      return h(ImageToBase, {
+        file: state.file as File,
+      })
+    }
+  } else if (moduleType === 'settings') {
+    switch(moduleName) {
+    case 'wallpaper':
+      return h(WallpaperGallery)
+    }
+  }
+  return null
+}
+export default {
+  setup() {
+    const modalVisible = ref(false)
+    let activeComponent: VNode = h('div')
+    // 监听路由变动
     let unbindRouterListener: (() => void) | null = onRouterChange((moduleType, moduleName, state) => {
-      if (moduleType === 'widgets') {
-        switch(moduleName) {
-        case 'private-bookmark':
-          privateBookmarksVisible.value = true
-          break
-        case 'public-bookmark':
-          publicBookmarksVisible.value = true
-          break
-        case 'json-formatter':
-          jsonFormatterVisible.value = true
-          break
-        case 'reg-visual':
-          regVisualVisible.value = true
-          regText.value = state.regText as string || ''
-          break
-        case 'img-to-base':
-          imgToBaseVisible.value = true
-          imgToBaseFile.value = state.file as File || null
-          break
-        }
-      } else if (moduleType === 'settings') {
-        switch(moduleName) {
-        case 'wallpaper':
-          wallpaperGalleryVisible.value = true
-          break
-        }
+      modalVisible.value = false
+      const matchedComponent = createSubVNode(moduleType, moduleName, state)
+      if (matchedComponent) {
+        activeComponent = h(matchedComponent)
+        nextTick(() => {
+          modalVisible.value = true
+        })
       }
     }, true)
+    // 组件销毁时解除路由监听
     onBeforeUnmount(() => {
       if (unbindRouterListener) {
         unbindRouterListener()
         unbindRouterListener = null
       }
     })
-    return {
-      privateBookmarksVisible,
-      publicBookmarksVisible,
-      wallpaperGalleryVisible,
-      jsonFormatterVisible,
-      regVisualVisible,
-      regText,
-      imgToBaseVisible,
-      imgToBaseFile,
-      resetRouter() {
-        regText.value = ''
-        imgToBaseFile.value = null
-        history.replaceState({}, '', location.pathname)
-      },
+
+    return function () {
+      const modalComponent = resolveComponent('v-modal')
+      return h(
+        modalComponent,
+        {
+          width: '80%',
+          height: '80%',
+          modelValue: modalVisible.value,
+          'onUpdate:modelValue'(visible: boolean) {
+            modalVisible.value = visible
+          },
+          onAfterClose() {
+            history.replaceState({}, '', location.pathname)
+          },
+        },
+        () => {
+          return activeComponent
+        }
+      )
     }
   },
 }
