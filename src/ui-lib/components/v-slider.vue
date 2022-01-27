@@ -102,6 +102,10 @@ export default {
       type: Number,
       default: 100,
     },
+    step: {
+      type: Number,
+      default: 0,
+    },
     marks: {
       type: Array as PropType<markItem[]>,
       default() {
@@ -115,6 +119,7 @@ export default {
       modelValue: number,
       min: number,
       max: number,
+      step: number,
       marks: markItem[],
     },
     context
@@ -133,7 +138,12 @@ export default {
       },
       { immediate: true }
     )
-
+    function applyStep(value: number): number {
+      if(props.step) {
+        return Math.round(value / props.step) * props.step
+      }
+      return value
+    }
     return {
       dragValue,
       trackRef,
@@ -193,7 +203,7 @@ export default {
         function delayTriggerUpdate(value: number) {
           timer && clearTimeout(timer)
           timer = setTimeout(() => {
-            context.emit('update:modelValue', value)
+            context.emit('update:modelValue', applyStep(value))
           }, 10)
         }
         dragHandle(event, {
@@ -204,12 +214,12 @@ export default {
           move(params) {
             const { width, value } = countValueByDrag(params.xOffset)
             screenWidthByDrag.value = width + 'px'
-            dragValue.value = value
+            dragValue.value = applyStep(value)
             delayTriggerUpdate(value)
           },
           end(params) {
             const { value } = countValueByDrag(params.xOffset)
-            context.emit('update:modelValue', value)
+            context.emit('update:modelValue', applyStep(value))
             isInDragMode.value = false
           },
         })
