@@ -8,8 +8,8 @@
   padding 50px 20px
   background #405f77
 .title
-  margin-bottom 20px
-  font-size 28px
+  margin-bottom 30px
+  font-size 30px
   color #afc4d4
 .label
   margin 20px 0 10px
@@ -17,9 +17,10 @@
   color #afc4d4
 .isosceles
   float right
-  height 28px
+  height 26px
+  margin-top -3px
   padding 0 5px
-  line-height 28px
+  line-height 26px
   font-size 12px
   border-radius 4px
   cursor pointer
@@ -48,18 +49,30 @@
   .value
     line-height 12px
     font-size 12px
-    color #29333d
+    color #637f9c
+.color-input
+  box-sizing border-box
+  width 140px
+  height 40px
+  border none
+  padding 10px
+  background #364f63
+  color #afc4d4
+  font-size 14px
+
 .main
   display flex
   flex-direction column
   width 100px
   flex-grow 1
 .preview-canvas
+  position relative
   display flex
   align-items center
   justify-content center
   height 100px
   flex-grow 1
+  overflow hidden
   background-image linear-gradient(45deg, rgba(0,0,0,.25) 25%, transparent 0, transparent 75%, rgba(0,0,0,.25) 0),linear-gradient(45deg, rgba(0,0,0,.25) 25%, transparent 0, transparent 75%, rgba(0,0,0,.25) 0)
   background-position 0 0, 10px 10px
   background-size 20px 20px
@@ -68,6 +81,24 @@
   height 0
   border-style solid
   transition .2s
+.zoom-bar
+  position absolute
+  right 20px
+  bottom 20px
+  width 200px
+  display flex
+  align-items center
+  .current
+    width 40px
+    font-size 12px
+    color #8f96a3
+  .v-slider
+    width 10px
+    flex-grow 1
+    margin-right 10px
+  .v-button
+    padding 6px 10px
+    font-size 12px
 .code
   padding 50px 80px 70px
   line-height 1.5
@@ -116,7 +147,7 @@
         <v-slider
           v-model="customValue1"
           :min="2"
-          :max="60"
+          :max="40"
           :step="1"
         />
       </div>
@@ -130,7 +161,7 @@
         <v-slider
           v-model="customValue2"
           :min="2"
-          :max="60"
+          :max="40"
           :step="1"
         />
       </div>
@@ -144,7 +175,7 @@
         <v-slider
           v-model="customValue3"
           :min="2"
-          :max="60"
+          :max="40"
           :step="1"
         />
       </div>
@@ -153,6 +184,7 @@
       </div>
       <input
         v-model="customColor"
+        class="color-input"
         type="text"
       >
     </div>
@@ -163,8 +195,23 @@
           :style="{
             borderWidth: screenBorderWidth,
             borderColor: screenBorderColor,
+            transform: `scale(${zoomLevel / 100})`
           }"
         />
+        <div class="zoom-bar">
+          <div class="current">
+            {{ zoomLevel }}%
+          </div>
+          <v-slider
+            v-model="zoomLevel"
+            :min="50"
+            :max="800"
+            :step="1"
+          />
+          <v-button @click="zoomLevel = 100">
+            还原
+          </v-button>
+        </div>
       </div>
       <div class="code">
         <span>width: 0;<br>height: 0;<br>border-style: solid;<br>border-width: {{ screenBorderWidth }};<br>border-color: {{ screenBorderColor }};</span>
@@ -191,6 +238,7 @@ export default {
     const customValue1 = ref(30)
     const customValue2 = ref(20)
     const customValue3 = ref(30)
+    const zoomLevel = ref(400)
     const customColor = ref('#007bff')
     // 是否为等腰三角形
     const customIsosceles = ref(true)
@@ -235,6 +283,7 @@ export default {
       screenBorderWidth,
       screenBorderColor,
       selectedIndex,
+      zoomLevel,
       handleSelected(index: number) {
         console.log('index', index)
       },

@@ -7,13 +7,13 @@ const triTemplate: triTemplateMaker[] = [
   // 1
   {
     borderWidth(a: number, b: number, c: number) {
-      return `${a}px ${c || 30}px ${b}px 0`
+      return `${a}px ${c || 20}px ${b}px 0`
     },
     borderColor(color: string) {
       return `transparent ${color} transparent transparent`
     },
     default() {
-      return [20, 20, 30]
+      return [15, 15, 20]
     },
   },
   // 2
@@ -25,7 +25,7 @@ const triTemplate: triTemplateMaker[] = [
       return `transparent ${color} transparent transparent`
     },
     default() {
-      return [30, 30, -1]
+      return [20, 20, -1]
     },
   },
   // 3
@@ -37,7 +37,7 @@ const triTemplate: triTemplateMaker[] = [
       return `${color} transparent transparent transparent`
     },
     default() {
-      return [20, 20, 30]
+      return [15, 15, 20]
     },
   },
   // 4
@@ -49,7 +49,7 @@ const triTemplate: triTemplateMaker[] = [
       return `${color} transparent transparent transparent`
     },
     default() {
-      return [30, 30, -1]
+      return [20, 20, -1]
     },
   },
   // 5
@@ -61,7 +61,7 @@ const triTemplate: triTemplateMaker[] = [
       return `transparent transparent transparent ${color}`
     },
     default() {
-      return [20, 20, 30]
+      return [15, 15, 20]
     },
   },
   // 6
@@ -73,7 +73,7 @@ const triTemplate: triTemplateMaker[] = [
       return `transparent transparent transparent ${color}`
     },
     default() {
-      return [30, 30, -1]
+      return [20, 20, -1]
     },
   },
   // 7
@@ -85,7 +85,7 @@ const triTemplate: triTemplateMaker[] = [
       return `transparent transparent ${color} transparent`
     },
     default() {
-      return [20, 20, 30]
+      return [15, 15, 20]
     },
   },
   // 8
@@ -97,7 +97,7 @@ const triTemplate: triTemplateMaker[] = [
       return `transparent transparent ${color} transparent`
     },
     default() {
-      return [30, 30, -1]
+      return [20, 20, -1]
     },
   },
 ]

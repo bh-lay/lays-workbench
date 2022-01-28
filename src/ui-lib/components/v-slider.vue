@@ -1,5 +1,5 @@
 <style lang="stylus" scoped>
-.v-sider
+.v-slider
   height 14px
   padding-top 10px
 .railway-track
@@ -47,7 +47,7 @@
 </style>
 
 <template>
-  <div class="v-sider">
+  <div class="v-slider">
     <div
       ref="trackRef"
       class="railway-track"
