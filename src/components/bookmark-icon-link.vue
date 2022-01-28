@@ -10,6 +10,7 @@
   img
     width 2.6em
     height 2.6em
+    pointer-events none
   span
     font-size 1.6em
   &:hover
