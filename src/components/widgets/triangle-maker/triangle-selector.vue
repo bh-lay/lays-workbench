@@ -2,7 +2,7 @@
 .triangle-selector
   position relative
   width 100px
-  height 100%
+  height 100px
   border 1px dashed #7a9cb8
   span
     display block

@@ -74,7 +74,7 @@ export default {
       quickInput,
       handleSelected(index: number) {
         replaceRouter('widgets', 'triangle-maker', {
-          index,
+          defaultIndex: index,
         })
       },
     }

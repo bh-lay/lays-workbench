@@ -7,6 +7,7 @@ import WallpaperGallery from '@/components/wallpaper-gallery/index.vue'
 import JsonFormatter from '@/components/widgets/json-formatter/main.vue'
 import RegVisual from '@/components/widgets/reg-visual/main.vue'
 import ImageToBase from '@/components/widgets/img-to-base/main.vue'
+import TriangleMaker from '@/components/widgets/triangle-maker/main.vue'
 
 function createSubVNode(moduleType: string, moduleName: string, state: routerState): VNode | null {
   if (moduleType === 'widgets') {
@@ -24,6 +25,10 @@ function createSubVNode(moduleType: string, moduleName: string, state: routerSta
     case 'img-to-base':
       return h(ImageToBase, {
         file: state.file as File,
+      })
+    case 'triangle-maker':
+      return h(TriangleMaker, {
+        defaultIndex: state.defaultIndex as number,
       })
     }
   } else if (moduleType === 'settings') {
