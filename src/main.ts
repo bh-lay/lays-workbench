@@ -3,7 +3,7 @@ import App from './App.vue'
 import uiLib from './ui-lib/index'
 import { initAppConfig } from './assets/ts/app-config'
 import { initVariables } from './assets/ts/css-variables'
-import './assets/stylus/index.styl'
+import './assets/stylus/imported-styles/index.styl'
 function initApp() {
   initAppConfig()
   initVariables()

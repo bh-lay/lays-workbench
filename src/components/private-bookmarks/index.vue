@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/functions/scrollbar.styl'
 .bookmark-directory
   display flex
   height 100%
@@ -8,9 +9,7 @@
   flex-shrink 0
   padding 30px 0 60px
   overflow auto
-  &::-webkit-scrollbar
-    width 0
-    height 0
+  scrollbar #26262c
 </style>
 <template>
   <div class="bookmark-directory">

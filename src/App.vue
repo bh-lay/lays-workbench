@@ -19,6 +19,7 @@ textarea
   font-family inherit
 </style>
 <style lang="stylus" scoped>
+@import './assets/stylus/functions/scrollbar.styl'
 .gallery
   position absolute
   width 100%
@@ -35,9 +36,7 @@ textarea
   height 100px
   flex-grow 1
   overflow auto
-  &::-webkit-scrollbar
-    width 0
-    height 0
+  scrollbar #334
 .pager-footer
   height 40px
   flex-shrink 0

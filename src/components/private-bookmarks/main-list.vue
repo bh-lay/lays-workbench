@@ -1,12 +1,11 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/functions/scrollbar.styl'
 .bookmark-container
   width 100px
   flex-grow 1
   padding 30px 50px
   overflow auto
-  &::-webkit-scrollbar
-    width 0
-    height 0
+  scrollbar #26262c
 .link-list-body
   border-radius 4px
   background #2f2f37

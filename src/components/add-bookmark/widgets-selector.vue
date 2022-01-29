@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/functions/scrollbar.styl'
 .widgets-selector
   padding-top 20px
 .size-selector
@@ -6,9 +7,7 @@
 .scroll-area
   height 500px
   overflow auto
-  &::-webkit-scrollbar
-    width 0
-    height 0
+  scrollbar #26262c
 .bookmark-item
   cursor pointer
   :deep(.card)

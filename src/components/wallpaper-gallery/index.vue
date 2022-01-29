@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/functions/scrollbar.styl'
 .wallpaper-gallery
   display flex
   height 100%
@@ -10,9 +11,7 @@
   flex-grow 1
   padding 10px 50px 10px 10px
   overflow auto
-  &::-webkit-scrollbar
-    width 0
-    height 0
+  scrollbar #26262c
 </style>
 
 <template>

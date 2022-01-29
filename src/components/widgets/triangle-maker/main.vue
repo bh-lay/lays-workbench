@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../../assets/stylus/functions/scrollbar.styl'
 .triangle-maker
   display flex
   width 100%
@@ -8,9 +9,7 @@
   padding 50px 20px
   background #405f77
   overflow auto
-  &::-webkit-scrollbar
-    width 0
-    height 0
+  scrollbar #405f77
 .title
   margin-bottom 30px
   font-size 30px
@@ -117,9 +116,7 @@
   -moz-user-select text
   -ms-user-select text
   user-select text
-  &::-webkit-scrollbar
-    width 0
-    height 0
+  scrollbar #26262c
 </style>
 
 <template>
@@ -232,6 +229,7 @@
 import { Ref, ref, watch } from 'vue'
 import TriangleSelector from './triangle-selector.vue'
 import { getTriCssTemplate, triTemplateMaker } from './consts'
+
 export default {
   name: 'TriangleMakerWidgets',
   components: { TriangleSelector },
