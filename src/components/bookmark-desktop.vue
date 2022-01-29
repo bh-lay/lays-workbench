@@ -73,15 +73,19 @@
     @before-drag="handleBeforeDrag"
     @drag-end="handleDragEnd"
   />
-  <folder-layer
-    :id="selectedBookmarkItem.id"
-    v-model:visible="folderLayerVisible"
-    :name="selectedBookmarkItem.name"
-    @name-change="handleFolderNameChange"
-    @open-bookmark-editor="handleEditSubFolderBookmark"
+  <v-modal
+    v-model="folderLayerVisible"
+    :width="780"
     @after-close="afterFolderClose"
-    @after-drop-to-desktop="handleDropToDesktop"
-  />
+  >
+    <folder-layer
+      :id="selectedBookmarkItem.id"
+      :name="selectedBookmarkItem.name"
+      @name-change="handleFolderNameChange"
+      @open-bookmark-editor="handleEditSubFolderBookmark"
+      @after-drop-to-desktop="handleDropToDesktop"
+    />
+  </v-modal>
 </template>
 
 <script lang="ts">
