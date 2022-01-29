@@ -73,6 +73,7 @@
         <div
           v-if="modelValue"
           class="modal-mask"
+          @click="maskClickHandle"
         />
       </transition>
       <transition name="slidedown">
@@ -84,7 +85,7 @@
           <slot />
           <div
             class="modal-close"
-            @click="$emit('update:modelValue', false)"
+            @click="closeModal"
           >
             <v-mdi name="mdi-close" />
           </div>
@@ -95,10 +96,14 @@
 </template>
 
 <script lang="ts">
+import { watch, onBeforeUnmount } from 'vue'
 type modalStyle = {
   background: string,
   width?: string,
   height?: string
+}
+interface CustomEventTarget extends EventTarget {
+  tagName: string
 }
 function inputSize2Style(input: string | number): string {
   if (typeof input === 'number') {
@@ -125,9 +130,17 @@ export default {
       type: String,
       default: '#26262c',
     },
+    closeOnClickModal: {
+      type: Boolean,
+      default: false,
+    },
+    closeOnPressEscape: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['after-open', 'after-close', 'update:modelValue'],
-  setup(props) {
+  setup(props, context) {
     const modalBodyStyle: modalStyle = {
       background: props.undercoat,
     }
@@ -137,18 +150,46 @@ export default {
     if (props.height) {
       modalBodyStyle.height = inputSize2Style(props.height)
     }
+    function closeModal() {
+      context.emit('update:modelValue', false)
+    }
+    const keydownListener = function (event: KeyboardEvent) {
+      // 只处理 Esc 按键
+      if (event.key !== 'Escape') {
+        return
+      }
+      // 判断是否在 input 中按下 Esc
+      const target = event.target as CustomEventTarget
+      if (!target || target.tagName.match(/input/i)) {
+        return
+      }
+      closeModal()
+    }
+    watch(
+      () => props.modelValue,
+      isVisible => {
+        if (isVisible) {
+          context.emit('after-open')
+          // 仅在配置了按下 Esc 关闭时才注册事件监听
+          if (props.closeOnPressEscape) {
+            window.addEventListener('keydown', keydownListener)
+          }
+        } else {
+          context.emit('after-close')
+          // 未放置外部修改 closeOnPressEscape 值，无论是否绑定都尝试移除事件
+          window.removeEventListener('keydown', keydownListener)
+        }
+      }
+    )
     return {
       modalBodyStyle,
+      closeModal,
+      maskClickHandle() {
+        if (props.closeOnClickModal) {
+          closeModal()
+        }
+      },
     }
-  },
-  watch: {
-    modelValue(isVisible) {
-      if (isVisible) {
-        this.$emit('after-open')
-      } else {
-        this.$emit('after-close')
-      }
-    },
   },
 }
 </script>

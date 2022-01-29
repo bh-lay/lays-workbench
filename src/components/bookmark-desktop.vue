@@ -76,6 +76,8 @@
   <v-modal
     v-model="folderLayerVisible"
     :width="780"
+    :close-on-click-modal="true"
+    :close-on-press-escape="true"
     @after-close="afterFolderClose"
   >
     <folder-layer
