@@ -1,10 +1,9 @@
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const path = require('path');
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+const path = require('path')
 
 function resolve(dir: string) {
-  return path.join(__dirname, dir);
+  return path.join(__dirname, dir)
 }
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,14 +13,14 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve('./src'),
-      '@database': resolve('./src/database')
-    }
+      '@database': resolve('./src/database'),
+    },
   },
   build:{
     rollupOptions:{
       output:{
         // 分包逻辑
-        manualChunks(id: any){
+        manualChunks(id){
           // mdi 较大，单独拆包
           if(id.includes('@mdi')){
             return 'mdi'
@@ -34,8 +33,8 @@ export default defineConfig({
           if(id.includes('node_modules')){
             return 'libs'
           }
-        }
-      }
-    }
-  }
-});
+        },
+      },
+    },
+  },
+})
