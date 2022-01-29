@@ -47,7 +47,7 @@ textarea
   display flex
   align-items center
   justify-content space-between
-  padding 0 15px
+  padding 0 15px 0 10px
 .scroll-body
   position relative
   display flex
@@ -55,25 +55,6 @@ textarea
   justify-content center
   align-items center
   min-height 100%
-.page-title
-  height 36px
-  display flex
-  align-items center
-  border-radius 4px
-  color #c2c9d6
-  svg
-    width 30px
-    height 26px
-    vertical-align middle
-    fill rgba(255, 255, 255, .8)
-  span
-    display inline-block
-    vertical-align middle
-    height 20px
-    padding-left 8px
-    line-height 20px
-    font-size 16px
-    color rgba(255, 255, 255, .5)
 .fixed-height-pager
   width 90%
   max-width var(--max-container-width)
@@ -115,10 +96,7 @@ textarea
   >
     <div class="pager-header">
       <div class="pager-header-inner">
-        <div class="page-title">
-          <v-mdi name="mdi-hail" />
-          <span>小剧起始页</span>
-        </div>
+        <logo-about />
         <settings />
       </div>
     </div>
@@ -154,11 +132,13 @@ import Gallery from '@/components/gallery.vue'
 import SearchEntrance from '@/components/search-entrance.vue'
 import BookmarkDesktop from '@/components/bookmark-desktop.vue'
 import Settings from '@/components/settings/index.vue'
+import LogoAbout from '@/components/logo-about/index.vue'
+
 import EasyRouter from '@/components/easy-router.vue'
 import httpsUpgradeTips from '@/components/https-upgrade-tips.vue'
 import { bookmarkIsEmptyService } from '@database/services/bookmark-service'
 export default {
-  components: { Gallery, SearchEntrance, BookmarkDesktop, Settings, EasyRouter, httpsUpgradeTips },
+  components: { Gallery, SearchEntrance, BookmarkDesktop, LogoAbout, Settings, EasyRouter, httpsUpgradeTips },
   setup() {
     const focused = ref(false)
     const upgradeVisible = ref(false)
