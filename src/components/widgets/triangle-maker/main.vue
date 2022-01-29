@@ -7,6 +7,10 @@
   width 220px
   padding 50px 20px
   background #405f77
+  overflow auto
+  &::-webkit-scrollbar
+    width 0
+    height 0
 .title
   margin-bottom 30px
   font-size 30px
@@ -101,6 +105,7 @@
     font-size 12px
 .code
   padding 50px 80px 70px
+  overflow auto
   line-height 1.5
   white-space pre
   font-family monospace
@@ -112,6 +117,9 @@
   -moz-user-select text
   -ms-user-select text
   user-select text
+  &::-webkit-scrollbar
+    width 0
+    height 0
 </style>
 
 <template>
