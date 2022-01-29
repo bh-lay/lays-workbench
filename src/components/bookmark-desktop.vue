@@ -402,7 +402,8 @@ export default {
         selectedBookmarkItem.value = bookmarkItem
         mouseHandle.openEditModal()
       },
-      afterFolderClose(opendFolderId: string) {
+      afterFolderClose() {
+        const opendFolderId: string = selectedBookmarkItem.value.id
         for (let i = 0; i < bookmarkList.value.length; i++) {
           if (bookmarkList.value[i].id === opendFolderId) {
             triggerFolderIconChange(bookmarkList.value[i])

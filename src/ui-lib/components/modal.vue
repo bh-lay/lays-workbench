@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import { watch, onBeforeUnmount } from 'vue'
+import { watch } from 'vue'
 type modalStyle = {
   background: string,
   width?: string,
