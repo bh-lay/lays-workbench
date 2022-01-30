@@ -16,6 +16,9 @@ export default defineConfig({
       '@database': resolve('./src/database'),
     },
   },
+  server: {
+    host: '0.0.0.0',
+  },
   build:{
     rollupOptions:{
       output:{

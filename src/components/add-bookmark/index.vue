@@ -12,6 +12,8 @@
   <v-modal
     v-model="addBookmarkVisible"
     :width="400"
+    :close-on-click-modal="true"
+    :close-on-press-escape="true"
   >
     <main-function @success="handleCreateSuccess" />
   </v-modal>
