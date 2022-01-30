@@ -83,6 +83,8 @@
   <v-modal
     v-model="linkEditorConfig.visible"
     :width="440"
+    :close-on-click-modal="true"
+    :close-on-press-escape="true"
   >
     <link-editor
       :type="linkEditorConfig.type"
@@ -95,6 +97,8 @@
   <v-modal
     v-model="folderEditorConfig.visible"
     :width="440"
+    :close-on-click-modal="true"
+    :close-on-press-escape="true"
   >
     <folder-editor
       :type="folderEditorConfig.type"

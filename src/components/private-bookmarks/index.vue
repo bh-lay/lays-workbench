@@ -36,6 +36,8 @@
   <v-modal
     v-model="folderEditorConfig.visible"
     :width="440"
+    :close-on-click-modal="true"
+    :close-on-press-escape="true"
   >
     <folder-editor
       :type="folderEditorConfig.type"

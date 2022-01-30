@@ -103,7 +103,9 @@ type modalStyle = {
   height?: string
 }
 interface CustomEventTarget extends EventTarget {
-  tagName: string
+  tagName: string,
+  composing: boolean,
+  blur: () => void
 }
 function inputSize2Style(input: string | number): string {
   if (typeof input === 'number') {
@@ -158,9 +160,15 @@ export default {
       if (event.key !== 'Escape') {
         return
       }
-      // 判断是否在 input 中按下 Esc
+      // 判断是否在 input、textarea 中按下 Esc
       const target = event.target as CustomEventTarget
-      if (!target || target.tagName.match(/input/i)) {
+      if (target && target.tagName.match(/input|textarea/i)) {
+        if (target.composing) {
+          // 输入法参与过程中，不处理
+        } else {
+          // 非输入过程中，释放焦点
+          target.blur()
+        }
         return
       }
       closeModal()
