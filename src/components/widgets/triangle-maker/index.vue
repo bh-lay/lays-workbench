@@ -6,29 +6,15 @@
   align-items center
   justify-content center
   height 100%
-.triangle-selector
-  position relative
-  width 100px
-  height 100%
-  border 1px dashed #7a9cb8
-  span
-    display block
-    width 0
-    height 0
-    border 50px solid #4f7492
-  &:before,
-  &:after
-    position absolute
-    content ''
-    display block
-    width 141.421%
-    height 1px
-    border-top 1px dashed #7a9cb8
-    transform-origin left center
-  &:before
-    transform rotate(45deg)
-  &:after
-    transform rotate(-45deg)
+.info
+  padding 0 0 10px 20px
+  .title
+    margin-bottom 10px
+    font-size 18px
+    color #dee6ed
+  .desc
+    font-size 13px
+    color #94b2d1
 </style>
 
 <template>
@@ -41,10 +27,17 @@
     }"
     @click="handleClick"
   >
+    <triangle-selector @selected="handleSelected" />
     <div
-      class="main-text"
+      v-if="widgetsSize === BookmarkSize.large"
+      class="info"
     >
-      <triangle-selector @selected="handleSelected" />
+      <div class="title">
+        三角形生成器
+      </div>
+      <div class="desc">
+        箭头角标 CSS 全搞定
+      </div>
     </div>
   </div>
 </template>
