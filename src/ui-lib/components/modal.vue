@@ -32,15 +32,15 @@
   right 5px
   width 40px
   height 40px
-  line-height 40px
-  text-align center
+  display flex
+  align-items center
+  justify-content center
   z-index 102
   transition-delay .2s
   cursor pointer
   margin-left 5px
   transition .2s
   svg
-    vertical-align text-bottom
     fill #aaa
   &:hover
     background #212127
@@ -87,7 +87,10 @@
             class="modal-close"
             @click="closeModal"
           >
-            <v-mdi name="mdi-close" />
+            <v-mdi
+              name="mdi-close"
+              size="22"
+            />
           </div>
         </div>
       </transition>
