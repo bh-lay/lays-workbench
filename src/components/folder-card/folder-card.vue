@@ -119,9 +119,9 @@ export default {
         })
         let normalIconCount = 0
         if (cardSize === BookmarkSize.large) {
-          normalIconCount = 7
+          normalIconCount = list.length === 8 ? 8 : 7
         } else if (cardSize === BookmarkSize.medium) {
-          normalIconCount = 3
+          normalIconCount = list.length === 4 ? 4 : 3
         } else if (cardSize === BookmarkSize.small) {
           normalIconCount = 0
         }
