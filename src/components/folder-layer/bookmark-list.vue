@@ -44,6 +44,9 @@
       >
         编辑
       </v-contextmenu-item>
+      <v-contextmenu-item @click="handleSetToDesktop">
+        放回桌面
+      </v-contextmenu-item>
       <v-contextmenu-item @click="handleRemove">
         删除
       </v-contextmenu-item>
@@ -121,15 +124,47 @@ export default {
     const isStartDrag = ref(false)
     const isContextmenuVisible = ref(false)
 
-    function handleSetSize(bookmarkItem: Bookmark, size: BookmarkSize) {
-      bookmarkItem.size = size
-      bookmarkUpdateService(bookmarkItem)
+    function handleSetToDesktop() {
+      const selectedBookmark = selectedBookmarkItem.value
+      if (!selectedBookmark) {
+        return
+      }
+      selectedBookmark.parent = ''
+      bookmarkUpdateService(selectedBookmark)
+        .then(() => {
+          for (let i = 0; i < bookmarkList.value.length; i++) {
+            if (bookmarkList.value[i].id === selectedBookmark.id) {
+              bookmarkList.value.splice(i, 1)
+              break
+            }
+          }
+          context.emit('after-drop-to-desktop')
+        })
         .catch(e => {
           new Message({
-            message: e.message || '设置尺寸失败',
+            message: e.message || '放回桌面失败',
           })
         })
     }
+    function handleRemove() {
+      const selectedBookmark = selectedBookmarkItem.value
+      if (!selectedBookmark) {
+        return
+      }
+      bookmarkRemoveService(selectedBookmark.id).then(() => {
+        for (let i = 0; i < bookmarkList.value.length; i++) {
+          if (bookmarkList.value[i].id === selectedBookmark.id) {
+            bookmarkList.value.splice(i, 1)
+            break
+          }
+        }
+      }).catch(e => {
+        new Message({
+          message: e.message || '删除失败',
+        })
+      })
+    }
+
     const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
     return {
       dragEvent,
@@ -182,7 +217,7 @@ export default {
         willStartDrag.value = false
         isStartDrag.value = false
         needForbiddenClick = false
-        if (type === 'cancel' || type === 'enter') {
+        if (type === 'cancel' || type === 'enter' || type === 'size') {
           return
         }
         if (type === 'before') {
@@ -211,66 +246,13 @@ export default {
           const idList = list.map(item => item.id)
           bookmarkResortService(idList)
         } else if (type === 'delete') {
-          const selectedBookmark = selectedBookmarkItem.value
-          if (!selectedBookmark) {
-            return
-          }
-          bookmarkRemoveService(selectedBookmark.id).then(() => {
-            for (let i = 0; i < bookmarkList.value.length; i++) {
-              if (bookmarkList.value[i].id === selectedBookmark.id) {
-                bookmarkList.value.splice(i, 1)
-                break
-              }
-            }
-          }).catch(e => {
-            new Message({
-              message: e.message || '删除失败',
-            })
-          })
-        } else if (type === 'size') {
-          const selectedBookmark = selectedBookmarkItem.value
-          selectedBookmark && handleSetSize(selectedBookmark, size)
+          handleRemove()
         } else if (type === 'desktop') {
-          const selectedBookmark = selectedBookmarkItem.value
-          if (!selectedBookmark) {
-            return
-          }
-          selectedBookmark.parent = ''
-          bookmarkUpdateService(selectedBookmark)
-            .then(() => {
-              for (let i = 0; i < bookmarkList.value.length; i++) {
-                if (bookmarkList.value[i].id === selectedBookmark.id) {
-                  bookmarkList.value.splice(i, 1)
-                  break
-                }
-              }
-              context.emit('after-drop-to-desktop')
-            })
-            .catch(e => {
-              new Message({
-                message: e.message || '放回桌面失败',
-              })
-            })
+          handleSetToDesktop()
         }
       },
-      handleRemove() {
-        const selectedBookmark = selectedBookmarkItem.value
-        if (!selectedBookmark) {
-          return
-        }
-        bookmarkRemoveService(selectedBookmark.id).then(() => {
-          for (let i = 0; i < bookmarkList.value.length; i++) {
-            if (bookmarkList.value[i].id === selectedBookmark.id) {
-              bookmarkList.value.splice(i, 1)
-              break
-            }
-          }
-        }).catch(e => {
-          new Message({
-            message: e.message || '删除失败',
-          })
-        })
-      },
+      handleRemove,
+      handleSetToDesktop,
     }
   },
 }
