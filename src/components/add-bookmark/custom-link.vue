@@ -9,19 +9,6 @@
     line-height 14px
     font-size 12px
     color #6f6f85
-  input
-    box-sizing border-box
-    width 100%
-    height 40px
-    padding 0 10px
-    background #1a1d23
-    border none
-    font-size 14px
-    color #c1c5cd
-    transition .4s
-    &:focus
-      background #111317
-      outline none
 .undercoat
   display inline-block
   width 50px
@@ -61,23 +48,23 @@
       <div class="label">
         名称
       </div>
-      <input
+      <v-input
         v-model="previewData.name"
         type="text"
         placeholder="输入链接名称"
         maxlength="20"
-      >
+      />
     </div>
     <div class="input-item">
       <div class="label">
         链接地址
       </div>
-      <input
+      <v-input
         v-model="previewData.value"
         v-focus
         type="text"
         placeholder="输入链接地址"
-      >
+      />
     </div>
     <div class="input-item">
       <icon-editor v-model="previewData.icon" />

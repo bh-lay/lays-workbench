@@ -13,37 +13,12 @@
   display flex
   width 90%
   max-width 600px
-  height 50px
   margin auto
   overflow hidden
-  input
+  .v-input
     width 100px
     margin-right 15px
-    padding 0 20px
-    border none
     flex-grow 1
-    background #16181d
-    border-radius 8px
-    font-size 16px
-    color #a8aebd
-    &::placeholder
-      color #586074
-    &:focus
-      outline none
-      background #0f1114
-  button
-    width 80px
-    border none
-    outline none
-    background #16181d
-    border-radius 8px
-    font-size 14px
-    color #586074
-    cursor pointer
-    &:hover
-      background #0f1114
-    &:active
-      background #000
 .footer
   width 90%
   max-width 600px
@@ -61,14 +36,14 @@
       网络图片
     </div>
     <div class="input-center">
-      <input
+      <v-input
         v-model="picUrl"
         v-focus
         placeholder="填写图片地址"
-      >
-      <button @click="applyPic">
+      />
+      <v-button @click="applyPic">
         使用
-      </button>
+      </v-button>
     </div>
     <div class="footer">
       <p>

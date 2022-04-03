@@ -54,14 +54,11 @@
     font-size 12px
     color #637f9c
 .color-input
-  box-sizing border-box
   width 140px
-  height 40px
-  border none
-  padding 10px
-  background #364f63
-  color #afc4d4
-  font-size 14px
+  :deep(input)
+    border-color #364f63
+    background #364f63
+    color #afc4d4
 
 .main
   display flex
@@ -187,11 +184,11 @@
       <div class="label">
         颜色
       </div>
-      <input
+      <v-input
         v-model="customColor"
         class="color-input"
         type="text"
-      >
+      />
     </div>
     <div class="main">
       <div class="preview-canvas">

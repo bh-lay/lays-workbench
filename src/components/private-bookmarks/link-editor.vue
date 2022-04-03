@@ -12,19 +12,6 @@
   margin 15px 0 5px
   font-size 12px
   color #666
-input
-  box-sizing border-box
-  width 100%
-  height 40px
-  padding 0 12px
-  background #2f2f37
-  border 1px solid #1c1c21
-  border-radius 4px
-  color #888
-  transition .4s
-  &:focus
-    outline none
-    border-color #2154ba
 .footer
   padding-top 15px
   text-align right
@@ -41,20 +28,20 @@ input
       <div class="label">
         名称
       </div>
-      <input
+      <v-input
         v-model="name"
         v-focus
         type="text"
         placeholder="书签名"
-      >
+      />
       <div class="label">
         网址
       </div>
-      <input
+      <v-input
         v-model="value"
         type="text"
         placeholder="网址"
-      >
+      />
     </div>
     <div class="footer">
       <v-button @click="$emit('cancel')">

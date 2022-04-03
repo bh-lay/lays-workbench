@@ -1,7 +1,9 @@
 <style lang="stylus" scoped>
 .icon-editor
   display flex
-  background #1a1d23
+  background #2f2f37
+  border 1px solid #1c1c21
+  border-radius 4px
 .dropdown-button
   display flex
   align-items center
@@ -21,16 +23,11 @@
   &:active,
   &.active
     background #16181d
-input
-  display block
+.v-input
   width 20px
-  padding 0 20px
   flex-grow 1
-  background transparent
-  border none
-  color #c1c5cd
-  &:focus
-    outline none
+  :deep(input)
+    border-color transparent
 .mdi-help
   display flex
   width 40px
@@ -71,12 +68,12 @@ input
         </v-dropdown-item>
       </template>
     </v-dropdown>
-    <input
+    <v-input
       v-if="iconType !== 'crab'"
       v-model="inputValue"
       :maxlength="iconType === 'mdi' ? 30 : 6"
       type="text"
-    >
+    />
     <div
       v-else
       class="crab-message"

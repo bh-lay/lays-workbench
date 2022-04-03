@@ -1,25 +1,18 @@
 <style lang="stylus" scoped>
-input
-  display block
-  width 220px
+.v-input
+  width 260px
   margin auto
-  padding 10px 20px
-  background transparent
-  border none
-  transition .15s
-  line-height 16px
-  text-align center
-  font-size 18px
-  color #fff
-  transition .3s
-  &:focus
-    outline none
-    background #1d2126
+  :deep(input)
+    text-align center
+    font-size 16px
+    color #fff
+    border-color transparent
+    background transparent
 </style>
 
 <template>
   <div class="folder-name-editor">
-    <input
+    <v-input
       ref="inputRef"
       v-model="inputValue"
       maxlength="20"
@@ -27,7 +20,7 @@ input
       placeholder="分组名"
       @keydown.enter="blur"
       @focusout="handleChange"
-    >
+    />
   </div>
 </template>
 

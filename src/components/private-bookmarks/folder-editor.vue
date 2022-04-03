@@ -8,19 +8,6 @@
   font-weight bold
   font-size 16px
   color #888
-input
-  box-sizing border-box
-  width 100%
-  height 40px
-  padding 0 12px
-  background #2f2f37
-  border 1px solid #1c1c21
-  border-radius 4px
-  color #888
-  transition .4s
-  &:focus
-    outline none
-    border-color #2154ba
 .footer
   padding-top 15px
   text-align right
@@ -34,12 +21,12 @@ input
       <span v-else>添加文件夹</span>
     </div>
     <div class="body">
-      <input
+      <v-input
         v-model="name"
         v-focus
         type="text"
         placeholder="目录名"
-      >
+      />
     </div>
     <div class="footer">
       <v-button @click="$emit('cancel')">
