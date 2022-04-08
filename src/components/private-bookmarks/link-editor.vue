@@ -1,29 +1,21 @@
 <style lang="stylus" scoped>
 .link-editor
-  padding 15px 20px 20px
+  padding 0 20px 20px
   background #26262c
-.header
-  margin-bottom 10px
-  line-height 30px
-  font-weight bold
-  font-size 16px
-  color #888
 .label
-  margin 15px 0 5px
+  margin-bottom 5px
   font-size 12px
   color #666
+.v-input
+  margin-bottom 15px
 .footer
-  padding-top 15px
+  padding-top 5px
   text-align right
   .v-button
     margin-left 10px
 </style>
 <template>
   <div class="link-editor">
-    <div class="header">
-      <span v-if="type === 'edit'">修改书签</span>
-      <span v-else>添加书签</span>
-    </div>
     <div class="body">
       <div class="label">
         名称

@@ -36,6 +36,7 @@
   <v-modal
     v-model="folderEditorConfig.visible"
     :width="440"
+    title="添加文件夹"
     :close-on-click-modal="true"
     :close-on-press-escape="true"
   >

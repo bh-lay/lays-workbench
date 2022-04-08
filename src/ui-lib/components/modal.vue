@@ -26,6 +26,12 @@
   left 0
   z-index 100
   background: rgba(0, 0, 0, .7)
+.modal-title
+  padding 15px 20px
+  line-height 30px
+  font-weight bold
+  font-size 16px
+  color #b9bdc6
 .modal-close
   position absolute
   top 5px
@@ -82,6 +88,12 @@
           class="modal-body"
           :style="modalBodyStyle"
         >
+          <div
+            v-if="title"
+            class="modal-title"
+          >
+            {{ title }}
+          </div>
           <slot />
           <div
             class="modal-close"
@@ -129,6 +141,10 @@ export default {
     },
     height: {
       type: [String, Number],
+      default: '',
+    },
+    title: {
+      type: String,
       default: '',
     },
     undercoat: {

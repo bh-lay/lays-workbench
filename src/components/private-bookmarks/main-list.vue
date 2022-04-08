@@ -83,6 +83,7 @@
   <v-modal
     v-model="linkEditorConfig.visible"
     :width="440"
+    :title="linkEditorConfig.type === 'edit' ? '修改书签' : '添加书签'"
     :close-on-click-modal="true"
     :close-on-press-escape="true"
   >
@@ -97,6 +98,7 @@
   <v-modal
     v-model="folderEditorConfig.visible"
     :width="440"
+    :title="folderEditorConfig.type === 'edit' ? '修改文件夹' : '添加文件夹'"
     :close-on-click-modal="true"
     :close-on-press-escape="true"
   >

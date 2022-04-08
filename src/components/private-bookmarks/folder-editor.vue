@@ -1,13 +1,7 @@
 <style lang="stylus" scoped>
 .link-editor
-  padding 15px 20px 20px
+  padding 0 20px 20px
   background #26262c
-.header
-  margin-bottom 10px
-  line-height 30px
-  font-weight bold
-  font-size 16px
-  color #888
 .footer
   padding-top 15px
   text-align right
@@ -16,10 +10,6 @@
 </style>
 <template>
   <div class="link-editor">
-    <div class="header">
-      <span v-if="type === 'edit'">修改文件夹</span>
-      <span v-else>添加文件夹</span>
-    </div>
     <div class="body">
       <v-input
         v-model="name"
