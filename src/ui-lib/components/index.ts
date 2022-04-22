@@ -3,11 +3,7 @@ import VButton from './v-button.vue'
 import VInput from './v-input.vue'
 import VSlider from './v-slider.vue'
 import Modal from './modal.vue'
-import VueMdijs from './vue-mdijs.vue'
-import * as mdiIcons from '@mdi/js'
-
-// 全量引入 mdi 图标
-VueMdijs.add(mdiIcons)
+import VueMdijs from './vue-mdijs'
 
 export default {
   install(app: Application) {
