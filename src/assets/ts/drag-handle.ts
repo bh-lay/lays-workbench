@@ -8,7 +8,8 @@ const removeSelecteion = window.getSelection
   }
 
 type dragOptions = {
-  stableStart: (startX: number, startY: number) => void;
+  beforeStart?: (e: MouseEvent) => void;
+  start: (startX: number, startY: number) => void;
   move: (a: dragParams) => void;
   end: (a: dragParams) => void;
   cancel?: () => void;
@@ -34,10 +35,12 @@ function getParam(e: MouseEvent, startX: number, startY: number) {
   return returns
 }
 export default function (event: MouseEvent, options?: dragOptions) {
-  const { stableStart, move, end, cancel, stableDistance } = options || {}
+  const { beforeStart, start, move, end, cancel, stableDistance } = options || {}
+  // 触发最早的开始事件
+  beforeStart && beforeStart(event)
   const startX = event.clientX
   const startY = event.clientY
-  let isTriggeredEvent = false
+  let hasTriggerStartEvent: boolean = false
   const _stableDistance = stableDistance || 0
   if (!_stableDistance) {
     event.preventDefault && event.preventDefault()
@@ -51,14 +54,14 @@ export default function (event: MouseEvent, options?: dragOptions) {
     e.stopPropagation && e.stopPropagation()
     removeSelecteion()
     const param = getParam(e, startX, startY)
-    if (isTriggeredEvent) {
+    if (hasTriggerStartEvent) {
       move && move(param)
     } else if (
       Math.sqrt(param.xOffset * param.xOffset + param.yOffset * param.yOffset) >
       _stableDistance
     ) {
-      isTriggeredEvent = true
-      stableStart && stableStart(startX, startY)
+      hasTriggerStartEvent = true
+      start && start(startX, startY)
       move && move(param)
     }
   }
@@ -67,7 +70,7 @@ export default function (event: MouseEvent, options?: dragOptions) {
 
     document.removeEventListener('mousemove', mousemove, listenerConfig)
     document.removeEventListener('mouseup', up, listenerConfig)
-    if (isTriggeredEvent) {
+    if (hasTriggerStartEvent) {
       end && end(getParam(event, startX, startY))
     } else {
       cancel && cancel()

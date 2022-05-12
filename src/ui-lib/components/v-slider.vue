@@ -208,7 +208,7 @@ export default {
         }
         dragHandle(event, {
           stableDistance: 20,
-          stableStart() {
+          start() {
             isInDragMode.value = true
           },
           move(params) {

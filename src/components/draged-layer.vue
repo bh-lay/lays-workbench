@@ -342,7 +342,7 @@ export default {
 
     dragHandle(props.event, {
       stableDistance: 20,
-      stableStart() {
+      start() {
         context.emit('beforeDrag')
         isStableStart.value = true
         itemSizeAndPositionMap = getItemListMap(internalInstance)
