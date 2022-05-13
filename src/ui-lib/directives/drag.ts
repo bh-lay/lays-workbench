@@ -1,11 +1,6 @@
 import { App as Application }  from 'vue'
-import dragHandle, { mouseDragHandle, touchDragHandle } from '@/assets/ts/drag-handle'
-function executeFuncton (callback: unknown, params: unknown[]) {
-  if (typeof callback !== 'function') {
-    return
-  }
-  callback(...params)
-}
+import { mouseDragHandle, touchDragHandle } from '@/assets/ts/drag-handle'
+
 export default {
   install(app: Application) {
     app.directive('drag', {

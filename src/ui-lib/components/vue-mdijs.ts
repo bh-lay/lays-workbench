@@ -21,7 +21,7 @@ function loadIconConfigAndWaitReady() {
   }
   loadPromiseCache = import('@mdi/js').then((mdiIconConfig) => {
     iconLib = mdiIconConfig as libType
-    isIconConfigReady = true;
+    isIconConfigReady = true
   })
   return loadPromiseCache
 }
@@ -55,7 +55,7 @@ export default {
   },
   setup(props: {
     name: string,
-    size: String | Number,
+    size: string |number,
     fill: string,
     rotate: number,
   }) {
@@ -77,15 +77,15 @@ export default {
           height: props.size,
           style: {
             transform: `rotate(${props.rotate}deg)`,
-            display: 'inline-block'
-          }
+            display: 'inline-block',
+          },
         },
         [
           h('path', {
-            d: iconReady.value ? getIconContextByName(props.name) : ''
-          })
+            d: iconReady.value ? getIconContextByName(props.name) : '',
+          }),
         ]
       )
     }
-  }
+  },
 }

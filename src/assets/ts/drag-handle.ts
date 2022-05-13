@@ -162,13 +162,13 @@ export function touchDragHandle(originEvent: MouseEvent | TouchEvent, options?: 
   }
   function removeEventListener() {
     clearTimeout(longTouchTimer)
-    targetNode?.removeEventListener('touchmove', touchMove, listenerConfig);
-    targetNode?.removeEventListener('touchend', touchEnd, listenerConfig);
-    targetNode?.removeEventListener('touchcancel', touchCancel, listenerConfig);
+    targetNode?.removeEventListener('touchmove', touchMove, listenerConfig)
+    targetNode?.removeEventListener('touchend', touchEnd, listenerConfig)
+    targetNode?.removeEventListener('touchcancel', touchCancel, listenerConfig)
   }
-  targetNode.addEventListener('touchmove', touchMove, listenerConfig);
-  targetNode.addEventListener('touchend', touchEnd, listenerConfig);
-  targetNode.addEventListener('touchcancel', touchCancel, listenerConfig);
+  targetNode.addEventListener('touchmove', touchMove, listenerConfig)
+  targetNode.addEventListener('touchend', touchEnd, listenerConfig)
+  targetNode.addEventListener('touchcancel', touchCancel, listenerConfig)
 }
 
 export default function (event: MouseEvent | TouchEvent, options?: dragOptions) {

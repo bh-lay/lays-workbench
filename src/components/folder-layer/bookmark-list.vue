@@ -205,7 +205,7 @@ export default {
         needForbiddenClick = true
         isStartDrag.value = true
       },
-      handleDragEnd({ type, from, to, size}: {
+      handleDragEnd({ type, from, to }: {
         type: string,
         from: string,
         to: string,

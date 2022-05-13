@@ -16,7 +16,7 @@
 </style>
 
 <script lang="ts">
-import { ref, watch, h, onMounted, getCurrentInstance } from 'vue'
+import { watch, h, onMounted, getCurrentInstance } from 'vue'
 
 export default {
   props: {
