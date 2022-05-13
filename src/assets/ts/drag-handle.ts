@@ -23,7 +23,7 @@ export type dragParams = {
 };
 
 const listenerConfig: AddEventListenerOptions = {
-  passive: true,
+  passive: false,
   capture: true,
 }
 function getParamFromMouseEvent(event: MouseEvent, startX: number, startY: number) {
@@ -126,10 +126,11 @@ export function touchDragHandle(originEvent: MouseEvent | TouchEvent, options?: 
     start && start(startX, startY)
     const param = getParamFromTouchEvent(event, startX, startY)
     move && move(param)
-  }, 1000)
+  }, 500)
   function touchMove(originEvent: Event) {
     const event = originEvent as TouchEvent
     event.stopPropagation && event.stopPropagation()
+    event.preventDefault && event.preventDefault()
     removeSelecteion()
     const param = getParamFromTouchEvent(event, startX, startY)
     if (hasTriggerStartEvent) {
@@ -147,6 +148,7 @@ export function touchDragHandle(originEvent: MouseEvent | TouchEvent, options?: 
   }
   function touchEnd() {
     event.stopPropagation()
+    clearTimeout(longTouchTimer)
     removeEventListener()
 
     if (hasTriggerStartEvent && lastTouchParams) {
@@ -157,11 +159,11 @@ export function touchDragHandle(originEvent: MouseEvent | TouchEvent, options?: 
   }
   function touchCancel() {
     event.stopPropagation()
+    clearTimeout(longTouchTimer)
     removeEventListener()
     cancel && cancel()
   }
   function removeEventListener() {
-    clearTimeout(longTouchTimer)
     targetNode?.removeEventListener('touchmove', touchMove, listenerConfig)
     targetNode?.removeEventListener('touchend', touchEnd, listenerConfig)
     targetNode?.removeEventListener('touchcancel', touchCancel, listenerConfig)

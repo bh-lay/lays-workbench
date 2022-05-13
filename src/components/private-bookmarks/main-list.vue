@@ -58,8 +58,8 @@
         }"
         :data="item"
         :active="selectedBookmark.id === item.id"
-        @mousedown="handleDrag($event, item)"
-        @touchstart="handleDrag($event, item)"
+        @mousedown="dragStartHandle($event, item)"
+        @touchstart="dragStartHandle($event, item)"
         @click="selectedBookmark = item"
         @dblclick="handleOpen(item)"
       />
@@ -266,7 +266,7 @@ function handleDragMove(list: Bookmark[], fromIndex: number, targetIndex: number
   return bookmarkResortService(idList)
 }
 // 拖拽处理方法
-function dragHandler(
+function dragSetup(
   selectedBookmarkRef: Ref<Bookmark | null>,
   bookmarkListRef: Ref<Bookmark[]>,
   onDragSuccess: () => void,
@@ -276,12 +276,18 @@ function dragHandler(
   const isDraging = ref(false)
   const dragEvent: Ref<MouseEvent | TouchEvent | null> = shallowRef(null)
   let willSelectedBookmark: Bookmark | null = null
-
+  function removeDragLayer() {
+    isDraging.value = false
+    willStartDrag.value = false
+  }
   return {
     dragEvent,
     willStartDrag,
     isDraging,
-    handleDrag(event: MouseEvent | TouchEvent, bookmark: Bookmark) {
+    dragStartHandle(event: MouseEvent | TouchEvent, bookmark: Bookmark) {
+      if ('ontouchend' in document && event.type === 'mousedown') {
+        return
+      }
       dragEvent.value = event
       willStartDrag.value = true
       willSelectedBookmark = bookmark
@@ -295,8 +301,7 @@ function dragHandler(
       from: string,
       to: string,
     }) {
-      isDraging.value = false
-      willStartDrag.value = false
+      removeDragLayer()
       if (type === 'cancel') {
         return
       }
@@ -357,7 +362,7 @@ export default {
         })
       })
     }
-    const dragHandlerReturns = dragHandler(
+    const dragSetupReturns = dragSetup(
       selectedBookmark,
       bookmarkList, () => {
         context.emit('after-drag')
@@ -447,7 +452,7 @@ export default {
         removeBookmark(selectedBookmark.value.id, bookmarkList.value)
       },
     }
-    return Object.assign(setupObject, dragHandlerReturns)
+    return Object.assign(setupObject, dragSetupReturns)
   },
 }
 </script>
