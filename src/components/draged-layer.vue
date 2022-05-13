@@ -293,7 +293,7 @@ function getMouseTriggered(
 export default {
   props: {
     event: {
-      type: MouseEvent,
+      type: [MouseEvent, TouchEvent],
       default() {
         return {}
       },
@@ -319,7 +319,7 @@ export default {
   },
   emits: ['beforeDrag', 'dragEnd'],
   setup(props: {
-    event: MouseEvent,
+    event: MouseEvent | TouchEvent,
     dragedBookmark: Bookmark,
     disabledEnter: boolean,
     disabledSize: boolean,

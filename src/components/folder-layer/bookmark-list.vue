@@ -32,6 +32,7 @@
       :data-id="bookmarkItem.id"
       @next="openItem($event)"
       @mousedown="handleDrag($event, bookmarkItem)"
+      @touchstart="handleDrag($event, bookmarkItem)"
     />
     <v-contextmenu
       ref="menu"
@@ -165,7 +166,7 @@ export default {
       })
     }
 
-    const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
+    const dragEvent: Ref<MouseEvent | TouchEvent | null> = shallowRef(null)
     return {
       dragEvent,
       willStartDrag,
@@ -195,11 +196,7 @@ export default {
           }
         }
       },
-      handleDrag(event: MouseEvent, bookmarkItem: Bookmark) {
-        // 非左键不处理
-        if (event.button !== 0) {
-          return
-        }
+      handleDrag(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
         selectedBookmarkItem.value = bookmarkItem
         dragEvent.value = event
         willStartDrag.value = true

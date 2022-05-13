@@ -32,6 +32,7 @@
       :data-id="bookmarkItem.id"
       @next="openItem"
       @mousedown="handleDrag($event, bookmarkItem)"
+      @touchstart="handleDrag($event, bookmarkItem)"
     />
     <bookmark-item :data="addData">
       <template #body>
@@ -150,7 +151,7 @@ function mouseIntractive({
   }
 
   let needForbiddenClick = false
-  const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
+  const dragEvent: Ref<MouseEvent | TouchEvent | null> = shallowRef(null)
   return {
     folderLayerVisible,
     willStartDrag,
@@ -180,11 +181,7 @@ function mouseIntractive({
         folderLayerVisible.value = true
       }
     },
-    handleDrag(event: MouseEvent, bookmarkItem: Bookmark) {
-      // 非左键不处理
-      if (event.button !== 0) {
-        return
-      }
+    handleDrag(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
       setSelectedBookmarkItem(bookmarkItem)
       dragEvent.value = event
       willStartDrag.value = true

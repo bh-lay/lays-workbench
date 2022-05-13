@@ -59,6 +59,7 @@
         :data="item"
         :active="selectedBookmark.id === item.id"
         @mousedown="handleDrag($event, item)"
+        @touchstart="handleDrag($event, item)"
         @click="selectedBookmark = item"
         @dblclick="handleOpen(item)"
       />
@@ -273,14 +274,14 @@ function dragHandler(
 ) {
   const willStartDrag = ref(false)
   const isDraging = ref(false)
-  const dragEvent: Ref<MouseEvent | null> = shallowRef(null)
+  const dragEvent: Ref<MouseEvent | TouchEvent | null> = shallowRef(null)
   let willSelectedBookmark: Bookmark | null = null
 
   return {
     dragEvent,
     willStartDrag,
     isDraging,
-    handleDrag(event: MouseEvent, bookmark: Bookmark) {
+    handleDrag(event: MouseEvent | TouchEvent, bookmark: Bookmark) {
       dragEvent.value = event
       willStartDrag.value = true
       willSelectedBookmark = bookmark
