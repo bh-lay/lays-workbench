@@ -71,11 +71,11 @@
         </div>
       </div>
       <div
+        v-drag="dragOption"
         :class="['railway-engine', isInDragMode ? 'active' : '']"
         :style="{
           left: isInDragMode ? screenWidthByDrag : screenWidthByValue,
         }"
-        @mousedown="dragHandleStart"
       />
     </div>
   </div>
@@ -83,7 +83,7 @@
 
 <script lang="ts">
 import { ref, watch, Ref, PropType } from 'vue'
-import dragHandle from '@/assets/ts/drag-handle'
+import { dragOptions } from '@/assets/ts/drag-handle'
 type markItem = {
   value: number,
   label?: string
@@ -129,6 +129,8 @@ export default {
     const trackRef: Ref<HTMLDivElement | null> = ref(null)
     const isInDragMode = ref(false)
     const dragValue = ref(0)
+    let trackWidth = 0
+    let startWidth = 0
     watch(
       [() => props.modelValue, () => props.min, () => props.max],
       () => {
@@ -144,86 +146,89 @@ export default {
       }
       return value
     }
+
+    // 获取吸附的数值
+    function sorptionValue(value: number) {
+      // 不能超出最大、最小限制
+      const newValue = Math.max(Math.min(props.max, value), props.min)
+      if (newValue !== value) {
+        return newValue
+      }
+      // 吸附范围在 最大最小值的差值 1/50
+      const sorptionRange = (props.max - props.min) / 50
+      // 遍历标记
+      for (let i = 0; i < props.marks.length; i++) {
+        let distance = Math.abs(props.marks[i].value - newValue)
+        if (distance < sorptionRange) {
+          return props.marks[i].value
+        }
+      }
+      // 其他情况，原值返回
+      return value
+    }
+    // 根据拖拽情况计算新值
+    function countValueByDrag(xOffset: number) {
+      const newWidth = startWidth + xOffset
+      const widthRate = newWidth / trackWidth
+      const dragValue = widthRate * (props.max - props.min) + props.min
+      // 数值进行吸附处理
+      const newValue = sorptionValue(dragValue)
+      // 若吸附修正后的值和原值有差异，则使用修正后的值
+      if (newValue !== dragValue) {
+        return {
+          width: trackWidth * (newValue - props.min) / (props.max - props.min),
+          value: newValue,
+        }
+      }
+      // 默认返回原职原值
+      return {
+        width: newWidth,
+        value: newValue,
+      }
+    }
+    let timer: number | null = null
+    function delayTriggerUpdate(value: number) {
+      timer && clearTimeout(timer)
+      timer = setTimeout(() => {
+        context.emit('update:modelValue', applyStep(value))
+      }, 10)
+    }
+
+    const dragOption: dragOptions = {
+      stableDistance: 20,
+      beforeStart() {
+        const trackNode = trackRef.value
+        if (trackNode === null) {
+          return
+        }
+        trackWidth = trackNode.clientWidth
+        // 开始值
+        startWidth =
+          ((props.modelValue - props.min) / (props.max - props.min)) *
+          trackWidth
+      },
+      start() {
+        isInDragMode.value = true
+      },
+      move(params) {
+        const { width, value } = countValueByDrag(params.xOffset)
+        screenWidthByDrag.value = width + 'px'
+        dragValue.value = applyStep(value)
+        delayTriggerUpdate(value)
+      },
+      end(params) {
+        const { value } = countValueByDrag(params.xOffset)
+        context.emit('update:modelValue', applyStep(value))
+        isInDragMode.value = false
+      },
+    }
     return {
       dragValue,
       trackRef,
       isInDragMode,
       screenWidthByValue,
       screenWidthByDrag,
-      dragHandleStart(event: MouseEvent) {
-        const trackNode = trackRef.value
-        if (trackNode === null) {
-          return
-        }
-        const trackWidth = trackNode.clientWidth
-        // 开始值
-        const startWidth =
-          ((props.modelValue - props.min) / (props.max - props.min)) *
-          trackWidth
-        // 获取吸附的数值
-        function sorptionValue(value: number) {
-          // 不能超出最大、最小限制
-          const newValue = Math.max(Math.min(props.max, value), props.min)
-          if (newValue !== value) {
-            return newValue
-          }
-          // 吸附范围在 最大最小值的差值 1/50
-          const sorptionRange = (props.max - props.min) / 50
-          // 遍历标记
-          for (let i = 0; i < props.marks.length; i++) {
-            let distance = Math.abs(props.marks[i].value - newValue)
-            if (distance < sorptionRange) {
-              return props.marks[i].value
-            }
-          }
-          // 其他情况，原值返回
-          return value
-        }
-        // 根据拖拽情况计算新值
-        function countValueByDrag(xOffset: number) {
-          const newWidth = startWidth + xOffset
-          const widthRate = newWidth / trackWidth
-          const dragValue = widthRate * (props.max - props.min) + props.min
-          // 数值进行吸附处理
-          const newValue = sorptionValue(dragValue)
-          // 若吸附修正后的值和原值有差异，则使用修正后的值
-          if (newValue !== dragValue) {
-            return {
-              width: trackWidth * (newValue - props.min) / (props.max - props.min),
-              value: newValue,
-            }
-          }
-          // 默认返回原职原值
-          return {
-            width: newWidth,
-            value: newValue,
-          }
-        }
-        let timer: number | null = null
-        function delayTriggerUpdate(value: number) {
-          timer && clearTimeout(timer)
-          timer = setTimeout(() => {
-            context.emit('update:modelValue', applyStep(value))
-          }, 10)
-        }
-        dragHandle(event, {
-          stableDistance: 20,
-          start() {
-            isInDragMode.value = true
-          },
-          move(params) {
-            const { width, value } = countValueByDrag(params.xOffset)
-            screenWidthByDrag.value = width + 'px'
-            dragValue.value = applyStep(value)
-            delayTriggerUpdate(value)
-          },
-          end(params) {
-            const { value } = countValueByDrag(params.xOffset)
-            context.emit('update:modelValue', applyStep(value))
-            isInDragMode.value = false
-          },
-        })
-      },
+      dragOption,
     }
   },
 }

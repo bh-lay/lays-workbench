@@ -7,7 +7,7 @@ const removeSelecteion = window.getSelection
     // nothing
   }
 
-type dragOptions = {
+export type dragOptions = {
   beforeStart?: (e: MouseEvent) => void;
   start: (startX: number, startY: number) => void;
   move: (a: dragParams) => void;
@@ -15,7 +15,7 @@ type dragOptions = {
   cancel?: () => void;
   stableDistance: number;
 };
-type dragParams = {
+export type dragParams = {
   clientX: number;
   clientY: number;
   xOffset: number;
@@ -40,7 +40,7 @@ export default function (event: MouseEvent, options?: dragOptions) {
   beforeStart && beforeStart(event)
   const startX = event.clientX
   const startY = event.clientY
-  let hasTriggerStartEvent: boolean = false
+  let hasTriggerStartEvent = false
   const _stableDistance = stableDistance || 0
   if (!_stableDistance) {
     event.preventDefault && event.preventDefault()
