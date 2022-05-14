@@ -247,7 +247,7 @@ export default {
     let sideRectList: mapItem[] = []
 
     dragHandle(props.event, {
-      stableDistance: 20,
+      mouseStableDistance: 20,
       start() {
         context.emit('beforeDrag')
         isStableStart.value = true

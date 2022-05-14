@@ -341,7 +341,7 @@ export default {
     let itemSizeAndPositionMap: mapItem[] = []
 
     dragHandle(props.event, {
-      stableDistance: 20,
+      mouseStableDistance: 20,
       start() {
         context.emit('beforeDrag')
         isStableStart.value = true

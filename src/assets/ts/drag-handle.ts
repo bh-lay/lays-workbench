@@ -13,7 +13,9 @@ export type dragOptions = {
   move: (a: dragParams) => void;
   end: (a: dragParams) => void;
   cancel?: () => void;
-  stableDistance: number;
+  mouseStableDistance: number;
+  touchStableDistance?: number;
+  touchHoldTime?: number;
 };
 export type dragParams = {
   clientX: number;
@@ -55,7 +57,7 @@ function getParamFromTouchEvent(event: TouchEvent, startX: number, startY: numbe
 }
 export function mouseDragHandle(originEvent: MouseEvent | TouchEvent, options?: dragOptions) {
   const event = originEvent as MouseEvent
-  const { beforeStart, start, move, end, cancel, stableDistance } = options || {}
+  const { beforeStart, start, move, end, cancel, mouseStableDistance } = options || {}
   // 非左键不处理
   if (event.button !== 0) {
     cancel && cancel()
@@ -66,7 +68,7 @@ export function mouseDragHandle(originEvent: MouseEvent | TouchEvent, options?: 
   const startX = event.clientX
   const startY = event.clientY
   let hasTriggerStartEvent = false
-  const _stableDistance = stableDistance || 0
+  const _stableDistance = mouseStableDistance || 0
   if (!_stableDistance) {
     event.preventDefault && event.preventDefault()
     event.stopPropagation && event.stopPropagation()
@@ -103,7 +105,7 @@ export function mouseDragHandle(originEvent: MouseEvent | TouchEvent, options?: 
 
 export function touchDragHandle(originEvent: MouseEvent | TouchEvent, options?: dragOptions) {
   const event = originEvent as TouchEvent
-  const { beforeStart, start, move, end, cancel, stableDistance } = options || {}
+  const { beforeStart, start, move, end, cancel, touchHoldTime = 300, touchStableDistance = 50 } = options || {}
   const touches = event.touches || []
   const targetNode = event.target
   if (touches.length !== 1 || !targetNode) {
@@ -116,38 +118,31 @@ export function touchDragHandle(originEvent: MouseEvent | TouchEvent, options?: 
   const startY = touchFinger.clientY
   let lastTouchParams: dragParams | null = null
   let hasTriggerStartEvent = false
-  const _stableDistance = stableDistance || 0
-  if (!_stableDistance) {
-    event.preventDefault && event.preventDefault()
-    event.stopPropagation && event.stopPropagation()
-  }
+
   const longTouchTimer = setTimeout(() => {
     hasTriggerStartEvent = true
     start && start(startX, startY)
     const param = getParamFromTouchEvent(event, startX, startY)
     move && move(param)
-  }, 500)
+  }, touchHoldTime)
   function touchMove(originEvent: Event) {
     const event = originEvent as TouchEvent
+    const param = getParamFromTouchEvent(event, startX, startY)
+    if (!hasTriggerStartEvent && Math.sqrt(param.xOffset * param.xOffset + param.yOffset * param.yOffset) >
+    touchStableDistance) {
+      touchCancel()
+      return
+    }
+    if (!hasTriggerStartEvent) {
+      return
+    }
     event.stopPropagation && event.stopPropagation()
     event.preventDefault && event.preventDefault()
-    removeSelecteion()
-    const param = getParamFromTouchEvent(event, startX, startY)
-    if (hasTriggerStartEvent) {
-      move && move(param)
-    } else if (
-      Math.sqrt(param.xOffset * param.xOffset + param.yOffset * param.yOffset) >
-      _stableDistance
-    ) {
-      clearTimeout(longTouchTimer)
-      hasTriggerStartEvent = true
-      start && start(startX, startY)
-      move && move(param)
-    }
+    move && move(param)
+
     lastTouchParams = param
   }
   function touchEnd() {
-    event.stopPropagation()
     clearTimeout(longTouchTimer)
     removeEventListener()
 
@@ -158,7 +153,6 @@ export function touchDragHandle(originEvent: MouseEvent | TouchEvent, options?: 
     }
   }
   function touchCancel() {
-    event.stopPropagation()
     clearTimeout(longTouchTimer)
     removeEventListener()
     cancel && cancel()
