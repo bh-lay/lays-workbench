@@ -1,5 +1,5 @@
 import { App as Application }  from 'vue'
-import { mouseDragHandle, touchDragHandle } from '@/assets/ts/drag-handle'
+import { supportTouch, mouseDragHandle, touchDragHandle } from '@/assets/ts/drag-handle'
 
 export default {
   install(app: Application) {
@@ -7,7 +7,7 @@ export default {
       mounted (el: HTMLElement, binding) {
         const bindingValue = typeof binding.value === 'object' ? binding.value : {}
         const triggerElement = el
-        if ('ontouchend' in document) {
+        if (supportTouch) {
           triggerElement.addEventListener('touchstart', (event: TouchEvent) => {
             touchDragHandle(event, bindingValue)
           })
@@ -21,7 +21,7 @@ export default {
     app.directive('drag-start', {
       mounted (el: HTMLElement, binding) {
         const triggerElement = el
-        if ('ontouchend' in document) {
+        if (supportTouch) {
           triggerElement.addEventListener('touchstart', (event: TouchEvent) => {
             if (typeof binding.value === 'function') {
               binding.value(event)

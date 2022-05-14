@@ -21,9 +21,9 @@
   position absolute
   width 40px
   height 40px
-  margin -10px 0 0 -10px
+  transform translate(-50%, -50%)
   border-radius 4px
-  background #333
+  background #2196f3
   box-shadow 1px 1px 2px rgba(0, 0, 0, 0.2),2px 2px 20px rgba(0, 0, 0, 0.2)
 .trash-area
   position absolute
@@ -96,6 +96,12 @@
     transform scale(1.25)
     background #4d636f
     color #bac8cf
+.touch-mode
+  .draged-shadow
+    width 80px
+    height 80px
+    border-radius 20px
+    opacity .5
 </style>
 
 <template>
@@ -103,7 +109,7 @@
     <transition name="fade-fast">
       <div
         v-if="isStableStart"
-        class="draged-layer"
+        :class="['draged-layer', supportTouch ? 'touch-mode' : '']"
       >
         <div
           :class="{
@@ -151,6 +157,18 @@
             background: dragedBookmark.undercoat,
           }"
         />
+        <!-- <div
+          v-for="item in gridTestData"
+          :key="item.id"
+          :style="{
+            position: 'absolute',
+            top: item.top + 'px',
+            left: item.left + 'px',
+            width: (item.right - item.left) + 'px',
+            height: item.bottom - item.top + 'px',
+            border: '1px solid red',
+          }"
+        /> -->
       </div>
     </transition>
   </teleport>
@@ -159,7 +177,7 @@
 <script lang="ts">
 import { ref, getCurrentInstance, Ref, ComponentInternalInstance } from 'vue'
 import { getAppConfigItem } from '@/assets/ts/app-config'
-import dragHandle from '@/assets/ts/drag-handle'
+import dragHandle, { supportTouch } from '@/assets/ts/drag-handle'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 type mapItem = {
   id: string,
@@ -328,6 +346,7 @@ export default {
     const isStableStart = ref(false)
     const clientX = ref(0)
     const clientY = ref(0)
+    // const gridTestData: Ref<mapItem[]> = ref([])
     const gridGap = getAppConfigItem('gridGap') as number
     const shadowRectStyle = ref({
       top: '',
@@ -341,12 +360,11 @@ export default {
     let itemSizeAndPositionMap: mapItem[] = []
 
     dragHandle(props.event, {
-      mouseStableDistance: 20,
       start() {
         context.emit('beforeDrag')
         isStableStart.value = true
         itemSizeAndPositionMap = getItemListMap(internalInstance)
-        // console.log('itemSizeAndPositionMap', itemSizeAndPositionMap)
+        // gridTestData.value = itemSizeAndPositionMap
       },
       move(params) {
         const triggered = getMouseTriggered(
@@ -450,6 +468,8 @@ export default {
       },
     })
     return {
+      // gridTestData,
+      supportTouch,
       clientX,
       clientY,
       isStableStart,

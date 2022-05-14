@@ -125,18 +125,27 @@ textarea
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 import Gallery from '@/components/gallery.vue'
 import SearchEntrance from '@/components/search-entrance.vue'
 import BookmarkDesktop from '@/components/bookmark-desktop.vue'
 import Settings from '@/components/settings/index.vue'
 import LogoAbout from '@/components/logo-about/index.vue'
-
 import EasyRouter from '@/components/easy-router.vue'
+
 export default {
   components: { Gallery, SearchEntrance, BookmarkDesktop, LogoAbout, Settings, EasyRouter },
   setup() {
     const focused = ref(false)
+
+    // 阻止双指放大
+    function preventPageZoom(event: Event) {
+      event.preventDefault()
+    }
+    document.addEventListener('gesturestart', preventPageZoom)
+    onUnmounted(() => {
+      document.removeEventListener('gesturestart', preventPageZoom)
+    })
     return {
       focused,
     }

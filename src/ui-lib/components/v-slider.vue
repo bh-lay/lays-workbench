@@ -195,7 +195,6 @@ export default {
     }
 
     const dragOption: dragOptions = {
-      mouseStableDistance: 20,
       beforeStart() {
         const trackNode = trackRef.value
         if (trackNode === null) {
