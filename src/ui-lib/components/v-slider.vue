@@ -15,21 +15,29 @@
   background #2196f3
 .railway-engine
   position absolute
-  top -5px
-  margin-left -6px
-  width 10px
-  height 10px
-  border-radius 10px
-  border 2px solid #2196f3
-  background #fff
+  top -18px
+  margin-left -22px
+  width 40px
+  height 40px
   transition transform .15s
+  &:before
+    content ''
+    position relative
+    display block
+    top 13px
+    left 13px
+    width 10px
+    height 10px
+    border-radius 10px
+    border 2px solid #2196f3
+    background #fff
   &:hover
     cursor grab
     transform scale(1.4)
-  &:active,
   &.active
+  &:active
     cursor grabbing
-    transform scale(1.6)
+    transform scale(1.7)
 .railway-stations
   position absolute
   width 100%
@@ -44,10 +52,14 @@
   width 2px
   height 4px
   background rgba(255, 255, 255, .6)
+.touch-mode .railway-engine
+  &.active
+    cursor grabbing
+    transform scale(2.5)
 </style>
 
 <template>
-  <div class="v-slider">
+  <div :class="['v-slider', supportTouch ? 'touch-mode' : '']">
     <div
       ref="trackRef"
       class="railway-track"
@@ -83,7 +95,7 @@
 
 <script lang="ts">
 import { ref, watch, Ref, PropType } from 'vue'
-import { dragOptions } from '@/assets/ts/drag-handle'
+import { dragOptions, supportTouch } from '@/assets/ts/drag-handle'
 type markItem = {
   value: number,
   label?: string
@@ -195,6 +207,7 @@ export default {
     }
 
     const dragOption: dragOptions = {
+      touchStableTime: 0,
       beforeStart() {
         const trackNode = trackRef.value
         if (trackNode === null) {
@@ -220,8 +233,12 @@ export default {
         context.emit('update:modelValue', applyStep(value))
         isInDragMode.value = false
       },
+      cancel() {
+        isInDragMode.value = false
+      },
     }
     return {
+      supportTouch,
       dragValue,
       trackRef,
       isInDragMode,
