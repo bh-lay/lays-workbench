@@ -53,13 +53,14 @@
             selectedBookmark = item
           }
         }"
+        v-drag-start="(event) => {
+          dragStartHandle(event, item)
+        }"
         :class="{
           draged: isDraging && selectedBookmark.id === item.id,
         }"
         :data="item"
         :active="selectedBookmark.id === item.id"
-        @mousedown="dragStartHandle($event, item)"
-        @touchstart="dragStartHandle($event, item)"
         @click="selectedBookmark = item"
         @dblclick="handleOpen(item)"
       />
@@ -285,9 +286,6 @@ function dragSetup(
     willStartDrag,
     isDraging,
     dragStartHandle(event: MouseEvent | TouchEvent, bookmark: Bookmark) {
-      if ('ontouchend' in document && event.type === 'mousedown') {
-        return
-      }
       dragEvent.value = event
       willStartDrag.value = true
       willSelectedBookmark = bookmark

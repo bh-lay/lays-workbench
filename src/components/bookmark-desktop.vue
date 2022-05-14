@@ -24,6 +24,9 @@
           selectedBookmarkItem = bookmarkItem
         }
       }"
+      v-drag-start="(event) => {
+        dragStartHandle(event, bookmarkItem)
+      }"
       :data="bookmarkItem"
       :class="{
         draged: isStartDrag && selectedBookmarkItem.id === bookmarkItem.id,
@@ -31,8 +34,6 @@
       }"
       :data-id="bookmarkItem.id"
       @next="openItem"
-      @mousedown="handleDrag($event, bookmarkItem)"
-      @touchstart="handleDrag($event, bookmarkItem)"
     />
     <bookmark-item :data="addData">
       <template #body>
@@ -181,7 +182,7 @@ function mouseIntractive({
         folderLayerVisible.value = true
       }
     },
-    handleDrag(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
+    dragStartHandle(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
       setSelectedBookmarkItem(bookmarkItem)
       dragEvent.value = event
       willStartDrag.value = true

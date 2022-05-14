@@ -24,6 +24,9 @@
           selectedBookmarkItem = bookmarkItem
         }
       }"
+      v-drag-start="(event) => {
+        dragStartHandle(event, bookmarkItem)
+      }"
       :class="{
         draged: isStartDrag && selectedBookmarkItem.id === bookmarkItem.id,
         selected: isContextmenuVisible && selectedBookmarkItem.id === bookmarkItem.id
@@ -31,8 +34,6 @@
       :data="bookmarkItem"
       :data-id="bookmarkItem.id"
       @next="openItem($event)"
-      @mousedown="handleDrag($event, bookmarkItem)"
-      @touchstart="handleDrag($event, bookmarkItem)"
     />
     <v-contextmenu
       ref="menu"
@@ -196,7 +197,7 @@ export default {
           }
         }
       },
-      handleDrag(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
+      dragStartHandle(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
         selectedBookmarkItem.value = bookmarkItem
         dragEvent.value = event
         willStartDrag.value = true

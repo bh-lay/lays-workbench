@@ -18,5 +18,23 @@ export default {
         }
       },
     })
+    app.directive('drag-start', {
+      mounted (el: HTMLElement, binding) {
+        const triggerElement = el
+        if ('ontouchend' in document) {
+          triggerElement.addEventListener('touchstart', (event: TouchEvent) => {
+            if (typeof binding.value === 'function') {
+              binding.value(event)
+            }
+          })
+        } else {
+          triggerElement.addEventListener('mousedown', (event: MouseEvent) => {
+            if (typeof binding.value === 'function') {
+              binding.value(event)
+            }
+          })
+        }
+      },
+    })
   },
 }
