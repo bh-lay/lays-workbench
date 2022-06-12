@@ -6,7 +6,11 @@ const removeSelecteion = window.getSelection
   : function () {
     // nothing
   }
-
+// 修复 Mac 版 Safari，TouchEvent 数据类型缺失的问题，thx for chenwei
+if (!window.TouchEvent) {
+  // @ts-ignore
+  window.TouchEvent = {}
+}
 export type dragOptions = {
   beforeStart?: () => void;
   start: (startX: number, startY: number) => void;
