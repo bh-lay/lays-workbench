@@ -31,26 +31,26 @@
       width 100%
       height 100%
   .origin-map
-    padding calc((var(--grid-size) - var(--grid-gap)) / 5)
+    padding calc((var(--grid-size) * 0.6) / 5)
     div
-      width calc((var(--grid-size) - var(--grid-gap)) * 0.75)
-      height calc((var(--grid-size) - var(--grid-gap)) * 0.75)
-      font-size calc((var(--grid-size) - var(--grid-gap)) * 0.12)
+      width calc((var(--grid-size) * 0.6) * 0.75)
+      height calc((var(--grid-size) * 0.6) * 0.75)
+      font-size calc((var(--grid-size) * 0.6) * 0.12)
   .folder-card-large,
   .folder-card-medium
     display grid
-    padding calc(var(--grid-gap) / 4)
-    grid-template-rows repeat(auto-fill, calc((var(--grid-size) - var(--grid-gap) * 3 / 4)))
-    grid-template-columns repeat(auto-fill, calc((var(--grid-size) - var(--grid-gap) * 3 / 4)))
+    padding calc(var(--grid-size) * 0.1)
+    grid-template-rows repeat(auto-fill, calc(var(--grid-size) * 0.7))
+    grid-template-columns repeat(auto-fill, calc(var(--grid-size) * 0.7))
     grid-auto-flow dense
     justify-content space-between
     align-items center
     justify-items center
     & > div
-      width calc((var(--grid-size) - var(--grid-gap)))
-      height calc((var(--grid-size) - var(--grid-gap)))
+      width calc((var(--grid-size) * 0.6))
+      height calc((var(--grid-size) * 0.6))
       border-radius 8px
-      font-size calc((var(--grid-size) - var(--grid-gap)) * 0.17)
+      font-size calc((var(--grid-size) * 0.6) * 0.17)
 </style>
 
 <template>

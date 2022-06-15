@@ -28,7 +28,7 @@
     </div>
     <div class="item">
       <div class="label">
-        区块大小
+        界面缩放
       </div>
       <v-slider
         v-model="gridSize"
@@ -37,22 +37,6 @@
         :marks="[
           {
             value: appConfigDefault.gridSize,
-            label: '',
-          },
-        ]"
-      />
-    </div>
-    <div class="item">
-      <div class="label">
-        区块内间距
-      </div>
-      <v-slider
-        v-model="gridGap"
-        :min="0"
-        :max="50"
-        :marks="[
-          {
-            value: appConfigDefault.gridGap,
             label: '',
           },
         ]"
@@ -70,7 +54,6 @@ export default {
   setup() {
     const appConfig = getAppConfig()
     const gridSize = ref(appConfig.gridSize)
-    const gridGap = ref(appConfig.gridGap)
     const maxContainerWidth = ref(appConfig.maxContainerWidth)
     const windowWidth = window.innerWidth
     const appConfigDefault = getAppConfigDefault()
@@ -80,13 +63,9 @@ export default {
     watch(gridSize, (value) => {
       appConfig.gridSize = value
     })
-    watch(gridGap, (value) => {
-      appConfig.gridGap = value
-    })
     return {
       appConfigDefault,
       gridSize,
-      gridGap,
       maxContainerWidth,
       windowWidth,
     }

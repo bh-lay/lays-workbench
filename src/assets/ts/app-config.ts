@@ -1,7 +1,6 @@
 const APP_CONFIG_DEFAULT = {
   maxContainerWidth: 1200,
   gridSize: 84,
-  gridGap: 34,
   iconRadius: 8,
   wallpaper: 'https://w.wallhaven.cc/full/nz/wallhaven-nzkggo.jpg',
   searchEngineName: 'caniuse',
@@ -9,7 +8,7 @@ const APP_CONFIG_DEFAULT = {
 
 let APP_CONFIG: Record<string, string | number> = new Proxy({}, {})
 
-type configKey = 'gridSize' | 'gridGap' | 'iconRadius' | 'maxContainerWidth'
+type configKey = 'gridSize' | 'iconRadius' | 'maxContainerWidth'
 const localStorageKey = 'APP_CONFIG_V1'
 
 // 数据持久化逻辑

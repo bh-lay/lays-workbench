@@ -30,7 +30,6 @@ export enum BookmarkSize {
   small = 1,
   medium = 2,
   large = 3,
-  three_one = 4
 }
 // 书签图标类型
 type BookmarkIconCrab = 'crab'

@@ -232,7 +232,8 @@ function getMouseTriggered(
   target?: mapItem,
   size?: BookmarkSize,
 } {
-  const gridGap = getAppConfigItem('gridGap') as number
+  const gridSize = getAppConfigItem('gridSize') as number
+  const gridGap = gridSize * 0.4
   // 是否拖拽合并
   for (let i = 0; i < map.length; i++) {
     let mapItem = map[i]
@@ -347,7 +348,8 @@ export default {
     const clientX = ref(0)
     const clientY = ref(0)
     // const gridTestData: Ref<mapItem[]> = ref([])
-    const gridGap = getAppConfigItem('gridGap') as number
+    const gridSize = getAppConfigItem('gridSize') as number
+    const gridGap = gridSize * 0.4
     const shadowRectStyle = ref({
       top: '',
       left: '',

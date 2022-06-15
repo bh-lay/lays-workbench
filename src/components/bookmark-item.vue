@@ -5,8 +5,8 @@
   height var(--grid-size)
   grid-area span 1 / span 1 / auto / auto
   .card
-    width calc(var(--grid-size) - var(--grid-gap))
-    height calc(var(--grid-size) - var(--grid-gap))
+    width calc(var(--grid-size) * 0.6)
+    height calc(var(--grid-size) * 0.6)
     margin 0 auto
     border-radius var(--icon-radius)
     overflow hidden
@@ -32,7 +32,7 @@
     visibility hidden
     transition .15s
   .bookmark-icon
-    font-size calc((var(--grid-size) - var(--grid-gap)) * 0.2)
+    font-size calc((var(--grid-size) * 0.6) * 0.2)
   &:hover
     .popover
       visibility visible
@@ -44,25 +44,19 @@
   width calc(var(--grid-size) * 2)
   height calc(var(--grid-size) * 2)
   .bookmark-icon
-    font-size calc((var(--grid-size) * 2 - var(--grid-gap)) * 0.2)
+    font-size calc(var(--grid-size) * 0.28)
   .card
-    width calc(var(--grid-size) * 2 - var(--grid-gap))
-    height calc(var(--grid-size) * 2 - var(--grid-gap))
+    width calc(var(--grid-size) * 1.6)
+    height calc(var(--grid-size) * 1.6)
 .item-size-large
   grid-area span 2 / span 4 / auto / auto
   width calc(var(--grid-size) * 4)
   height calc(var(--grid-size) * 2)
   .bookmark-icon
-    font-size calc((var(--grid-size) * 4 - var(--grid-gap)) * 0.14)
+    font-size calc(var(--grid-size) * 3.6 * 0.14)
   .card
-    width calc(var(--grid-size) * 4 - var(--grid-gap))
-    height calc(var(--grid-size) * 2 - var(--grid-gap))
-.item-size-three_one
-  width calc(var(--grid-size) * 3)
-  height var(--grid-size)
-  grid-area span 1 / span 3 / auto / auto
-  .card
-    width calc(var(--grid-size) * 3 - var(--grid-gap))
+    width calc(var(--grid-size) * 3.6)
+    height calc(var(--grid-size) * 1.6)
 </style>
 
 <template>

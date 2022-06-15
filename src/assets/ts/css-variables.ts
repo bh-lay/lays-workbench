@@ -1,7 +1,7 @@
 import { onAppConfigChange, getAppConfig } from './app-config'
 
-type variableKey = 'maxContainerWidth' | 'gridSize' | 'gridGap' | 'iconRadius'
-const cssVariableKeys: variableKey[] = ['maxContainerWidth', 'gridSize', 'gridGap', 'iconRadius']
+type variableKey = 'maxContainerWidth' | 'gridSize' | 'iconRadius'
+const cssVariableKeys: variableKey[] = ['maxContainerWidth', 'gridSize', 'iconRadius']
 
 // 获取 CSS 变量配置
 function getCssVariables() {
