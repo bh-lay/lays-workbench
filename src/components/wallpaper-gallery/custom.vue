@@ -24,10 +24,10 @@
   max-width 600px
   margin 20px auto
   font-size 15px
-  color #444a5a
+  color #a2a6ae
   a
     margin-right 10px
-    color #444a5a
+    color #878c97
 </style>
 
 <template>
@@ -52,10 +52,10 @@
       </p>
       <p>给您几个链接，尽情探索吧～</p>
       <p>
-        <a href="https://imgtu.com/">路过图床</a>
-        <a href="https://sm.ms/">SM.MS</a>
-        <a href="https://wallhaven.cc/">wallhaven</a>
-        <a href="https://imgurl.org/">imgurl</a>
+        <a target="_blank" href="https://imgtu.com/">路过图床</a>
+        <a target="_blank" href="https://sm.ms/">SM.MS</a>
+        <a target="_blank" href="https://wallhaven.cc/">wallhaven</a>
+        <a target="_blank" href="https://imgurl.org/">imgurl</a>
       </p>
     </div>
   </div>
