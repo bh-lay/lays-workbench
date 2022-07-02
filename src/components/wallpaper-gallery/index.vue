@@ -5,7 +5,7 @@
   height 100%
 .side
   width 140px
-  padding-top 10px
+  padding 10px 0 10px 10px
 .main
   width 100px
   flex-grow 1

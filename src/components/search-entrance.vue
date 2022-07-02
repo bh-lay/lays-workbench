@@ -68,7 +68,7 @@ search-height = 56px
   font-size 12px
   font-weight bold
   color #e0e4eb
-  transition 0.2s ease-out
+  transition background 0.2s ease-out
   cursor pointer
   svg
     display inline-block
@@ -248,6 +248,28 @@ export default {
     const closeEngineList = () => {
       engineListVisible.value = false
     }
+    function handleSearch() {
+      let searhKeyword = encodeURIComponent(searchText.value)
+      searchText.value = ''
+      window.open(selectedEngine.value.url.replace('[kw]', searhKeyword))
+      const inputNode = inputRef.value as HTMLInputElement | null
+      if (inputNode) {
+        inputNode.blur()
+      }
+    }
+    function handleSwitchEngine(direct: number) {
+      let nextIndex: number = -1 
+      const currentIndex = activeEngineIndex.value
+      const engineCount = searchEngineConfig.length
+      if (currentIndex === engineCount - 1 && direct > 0) {
+        nextIndex = 0
+      } else if (currentIndex === 0 && direct < 0) {
+        nextIndex = engineCount - 1
+      } else {
+        nextIndex = currentIndex + (direct > 0 ? 1 : -1)
+      }
+       selectedEngineName.value = searchEngineConfig[nextIndex].name
+    }
     return {
       inputRef,
       searchEngineConfig,
@@ -268,15 +290,23 @@ export default {
       showEngineList,
       closeEngineList,
       handleKeydown(e: KeyboardEvent) {
-        if (e.key !== 'Enter' || isComposing.value) {
+        if (isComposing.value) {
           return
         }
-        let searhKeyword = encodeURIComponent(searchText.value)
-        searchText.value = ''
-        window.open(selectedEngine.value.url.replace('[kw]', searhKeyword))
-        const inputNode = inputRef.value as HTMLInputElement | null
-        if (inputNode) {
-          inputNode.blur()
+        switch(e.key) {
+          case 'ArrowUp':
+            engineListVisible.value = true
+            handleSwitchEngine(-1)
+            break;
+          case 'ArrowDown':
+            engineListVisible.value = true
+            handleSwitchEngine(1)
+            break;
+          case 'Enter':
+            handleSearch()
+            break;
+          default:
+            engineListVisible.value = false
         }
       },
     }
