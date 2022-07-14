@@ -141,7 +141,7 @@ search-height = 56px
 </template>
 
 <script lang="ts" >
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, Ref, computed, watch, nextTick, onUnmounted } from 'vue'
 import { getAppConfigItem, setAppConfigItem } from '@/assets/ts/app-config'
 
 type searchEngine = {
@@ -195,10 +195,25 @@ const searchEngineConfig: searchEngine[] = [
     icon: 'mdi-npm',
   },
 ]
+function globalShortcut(inputRef: Ref<null | HTMLInputElement>) {
+  const keydownListener = function (event: KeyboardEvent) {
+    const inputNode = inputRef.value as HTMLInputElement | null
+    if (!inputNode) {
+      return
+    }
+    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+      inputNode.focus()
+    }
+  }
+  window.addEventListener('keydown', keydownListener)
+  onUnmounted(() => {
+    window.removeEventListener('keydown', keydownListener)
+  })
+}
 export default {
   emits: ['focus', 'blur'],
   setup(props, context) {
-    const inputRef = ref(null)
+    const inputRef: Ref<null | HTMLInputElement> = ref(null)
     const selectedEngineName = ref(getAppConfigItem('searchEngineName'))
     const searchText = ref('')
     const engineListVisible = ref(false)
@@ -270,6 +285,7 @@ export default {
       }
        selectedEngineName.value = searchEngineConfig[nextIndex].name
     }
+    globalShortcut(inputRef)
     return {
       inputRef,
       searchEngineConfig,
