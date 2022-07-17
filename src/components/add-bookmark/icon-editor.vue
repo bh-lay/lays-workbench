@@ -238,7 +238,7 @@ export default {
       iconTypeConfigList,
       inputValue,
       openMdiHelp() {
-        window.open('https://material.iconhelper.cn/', 'material-help')
+        window.open('https://pictogrammers.github.io/@mdi/font/2.0.46/', 'material-help')
       },
     }
   },
