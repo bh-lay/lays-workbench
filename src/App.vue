@@ -127,7 +127,7 @@ textarea
 <script lang="ts">
 import { onUnmounted, ref } from 'vue'
 import Gallery from '@/components/gallery.vue'
-import SearchEntrance from '@/components/search-entrance.vue'
+import SearchEntrance from '@/components/search-entrance/index.vue'
 import BookmarkDesktop from '@/components/bookmark-desktop.vue'
 import Settings from '@/components/settings/index.vue'
 import LogoAbout from '@/components/logo-about/index.vue'

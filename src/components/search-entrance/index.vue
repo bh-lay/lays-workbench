@@ -137,12 +137,19 @@ search-height = 56px
         </div>
       </div>
     </transition>
+    <transition name="zoom">
+      <search-bookmark
+        v-if="selectedEngineName === 'bookmark' && !isActive"
+        :searchText="searchText"
+      />
+    </transition>
   </div>
 </template>
 
 <script lang="ts" >
 import { ref, Ref, computed, watch, nextTick, onUnmounted } from 'vue'
 import { getAppConfigItem, setAppConfigItem } from '@/assets/ts/app-config'
+import SearchBookmark from './search-bookmark.vue'
 
 type searchEngine = {
   name: string,
@@ -194,6 +201,13 @@ const searchEngineConfig: searchEngine[] = [
     url: 'https://www.npmjs.com/search?q=[kw]',
     icon: 'mdi-npm',
   },
+  {
+    name: 'bookmark',
+    label: '书签',
+    placeholder: '搜索书签名或网址...',
+    url: '',
+    icon: 'mdi-bookmark',
+  },
 ]
 function globalShortcut({
   setInputFocus,
@@ -211,6 +225,8 @@ function globalShortcut({
   })
 }
 export default {
+  name: 'SearchEntrance',
+  components: { SearchBookmark },
   emits: ['focus', 'blur'],
   setup(props, context) {
     const inputRef: Ref<null | HTMLInputElement> = ref(null)
@@ -270,6 +286,9 @@ export default {
       }
     }
     function handleSearch() {
+      if (!selectedEngine.value.url) {
+        return
+      }
       let searhKeyword = encodeURIComponent(searchText.value)
       searchText.value = ''
       window.open(selectedEngine.value.url.replace('[kw]', searhKeyword))
