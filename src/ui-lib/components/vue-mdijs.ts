@@ -67,6 +67,21 @@ export default {
       })
     }
     return function () {
+      if (!iconReady.value) {
+        return h(
+          'span',
+          {
+            class: 'loading',
+            style: {
+              display: 'inline-block',
+              width: props.size + 'px',
+              height: props.size + 'px',
+              boxShadow: `inset -4px -4px 0 1px ${props.fill}`,
+              borderRadius: '50%',
+            },
+          }
+        )
+      }
       return h(
         'svg',
         {
@@ -82,7 +97,7 @@ export default {
         },
         [
           h('path', {
-            d: iconReady.value ? getIconContextByName(props.name) : '',
+            d: getIconContextByName(props.name),
           }),
         ]
       )
