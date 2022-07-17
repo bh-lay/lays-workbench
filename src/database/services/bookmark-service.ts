@@ -11,6 +11,7 @@ import {
   bookmarkResetSortManager,
   bookmarkClearManager,
   bookmarkCountManager,
+  bookmarkSearchManager,
 } from '../manager/bookmark-manager'
 import { isBookmarkMatchesQuery, queryOptions } from '../utils/bookmark-query-matches'
 
@@ -116,4 +117,9 @@ export async function bookmarkIsEmptyService(): Promise<boolean> {
   return count === 0
 }
 
-
+// 搜索书签
+export async function bookmarkSearchService(searchKey: string): Promise<Bookmark[]> {
+  const db: IDBDatabase = await getIDBRequest()
+  let data: Bookmark[] = await bookmarkSearchManager(db, searchKey)
+  return data
+}

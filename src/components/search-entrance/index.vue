@@ -139,7 +139,7 @@ search-height = 56px
     </transition>
     <transition name="zoom">
       <search-bookmark
-        v-if="selectedEngineName === 'bookmark' && !isActive"
+        v-if="selectedEngineName === 'bookmark' && isActive && searchText.length"
         :searchText="searchText"
       />
     </transition>

@@ -242,3 +242,38 @@ export function bookmarkClearManager(db: IDBDatabase): Promise<string> {
     }
   })
 }
+
+export function bookmarkSearchManager(db: IDBDatabase, searchKey: string): Promise<Bookmark[]> {
+  return new Promise((resolve, reject) => {
+    const objectStore = db.transaction('bookmark').objectStore('bookmark')
+    const request = objectStore.openCursor()
+    const bookmarkList: Bookmark[] = []
+    request.onsuccess = function (event) {
+      if (!event.target) {
+        reject(new Error('could not find target'))
+        return
+      }
+      const target = event.target as CustomIDBCursorEventTarget
+      const cursor = target.result
+      if (cursor) {
+        const bookmarkItem = cursor.value as bookmarkOriginData
+        if (
+          (bookmarkItem.name && bookmarkItem.name.indexOf(searchKey) > -1) ||
+          (bookmarkItem.value && bookmarkItem.value.indexOf(searchKey) > -1)
+        ) {
+          bookmarkList.push(new Bookmark(bookmarkItem))
+        }
+        cursor.continue()
+      } else {
+        resolve(bookmarkList)
+      }
+    }
+
+    request.onerror = function () {
+      // 数据写入失败
+      const error = new Error('数据读取失败')
+      // error.__detail = event
+      reject(error)
+    }
+  })
+}
