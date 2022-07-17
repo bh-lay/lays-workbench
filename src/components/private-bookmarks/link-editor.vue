@@ -22,7 +22,6 @@
       </div>
       <v-input
         v-model="name"
-        v-focus
         type="text"
         placeholder="书签名"
       />
@@ -31,6 +30,7 @@
       </div>
       <v-input
         v-model="value"
+        v-focus
         type="text"
         placeholder="网址"
       />
