@@ -195,14 +195,14 @@ const searchEngineConfig: searchEngine[] = [
     icon: 'mdi-npm',
   },
 ]
-function globalShortcut(inputRef: Ref<null | HTMLInputElement>) {
+function globalShortcut({
+  setInputFocus,
+} : {
+  setInputFocus: () => void,
+}) {
   const keydownListener = function (event: KeyboardEvent) {
-    const inputNode = inputRef.value as HTMLInputElement | null
-    if (!inputNode) {
-      return
-    }
     if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
-      inputNode.focus()
+      setInputFocus()
     }
   }
   window.addEventListener('keydown', keydownListener)
@@ -230,7 +230,7 @@ export default {
         isActive.value = isFocus
       }, 140)
     })
-    const setInputFocused = () => {
+    const setInputFocus = () => {
       const inputNode = inputRef.value as HTMLInputElement | null
       if (inputNode) {
         inputNode.focus()
@@ -252,7 +252,7 @@ export default {
       return -1
     })
     const showEngineList = () => {
-      setInputFocused()
+      setInputFocus()
       if (engineListVisible.value) {
         return
       }
@@ -263,14 +263,17 @@ export default {
     const closeEngineList = () => {
       engineListVisible.value = false
     }
-    function handleSearch() {
-      let searhKeyword = encodeURIComponent(searchText.value)
-      searchText.value = ''
-      window.open(selectedEngine.value.url.replace('[kw]', searhKeyword))
+    const inputBlur = () => {
       const inputNode = inputRef.value as HTMLInputElement | null
       if (inputNode) {
         inputNode.blur()
       }
+    }
+    function handleSearch() {
+      let searhKeyword = encodeURIComponent(searchText.value)
+      searchText.value = ''
+      window.open(selectedEngine.value.url.replace('[kw]', searhKeyword))
+      inputBlur()
     }
     function handleSwitchEngine(direct: number) {
       let nextIndex: number = -1 
@@ -285,7 +288,9 @@ export default {
       }
        selectedEngineName.value = searchEngineConfig[nextIndex].name
     }
-    globalShortcut(inputRef)
+    globalShortcut({
+      setInputFocus,
+    })
     return {
       inputRef,
       searchEngineConfig,
@@ -298,7 +303,7 @@ export default {
       isActive,
       isComposing,
       selectEngine(engine: searchEngine) {
-        setInputFocused()
+        setInputFocus()
         selectedEngineName.value = engine.name
         setAppConfigItem('searchEngineName', engine.name)
         closeEngineList()
@@ -321,8 +326,11 @@ export default {
           case 'Enter':
             handleSearch()
             break;
+          case 'Escape':
+            closeEngineList()
+            inputBlur()
           default:
-            engineListVisible.value = false
+            closeEngineList()
         }
       },
     }
