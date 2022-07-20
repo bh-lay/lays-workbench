@@ -140,14 +140,19 @@ search-height = 56px
     <transition name="zoom">
       <search-bookmark
         v-if="selectedEngineName === 'bookmark' && isActive && searchText.length"
+        ref="searchRef"
         :searchText="searchText"
       />
+      <!-- <search-bookmark
+        ref="searchRef"
+        :searchText="searchText"
+      /> -->
     </transition>
   </div>
 </template>
 
 <script lang="ts" >
-import { ref, Ref, computed, watch, nextTick, onUnmounted } from 'vue'
+import { ref, Ref, computed, watch, nextTick, onUnmounted, defineComponent } from 'vue'
 import { getAppConfigItem, setAppConfigItem } from '@/assets/ts/app-config'
 import SearchBookmark from './search-bookmark.vue'
 
@@ -230,6 +235,7 @@ export default {
   emits: ['focus', 'blur'],
   setup(props, context) {
     const inputRef: Ref<null | HTMLInputElement> = ref(null)
+    const searchRef: Ref<InstanceType<typeof SearchBookmark> | null> = ref(null)
     const selectedEngineName = ref(getAppConfigItem('searchEngineName'))
     const searchText = ref('')
     const engineListVisible = ref(false)
@@ -312,6 +318,7 @@ export default {
     })
     return {
       inputRef,
+      searchRef,
       searchEngineConfig,
       selectedEngineName,
       selectedEngine,
@@ -335,15 +342,29 @@ export default {
         }
         switch(e.key) {
           case 'ArrowUp':
-            engineListVisible.value = true
-            handleSwitchEngine(-1)
+            if (searchText.value.length) {
+              searchRef.value?.prev()
+            } else {
+              engineListVisible.value = true
+              handleSwitchEngine(-1)
+            }
+            e.preventDefault()
             break;
           case 'ArrowDown':
-            engineListVisible.value = true
-            handleSwitchEngine(1)
+            if (searchText.value.length) {
+              searchRef.value?.next()
+            } else {
+              engineListVisible.value = true
+              handleSwitchEngine(1)
+            }
+            e.preventDefault()
             break;
           case 'Enter':
-            handleSearch()
+            if (searchText.value.length) {
+              searchRef.value?.confirm()
+            } else {
+              handleSearch()
+            }
             break;
           case 'Escape':
             closeEngineList()

@@ -6,8 +6,8 @@ declare interface Window {
 }
 
 declare module '*.vue' {
-  import { ComponentOptions } from 'vue'
-  const componentOptions: ComponentOptions
+  import { DefineComponent } from 'vue'
+  const componentOptions: DefineComponent<{}, {}, any>
   export default componentOptions
 }
 

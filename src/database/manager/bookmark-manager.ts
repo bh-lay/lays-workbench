@@ -245,6 +245,11 @@ export function bookmarkClearManager(db: IDBDatabase): Promise<string> {
 
 export function bookmarkSearchManager(db: IDBDatabase, searchKey: string): Promise<Bookmark[]> {
   return new Promise((resolve, reject) => {
+    if (searchKey.length === 0) {
+      resolve([])
+      return
+    }
+    searchKey = searchKey.toLocaleLowerCase()
     const objectStore = db.transaction('bookmark').objectStore('bookmark')
     const request = objectStore.openCursor()
     const bookmarkList: Bookmark[] = []
@@ -258,8 +263,8 @@ export function bookmarkSearchManager(db: IDBDatabase, searchKey: string): Promi
       if (cursor) {
         const bookmarkItem = cursor.value as bookmarkOriginData
         if (
-          (bookmarkItem.name && bookmarkItem.name.indexOf(searchKey) > -1) ||
-          (bookmarkItem.value && bookmarkItem.value.indexOf(searchKey) > -1)
+          (bookmarkItem.name && bookmarkItem.name.toLocaleLowerCase().indexOf(searchKey) > -1) ||
+          (bookmarkItem.value && bookmarkItem.value.toLocaleLowerCase().indexOf(searchKey) > -1)
         ) {
           bookmarkList.push(new Bookmark(bookmarkItem))
         }

@@ -1,12 +1,15 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/functions/scrollbar.styl'
 .search-list
   position absolute
   top 110%
   left 0
   width 100%
+  max-height 500%
   border-radius 4px
   background #fff
-
+  overflow auto
+  scrollbar #fff
 .bookmark-list
   padding 20px
 .no-result
@@ -29,9 +32,14 @@
       <v-mdi name="mdi-meteor" size="60" />
       <span>没有搜索到书签</span>
     </div>
-    <div class="bookmark-list">
-      <p>开发中...</p>
-      <div v-for="bookmark in bookmarks" :key="bookmark.id">
+    <div v-if="bookmarks.length > 0" class="bookmark-list">
+      <div
+        v-for="(bookmark, index) in bookmarks"
+        :key="bookmark.id"
+        ref="bookmarkRef"
+        :class="['item', selectedIndex === index ? 'active' : '']"
+      >
+        {{ selectedIndex === index }}
         <strong>{{ bookmark.name }}</strong>
         <span>{{ bookmark.value }}</span>
       </div>
@@ -40,10 +48,10 @@
 </template>
 
 <script lang="ts">
-import { Ref, ref, watch } from 'vue'
+import { defineComponent, nextTick, Ref, ref, watch } from 'vue'
 import { bookmarkSearchService } from '@database/services/bookmark-service'
 import { Bookmark } from '@/database/entity/bookmark'
-export default {
+export default defineComponent({
   props: {
     searchText: {
       type: String,
@@ -54,6 +62,8 @@ export default {
     searchText: string
   }) {
     const isSearching = ref(false)
+    const selectedIndex = ref(0)
+    const bookmarkRef: Ref<[HTMLDivElement] | null> = ref(null)
     const bookmarks: Ref<Bookmark[]> = ref([])
     
     watch(
@@ -75,10 +85,30 @@ export default {
         immediate: true,
       }
     )
+    watch(selectedIndex, () => {
+      console.log('bookmarkRef', bookmarkRef.value)
+    })
     return {
       isSearching,
+      bookmarkRef,
+      selectedIndex,
       bookmarks,
+      next() {
+        if (selectedIndex.value < bookmarks.value.length - 1) {
+          selectedIndex.value++
+        } else {
+          selectedIndex.value = 0
+        }
+      },
+      prev() {
+        if (selectedIndex.value > 0) {
+          selectedIndex.value--
+        } else {
+          selectedIndex.value = bookmarks.value.length - 1
+        }
+      },
+      confirm() {},
     }
   },
-}
+})
 </script>
