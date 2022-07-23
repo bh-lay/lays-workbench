@@ -132,7 +132,7 @@
 <script lang="ts">
 import { ref, computed } from 'vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
-import { replaceRouter } from '@/assets/ts/router'
+import { openBookmark } from '@/assets/ts/bookmark-utils'
 export default {
   name: 'RegVisualWidgetsButton',
   props: {
@@ -148,8 +148,10 @@ export default {
     const widgetsSize = computed(() => props.data.size)
     function showRegVisual() {
       setTimeout(() => {
-        replaceRouter('widgets', 'reg-visual', {
-          regText: quickInput.value,
+        openBookmark(props.data, {
+          widgetsData: {
+            regText: quickInput.value,
+          },
         })
         quickInput.value = ''
       })

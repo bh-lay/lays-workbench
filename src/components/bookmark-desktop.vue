@@ -111,6 +111,7 @@ import {
   bookmarkResortService,
   bookmarkListService,
 } from '@database/services/bookmark-service'
+import { openBookmark } from '@/assets/ts/bookmark-utils'
 import { Message } from '@/ui-lib/message/index'
 import BookmarkItem from './bookmark-item.vue'
 import AddBookmark from './add-bookmark/index.vue'
@@ -168,19 +169,11 @@ function mouseIntractive({
         return
       }
       willStartDrag.value = false
-      if (data.type === BookmarkType.link) {
-        const bookmarkValue = data.value
-        if (typeof bookmarkValue !== 'string') {
-          return
+      openBookmark(data, {
+        handleFolder() {
+          folderLayerVisible.value = true
         }
-        if (bookmarkValue && bookmarkValue.match(/^#/)) {
-          location.hash = bookmarkValue
-        } else {
-          window.open(bookmarkValue, '_blank')
-        }
-      } else if (data.type === BookmarkType.folder) {
-        folderLayerVisible.value = true
-      }
+      })
     },
     dragStartHandle(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
       setSelectedBookmarkItem(bookmarkItem)

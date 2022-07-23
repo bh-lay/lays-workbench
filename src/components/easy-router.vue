@@ -12,9 +12,9 @@ import TriangleMaker from '@/components/widgets/triangle-maker/main.vue'
 function createSubVNode(moduleType: string, moduleName: string, state: routerState): VNode | null {
   if (moduleType === 'widgets') {
     switch(moduleName) {
-    case 'private-bookmark':
+    case 'private-bookmarks':
       return h(PrivateBookmarks)
-    case 'public-bookmark':
+    case 'public-bookmarks':
       return h(PublicBookmarks)
     case 'json-formatter':
       return h(JsonFormatter)

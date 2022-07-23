@@ -53,7 +53,7 @@ svg
 
 <script lang="ts">
 import { computed } from 'vue'
-import { replaceRouter } from '@/assets/ts/router'
+import { openBookmark } from '@/assets/ts/bookmark-utils'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 
 export default {
@@ -72,7 +72,7 @@ export default {
       widgetsSize,
       BookmarkSize,
       open() {
-        replaceRouter('widgets', 'private-bookmark')
+        openBookmark(props.data)
       },
     }
   },

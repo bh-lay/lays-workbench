@@ -118,16 +118,9 @@
 </template>
 
 <script lang="ts">
-import { replaceRouter } from '@/assets/ts/router'
 
 export default {
   name: 'LogoAbout',
-  setup() {
-    return {
-      settingWallpaper() {
-        replaceRouter('settings', 'wallpaper')
-      },
-    }
-  },
+  setup() {},
 }
 </script>

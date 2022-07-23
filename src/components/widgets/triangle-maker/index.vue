@@ -45,7 +45,7 @@
 <script lang="ts">
 import { ref, computed } from 'vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
-import { replaceRouter } from '@/assets/ts/router'
+import { openBookmark } from '@/assets/ts/bookmark-utils'
 import TriangleSelector from './triangle-selector.vue'
 export default {
   name: 'TriangleMakerButton',
@@ -66,8 +66,10 @@ export default {
       widgetsSize,
       quickInput,
       handleSelected(index: number) {
-        replaceRouter('widgets', 'triangle-maker', {
-          defaultIndex: index,
+        openBookmark(props.data, {
+          widgetsData: {
+            defaultIndex: index,
+          },
         })
       },
     }

@@ -133,6 +133,7 @@ import {
   bookmarkResortService,
   bookmarkRemoveService,
 } from '@database/services/bookmark-service'
+import { openBookmark } from '@/assets/ts/bookmark-utils'
 import { Message } from '@/ui-lib/message/index'
 import MainItem from './main-item.vue'
 import LinkEditor from './link-editor.vue'
@@ -440,11 +441,11 @@ export default {
         folderEditorConfig.value.visible = false
       },
       handleOpen(bookmark: Bookmark) {
-        if (bookmark.type === BookmarkType.folder) {
-          context.emit('open-folder', bookmark.id)
-        } else if (bookmark.type === BookmarkType.link) {
-          window.open(bookmark.value as string, '_blank')
-        }
+        openBookmark(bookmark, {
+          handleFolder() {
+            context.emit('open-folder', bookmark.id)
+          }
+        })
       },
       handleRemove() {
         removeBookmark(selectedBookmark.value.id, bookmarkList.value)

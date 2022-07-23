@@ -360,11 +360,11 @@ export default {
             e.preventDefault()
             break;
           case 'Enter':
-            if (searchText.value.length) {
-              searchRef.value?.confirm()
-            } else {
+            // if (searchText.value.length) {
+              // searchRef.value?.confirm()
+            // } else {
               handleSearch()
-            }
+            // }
             break;
           case 'Escape':
             closeEngineList()

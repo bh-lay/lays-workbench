@@ -101,7 +101,7 @@
     </div>
     <template v-if="widgetsSize === BookmarkSize.large">
       <div
-        ref="drag_area"
+        ref="dragArea"
         :class="['drag-area', isDragOver ? 'active' : '']"
         @click="$refs.input.click()"
       >
@@ -119,9 +119,9 @@
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue'
+import { ref, Ref, computed, onMounted } from 'vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
-import { replaceRouter } from '@/assets/ts/router'
+import { openBookmark } from '@/assets/ts/bookmark-utils'
 import { Message } from '@/ui-lib/message/index'
 export default {
   name: 'ImageBaseWidgetsButton',
@@ -137,66 +137,69 @@ export default {
     const isDragOver = ref(false)
     const base64Str = ref('')
     const widgetsSize = computed(() => props.data.size)
-    return {
-      isDragOver,
-      base64Str,
-      widgetsSize,
-      BookmarkSize,
-    }
-  },
-  mounted() {
-    const dragAreaNode = this.$refs.drag_area as HTMLElement
-    if (!dragAreaNode) {
-      return
-    }
-    dragAreaNode.addEventListener('dragover', (e: DragEvent) => {
-      e.stopPropagation()
-      e.preventDefault()
-      if (e.dataTransfer) {
-        e.dataTransfer.dropEffect = 'copy'
-      }
-      this.isDragOver = true
-    })
-    dragAreaNode.addEventListener('dragleave', () => {
-      this.isDragOver = false
-    })
-    dragAreaNode.addEventListener('drop', (e: DragEvent) => {
-      e.stopPropagation()
-      e.preventDefault()
-      if (e.dataTransfer) {
-        var files = e.dataTransfer.files
-        this.handleSelectFile(files[0])
-      }
-      this.isDragOver = false
-    })
-  },
-  methods: {
-    handleInputChange(event: InputEvent) {
-      const eventTarget = event.target as null | {
-        files: File[]
-      }
-      if (!eventTarget) {
-        return
-      }
-      if (!eventTarget.files) {
-        return
-      }
-      if (!eventTarget.files[0]) {
-        return
-      }
-      this.handleSelectFile(eventTarget.files[0])
-    },
-    handleSelectFile(file: File) {
+    const dragArea: Ref<HTMLElement | null> = ref(null)
+
+    function handleSelectFile(file: File) {
       if (file.size > 2 * 1024 * 1024) {
         new Message({
           message: '图片大于 2M，不建议使用 base64 !',
         })
         return
       }
-      replaceRouter('widgets', 'img-to-base', {
-        file,
+      openBookmark(props.data, {
+        widgetsData: {
+          file
+        }
       })
-    },
+    }
+    onMounted(() => {
+      const dragAreaNode = dragArea.value
+      if (!dragAreaNode) {
+        return
+      }
+      dragAreaNode.addEventListener('dragover', (e: DragEvent) => {
+        e.stopPropagation()
+        e.preventDefault()
+        if (e.dataTransfer) {
+          e.dataTransfer.dropEffect = 'copy'
+        }
+        isDragOver.value = true
+      })
+      dragAreaNode.addEventListener('dragleave', () => {
+        isDragOver.value = false
+      })
+      dragAreaNode.addEventListener('drop', (e: DragEvent) => {
+        e.stopPropagation()
+        e.preventDefault()
+        if (e.dataTransfer) {
+          var files = e.dataTransfer.files
+          handleSelectFile(files[0])
+        }
+        isDragOver.value = false
+      })
+    })
+    return {
+      dragArea,
+      isDragOver,
+      base64Str,
+      widgetsSize,
+      BookmarkSize,
+      handleInputChange(event: InputEvent) {
+        const eventTarget = event.target as null | {
+          files: File[]
+        }
+        if (!eventTarget) {
+          return
+        }
+        if (!eventTarget.files) {
+          return
+        }
+        if (!eventTarget.files[0]) {
+          return
+        }
+        handleSelectFile(eventTarget.files[0])
+      },
+    }
   },
 }
 </script>

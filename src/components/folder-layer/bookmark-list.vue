@@ -83,6 +83,7 @@ import {
   bookmarkResortService,
   bookmarkUpdateService,
 } from '@database/services/bookmark-service'
+import { openBookmark } from '@/assets/ts/bookmark-utils'
 import { Message } from '@/ui-lib/message/index'
 import BookmarkItem from '../bookmark-item.vue'
 import DragedLayer from '../draged-layer.vue'
@@ -185,17 +186,7 @@ export default {
           return
         }
         willStartDrag.value = false
-        if (data.type === BookmarkType.link) {
-          const bookmarkValue = data.value
-          if (typeof bookmarkValue !== 'string') {
-            return
-          }
-          if (bookmarkValue && bookmarkValue.match(/^#/)) {
-            location.hash = bookmarkValue
-          } else {
-            window.open(bookmarkValue, '_blank')
-          }
-        }
+        openBookmark(data)
       },
       dragStartHandle(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
         selectedBookmarkItem.value = bookmarkItem

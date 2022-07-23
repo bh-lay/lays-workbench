@@ -54,7 +54,7 @@ svg
 <script lang="ts">
 import { computed } from 'vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
-import { replaceRouter } from '@/assets/ts/router'
+import { openBookmark } from '@/assets/ts/bookmark-utils'
 export default {
   name: 'PublicBookmarkWidgetsButton',
   props: {
@@ -73,7 +73,7 @@ export default {
       widgetsSize,
       BookmarkSize,
       openModal() {
-        replaceRouter('widgets', 'public-bookmark')
+        openBookmark(props.data)
       },
     }
   },
