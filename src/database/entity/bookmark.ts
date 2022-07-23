@@ -21,6 +21,7 @@ export function bookmarkEntityInit (db: IDBDatabase) {
 // 书签类型
 export enum BookmarkType {
   link = 1,
+  // dialog 类型已废弃
   dialog = 2,
   widgets = 3,
   folder = 4,

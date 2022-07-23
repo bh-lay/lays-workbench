@@ -234,22 +234,14 @@ var visualize='src/visualize';
 var parse='src/parse';
 var Kit='src/Kit';
 
-if (params.debug) {
-  document.write('<script src="src/libs/require.js" charset="utf-8"><'+'/script>');
-  window.addEventListener('DOMContentLoaded',function () {
-    require([raphael,visualize,parse,Kit],init);
-  });
-} else {
-  document.write('<script src="dist/regulex.js" charset="utf-8"><'+'/script>');
-  window.addEventListener('DOMContentLoaded',function () {
-    raphael=require('regulex').Raphael;
-    parse = require('regulex').parse;
-    visualize = require('regulex').visualize;
-    Kit=require('regulex').Kit;
-    init(raphael,visualize,parse,Kit);
-  });
-
-}
+document.write('<script src="dist/regulex.js" charset="utf-8"><'+'/script>');
+window.addEventListener('DOMContentLoaded',function () {
+  raphael=require('regulex').Raphael;
+  parse = require('regulex').parse;
+  visualize = require('regulex').visualize;
+  Kit=require('regulex').Kit;
+  init(raphael,visualize,parse,Kit);
+});
 
 
 function init(R,visualize,parse,K) {
@@ -316,7 +308,6 @@ function serializeHash(params) {
   var re=getInputValue();
   var flags=getFlags();
   return "#!" +
-    (params.debug?"debug=true&":"") +
     (params.cmd?"cmd="+params.cmd+"&":"") +
     (params.embed?"embed=true&":"") +
     "flags="+flags+"&re="+encodeURIComponent(params.re=re);
