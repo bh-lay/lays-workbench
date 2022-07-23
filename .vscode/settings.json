@@ -19,4 +19,5 @@
     ],
     "html.format.wrapLineLength": 180,
     "editor.wordWrap": "on",
+    "git.ignoreLimitWarning": true,
 }
