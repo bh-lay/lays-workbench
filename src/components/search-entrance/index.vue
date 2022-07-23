@@ -142,11 +142,8 @@ search-height = 56px
         v-if="selectedEngineName === 'bookmark' && isActive && searchText.length"
         ref="searchRef"
         :searchText="searchText"
+        @after-open="searchText = ''"
       />
-      <!-- <search-bookmark
-        ref="searchRef"
-        :searchText="searchText"
-      /> -->
     </transition>
   </div>
 </template>
@@ -220,8 +217,9 @@ function globalShortcut({
   setInputFocus: () => void,
 }) {
   const keydownListener = function (event: KeyboardEvent) {
-    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
       setInputFocus()
+      event.preventDefault()
     }
   }
   window.addEventListener('keydown', keydownListener)
@@ -229,7 +227,7 @@ function globalShortcut({
     window.removeEventListener('keydown', keydownListener)
   })
 }
-export default {
+export default defineComponent({
   name: 'SearchEntrance',
   components: { SearchBookmark },
   emits: ['focus', 'blur'],
@@ -360,11 +358,11 @@ export default {
             e.preventDefault()
             break;
           case 'Enter':
-            // if (searchText.value.length) {
-              // searchRef.value?.confirm()
-            // } else {
+            if (selectedEngineName.value === 'bookmark') {
+              searchRef.value?.confirm()
+            } else {
               handleSearch()
-            // }
+            }
             break;
           case 'Escape':
             closeEngineList()
@@ -375,5 +373,5 @@ export default {
       },
     }
   },
-}
+})
 </script>

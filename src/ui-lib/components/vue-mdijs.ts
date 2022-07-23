@@ -1,4 +1,4 @@
-import { h, ref } from 'vue'
+import { h, ref, defineComponent } from 'vue'
 type libType = {[key:string]: string}
 let iconLib: libType = {}
 
@@ -33,7 +33,7 @@ function getIconContextByName(iconName: string) {
   }
   return iconContext
 }
-export default {
+export default defineComponent({
   name: 'VMdi',
   props: {
     name: {
@@ -103,4 +103,4 @@ export default {
       )
     }
   },
-}
+})

@@ -4,7 +4,7 @@ import VInput from './v-input.vue'
 import VSlider from './v-slider.vue'
 import Modal from './modal.vue'
 import VueMdijs from './vue-mdijs'
-
+import HightlightText from './hightlight-text'
 export default {
   install(app: Application) {
     app.component('VButton', VButton)
@@ -12,5 +12,6 @@ export default {
     app.component('VInput', VInput)
     app.component('VModal', Modal)
     app.component('VMdi', VueMdijs)
+    app.component('HightlightText', HightlightText)
   },
 }
