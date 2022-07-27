@@ -51,7 +51,7 @@
     background #adcfeb
 </style>
 <template>
-  <div class="search-list">
+  <div class="search-list" @mousedown.prevent>
     <div v-if="!isSearching && bookmarks.length === 0" class="no-result">
       <v-mdi name="mdi-meteor" size="60" />
       <span>没有搜索到书签</span>
