@@ -154,7 +154,7 @@ export default {
         name: 'google',
         label: '谷歌',
         placeholder: '谷歌虽好，可不一定访问的了～',
-        url: 'https://www.baidu.com/s?ie=UTF-8&wd=[kw]',
+        url: 'https://www.google.com/search?q=[kw]',
         icon: '/favicon/google.ico',
       },
       {
@@ -175,14 +175,14 @@ export default {
         name: 'github',
         label: 'Github',
         placeholder: '来，我们一起偷代码～',
-        url: '/favicon/github.png',
+        url: 'https://github.com/search?q=[kw]',
         icon: '/favicon/github.png',
       },
       {
         name: 'npm',
         label: 'NPM',
         placeholder: '别硬撸了，找个好用的轮子吧！',
-        url: '/favicon/npm.png',
+        url: 'https://www.npmjs.com/search?q=[kw]',
         icon: '/favicon/npm.png',
       },
     ];
