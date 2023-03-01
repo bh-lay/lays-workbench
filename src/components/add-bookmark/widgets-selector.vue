@@ -71,6 +71,10 @@ const supportWidgetsList = [
     label: '三角形生成器',
     name: 'triangle-maker',
   },
+  {
+    label: '倒计时',
+    name: 'countdown',
+  },
 ]
 
 export default {

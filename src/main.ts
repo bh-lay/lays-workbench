@@ -4,12 +4,14 @@ import uiLib from './ui-lib/index'
 import { initAppConfig } from './assets/ts/app-config'
 import { initVariables } from './assets/ts/css-variables'
 import './assets/stylus/imported-styles/index.styl'
+// import SevenSegmentDisplay from 'vue3-seven-segment-display'
 function initApp() {
   initAppConfig()
   initVariables()
 
   const app = createApp(App)
   app.use(uiLib)
+  // app.use(SevenSegmentDisplay as Plugin)
   app.mount('#app')
 }
 function removeMask() {

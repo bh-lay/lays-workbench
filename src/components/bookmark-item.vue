@@ -3,6 +3,7 @@
   position relative
   width var(--grid-size)
   height var(--grid-size)
+  font-size var(--grid-size)
   grid-area span 1 / span 1 / auto / auto
   .card
     width calc(var(--grid-size) * 0.6)
@@ -43,6 +44,7 @@
   grid-area span 2 / span 2 / auto / auto
   width calc(var(--grid-size) * 2)
   height calc(var(--grid-size) * 2)
+  font-size calc(var(--grid-size) * 2)
   .bookmark-icon
     font-size calc(var(--grid-size) * 0.28)
   .card
@@ -52,6 +54,7 @@
   grid-area span 2 / span 4 / auto / auto
   width calc(var(--grid-size) * 4)
   height calc(var(--grid-size) * 2)
+  font-size calc(var(--grid-size) * 4)
   .bookmark-icon
     font-size calc(var(--grid-size) * 3.6 * 0.14)
   .card
