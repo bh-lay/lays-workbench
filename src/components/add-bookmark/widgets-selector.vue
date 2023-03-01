@@ -6,6 +6,7 @@
   margin 0 auto 20px
 .scroll-area
   height 500px
+  max-height calc(90vh - 150px)
   overflow auto
   scrollbar #26262c
 .bookmark-item

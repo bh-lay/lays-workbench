@@ -1,6 +1,11 @@
 <style lang="stylus" scoped>
 .custom-link
   padding 20px 0
+  display flex
+.edit-area
+  width 100px
+  flex-grow 1
+  padding-right 20px
 .input-item
   margin-bottom 20px
   .label
@@ -34,66 +39,81 @@
   display flex
   align-items center
   justify-content center
-  height 180px
+  width 360px
   padding-top 20px
   background #1a1d23
 .footer
   padding-top 20px
   text-align right
+
+
+@media screen and (max-width:600px)
+  .custom-link
+    flex-direction column-reverse
+  .edit-area
+    width 100%
+    padding-right 0
+  .preview-area
+    width 100%
+    height 160px
+    margin-bottom 20px
+
 </style>
 
 <template>
   <div class="custom-link">
-    <div class="input-item">
-      <div class="label">
-        名称
+    <div class="edit-area">
+      <div class="input-item">
+        <div class="label">
+          名称
+        </div>
+        <v-input
+          v-model="previewData.name"
+          type="text"
+          placeholder="输入链接名称"
+          maxlength="20"
+        />
       </div>
-      <v-input
-        v-model="previewData.name"
-        type="text"
-        placeholder="输入链接名称"
-        maxlength="20"
-      />
-    </div>
-    <div class="input-item">
-      <div class="label">
-        链接地址
+      <div class="input-item">
+        <div class="label">
+          链接地址
+        </div>
+        <v-input
+          v-model="previewData.value"
+          v-focus
+          type="text"
+          placeholder="输入链接地址"
+        />
       </div>
-      <v-input
-        v-model="previewData.value"
-        v-focus
-        type="text"
-        placeholder="输入链接地址"
-      />
-    </div>
-    <div class="input-item">
-      <icon-editor v-model="previewData.icon" />
-    </div>
-    <div class="input-item">
-      <div class="undercoat-and-size">
-        <v-dropdown
-          class="undercoat"
-          type="plain"
-          :style="{
-            background: previewData.undercoat
-          }"
-        >
-          <template #body>
-            <color-selector v-model="previewData.undercoat" />
-          </template>
-        </v-dropdown>
-        <size-selector v-model="previewData.size" />
+      <div class="input-item">
+        <icon-editor v-model="previewData.icon" />
+      </div>
+      <div class="input-item">
+        <div class="undercoat-and-size">
+          <v-dropdown
+            class="undercoat"
+            type="plain"
+            :style="{
+              background: previewData.undercoat
+            }"
+          >
+            <template #body>
+              <color-selector v-model="previewData.undercoat" />
+            </template>
+          </v-dropdown>
+          <size-selector v-model="previewData.size" />
+        </div>
+      </div>
+      <div class="footer">
+        <v-button @click="confirm">
+          确定
+        </v-button>
       </div>
     </div>
     <div class="preview-area">
       <bookmark-item
         :data="previewData"
       />
-    </div>
-    <div class="footer">
-      <v-button @click="confirm">
-        确定
-      </v-button>
     </div>
   </div>
 </template>
