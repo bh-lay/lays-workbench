@@ -76,7 +76,8 @@ export default defineComponent({
               display: 'inline-block',
               width: props.size + 'px',
               height: props.size + 'px',
-              boxShadow: `inset -4px -4px 0 1px ${props.fill}`,
+              border: `1px solid ${props.fill}`,
+              opacity: 0.3,
               borderRadius: '50%',
             },
           }
