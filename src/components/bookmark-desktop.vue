@@ -58,7 +58,7 @@
   </v-contextmenu>
   <v-modal
     v-model="editModalVisible"
-    :width="400"
+    :width="800"
   >
     <div style="padding: 20px">
       <custom-link
