@@ -80,7 +80,7 @@
 import {
   bookmarkUpdateService
 } from '@database/services/bookmark-service'
-import { ref, computed, Ref, watch, onBeforeUnmount } from 'vue'
+import { ref, computed, Ref, watch, onBeforeUnmount, ComputedRef } from 'vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 import { openBookmark } from '@/assets/ts/bookmark-utils'
 import { SevenSegmentDisplay } from 'vue3-seven-segment-display'
@@ -125,6 +125,23 @@ function calTimeLeft (endTime: number) {
   }
   return result
 }
+
+function startTimer(eventEndTime: Ref<number>, widgetsSize: ComputedRef<BookmarkSize>, timeLeftArray: Ref<timeLeftList> ) {
+  const timer = setInterval(() => {
+    let newTimeLeftList = calTimeLeft(eventEndTime.value)
+    if (widgetsSize.value === BookmarkSize.small && newTimeLeftList.length) {
+      newTimeLeftList = [newTimeLeftList[0]]
+    }
+    timeLeftArray.value = newTimeLeftList
+    if (newTimeLeftList.length === 0) {
+      stopTimer()
+    }
+  }, 200)
+  const stopTimer = () => {
+    clearInterval(timer)
+  }
+  return stopTimer
+}
 export default {
   components: { SevenSegmentDisplay, CountdownEditor },
   props: {
@@ -145,18 +162,14 @@ export default {
     const timeLeftArray: Ref<timeLeftList> = ref([])
     const editModalVisible = ref(false)
     const defaultUndercoat = '#2B393D'
-    const timer = setInterval(() => {
-      let newTimeLeftList = calTimeLeft(eventEndTime.value)
-      if (widgetsSize.value === BookmarkSize.small && newTimeLeftList.length) {
-        newTimeLeftList = [newTimeLeftList[0]]
-      }
-      timeLeftArray.value = newTimeLeftList
-    }, 200)
-    onBeforeUnmount(() => {
-      clearInterval(timer)
-    })
+
     const widgetsSize = computed(() => props.data.size)
     const widgetsUndercoat = computed(() => props.data.undercoat || defaultUndercoat)
+
+    let stopTimer = startTimer(eventEndTime, widgetsSize, timeLeftArray)
+    onBeforeUnmount(() => {
+      stopTimer()
+    })
 
     watch(
       () => props.data.value,
@@ -168,6 +181,8 @@ export default {
             const [eventNameInParams, eventTimeInParams] = widgetsParams.split(paramsSeprator)
             eventName.value = eventNameInParams
             eventEndTime.value = parseInt(eventTimeInParams, 10)
+
+            stopTimer = startTimer(eventEndTime, widgetsSize, timeLeftArray)
           }
         }
       },
