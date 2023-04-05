@@ -8,9 +8,11 @@ import ImgToBase from './widgets/img-to-base/index.vue'
 import PublicBookmarks from './widgets/public-bookmarks/index.vue'
 import PrivateBookmarks from './widgets/private-bookmarks/index.vue'
 import TriangleMaker from './widgets/triangle-maker/index.vue'
+import Countdown from './widgets/countdown/index.vue'
+import { splitInFirstColon } from '@/assets/ts/utils'
 
-const supportWidgetsTypes = ['reg-visual', 'json-formatter', 'native-bookmark', 'img-to-base', 'public-bookmarks', 'private-bookmarks', 'triangle-maker']
-const supportWidgets = [RegVisual, JsonFormatter, NativeBookmark, ImgToBase, PublicBookmarks, PrivateBookmarks, TriangleMaker]
+const supportWidgetsTypes = ['reg-visual', 'json-formatter', 'native-bookmark', 'img-to-base', 'public-bookmarks', 'private-bookmarks', 'triangle-maker', 'countdown']
+const supportWidgets = [RegVisual, JsonFormatter, NativeBookmark, ImgToBase, PublicBookmarks, PrivateBookmarks, TriangleMaker, Countdown]
 
 export default {
   components: {
@@ -21,6 +23,7 @@ export default {
     PublicBookmarks,
     PrivateBookmarks,
     TriangleMaker,
+    Countdown,
   },
   props: {
     data: {
@@ -34,11 +37,16 @@ export default {
     data: Bookmark
   }) {
     return function() {
-      const index = supportWidgetsTypes.indexOf(props.data.value as string)
-      if (index >= 0) {
-        return h(supportWidgets[index], {
-          data: props.data,
-        })
+      const widgetsValue = props.data.value
+      if (typeof widgetsValue === 'string') {
+        const [widgetsType, widgetsParams] = splitInFirstColon(widgetsValue)
+        const index = supportWidgetsTypes.indexOf(widgetsType)
+        if (index >= 0) {
+          return h(supportWidgets[index], {
+            data: props.data,
+            params: widgetsParams
+          })
+        }
       }
       return h('div', {}, [`unknown widgets type<br>${props.data.name}<small>${props.data.value}</small>`])
     }

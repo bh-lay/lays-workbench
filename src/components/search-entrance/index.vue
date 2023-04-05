@@ -15,16 +15,22 @@ search-height = 56px
   transition 0.4s 0.3s ease-in-out
   .selected-engine
     display flex
-    justify-content center
     align-items center
-    width 60px
+    justify-content space-between
+    width 120px
+    padding-left 20px
     flex-shrink 0
+    flex-grow 0
     cursor pointer
     svg
       width 24px
       height 24px
       fill #c1c6d1
       transition 0.2s ease-in-out
+    span
+      white-space nowrap
+      font-size 12px
+      color #aaafbb
     &:hover svg,
     &.active svg
       fill #182749
@@ -34,7 +40,7 @@ search-height = 56px
     width 100px
     flex-grow 1
     height search-height
-    padding 15px 20px
+    padding 15px 20px 15px 10px
     border none
     line-height 26px
     font-size 16px
@@ -101,6 +107,7 @@ search-height = 56px
         @click="showEngineList"
       >
         <v-mdi :name="selectedEngine.icon" />
+        <span>{{ selectedEngine.label }} :</span>
       </div>
       <input
         ref="inputRef"

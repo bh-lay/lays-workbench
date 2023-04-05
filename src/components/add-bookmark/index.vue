@@ -11,7 +11,7 @@
   />
   <v-modal
     v-model="addBookmarkVisible"
-    :width="400"
+    :width="800"
     :close-on-click-modal="true"
     :close-on-press-escape="true"
   >

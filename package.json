@@ -11,7 +11,8 @@
   "dependencies": {
     "@mdi/js": "^6.3.95",
     "json-formatter-js": "^2.3.4",
-    "vue": "^3.2.26"
+    "vue": "^3.2.26",
+    "vue3-seven-segment-display": "^1.0.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.8.1",
