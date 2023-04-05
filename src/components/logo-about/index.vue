@@ -62,7 +62,7 @@
   width 150px
   height 150px
   border-radius 4px
-  background url(https://api.qrserver.com/v1/create-qr-code/?data=https://u.wechat.com/ELEgl9SCdqLRb0m3ZXzfct4) no-repeat center #fff
+  background no-repeat center #fff
   background-size 130px
   span
     position relative
@@ -109,7 +109,7 @@
         <p class="wechat-title">
           作者微信<small>请注明：来自小剧起始页</small>
         </p>
-        <div class="qrcode">
+        <div class="qrcode" :style="{ backgroundImage: `url(${wechatQrCode})`}">
           <span>剧</span>
         </div>
       </div>
@@ -117,10 +117,9 @@
   </v-dropdown>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+// import imgRobber from '@/assets/ts/img-robber'
 
-export default {
-  name: 'LogoAbout',
-  setup() {},
-}
+// const wechatQrCode = imgRobber('https://api.qrserver.com/v1/create-qr-code/?data=https://u.wechat.com/ELEgl9SCdqLRb0m3ZXzfct4')
+const wechatQrCode = 'https://api.qrserver.com/v1/create-qr-code/?data=https://u.wechat.com/ELEgl9SCdqLRb0m3ZXzfct4'
 </script>

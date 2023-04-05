@@ -7,6 +7,7 @@ search-height = 56px
   margin-top 100px
   z-index 10
 .search-input
+  position relative
   display flex
   height search-height
   border-radius 4px
@@ -16,8 +17,7 @@ search-height = 56px
   .selected-engine
     display flex
     align-items center
-    justify-content space-between
-    width 120px
+    width 110px
     padding-left 20px
     flex-shrink 0
     flex-grow 0
@@ -28,6 +28,7 @@ search-height = 56px
       fill #c1c6d1
       transition 0.2s ease-in-out
     span
+      padding-left 12px
       white-space nowrap
       font-size 12px
       color #aaafbb
@@ -57,6 +58,7 @@ search-height = 56px
     transition 0.2s ease-out
     background #fff
     backdrop-filter blur(0)
+    z-index 1
     & > *
       transition 0.4s 0.15s
       opacity 1
@@ -66,12 +68,15 @@ search-height = 56px
   top 100%
   left 0
   width 160px
+  z-index 0
+  transition .2s ease-in
 .engine-item
-  height 38px
-  padding-left 22px
+  height 40px
+  padding-left 20px
   border-radius 4px
-  line-height 38px
-  font-size 12px
+  white-space nowrap
+  line-height 40px
+  font-size 14px
   font-weight bold
   color #e0e4eb
   transition background 0.2s ease-out
@@ -79,16 +84,16 @@ search-height = 56px
   svg
     display inline-block
     vertical-align middle
-    width 16px
-    height 16px
-    margin-right 12px
+    width 18px
+    height 18px
+    margin-right 10px
   &:hover
     background rgba(0, 0, 0, .2)
   &:active
     background rgba(0, 0, 0, .4)
   &.active
     height search-height
-    opacity 0
+    // opacity 0
 </style>
 
 <template>
@@ -107,7 +112,7 @@ search-height = 56px
         @click="showEngineList"
       >
         <v-mdi :name="selectedEngine.icon" />
-        <span>{{ selectedEngine.label }} :</span>
+        <span>{{ selectedEngine.label }}</span>
       </div>
       <input
         ref="inputRef"
@@ -127,7 +132,7 @@ search-height = 56px
         v-clickoutside="closeEngineList"
         class="engine-list"
         :style="{
-          top: -activeEngineIndex * 38 + 'px'
+          top: -activeEngineIndex * 40 + 'px'
         }"
       >
         <div
