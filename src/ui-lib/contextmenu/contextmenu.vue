@@ -41,9 +41,8 @@
 </template>
 
 <script lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, provide } from 'vue'
 export default {
-  name: 'VContextmenu',
   props: {
     width: {
       type: [String, Number],
@@ -55,6 +54,9 @@ export default {
     const visible = ref(false)
     watch(visible, isVisible => {
       context.emit(isVisible ? 'beforeVisible' : 'afterClose')
+    })
+    provide('close-dropdown', () => {
+      visible.value = false
     })
     return {
       top: 0,
