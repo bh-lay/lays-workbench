@@ -53,7 +53,7 @@
   >
     <div v-if="widgetsSize !== BookmarkSize.small" class="title">{{ eventName }}</div>
     <div class="countdown-time-list" :style="{
-      fontSize: 0.4 / Math.max(timeLeftArray.length, 3) + 'em'
+      fontSize: 0.4 / Math.max(timeLeftArray.length, 3.6) + 'em'
     }">
       <div v-if="timeLeftArray.length === 0">到站</div>
       <template v-else>
