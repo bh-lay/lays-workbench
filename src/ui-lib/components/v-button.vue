@@ -26,13 +26,11 @@
   </button>
 </template>
 
-<script lang="ts">
-export default {
-  props: {
-    type: {
-      type: String,
-      default: 'default',
-    },
+<script setup lang="ts">
+defineProps({
+  type: {
+    type: String,
+    default: 'default',
   },
-}
+})
 </script>

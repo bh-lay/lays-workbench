@@ -110,7 +110,7 @@
   </teleport>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { watch } from 'vue'
 type modalStyle = {
   background: string,
@@ -128,95 +128,87 @@ function inputSize2Style(input: string | number): string {
   }
   return input
 }
-export default {
-  name: 'VModal',
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
-    width: {
-      type: [String, Number],
-      default: '',
-    },
-    height: {
-      type: [String, Number],
-      default: '',
-    },
-    title: {
-      type: String,
-      default: '',
-    },
-    undercoat: {
-      type: String,
-      default: '#26262c',
-    },
-    closeOnClickModal: {
-      type: Boolean,
-      default: false,
-    },
-    closeOnPressEscape: {
-      type: Boolean,
-      default: false,
-    },
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false,
   },
-  emits: ['after-open', 'after-close', 'update:modelValue'],
-  setup(props, context) {
-    const modalBodyStyle: modalStyle = {
-      background: props.undercoat,
-    }
-    if (props.width) {
-      modalBodyStyle.width = inputSize2Style(props.width)
-    }
-    if (props.height) {
-      modalBodyStyle.height = inputSize2Style(props.height)
-    }
-    function closeModal() {
-      context.emit('update:modelValue', false)
-    }
-    const keydownListener = function (event: KeyboardEvent) {
-      // 只处理 Esc 按键
-      if (event.key !== 'Escape') {
-        return
-      }
-      // 判断是否在 input、textarea 中按下 Esc
-      const target = event.target as CustomEventTarget
-      if (target && target.tagName.match(/input|textarea/i)) {
-        if (target.composing) {
-          // 输入法参与过程中，不处理
-        } else {
-          // 非输入过程中，释放焦点
-          target.blur()
-        }
-        return
-      }
-      closeModal()
-    }
-    watch(
-      () => props.modelValue,
-      isVisible => {
-        if (isVisible) {
-          context.emit('after-open')
-          // 仅在配置了按下 Esc 关闭时才注册事件监听
-          if (props.closeOnPressEscape) {
-            window.addEventListener('keydown', keydownListener)
-          }
-        } else {
-          context.emit('after-close')
-          // 未放置外部修改 closeOnPressEscape 值，无论是否绑定都尝试移除事件
-          window.removeEventListener('keydown', keydownListener)
-        }
-      }
-    )
-    return {
-      modalBodyStyle,
-      closeModal,
-      maskClickHandle() {
-        if (props.closeOnClickModal) {
-          closeModal()
-        }
-      },
-    }
+  width: {
+    type: [String, Number],
+    default: '',
   },
+  height: {
+    type: [String, Number],
+    default: '',
+  },
+  title: {
+    type: String,
+    default: '',
+  },
+  undercoat: {
+    type: String,
+    default: '#26262c',
+  },
+  closeOnClickModal: {
+    type: Boolean,
+    default: false,
+  },
+  closeOnPressEscape: {
+    type: Boolean,
+    default: false,
+  },
+})
+const emits = defineEmits(['after-open', 'after-close', 'update:modelValue'])
+
+const modalBodyStyle: modalStyle = {
+  background: props.undercoat,
+}
+if (props.width) {
+  modalBodyStyle.width = inputSize2Style(props.width)
+}
+if (props.height) {
+  modalBodyStyle.height = inputSize2Style(props.height)
+}
+function closeModal() {
+  emits('update:modelValue', false)
+}
+const keydownListener = function (event: KeyboardEvent) {
+  // 只处理 Esc 按键
+  if (event.key !== 'Escape') {
+    return
+  }
+  // 判断是否在 input、textarea 中按下 Esc
+  const target = event.target as CustomEventTarget
+  if (target && target.tagName.match(/input|textarea/i)) {
+    if (target.composing) {
+      // 输入法参与过程中，不处理
+    } else {
+      // 非输入过程中，释放焦点
+      target.blur()
+    }
+    return
+  }
+  closeModal()
+}
+watch(
+  () => props.modelValue,
+  isVisible => {
+    if (isVisible) {
+      emits('after-open')
+      // 仅在配置了按下 Esc 关闭时才注册事件监听
+      if (props.closeOnPressEscape) {
+        window.addEventListener('keydown', keydownListener)
+      }
+    } else {
+      emits('after-close')
+      // 未放置外部修改 closeOnPressEscape 值，无论是否绑定都尝试移除事件
+      window.removeEventListener('keydown', keydownListener)
+    }
+  }
+)
+function maskClickHandle() {
+  if (props.closeOnClickModal) {
+    closeModal()
+  }
 }
 </script>

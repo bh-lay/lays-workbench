@@ -41,8 +41,8 @@
 </template>
 
 <script lang="ts">
-import { ref, watch, provide } from 'vue'
-export default {
+import { ref, watch, provide, defineComponent } from 'vue'
+export default defineComponent({
   props: {
     width: {
       type: [String, Number],
@@ -67,5 +67,5 @@ export default {
       },
     }
   },
-}
+})
 </script>

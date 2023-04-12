@@ -16,9 +16,9 @@
 </style>
 
 <script lang="ts">
-import { watch, h, onMounted, getCurrentInstance } from 'vue'
+import { watch, h, onMounted, getCurrentInstance, defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   props: {
     modelValue: {
       type: String,
@@ -100,5 +100,5 @@ export default {
       )
     }
   },
-}
+})
 </script>

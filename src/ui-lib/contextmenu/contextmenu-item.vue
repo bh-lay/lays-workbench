@@ -1,26 +1,13 @@
 <template>
   <div
     class="contextmenu-item"
-    @click="handleClick"
+    @click="closeDropdown"
   >
     <slot />
   </div>
 </template>
 
-<script lang="ts">
-import { ComponentPublicInstance, inject } from 'vue'
-// 自定义组件类型
-type customComponent = ComponentPublicInstance<{visible?: boolean}>
-
-export default {
-  name: 'ContextmenuItem',
-  setup() {
-    const closeDropdown = inject('close-dropdown', () => {}, false)
-    return {
-      handleClick() {
-        closeDropdown()
-      },
-    }
-  },
-}
+<script setup lang="ts">
+import { inject } from 'vue'
+const closeDropdown = inject('close-dropdown', () => {}, false)
 </script>

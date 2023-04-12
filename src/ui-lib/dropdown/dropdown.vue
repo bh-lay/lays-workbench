@@ -46,69 +46,64 @@
   </div>
 </template>
 
-<script lang="ts">
-import { nextTick, ref } from 'vue'
-export default {
-  name: 'VDropdown',
-  props: {
-    arrow: {
-      type: Boolean,
-      default: false,
-    },
-    placement: {
-      type: String,
-      default: 'bottom-left',
-    },
-    type: {
-      type: String,
-      // default、plain、dark
-      default: 'default',
-    },
-  },
-  setup(props) {
-    const top = ref(0)
-    const left = ref(0)
-    const visible = ref(false)
-    const buttonRef = ref(null)
-    const bodyRef = ref(null)
-    return {
-      top,
-      left,
-      visible,
-      buttonRef,
-      bodyRef,
-      onClickButton() {
-        if (visible.value) {
-          return
-        }
-        visible.value = true
-        const buttonNode = buttonRef.value as HTMLDivElement | null
+<script setup lang="ts">
+import { nextTick, provide, ref } from 'vue'
 
-        if (!buttonNode) {
-          return
-        }
-        const buttonBRC = buttonNode.getBoundingClientRect()
-        if (props.placement === 'bottom-right') {
-          nextTick(() => {
-            const bodyNode = bodyRef.value as HTMLDivElement | null
-            let bodyWidth = 300
-            if (bodyNode) {
-              bodyWidth = bodyNode.clientWidth
-            }
-            top.value = buttonBRC.top + buttonBRC.height
-            left.value = buttonBRC.left + buttonBRC.width - bodyWidth
-          })
-        } else {
-          // default
-          // if (props.placement === 'bottom-left')
-          top.value = buttonBRC.top + buttonBRC.height
-          left.value = buttonBRC.left
-        }
-      },
-      onClickoutside() {
-        visible.value = false
-      },
-    }
+const props = defineProps({
+  arrow: {
+    type: Boolean,
+    default: false,
   },
+  placement: {
+    type: String,
+    default: 'bottom-left',
+  },
+  type: {
+    type: String,
+    // default、plain、dark
+    default: 'default',
+  },
+})
+
+provide('close-dropdown', () => {
+  visible.value = false
+})
+
+const top = ref(0)
+const left = ref(0)
+const visible = ref(false)
+const buttonRef = ref(null)
+const bodyRef = ref(null)
+
+function onClickButton() {
+  if (visible.value) {
+    return
+  }
+  visible.value = true
+  const buttonNode = buttonRef.value as HTMLDivElement | null
+
+  if (!buttonNode) {
+    return
+  }
+  const buttonBRC = buttonNode.getBoundingClientRect()
+  if (props.placement === 'bottom-right') {
+    nextTick(() => {
+      const bodyNode = bodyRef.value as HTMLDivElement | null
+      let bodyWidth = 300
+      if (bodyNode) {
+        bodyWidth = bodyNode.clientWidth
+      }
+      top.value = buttonBRC.top + buttonBRC.height
+      left.value = buttonBRC.left + buttonBRC.width - bodyWidth
+    })
+  } else {
+    // default
+    // if (props.placement === 'bottom-left')
+    top.value = buttonBRC.top + buttonBRC.height
+    left.value = buttonBRC.left
+  }
+}
+function onClickoutside() {
+  visible.value = false
 }
 </script>

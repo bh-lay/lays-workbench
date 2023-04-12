@@ -76,78 +76,68 @@
   </transition>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref, watch, PropType, nextTick } from 'vue'
 import VButton from '../components/v-button.vue'
 type emptyFunction = () => void
-export default {
-  name: 'VMessage',
-  components: { VButton },
-  props: {
-    message: {
-      type: String,
-      default: '',
-    },
-    duration: {
-      type: Number,
-      default: 5000,
-    },
-    confirmText: {
-      type: String,
-      default: '确定',
-    },
-    cancelText: {
-      type: String,
-      default: '取消',
-    },
-    onClose: {
-      type: Function as PropType<emptyFunction>,
-      default: null,
-    },
-    confirm: {
-      type: Function as PropType<emptyFunction>,
-      default: null,
-    },
+
+const props =defineProps({
+  message: {
+    type: String,
+    default: '',
   },
-  setup(props: {
-    duration: number,
-    confirm: emptyFunction
-  }) {
-    // 初始显示
-    const visible = ref(true)
-    function triggerCallback() {
-      // 为保证关闭动画完整进行，延迟两秒触发关闭事件
-      setTimeout(() => {
-        props.onClose && props.onClose()
-      }, 2000)
-    }
-    nextTick(() => {
-      // 为了执行动画，下一栈隐藏，然后显示
-      visible.value = false
-      nextTick(() => {
-        visible.value = true
-      })
-      // 当真正需要关闭时，触发回调
-      watch(visible, isVisible => {
-        if (isVisible) {
-          return
-        }
-        triggerCallback()
-      })
-    })
-    console.log('props.confirm', props.confirm)
-    if (props.duration > 0 && !props.confirm) {
-      setTimeout(() => {
-        visible.value = false
-      }, props.duration)
-    }
-    return {
-      visible,
-      onConfirm() {
-        visible.value = false
-        props.confirm && props.confirm()
-      },
-    }
+  duration: {
+    type: Number,
+    default: 5000,
   },
+  confirmText: {
+    type: String,
+    default: '确定',
+  },
+  cancelText: {
+    type: String,
+    default: '取消',
+  },
+  onClose: {
+    type: Function as PropType<emptyFunction>,
+    default: null,
+  },
+  confirm: {
+    type: Function as PropType<emptyFunction>,
+    default: null,
+  },
+})
+
+// 初始显示
+const visible = ref(true)
+function triggerCallback() {
+  // 为保证关闭动画完整进行，延迟两秒触发关闭事件
+  setTimeout(() => {
+    props.onClose && props.onClose()
+  }, 2000)
+}
+nextTick(() => {
+  // 为了执行动画，下一栈隐藏，然后显示
+  visible.value = false
+  nextTick(() => {
+    visible.value = true
+  })
+  // 当真正需要关闭时，触发回调
+  watch(visible, isVisible => {
+    if (isVisible) {
+      return
+    }
+    triggerCallback()
+  })
+})
+if (props.duration > 0 && !props.confirm) {
+  setTimeout(() => {
+    visible.value = false
+  }, props.duration)
+}
+
+function onConfirm() {
+  visible.value = false
+  props.confirm && props.confirm()
 }
 </script>

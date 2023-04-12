@@ -93,159 +93,138 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref, watch, Ref, PropType } from 'vue'
 import { dragOptions, supportTouch } from '@/assets/ts/drag-handle'
 type markItem = {
   value: number,
   label?: string
 }
-export default {
-  props: {
-    modelValue: {
-      type: Number,
-      default: 0,
-    },
-    min: {
-      type: Number,
-      default: 0,
-    },
-    max: {
-      type: Number,
-      default: 100,
-    },
-    step: {
-      type: Number,
-      default: 0,
-    },
-    marks: {
-      type: Array as PropType<markItem[]>,
-      default() {
-        return []
-      },
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    default: 0,
+  },
+  min: {
+    type: Number,
+    default: 0,
+  },
+  max: {
+    type: Number,
+    default: 100,
+  },
+  step: {
+    type: Number,
+    default: 0,
+  },
+  marks: {
+    type: Array as PropType<markItem[]>,
+    default() {
+      return []
     },
   },
-  emits: ['update:modelValue'],
-  setup(
-    props: {
-      modelValue: number,
-      min: number,
-      max: number,
-      step: number,
-      marks: markItem[],
-    },
-    context
-  ) {
-    const screenWidthByValue = ref('0%')
-    const screenWidthByDrag = ref('0px')
-    const trackRef: Ref<HTMLDivElement | null> = ref(null)
-    const isInDragMode = ref(false)
-    const dragValue = ref(0)
-    let trackWidth = 0
-    let startWidth = 0
-    watch(
-      [() => props.modelValue, () => props.min, () => props.max],
-      () => {
-        let widthRate = (props.modelValue - props.min) / (props.max - props.min)
-        widthRate = Math.max(Math.min(widthRate, 1), 0)
-        screenWidthByValue.value = widthRate * 100 + '%'
-      },
-      { immediate: true }
-    )
-    function applyStep(value: number): number {
-      if(props.step) {
-        return Math.round(value / props.step) * props.step
-      }
-      return value
-    }
+})
+const emits =defineEmits(['update:modelValue'])
 
-    // 获取吸附的数值
-    function sorptionValue(value: number) {
-      // 不能超出最大、最小限制
-      const newValue = Math.max(Math.min(props.max, value), props.min)
-      if (newValue !== value) {
-        return newValue
-      }
-      // 吸附范围在 最大最小值的差值 1/50
-      const sorptionRange = (props.max - props.min) / 50
-      // 遍历标记
-      for (let i = 0; i < props.marks.length; i++) {
-        let distance = Math.abs(props.marks[i].value - newValue)
-        if (distance < sorptionRange) {
-          return props.marks[i].value
-        }
-      }
-      // 其他情况，原值返回
-      return value
-    }
-    // 根据拖拽情况计算新值
-    function countValueByDrag(xOffset: number) {
-      const newWidth = startWidth + xOffset
-      const widthRate = newWidth / trackWidth
-      const dragValue = widthRate * (props.max - props.min) + props.min
-      // 数值进行吸附处理
-      const newValue = sorptionValue(dragValue)
-      // 若吸附修正后的值和原值有差异，则使用修正后的值
-      if (newValue !== dragValue) {
-        return {
-          width: trackWidth * (newValue - props.min) / (props.max - props.min),
-          value: newValue,
-        }
-      }
-      // 默认返回原职原值
-      return {
-        width: newWidth,
-        value: newValue,
-      }
-    }
-    let timer: number | null = null
-    function delayTriggerUpdate(value: number) {
-      timer && clearTimeout(timer)
-      timer = setTimeout(() => {
-        context.emit('update:modelValue', applyStep(value))
-      }, 10)
-    }
+const screenWidthByValue = ref('0%')
+const screenWidthByDrag = ref('0px')
+const trackRef: Ref<HTMLDivElement | null> = ref(null)
+const isInDragMode = ref(false)
+const dragValue = ref(0)
+let trackWidth = 0
+let startWidth = 0
+watch(
+  [() => props.modelValue, () => props.min, () => props.max],
+  () => {
+    let widthRate = (props.modelValue - props.min) / (props.max - props.min)
+    widthRate = Math.max(Math.min(widthRate, 1), 0)
+    screenWidthByValue.value = widthRate * 100 + '%'
+  },
+  { immediate: true }
+)
+function applyStep(value: number): number {
+  if(props.step) {
+    return Math.round(value / props.step) * props.step
+  }
+  return value
+}
 
-    const dragOption: dragOptions = {
-      touchStableTime: 0,
-      beforeStart() {
-        const trackNode = trackRef.value
-        if (trackNode === null) {
-          return
-        }
-        trackWidth = trackNode.clientWidth
-        // 开始值
-        startWidth =
-          ((props.modelValue - props.min) / (props.max - props.min)) *
-          trackWidth
-      },
-      start() {
-        isInDragMode.value = true
-      },
-      move(params) {
-        const { width, value } = countValueByDrag(params.xOffset)
-        screenWidthByDrag.value = width + 'px'
-        dragValue.value = applyStep(value)
-        delayTriggerUpdate(value)
-      },
-      end(params) {
-        const { value } = countValueByDrag(params.xOffset)
-        context.emit('update:modelValue', applyStep(value))
-        isInDragMode.value = false
-      },
-      cancel() {
-        isInDragMode.value = false
-      },
+// 获取吸附的数值
+function sorptionValue(value: number) {
+  // 不能超出最大、最小限制
+  const newValue = Math.max(Math.min(props.max, value), props.min)
+  if (newValue !== value) {
+    return newValue
+  }
+  // 吸附范围在 最大最小值的差值 1/50
+  const sorptionRange = (props.max - props.min) / 50
+  // 遍历标记
+  for (let i = 0; i < props.marks.length; i++) {
+    let distance = Math.abs(props.marks[i].value - newValue)
+    if (distance < sorptionRange) {
+      return props.marks[i].value
     }
+  }
+  // 其他情况，原值返回
+  return value
+}
+// 根据拖拽情况计算新值
+function countValueByDrag(xOffset: number) {
+  const newWidth = startWidth + xOffset
+  const widthRate = newWidth / trackWidth
+  const dragValue = widthRate * (props.max - props.min) + props.min
+  // 数值进行吸附处理
+  const newValue = sorptionValue(dragValue)
+  // 若吸附修正后的值和原值有差异，则使用修正后的值
+  if (newValue !== dragValue) {
     return {
-      supportTouch,
-      dragValue,
-      trackRef,
-      isInDragMode,
-      screenWidthByValue,
-      screenWidthByDrag,
-      dragOption,
+      width: trackWidth * (newValue - props.min) / (props.max - props.min),
+      value: newValue,
     }
+  }
+  // 默认返回原职原值
+  return {
+    width: newWidth,
+    value: newValue,
+  }
+}
+let timer: number | null = null
+function delayTriggerUpdate(value: number) {
+  timer && clearTimeout(timer)
+  timer = setTimeout(() => {
+    emits('update:modelValue', applyStep(value))
+  }, 10)
+}
+
+const dragOption: dragOptions = {
+  touchStableTime: 0,
+  beforeStart() {
+    const trackNode = trackRef.value
+    if (trackNode === null) {
+      return
+    }
+    trackWidth = trackNode.clientWidth
+    // 开始值
+    startWidth =
+      ((props.modelValue - props.min) / (props.max - props.min)) *
+      trackWidth
+  },
+  start() {
+    isInDragMode.value = true
+  },
+  move(params) {
+    const { width, value } = countValueByDrag(params.xOffset)
+    screenWidthByDrag.value = width + 'px'
+    dragValue.value = applyStep(value)
+    delayTriggerUpdate(value)
+  },
+  end(params) {
+    const { value } = countValueByDrag(params.xOffset)
+    emits('update:modelValue', applyStep(value))
+    isInDragMode.value = false
+  },
+  cancel() {
+    isInDragMode.value = false
   },
 }
 </script>
