@@ -63,7 +63,7 @@ export default {
   name: 'PrivateBookmarkCenter',
   components: { FolderItem, MainList, FolderEditor },
   setup() {
-    const activeId = ref('root')
+    const activeId = ref('bookmark-collection')
     const changedParentId = ref('')
 
     const folderEditorConfig = ref({
@@ -78,7 +78,7 @@ export default {
       changedParentId,
       folderEditorConfig,
       rootFolder: new Bookmark({
-        id: 'root',
+        id: 'bookmark-collection',
         name: '我的书签',
       }),
       handleSelect(selectedId: string) {

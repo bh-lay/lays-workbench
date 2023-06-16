@@ -13,6 +13,7 @@ declare module '*.vue' {
 
 declare interface CustomIDBTransactionEventTarget extends EventTarget {
   transaction: IDBTransaction
+  result: IDBDatabase
 }
 declare interface CustomIDBCountEventTarget extends EventTarget {
   result: number,

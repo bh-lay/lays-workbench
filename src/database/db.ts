@@ -1,4 +1,4 @@
-import { bookmarkEntityInit } from './entity/bookmark'
+import {bookmarkEntityInit,bookmarkUpgrade } from './upgrades/bookmark'
 
 function getIDBObject() {
   return window.indexedDB ||
@@ -14,33 +14,42 @@ export function isSupportIDB() {
 export function getIDBRequest(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const indexedDB = getIDBObject()
-    const request = indexedDB.open('data-store', 1)
+    const request = indexedDB.open('data-store', 2)
     request.onerror = function() {
       const error = new Error('建立数据库连接失败！')
-      // error.__detail = event
       reject(error)
     }
-    request.onerror = function() {
+    request.onerror = function(event: Event) {
       const error = new Error('建立数据库连接失败！')
-      // error.__detail = event
       reject(error)
     }
     request.onsuccess = function() {
       resolve(request.result)
     }
-    request.onupgradeneeded = function(event) {
-      const db = request.result
+    request.onblocked = function(event) {
+      alert('本地数据升级，请关闭全部页面重新打开！');
+    }
+    request.onupgradeneeded = async function(event) {
       const target = event.target as CustomIDBTransactionEventTarget
-      // db = event.target.result;
-      if (!target) {
-        reject(new Error('could not find target'))
-      } else {
-        const transaction = target.transaction
-        transaction.oncomplete = function() {
-          resolve(db)
-        }
-        // 此处处理数据库初始化、升级逻辑
+      const db = target.result
+
+      if (!target || !db) {
+        return reject(new Error('could not find target'))
+      }
+      const transaction = target.transaction
+      transaction.oncomplete = function() {
+        resolve(db)
+      }
+
+      const newVersion: number = event.newVersion || 0
+      const oldVersion: number = event.oldVersion || 0
+
+      if (oldVersion === 0) {
+        // 数据库初始化逻辑
         bookmarkEntityInit(db)
+      } else {
+        // 数据库升级逻辑
+        await bookmarkUpgrade(newVersion, oldVersion, db, transaction)
       }
     }
   })
