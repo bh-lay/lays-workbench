@@ -35,16 +35,6 @@ export function bookmarkInsertListManager(
 
     for(let i = 0, total = bookmarkList.length; i < total; i++) {
       const bookmark = new Bookmark(bookmarkList[i])
-      // if (useSalt) {
-      //   bookmark.id = importSalt + bookmark.id
-      //   if (
-      //     bookmark.parent &&
-      //     bookmark.parent !== 'root' &&
-      //     bookmark.parent !== 'desktop'
-      //   ) {
-      //     bookmark.parent = importSalt + bookmark.parent
-      //   }
-      // }
       bookmarkObjectStore.put(bookmark)
     }
     setTimeout(() => {

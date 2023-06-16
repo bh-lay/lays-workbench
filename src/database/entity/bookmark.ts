@@ -1,23 +1,3 @@
-
-export function bookmarkEntityInit (db: IDBDatabase) {
-  if (db.objectStoreNames.contains('bookmark')) {
-    return
-  }
-  const objectStore = db.createObjectStore('bookmark', {
-    keyPath: 'id',
-    autoIncrement: true,
-  })
-  objectStore.createIndex('id', 'id', { unique: true })
-  objectStore.createIndex('name', 'name', { unique: false })
-  objectStore.createIndex('type', 'type', { unique: false })
-  objectStore.createIndex('parent', 'parent', { unique: false })
-  objectStore.createIndex('size', 'size', { unique: false })
-  objectStore.createIndex('undercoat', 'undercoat', { unique: false })
-  objectStore.createIndex('value', 'value', { unique: false })
-  objectStore.createIndex('icon', 'icon', { unique: false })
-  objectStore.createIndex('desc', 'desc', { unique: false })
-}
-
 // 书签类型
 export enum BookmarkType {
   link = 1,

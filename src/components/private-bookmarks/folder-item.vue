@@ -134,7 +134,7 @@ export default {
     },
     active: {
       type: String,
-      default: 'root',
+      default: 'bookmark-collection',
     },
     expand: {
       type: Boolean,

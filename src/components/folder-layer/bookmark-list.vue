@@ -132,7 +132,7 @@ export default {
       if (!selectedBookmark) {
         return
       }
-      selectedBookmark.parent = ''
+      selectedBookmark.parent = 'desktop-default'
       bookmarkUpdateService(selectedBookmark)
         .then(() => {
           for (let i = 0; i < bookmarkList.value.length; i++) {

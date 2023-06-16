@@ -208,7 +208,7 @@ export default {
     const selectedBookmarkItem: Ref<Bookmark> = ref(new Bookmark({}))
     const getList = function () {
       bookmarkListService({
-        parent: null,
+        parent: 'desktop-default',
       }).then((list) => {
         bookmarkList.value = list
       })
