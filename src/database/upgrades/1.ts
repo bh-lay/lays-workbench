@@ -67,6 +67,23 @@ function addBookmark(objectStore: IDBObjectStore, data: any) {
     }
   })
 }
+
+function getBookmarkCount(objectStore: IDBObjectStore): Promise<number> {
+  return new Promise((resolve) => {
+    const request = objectStore.count()
+    request.onsuccess = function (event) {
+      const target = event.target as CustomIDBCountEventTarget
+      if (!target || typeof target.result !== 'number') {
+        resolve(0)
+      } else {
+        resolve(target.result || 0)
+      }
+    }
+    request.onerror = function () {
+      resolve(0)
+    }
+  })
+}
 async function addDesktopDefaultBookmark(objectStore: IDBObjectStore) {
   await addBookmark(objectStore, {
     id: 'desktop-default',
@@ -101,7 +118,10 @@ export default async function bookmarkUpgrade (
     return false
   }
   const objectStore = transaction.objectStore('bookmark')
-  await fixAllParentId(objectStore)
-  await addDesktopDefaultBookmark(objectStore)
+  const bookmarkCount = await getBookmarkCount(objectStore)
+  if (bookmarkCount > 0) {
+    await fixAllParentId(objectStore)
+    await addDesktopDefaultBookmark(objectStore)
+  }
   return true
 }
