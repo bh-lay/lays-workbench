@@ -1,12 +1,14 @@
 import { onAppConfigChange, getAppConfig } from './app-config'
 
-type variableKey = 'maxContainerWidth' | 'gridSize' | 'iconRadius'
-const cssVariableKeys: variableKey[] = ['maxContainerWidth', 'gridSize', 'iconRadius']
+type variableKey = 'maxContainerWidth' | 'gridSize'
+const cssVariableKeys: variableKey[] = ['maxContainerWidth', 'gridSize']
 
 // 获取 CSS 变量配置
 function getCssVariables() {
   const appConfig =  getAppConfig()
-  const result: Record<string, unknown> = {}
+  const result: Record<string, unknown> = {
+    iconRadius: 8
+  }
   return cssVariableKeys.reduce(function(result, key) {
     result[key] = appConfig[key]
     return result

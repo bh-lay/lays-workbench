@@ -10,7 +10,7 @@
 </style>
 
 <template>
-  <gallery>
+  <gallery :src="src">
     <v-dropdown-item-plain>
       <v-button
         type="white"
@@ -22,21 +22,16 @@
   </gallery>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import imgRobber from '@/assets/ts/img-robber'
 import { getAppConfigItem } from '@/assets/ts/app-config'
 import Gallery from '@/components/gallery.vue'
 
-export default {
-  name: 'SettingsWallpaper',
-  components: { Gallery },
-  emits: ['next'],
-  setup() {
-    const wallpaper = getAppConfigItem('wallpaper')
-    const usedUrl = imgRobber(wallpaper.toString())
-    return {
-      usedUrl,
-    }
-  },
-}
+const props = defineProps({
+  src: {
+    type: String,
+    default: ''
+  }
+})
+const emits = defineEmits(['next'])
 </script>

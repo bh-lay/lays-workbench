@@ -61,34 +61,29 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref } from 'vue'
-import { setAppConfigItem } from '@/assets/ts/app-config'
 import { Message } from '@/ui-lib/message/index'
-export default {
-  name: 'SettingsWallpaperCustom',
-  setup() {
-    const picUrl = ref('')
-    const picReg = /(?:http(?:|s):|)\/\/(?:[a-zA-Z0-9-]){1,26}(\.[a-zA-Z0-9-]+)+\/.+\.(jpg|png|gif|jpeg|bmp)/i
-    return {
-      picUrl,
-      applyPic() {
 
-        if (!picReg.test(picUrl.value)) {
-          new Message({
-            message: '图片地址看起来不对呦，请核对一下',
-            duration: 0,
-            confirmText: '继续使用',
-            cancelText: '取消',
-            confirm() {
-              setAppConfigItem('wallpaper', picUrl.value)
-            },
-          })
-        } else {
-          setAppConfigItem('wallpaper', picUrl.value)
-        }
+const picUrl = ref('')
+const picReg = /(?:http(?:|s):|)\/\/(?:[a-zA-Z0-9-]){1,26}(\.[a-zA-Z0-9-]+)+\/.+\.(jpg|png|gif|jpeg|bmp)/i
+
+const emits = defineEmits(['selected'])
+
+function applyPic() {
+  if (!picReg.test(picUrl.value)) {
+    new Message({
+      message: '图片地址看起来不对呦，请核对一下',
+      duration: 0,
+      confirmText: '继续使用',
+      cancelText: '取消',
+      confirm() {
+        emits('selected', picUrl.value)
       },
-    }
-  },
+    })
+  } else {
+    emits('selected', picUrl.value)
+  }
 }
+
 </script>

@@ -43,70 +43,61 @@
   </div>
 </template>
 
-<script lang="ts">
-import { ref, nextTick } from 'vue'
+<script setup lang="ts">
+import { ref, nextTick, watch } from 'vue'
 import loadImage from '@/assets/ts/load-image'
 import imgRobber from '@/assets/ts/img-robber'
-import { getAppConfigItem, onAppConfigChange } from '@/assets/ts/app-config'
 
-export default {
-  name: 'GalleryFrame',
-  props: {
-    defocus: {
-      type: Boolean,
-      default: false,
-    },
+const isImageLoaded = ref(false)
+const styleValue = ref({})
+const isPureColor = ref(false)
+
+const props = defineProps( {
+  src: {
+    type: String,
+    default: '',
   },
-  setup() {
-    const isImageLoaded = ref(false)
-    const styleValue = ref({})
-    const isPureColor = ref(false)
-    let lastWallpaperValue: string | null = null
-    const loadWallpaper = () => {
-      const currentUrl = getAppConfigItem('wallpaper') as string
-      isImageLoaded.value = false
-      // 长度小于17，认定为是颜色值
-      // http://a.cn/1.jpg
-      if (currentUrl.length < 17) {
-        isPureColor.value = true
-        styleValue.value = {
-          backgroundColor: currentUrl,
-        }
-        nextTick(() => {
-          isImageLoaded.value = true
-        })
-      } else {
-        isPureColor.value = false
-        const usedUrl = imgRobber(currentUrl)
-        styleValue.value = {
-          backgroundImage: `url(${usedUrl})`,
-        }
-        loadImage(usedUrl)
-          .then(() => {
-            isImageLoaded.value = true
-          })
-      }
+})
 
-      return currentUrl
+let lastWallpaperValue: string | null = null
+const loadWallpaper = (currentUrl: string) => {
+  isImageLoaded.value = false
+  // 长度小于17，认定为是颜色值
+  // http://a.cn/1.jpg
+  if (currentUrl.length < 17) {
+    isPureColor.value = true
+    styleValue.value = {
+      backgroundColor: currentUrl,
     }
-
-    // 当 APP 配置数据发生变动，重载
-    onAppConfigChange(() => {
-      const currentUrl = getAppConfigItem('wallpaper')
-      // 数值未发生变化，不重新加载数据
-      if (lastWallpaperValue === currentUrl) {
-        return
-      }
-
-      lastWallpaperValue = loadWallpaper()
+    nextTick(() => {
+      isImageLoaded.value = true
     })
-    lastWallpaperValue = loadWallpaper()
-
-    return {
-      isImageLoaded,
-      styleValue,
-      isPureColor,
+  } else {
+    isPureColor.value = false
+    const usedUrl = imgRobber(currentUrl)
+    styleValue.value = {
+      backgroundImage: `url(${usedUrl})`,
     }
-  },
+    loadImage(usedUrl)
+      .then(() => {
+        isImageLoaded.value = true
+      })
+  }
 }
+
+// 当 APP 配置数据发生变动，重载
+watch(
+  () => props.src,  
+  () => {
+    // 数值未发生变化，不重新加载数据
+    if (lastWallpaperValue === props.src) {
+      return
+    }
+    loadWallpaper(props.src)
+    lastWallpaperValue = props.src
+  },
+  {
+    immediate: true
+  }
+)
 </script>

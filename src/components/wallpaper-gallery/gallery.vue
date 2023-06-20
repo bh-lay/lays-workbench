@@ -42,20 +42,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { setAppConfigItem } from '@/assets/ts/app-config'
+<script setup lang="ts">
 import WallpaperItem from './wallpaper-item.vue'
 import wallpaperList from './wallpaper-list'
-export default {
-  name: 'SettingsWallpaperGallery',
-  components: { WallpaperItem },
-  setup() {
-    return {
-      wallpaperList,
-      applyWallpaper(url: string) {
-        setAppConfigItem('wallpaper', url)
-      },
-    }
-  },
+
+const emits = defineEmits(['selected'])
+
+function applyWallpaper(url: string) {
+  emits('selected', url)
 }
 </script>

@@ -17,28 +17,23 @@
   </div>
 </template>
 
-<script lang="ts">
-import { ref } from 'vue'
+<script setup lang="ts">
+import { Ref, ref, inject } from 'vue'
 import { bookmarkInsertService } from '@database/services/bookmark-service'
 import Tab from './tab.vue'
 import CustomLink from './custom-link.vue'
 import WidgetsSelector from './widgets-selector.vue'
 import { Bookmark } from '@/database/entity/bookmark'
-export default {
-  name: 'AddBookmarkMain',
-  components: { Tab, CustomLink, WidgetsSelector },
-  emits: ['success'],
-  setup(props, context) {
-    const activeCreateType = ref('custom')
-    return {
-      activeCreateType,
-      handleConfirm(data: Bookmark) {
-        bookmarkInsertService(data)
-          .then(() => {
-            context.emit('success')
-          })
-      },
-    }
-  },
+
+const emits = defineEmits(['success'])
+const activeCreateType = ref('custom')
+const activeDesktopId = inject<Ref<string>>('activeDesktopId')
+
+function handleConfirm(data: Bookmark) {
+  data.parent = activeDesktopId?.value || ''
+  bookmarkInsertService(data)
+    .then(() => {
+      emits('success')
+    })
 }
 </script>

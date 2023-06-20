@@ -1,6 +1,7 @@
 import { getIDBRequest } from '../db'
-import { Bookmark, BookmarkType } from '../entity/bookmark'
+import { Bookmark, BookmarkSystemId, BookmarkType } from '../entity/bookmark'
 import { autoInitDefaultData, loadDefaultData } from '../utils/init-bookmark-to-db'
+import { jsonParse, jsonStringify } from '@/assets/ts/utils'
 import {
   bookmarkInsertManager,
   bookmarkUpdateManager,
@@ -30,10 +31,13 @@ export function bookmarkInsertService(bookmarkItem: Bookmark, db?: IDBDatabase):
       return bookmarkInsertManager(db, bookmarkItem)
     })
 }
-export function bookmarkGetService(bookmarkId: string) {
-  return getIDBRequest().then((db: IDBDatabase) => {
-    return bookmarkGetManager(db, bookmarkId)
-  })
+export async function bookmarkGetService(bookmarkId: string, indexdb?: IDBDatabase) {
+  const db: IDBDatabase = await getDbFromParams(indexdb)
+  try {
+    return await bookmarkGetManager(db, bookmarkId)
+  } catch (e) {
+    return getBookmarkByDefault(db, bookmarkId)
+  }
 }
 
 export async function bookmarkUpdateService(bookmarkItem: Bookmark, indexdb?: IDBDatabase) {
@@ -41,6 +45,21 @@ export async function bookmarkUpdateService(bookmarkItem: Bookmark, indexdb?: ID
   await autoInitDefaultData(db)
   return await bookmarkUpdateManager(db, bookmarkItem)
 }
+
+export async function bookmarkDesktopWallpaperUpdateService(bookmarkId: string, wallpaper: string) {
+  const db = await getIDBRequest()
+  await autoInitDefaultData(db)
+
+  const bookmarkItem = await bookmarkGetService(bookmarkId)
+  if (bookmarkItem.parent !== BookmarkSystemId.desktop) {
+    throw new Error('must be desktop')
+  }
+  const desktopValue = jsonParse(bookmarkItem.value as string || '')
+  desktopValue.wallpaper = wallpaper
+  bookmarkItem.value = jsonStringify(desktopValue)
+  return await bookmarkUpdateManager(db, bookmarkItem)
+}
+
 export async function bookmarkRemoveService(bookmarkId: string) {
   const db: IDBDatabase = await getIDBRequest()
   await autoInitDefaultData(db)
@@ -79,6 +98,24 @@ async function getListByDefault(db: IDBDatabase, query: queryOptions) {
     }
   })
   return data
+}
+
+// 通过默认数据加载数据
+async function getBookmarkByDefault(db: IDBDatabase, bookmarkId: string) {
+  const data: Bookmark[] = []
+  // 若数据库中有数据，则放弃查找
+  const count = await bookmarkCountManager(db)
+  if (count > 0) {
+    throw new Error('')
+  }
+  // 加载远端数据
+  const defaultData = await loadDefaultData()
+  const matchedBookmark = defaultData.bookmarks.find(item => item.id === bookmarkId)
+  if (matchedBookmark) {
+    return new Bookmark(matchedBookmark)
+  } else {
+    throw new Error('')
+  }
 }
 export async function bookmarkListService(query: queryOptions): Promise<Bookmark[]> {
   const db: IDBDatabase = await getIDBRequest()

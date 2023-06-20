@@ -1,14 +1,18 @@
-const APP_CONFIG_DEFAULT = {
-  maxContainerWidth: 1200,
-  gridSize: 84,
-  iconRadius: 8,
-  wallpaper: 'https://w.wallhaven.cc/full/nz/wallhaven-nzkggo.jpg',
-  searchEngineName: 'caniuse',
+type AppConfig = {
+  maxContainerWidth: number,
+  activeDesktop: string,
+  gridSize: number,
+  searchEngineName: string,
 }
 
-let APP_CONFIG: Record<string, string | number> = new Proxy({}, {})
+const APP_CONFIG_DEFAULT: AppConfig = {
+  maxContainerWidth: 1200,
+  activeDesktop: '',
+  gridSize: 84,
+  searchEngineName: 'caniuse',
+}
+let APP_CONFIG: AppConfig | null = null
 
-type configKey = 'gridSize' | 'iconRadius' | 'maxContainerWidth'
 const localStorageKey = 'APP_CONFIG_V1'
 
 // 数据持久化逻辑
@@ -42,7 +46,7 @@ function afterDataChangeDelay() {
 }
 
 // 初始化
-export function initAppConfig() {
+export function initAppConfig(): AppConfig {
   // 尝试从本地获取数据
   const localData = localStorage.getItem(localStorageKey)
   let configFromLocal = null
@@ -55,29 +59,46 @@ export function initAppConfig() {
   }
   // 合并本地数据与默认数据
   const appConfig = Object.assign({}, APP_CONFIG_DEFAULT, configFromLocal)
-  // 初始化 Proxy 对象
-  APP_CONFIG = new Proxy(appConfig, {
-    set(target, key: configKey, value) {
+  const newAppConfig: AppConfig = new Proxy(appConfig, {
+    set(target, key: string, value) {
       // 若不在定义的类型中，则不设置
-      if (typeof APP_CONFIG_DEFAULT[key] === 'undefined') {
-        return false
+      if (key in APP_CONFIG_DEFAULT) {
+        afterDataChangeDelay()
+        return Reflect.set(target, key, value)
       }
-      afterDataChangeDelay()
-      return Reflect.set(target, key, value)
+      return false
     },
   })
+
+  // 初始化 Proxy 对象
+  APP_CONFIG = newAppConfig
+  return newAppConfig
 }
 
-export function getAppConfig() {
-  return APP_CONFIG
+export function getAppConfig(): AppConfig {
+  if (APP_CONFIG) {
+    return APP_CONFIG
+  }
+  return initAppConfig()
 }
 export function getAppConfigDefault() {
   return Object.assign({}, APP_CONFIG_DEFAULT)
 }
-export function getAppConfigItem(key: string): string | number  {
-  return APP_CONFIG[key]
+export function getAppConfigItem(key: keyof AppConfig) {
+  return getAppConfig()[key]
 }
 
-export function setAppConfigItem(key: string, value: string | number) {
-  APP_CONFIG[key] = value
+export function setAppConfigItem(key: keyof AppConfig, value: string | number) {
+  const appConfig = getAppConfig()
+
+  if (typeof value === 'string') {
+    if (key === 'activeDesktop' || key === 'searchEngineName') {
+      appConfig[key] = value
+    }
+  } else if (typeof value === 'number') {
+    if (key === 'maxContainerWidth' || key === 'gridSize') {
+      appConfig[key] = value
+    }
+  }
+  
 }

@@ -58,7 +58,7 @@
           <div class="label">
             壁纸设置
           </div>
-          <wallpaper @next="settingWallpaper" />
+          <wallpaper :src="activeWallpaper" @next="settingWallpaper" />
         </div>
         <div class="setting-group">
           <div class="label">
@@ -77,21 +77,19 @@
   </v-dropdown>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { replaceRouter } from '@/assets/ts/router'
 import Layout from './layout.vue'
 import Wallpaper from './wallpaper.vue'
 import DataIo from './data-io.vue'
 
-export default {
-  name: 'SettingsCenter',
-  components: { Layout, Wallpaper, DataIo },
-  setup() {
-    return {
-      settingWallpaper() {
-        replaceRouter('settings', 'wallpaper')
-      },
-    }
+const props = defineProps({
+  activeWallpaper: {
+    type: String,
+    default: ''
   },
+})
+function settingWallpaper() {
+  replaceRouter('settings', 'wallpaper')
 }
 </script>

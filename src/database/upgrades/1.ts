@@ -94,7 +94,7 @@ async function addDesktopDefaultBookmark(objectStore: IDBObjectStore) {
     size: 1,
     icon: 'mdi:worker',
     sort: 0,
-    value: '',
+    value: '{"wallpaper": "https://w.wallhaven.cc/full/nz/wallhaven-nzkggo.jpg"}',
     desc: ''
   })
   await addBookmark(objectStore, {
@@ -106,7 +106,7 @@ async function addDesktopDefaultBookmark(objectStore: IDBObjectStore) {
     size: 1,
     icon: 'mdi:fish',
     sort: 0,
-    value: '',
+    value: '{"wallpaper": "https://w.wallhaven.cc/full/wy/wallhaven-wyewex.jpg"}',
     desc: ''
   })
 }
