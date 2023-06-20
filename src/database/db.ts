@@ -7,6 +7,8 @@ function getIDBObject() {
     window.msIndexedDB
 }
 
+export const dbVersioon = 2
+
 export function isSupportIDB() {
   const indexedDB = getIDBObject()
   return !!(indexedDB && indexedDB.open)
@@ -14,7 +16,7 @@ export function isSupportIDB() {
 export function getIDBRequest(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const indexedDB = getIDBObject()
-    const request = indexedDB.open('data-store', 2)
+    const request = indexedDB.open('data-store', dbVersioon)
     request.onerror = function() {
       const error = new Error('建立数据库连接失败！')
       reject(error)

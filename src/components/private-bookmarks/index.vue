@@ -55,6 +55,7 @@ import FolderEditor from './folder-editor.vue'
 import {
   Bookmark,
   BookmarkType,
+  BookmarkSystemId,
 } from '@database/entity/bookmark'
 import { bookmarkInsertService } from '@database/services/bookmark-service'
 import FolderItem from './folder-item.vue'
@@ -63,7 +64,7 @@ export default {
   name: 'PrivateBookmarkCenter',
   components: { FolderItem, MainList, FolderEditor },
   setup() {
-    const activeId = ref('bookmark-collection')
+    const activeId = ref(BookmarkSystemId.collection)
     const changedParentId = ref('')
 
     const folderEditorConfig = ref({
@@ -78,7 +79,7 @@ export default {
       changedParentId,
       folderEditorConfig,
       rootFolder: new Bookmark({
-        id: 'bookmark-collection',
+        id: BookmarkSystemId.collection,
         name: '我的书签',
       }),
       handleSelect(selectedId: string) {

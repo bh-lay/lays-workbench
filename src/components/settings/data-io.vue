@@ -143,14 +143,12 @@
 import { ref } from 'vue'
 import { Message } from '@/ui-lib/message'
 import {
-  bookmarkListService,
-  bookmarkImportService,
-  bookmarkClearService,
-} from '@database/services/bookmark-service'
+  dbBackupDataType,
+  dbExportService,
+  dbImportService,
+  dbEmptyService,
+} from '@database/services/db-management-service'
 import { Bookmark } from '@/database/entity/bookmark'
-type backupData = {
-  bookmarks: Bookmark[]
-} | null
 
 function getFileContent(file: File):  Promise<string> {
   return new Promise((resolve, reject) => {
@@ -169,7 +167,7 @@ export default {
   setup() {
     const isWorking = ref(false)
     const downloadVisible = ref(false)
-    let exportData: backupData = null
+    let exportData: dbBackupDataType | null = null
 
     return {
       isWorking,
@@ -177,20 +175,16 @@ export default {
       exportDataToMemeory() {
         isWorking.value = true
         const startTime = Date.now()
-        return bookmarkListService({
-          parent: '*',
-        }).then((list) => {
+        return dbExportService().then((exportData): Promise<dbBackupDataType> => {
           // 五秒导出，不能太快了
           return new Promise(resolve => {
             const now = Date.now()
             setTimeout(() => {
-              resolve({
-                bookmarks: list,
-              })
+              resolve(exportData)
             }, 5000 - (now - startTime))
           })
-        }).then(data => {
-          exportData = data as backupData
+        }).then((data: dbBackupDataType) => {
+          exportData = data
           isWorking.value = false
           downloadVisible.value = true
         })
@@ -226,8 +220,8 @@ export default {
           .then((contentStr: string) => {
             return JSON.parse(contentStr)
           })
-          .then(backupData => {
-            return bookmarkImportService(backupData.bookmarks)
+          .then(dbBackupDataType => {
+            return dbImportService(dbBackupDataType)
           })
           .then(() => {
             location.reload()
@@ -246,7 +240,7 @@ export default {
           confirmText: '继续清空',
           cancelText: '取消',
           confirm() {
-            bookmarkClearService()
+            dbEmptyService()
               .then(() => {
                 // 一秒后重载界面
                 setTimeout(() => {

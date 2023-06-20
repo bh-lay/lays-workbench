@@ -1,5 +1,5 @@
 // upgrade: 1 -> 2
-import { BookmarkType, BookmarkSize } from '@database/entity/bookmark'
+
 type dataItem = {
   [key: string]: string | number | null | undefined
 }
@@ -90,8 +90,8 @@ async function addDesktopDefaultBookmark(objectStore: IDBObjectStore) {
     parent: 'desktop',
     name: '在搬砖',
     undercoat: '#177cb0',
-    type: BookmarkType.folder,
-    size: BookmarkSize.small,
+    type: 4,
+    size: 1,
     icon: 'mdi:worker',
     sort: 0,
     value: '',
@@ -102,8 +102,8 @@ async function addDesktopDefaultBookmark(objectStore: IDBObjectStore) {
     parent: 'desktop',
     name: '在摸鱼',
     undercoat: '#4caf50',
-    type: BookmarkType.folder,
-    size: BookmarkSize.small,
+    type: 4,
+    size: 1,
     icon: 'mdi:fish',
     sort: 0,
     value: '',
