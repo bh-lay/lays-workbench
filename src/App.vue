@@ -136,7 +136,7 @@ textarea
 
 <script setup lang="ts">
 import { Ref, onUnmounted, provide, ref, watch } from 'vue'
-import { getAppConfig } from '@/assets/ts/app-config'
+import { getAppConfig, setAppConfigItem } from '@/assets/ts/app-config'
 import { bookmarkGetService } from '@/database/services/bookmark-service'
 import Gallery from '@/components/gallery.vue'
 import SearchEntrance from '@/components/search-entrance/index.vue'
@@ -155,7 +155,7 @@ function jsonParse(input: string) {
 }
 const appConfig =  getAppConfig()
 const focused = ref(false)
-const activeDesktopId: Ref<string> = ref(appConfig.activeDesktop)
+const activeDesktopId: Ref<string> = ref(appConfig.activeDesktopId)
 // 阻止双指放大
 function preventPageZoom(event: Event) {
   event.preventDefault()
@@ -174,12 +174,16 @@ const activeWallpaper: Ref<string> = ref('')
 watch(
   activeDesktopId,
   (value) => {
+    setAppConfigItem('activeDesktopId', value)
     bookmarkGetService(value)
       .then((currentDesktop: Bookmark) => {
         const desktopValue = jsonParse(currentDesktop.value as string || '') || {}
         activeWallpaper.value = desktopValue.wallpaper as string || ''
       })
-  }
+  },
+  {
+    immediate: true,
+  },
 )
 
 </script>
