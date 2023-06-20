@@ -117,6 +117,7 @@ import { Ref, ref, watch } from 'vue'
 import {
   Bookmark,
   BookmarkType,
+  BookmarkSystemId,
 } from '@database/entity/bookmark'
 import { bookmarkListService } from '@database/services/bookmark-service'
 export default {
@@ -134,7 +135,7 @@ export default {
     },
     active: {
       type: String,
-      default: 'bookmark-collection',
+      default: BookmarkSystemId.collection,
     },
     expand: {
       type: Boolean,

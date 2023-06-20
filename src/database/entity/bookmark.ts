@@ -12,6 +12,11 @@ export enum BookmarkSize {
   medium = 2,
   large = 3,
 }
+export const BookmarkSystemId = {
+  root: 'root',
+  collection: 'bookmark-collection',
+  desktop: 'desktop',
+}
 // 书签图标类型
 type BookmarkIconCrab = 'crab'
 type BookmarkIconMdi = `mdi:${string}`
