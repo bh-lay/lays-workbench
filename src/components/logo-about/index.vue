@@ -1,25 +1,14 @@
 <style lang="stylus" scoped>
 .page-title
-  height 40px
-  padding 0 30px 0 15px
+  height 34px
+  padding 0 16px
   display flex
   align-items center
   color #c2c9d6
   cursor pointer
   transition .15s
-  svg
-    width 26px
-    height 24px
-    vertical-align middle
-    fill rgba(255, 255, 255, .8)
-  span
-    display inline-block
-    vertical-align middle
-    height 20px
-    padding-left 6px
-    line-height 20px
-    font-size 14px
-    color rgba(255, 255, 255, .5)
+  line-height 20px
+  font-size 12px
   &:hover
     background #3e4451
   &:active,
@@ -84,9 +73,8 @@
   <v-dropdown
     class="page-title"
     type="plain"
-    placement="bottom-left"
+    placement="bottom-right"
   >
-    <v-mdi name="mdi-hail" />
     <span>小剧起始页</span>
     <template #body>
       <div class="about-layer">
