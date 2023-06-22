@@ -59,9 +59,12 @@ const props = defineProps( {
   },
 })
 
-let lastWallpaperValue: string | null = null
-const loadWallpaper = (currentUrl: string) => {
-  isImageLoaded.value = false
+function waitFadeOut(time: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time)
+  })
+}
+function renderWallpaper (currentUrl: string)  {
   // 长度小于17，认定为是颜色值
   // http://a.cn/1.jpg
   if (currentUrl.length < 17) {
@@ -88,13 +91,14 @@ const loadWallpaper = (currentUrl: string) => {
 // 当 APP 配置数据发生变动，重载
 watch(
   () => props.src,  
-  () => {
-    // 数值未发生变化，不重新加载数据
-    if (lastWallpaperValue === props.src) {
-      return
+  async (newSrc, oldSrc) => {
+    if (oldSrc && isImageLoaded.value) {
+      isImageLoaded.value = false
+      await waitFadeOut(800)
+    } else {
+      isImageLoaded.value = false
     }
-    loadWallpaper(props.src)
-    lastWallpaperValue = props.src
+    renderWallpaper(newSrc)
   },
   {
     immediate: true

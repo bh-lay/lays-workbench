@@ -3,14 +3,14 @@ import { jsonParse } from "./utils"
 type AppConfig = {
   maxContainerWidth: number,
   activeDesktopId: string,
-  gridSize: number,
+  desktopZoom: number,
   searchEngineName: string,
 }
 
 const APP_CONFIG_DEFAULT: AppConfig = {
   maxContainerWidth: 1200,
   activeDesktopId: '',
-  gridSize: 84,
+  desktopZoom: 1,
   searchEngineName: 'caniuse',
 }
 let APP_CONFIG: AppConfig | null = null
@@ -53,7 +53,7 @@ function setAppConfigItemValue(appConfigItem: AppConfig, key: keyof AppConfig, v
       appConfigItem[key] = value
     }
   } else if (typeof value === 'number') {
-    if (key === 'maxContainerWidth' || key === 'gridSize') {
+    if (key === 'maxContainerWidth' || key === 'desktopZoom') {
       appConfigItem[key] = value
     }
   }
