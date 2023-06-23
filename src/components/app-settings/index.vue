@@ -50,10 +50,38 @@
     class="settings-btn"
     type="plain"
     placement="bottom-left"
+    @visible-before="handleDropdownVisible"
   >
-    <div class="app-name">小剧大赢家</div>
+    <div class="app-name">{{ userName }}</div>
     <template #body>
       <div class="group-list">
+        <div class="setting-group">
+          <div class="label">
+            称呼
+          </div>
+          <v-input
+            v-model="userNameInEdit"
+            v-focus
+            type="text"
+            placeholder="怎么称呼你 ？"
+            @keydown.enter="userNameConfirm"
+          />
+          <div v-if="userNameInEdit !== userName" style="padding-top: 10px;">
+            <v-button
+              type="primary"
+              @click="userNameConfirm"
+              style="margin-right: 10px;"
+            >
+              修改
+            </v-button>
+            <v-button
+              type="secondary"
+              @click="userNameCancel"
+            >
+              取消
+            </v-button>
+          </div>
+        </div>
         <div class="setting-group">
           <div class="label">
             壁纸设置
@@ -79,9 +107,11 @@
 
 <script setup lang="ts">
 import { replaceRouter } from '@/assets/ts/router'
+import { getAppConfigItem, setAppConfigItem } from '@/assets/ts/app-config'
 import Layout from './layout.vue'
 import Wallpaper from './wallpaper.vue'
 import DataIo from './data-io.vue'
+import { ref } from 'vue'
 
 const props = defineProps({
   activeWallpaper: {
@@ -89,6 +119,19 @@ const props = defineProps({
     default: ''
   },
 })
+const userNameInEdit = ref('')
+const userName = ref(getAppConfigItem('userName') as string || '')
+function userNameCancel() {
+  userNameInEdit.value = userName.value
+}
+function handleDropdownVisible() {
+  userNameInEdit.value = userName.value
+}
+function userNameConfirm() {
+  userName.value = userNameInEdit.value
+  setAppConfigItem('userName', userNameInEdit.value)
+}
+
 function settingWallpaper() {
   replaceRouter('settings', 'wallpaper')
 }

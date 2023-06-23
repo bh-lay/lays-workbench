@@ -176,7 +176,6 @@
 
 <script lang="ts">
 import { ref, getCurrentInstance, Ref, ComponentInternalInstance } from 'vue'
-import { getAppConfigItem } from '@/assets/ts/app-config'
 import { getGridSize } from '@/assets/ts/css-variables'
 import dragHandle, { supportTouch } from '@/assets/ts/drag-handle'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'

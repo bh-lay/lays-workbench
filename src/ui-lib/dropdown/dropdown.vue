@@ -64,6 +64,7 @@ const props = defineProps({
     default: 'default',
   },
 })
+const emits = defineEmits(['visible-before'])
 
 provide('close-dropdown', () => {
   visible.value = false
@@ -85,6 +86,7 @@ function onClickButton() {
   if (!buttonNode) {
     return
   }
+  emits('visible-before')
   const buttonBRC = buttonNode.getBoundingClientRect()
   if (props.placement === 'bottom-right') {
     nextTick(() => {

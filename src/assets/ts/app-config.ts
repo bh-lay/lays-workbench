@@ -1,6 +1,7 @@
 import { jsonParse } from "./utils"
 
 type AppConfig = {
+  userName: string,
   maxContainerWidth: number,
   activeDesktopId: string,
   desktopZoom: number,
@@ -8,6 +9,7 @@ type AppConfig = {
 }
 
 const APP_CONFIG_DEFAULT: AppConfig = {
+  userName: '小剧',
   maxContainerWidth: 1200,
   activeDesktopId: '',
   desktopZoom: 1,
@@ -49,7 +51,7 @@ function afterDataChangeDelay() {
 
 function setAppConfigItemValue(appConfigItem: AppConfig, key: keyof AppConfig, value: any) {
   if (typeof value === 'string') {
-    if (key === 'activeDesktopId' || key === 'searchEngineName') {
+    if (key === 'activeDesktopId' || key === 'searchEngineName' || key === 'userName') {
       appConfigItem[key] = value
     }
   } else if (typeof value === 'number') {
