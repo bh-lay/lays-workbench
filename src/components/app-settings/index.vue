@@ -1,20 +1,38 @@
 <style lang="stylus" scoped>
 .settings-btn
-  width 36px
-  height 36px
-  display flex
-  align-items center
-  justify-content center
+  position relative
   cursor pointer
-  border-radius 4px
   transition .2s ease-in-out
   background #333b4d
-  color #c2c9d6
+  &:before
+    position absolute
+    top 0
+    right -8px
+    content ''
+    width 0
+    height 0
+    border-style solid
+    border-width 17px 0 17px 8px
+    border-color transparent transparent transparent #333b4d
+    transition .2s ease-in-out
   &:hover
     background #252b37
+    &:before
+      border-left-color #252b37
   &:active,
   &.active
     background #181d25
+    &:before
+      border-left-color #181d25
+.app-name
+  max-width 10em
+  padding 0 10px 0 15px
+  white-space nowrap
+  text-overflow ellipsis
+  overflow hidden
+  line-height 34px
+  font-size 14px
+  color #c2c9d6
 .group-list
   width 340px
   margin-top 5px
@@ -31,19 +49,16 @@
   <v-dropdown
     class="settings-btn"
     type="plain"
-    placement="bottom-right"
+    placement="bottom-left"
   >
-    <v-mdi
-      name="mdi-tune"
-      size="18"
-    />
+    <div class="app-name">小剧大赢家</div>
     <template #body>
       <div class="group-list">
         <div class="setting-group">
           <div class="label">
             壁纸设置
           </div>
-          <wallpaper @next="settingWallpaper" />
+          <wallpaper :src="activeWallpaper" @next="settingWallpaper" />
         </div>
         <div class="setting-group">
           <div class="label">
@@ -62,21 +77,19 @@
   </v-dropdown>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { replaceRouter } from '@/assets/ts/router'
 import Layout from './layout.vue'
 import Wallpaper from './wallpaper.vue'
 import DataIo from './data-io.vue'
 
-export default {
-  name: 'SettingsCenter',
-  components: { Layout, Wallpaper, DataIo },
-  setup() {
-    return {
-      settingWallpaper() {
-        replaceRouter('settings', 'wallpaper')
-      },
-    }
+const props = defineProps({
+  activeWallpaper: {
+    type: String,
+    default: ''
   },
+})
+function settingWallpaper() {
+  replaceRouter('settings', 'wallpaper')
 }
 </script>

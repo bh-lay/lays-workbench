@@ -177,6 +177,7 @@
 <script lang="ts">
 import { ref, getCurrentInstance, Ref, ComponentInternalInstance } from 'vue'
 import { getAppConfigItem } from '@/assets/ts/app-config'
+import { getGridSize } from '@/assets/ts/css-variables'
 import dragHandle, { supportTouch } from '@/assets/ts/drag-handle'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 type mapItem = {
@@ -231,9 +232,8 @@ function getMouseTriggered(
   type: string,
   target?: mapItem,
   size?: BookmarkSize,
-} {
-  const gridSize = getAppConfigItem('gridSize') as number
-  const gridGap = gridSize * 0.4
+} { 
+  const gridGap = getGridSize() * 0.4
   // 是否拖拽合并
   for (let i = 0; i < map.length; i++) {
     let mapItem = map[i]
@@ -348,8 +348,7 @@ export default {
     const clientX = ref(0)
     const clientY = ref(0)
     // const gridTestData: Ref<mapItem[]> = ref([])
-    const gridSize = getAppConfigItem('gridSize') as number
-    const gridGap = gridSize * 0.4
+    const gridGap = getGridSize() * 0.4
     const shadowRectStyle = ref({
       top: '',
       left: '',

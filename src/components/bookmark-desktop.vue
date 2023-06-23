@@ -98,6 +98,8 @@ import {
   Ref,
   onMounted,
   shallowRef,
+  inject,
+  watch,
 } from 'vue'
 import {
   Bookmark,
@@ -204,18 +206,30 @@ export default {
   components: { BookmarkItem, AddBookmark, CustomLink, DragedLayer, FolderLayer },
   setup() {
     let bookmarkList: Ref<Bookmark[]> = ref([])
+    const activeDesktopId = inject<Ref<string>>('activeDesktopId')
 
     const selectedBookmarkItem: Ref<Bookmark> = ref(new Bookmark({}))
     const getList = function () {
+      const usedDesktopId = activeDesktopId?.value || ''
+      if (!usedDesktopId) {
+        bookmarkList.value = []
+        return
+      }
       bookmarkListService({
-        parent: 'desktop-default',
+        parent: usedDesktopId,
       }).then((list) => {
         bookmarkList.value = list
       })
     }
-    onMounted(() => {
-      getList()
-    })
+    watch(
+      () => activeDesktopId?.value,
+      () => {
+        getList()
+      },
+      {
+        immediate: true,
+      }
+    )
     function triggerFolderIconChange(bookmarkItem: Bookmark) {
       // 用 value 触发重绘
       bookmarkItem.value = bookmarkItem.value === '1' ? '2' : '1'
@@ -354,6 +368,7 @@ export default {
       },
     })
     return {
+      activeDesktopId,
       bookmarkList,
       BookmarkType,
       BookmarkSize,

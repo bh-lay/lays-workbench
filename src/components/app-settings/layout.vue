@@ -31,12 +31,12 @@
         界面缩放
       </div>
       <v-slider
-        v-model="gridSize"
-        :min="70"
-        :max="120"
+        v-model="desktopZoom"
+        :min="0.7"
+        :max="1.5"
         :marks="[
           {
-            value: appConfigDefault.gridSize,
+            value: appConfigDefault.desktopZoom,
             label: '',
           },
         ]"
@@ -53,19 +53,19 @@ export default {
   name: 'SettingsLayout',
   setup() {
     const appConfig = getAppConfig()
-    const gridSize = ref(appConfig.gridSize)
+    const desktopZoom = ref(appConfig.desktopZoom)
     const maxContainerWidth = ref(appConfig.maxContainerWidth)
     const windowWidth = window.innerWidth
     const appConfigDefault = getAppConfigDefault()
     watch(maxContainerWidth, (value) => {
       appConfig.maxContainerWidth = value
     })
-    watch(gridSize, (value) => {
-      appConfig.gridSize = value
+    watch(desktopZoom, (value) => {
+      appConfig.desktopZoom = value
     })
     return {
       appConfigDefault,
-      gridSize,
+      desktopZoom,
       maxContainerWidth,
       windowWidth,
     }

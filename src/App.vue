@@ -47,6 +47,11 @@ textarea
   align-items center
   justify-content space-between
   padding 0 15px 0 10px
+  .side-toolset
+    display flex
+    background #333b4d
+    border-radius 4px
+    overflow hidden
 .scroll-body
   position relative
   display flex
@@ -88,16 +93,20 @@ textarea
 </style>
 
 <template>
-  <gallery />
+  <gallery
+    :src="activeWallpaper"
+  />
   <div
     class="pager"
     @contextmenu.prevent
   >
     <div class="pager-header">
       <div class="pager-header-inner">
-        <DesktopSelector v-model="activeDesktopId" />
+        <div class="side-toolset">
+          <app-settings :active-wallpaper="activeWallpaper"/>
+          <desktop-selector v-model="activeDesktopId" />
+        </div>
         <logo-about />
-        <settings />
       </div>
     </div>
     <div class="pager-body">
@@ -114,10 +123,6 @@ textarea
     </div>
     <div class="pager-footer">
       <div class="footer-copyright">
-        <a
-          href="http://e.bh-lay.com"
-          target="_blank"
-        >小剧起始页</a>
         by: <a
           href="http://bh-lay.com"
           target="_blank"
@@ -129,33 +134,56 @@ textarea
   <easy-router />
 </template>
 
-<script lang="ts">
-import { Ref, onUnmounted, ref } from 'vue'
+<script setup lang="ts">
+import { Ref, onUnmounted, provide, ref, watch } from 'vue'
+import { getAppConfig, setAppConfigItem } from '@/assets/ts/app-config'
+import { bookmarkGetService } from '@/database/services/bookmark-service'
 import Gallery from '@/components/gallery.vue'
 import SearchEntrance from '@/components/search-entrance/index.vue'
 import BookmarkDesktop from '@/components/bookmark-desktop.vue'
-import Settings from '@/components/settings/index.vue'
+import AppSettings from '@/components/app-settings/index.vue'
 import LogoAbout from '@/components/logo-about/index.vue'
 import DesktopSelector from '@/components/desktop-selector/index.vue'
 import EasyRouter from '@/components/easy-router.vue'
-
-export default {
-  components: { Gallery, SearchEntrance, BookmarkDesktop, LogoAbout, DesktopSelector, Settings, EasyRouter },
-  setup() {
-    const focused = ref(false)
-    const activeDesktopId: Ref<string> = ref('')
-    // 阻止双指放大
-    function preventPageZoom(event: Event) {
-      event.preventDefault()
-    }
-    document.addEventListener('gesturestart', preventPageZoom)
-    onUnmounted(() => {
-      document.removeEventListener('gesturestart', preventPageZoom)
-    })
-    return {
-      focused,
-      activeDesktopId,
-    }
-  },
+import { Bookmark } from './database/entity/bookmark'
+function jsonParse(input: string) {
+  try {
+    return JSON.parse(input)
+  } catch (e) {
+    return {}
+  }
 }
+const appConfig =  getAppConfig()
+const focused = ref(false)
+const activeDesktopId: Ref<string> = ref(appConfig.activeDesktopId)
+// 阻止双指放大
+function preventPageZoom(event: Event) {
+  event.preventDefault()
+}
+document.addEventListener('gesturestart', preventPageZoom)
+onUnmounted(() => {
+  document.removeEventListener('gesturestart', preventPageZoom)
+})
+provide('activeDesktopId', activeDesktopId)
+provide('changeWallpaper', (src: string) => {
+  activeWallpaper.value = src
+})
+
+const activeWallpaper: Ref<string> = ref('')
+
+watch(
+  activeDesktopId,
+  (value) => {
+    setAppConfigItem('activeDesktopId', value)
+    bookmarkGetService(value)
+      .then((currentDesktop: Bookmark) => {
+        const desktopValue = jsonParse(currentDesktop.value as string || '') || {}
+        activeWallpaper.value = desktopValue.wallpaper as string || ''
+      })
+  },
+  {
+    immediate: true,
+  },
+)
+
 </script>

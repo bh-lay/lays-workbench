@@ -1,33 +1,48 @@
 <style lang="stylus" scoped>
 .desktop-selector
-  height 40px
-  padding 0 30px 0 15px
+  height 34px
+  padding 0 6px 0 15px
   display flex
   align-items center
-  color #c2c9d6
   cursor pointer
   transition .15s
-  svg
-    width 26px
-    height 24px
-    vertical-align middle
-    fill rgba(255, 255, 255, .8)
-  span
-    display inline-block
-    vertical-align middle
-    height 20px
-    padding-left 6px
-    line-height 20px
-    font-size 14px
-    color rgba(255, 255, 255, .5)
+  .mdi-icon
+    padding 3px
+    margin-left 5px
+    border-radius 4px
+    color #c2c9d6
+    opacity 0
+    transition .2s
+    &:hover
+      background #333b4d
+    &:active
+      background #181d25
+
   &:hover
-    background #3e4451
-  &:active,
+    background #252b37
+    .mdi-icon
+      opacity 1
   &.active
-    background #353a45
+    background #181d25
+.desktop-color-dot
+  display inline-block
+  width 6px
+  height 6px
+  border-radius 3px
+  vertical-align middle
+.desktop-name
+  display inline-block
+  vertical-align middle
+  max-width 10em
+  padding-left 6px
+  white-space nowrap
+  text-overflow ellipsis
+  overflow hidden
+  line-height 34px
+  font-size 12px
+  color #c2c9d6
 .about-layer
-  width 260px
-  padding 20px 26px 50px
+  // padding 20px 26px 50px
   background #3e4451
   color #949eb3
 
@@ -39,17 +54,31 @@
     type="plain"
     placement="bottom-left"
   >
-    <v-mdi name="mdi-hail" />
-    <span>{{ activeDesktop }}</span>
+    <div v-if="activeDesktop">
+      <span class="desktop-color-dot" :style="{
+        background: activeDesktop.undercoat
+      }"></span>
+      <span class="desktop-name">{{ activeDesktop.name }}</span>
+    </div>
+    <span v-else>无桌面</span>
+    <v-mdi
+      name="mdi-tune"
+      size="16"
+      @click.stop="handleClickSettings"
+    />
     <template #body>
       <div class="about-layer">
-        <div
+        <v-dropdown-item
           v-for="desktop in desktopList"
           :key="desktop.id"
+          :active="modelValue === desktop.id"
           @click="switchActiveDesktop(desktop.id)"
         >
-          {{ desktop }}
-        </div>
+          <span class="desktop-color-dot" :style="{
+            background: desktop.undercoat
+          }"></span>
+          <span class="desktop-name">{{ desktop.name }}</span>
+        </v-dropdown-item>
       </div>
     </template>
   </v-dropdown>
@@ -62,6 +91,7 @@ import {
   onMounted,
   watch,
 } from 'vue'
+import { Message } from '@/ui-lib/message/index'
 import { Bookmark, BookmarkSystemId } from '@database/entity/bookmark'
 import { bookmarkListService } from '@database/services/bookmark-service'
 
@@ -95,7 +125,11 @@ function automaticSelectFirstDesktop () {
 function switchActiveDesktop(bookmarkId: string) {
   emits('update:modelValue', bookmarkId)
 }
-
+function handleClickSettings() {
+  new Message({
+    message: '新增、修改桌面正在开发中，请稍后 ！',
+  })
+}
 watch(
   () => props.modelValue,
   () => {

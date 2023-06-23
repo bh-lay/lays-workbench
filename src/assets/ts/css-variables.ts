@@ -1,16 +1,14 @@
 import { onAppConfigChange, getAppConfig } from './app-config'
 
-type variableKey = 'maxContainerWidth' | 'gridSize' | 'iconRadius'
-const cssVariableKeys: variableKey[] = ['maxContainerWidth', 'gridSize', 'iconRadius']
-
 // 获取 CSS 变量配置
 function getCssVariables() {
-  const appConfig =  getAppConfig()
-  const result: Record<string, unknown> = {}
-  return cssVariableKeys.reduce(function(result, key) {
-    result[key] = appConfig[key]
-    return result
-  }, result)
+  const appConfig = getAppConfig()
+
+  return {
+    iconRadius: appConfig.desktopZoom * 8,
+    maxContainerWidth: appConfig.maxContainerWidth,
+    gridSize: getGridSize(),
+  }
 }
 function objectKeyToCssKey (text: string) {
   return '--' + text.replace(/(\w)([A-Z])/g, '$1-$2').toLocaleLowerCase()
@@ -30,6 +28,10 @@ function applyVariables() {
     const cssValue = `${variables[variableItemKey]}px`
     styleAtrribute.setProperty(cssKey, cssValue)
   }
+}
+
+export function getGridSize() {
+  return getAppConfig().desktopZoom * 84
 }
 
 export function initVariables() {

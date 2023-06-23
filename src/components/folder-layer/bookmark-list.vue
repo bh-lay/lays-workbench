@@ -65,12 +65,13 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   ref,
   Ref,
   shallowRef,
   onMounted,
+  inject,
 } from 'vue'
 import {
   Bookmark,
@@ -96,153 +97,137 @@ function moveIndexTo(list: Bookmark[], fromIndex: number, toIndex: number) {
     list.splice(fromIndex, 1)
   }
 }
-export default {
-  components: { BookmarkItem, DragedLayer },
-  props: {
-    parentId: {
-      type: String,
-      default: '',
-    },
-  },
-  emits: ['open-bookmark-editor', 'after-drop-to-desktop'],
-  setup(props, context) {
-    let bookmarkList: Ref<Bookmark[]> = ref([])
-    const selectedBookmarkItem: Ref<Bookmark | null> = ref(null)
-    const getList = function () {
-      bookmarkListService({
-        parent: props.parentId,
-      }).then((list) => {
-        // 强制更改为小组件模式
-        list.forEach(item => {
-          item.size = BookmarkSize.small
-        })
-        bookmarkList.value = list
-      })
-    }
-    onMounted(() => {
-      getList()
+
+const props =defineProps({
+parentId: {
+  type: String,
+  default: '',
+},
+})
+const emits = defineEmits(['open-bookmark-editor', 'after-drop-to-desktop'])
+
+let bookmarkList: Ref<Bookmark[]> = ref([])
+const selectedBookmarkItem: Ref<Bookmark | null> = ref(null)
+const getList = function () {
+  bookmarkListService({
+    parent: props.parentId,
+  }).then((list) => {
+    // 强制更改为小组件模式
+    list.forEach(item => {
+      item.size = BookmarkSize.small
     })
-    let needForbiddenClick = false
-    const willStartDrag = ref(false)
-    const isStartDrag = ref(false)
-    const isContextmenuVisible = ref(false)
+    bookmarkList.value = list
+  })
+}
+onMounted(() => {
+  getList()
+})
+let needForbiddenClick = false
+const willStartDrag = ref(false)
+const isStartDrag = ref(false)
+const isContextmenuVisible = ref(false)
+const activeDesktopId = inject<Ref<string>>('activeDesktopId')
 
-    function handleSetToDesktop() {
-      const selectedBookmark = selectedBookmarkItem.value
-      if (!selectedBookmark) {
-        return
-      }
-      selectedBookmark.parent = 'desktop-default'
-      bookmarkUpdateService(selectedBookmark)
-        .then(() => {
-          for (let i = 0; i < bookmarkList.value.length; i++) {
-            if (bookmarkList.value[i].id === selectedBookmark.id) {
-              bookmarkList.value.splice(i, 1)
-              break
-            }
-          }
-          context.emit('after-drop-to-desktop')
-        })
-        .catch(e => {
-          new Message({
-            message: e.message || '放回桌面失败',
-          })
-        })
-    }
-    function handleRemove() {
-      const selectedBookmark = selectedBookmarkItem.value
-      if (!selectedBookmark) {
-        return
-      }
-      bookmarkRemoveService(selectedBookmark.id).then(() => {
-        for (let i = 0; i < bookmarkList.value.length; i++) {
-          if (bookmarkList.value[i].id === selectedBookmark.id) {
-            bookmarkList.value.splice(i, 1)
-            break
-          }
+function handleSetToDesktop() {
+  const selectedBookmark = selectedBookmarkItem.value
+  if (!selectedBookmark) {
+    return
+  }
+  selectedBookmark.parent = activeDesktopId?.value || ''
+  bookmarkUpdateService(selectedBookmark)
+    .then(() => {
+      for (let i = 0; i < bookmarkList.value.length; i++) {
+        if (bookmarkList.value[i].id === selectedBookmark.id) {
+          bookmarkList.value.splice(i, 1)
+          break
         }
-      }).catch(e => {
-        new Message({
-          message: e.message || '删除失败',
-        })
+      }
+      emits('after-drop-to-desktop')
+    })
+    .catch(e => {
+      new Message({
+        message: e.message || '放回桌面失败',
       })
+    })
+}
+function handleRemove() {
+  const selectedBookmark = selectedBookmarkItem.value
+  if (!selectedBookmark) {
+    return
+  }
+  bookmarkRemoveService(selectedBookmark.id).then(() => {
+    for (let i = 0; i < bookmarkList.value.length; i++) {
+      if (bookmarkList.value[i].id === selectedBookmark.id) {
+        bookmarkList.value.splice(i, 1)
+        break
+      }
     }
+  }).catch(e => {
+    new Message({
+      message: e.message || '删除失败',
+    })
+  })
+}
 
-    const dragEvent: Ref<MouseEvent | TouchEvent | null> = shallowRef(null)
-    return {
-      dragEvent,
-      willStartDrag,
-      isStartDrag,
-      isContextmenuVisible,
-      bookmarkList,
-      BookmarkType,
-      BookmarkSize,
-      selectedBookmarkItem,
-      refreshList() {
-        getList()
-      },
-      openItem(data: Bookmark) {
-        if (needForbiddenClick) {
-          return
+const dragEvent: Ref<MouseEvent | TouchEvent | null> = shallowRef(null)
+
+function openItem(data: Bookmark) {
+  if (needForbiddenClick) {
+    return
+  }
+  willStartDrag.value = false
+  openBookmark(data)
+}
+function dragStartHandle(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
+  selectedBookmarkItem.value = bookmarkItem
+  dragEvent.value = event
+  willStartDrag.value = true
+}
+function handleBeforeDrag() {
+  needForbiddenClick = true
+  isStartDrag.value = true
+}
+function handleDragEnd({ type, from, to }: {
+  type: string,
+  from: string,
+  to: string,
+  size: BookmarkSize
+}) {
+  willStartDrag.value = false
+  isStartDrag.value = false
+  needForbiddenClick = false
+  if (type === 'cancel' || type === 'enter' || type === 'size') {
+    return
+  }
+  if (type === 'before') {
+    let fromIndex = -1
+    let targetIndex = -1
+    const list = bookmarkList.value
+    for (let i = 0; i < list.length; i++) {
+      let id = list[i].id
+      if (id === from) {
+        fromIndex = i
+      }
+      if (to) {
+        if (id === to) {
+          targetIndex = i
         }
-        willStartDrag.value = false
-        openBookmark(data)
-      },
-      dragStartHandle(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
-        selectedBookmarkItem.value = bookmarkItem
-        dragEvent.value = event
-        willStartDrag.value = true
-      },
-      handleBeforeDrag() {
-        needForbiddenClick = true
-        isStartDrag.value = true
-      },
-      handleDragEnd({ type, from, to }: {
-        type: string,
-        from: string,
-        to: string,
-        size: BookmarkSize
-      }) {
-        willStartDrag.value = false
-        isStartDrag.value = false
-        needForbiddenClick = false
-        if (type === 'cancel' || type === 'enter' || type === 'size') {
-          return
+        if (fromIndex >= 0 && targetIndex >= 0) {
+          break
         }
-        if (type === 'before') {
-          let fromIndex = -1
-          let targetIndex = -1
-          const list = bookmarkList.value
-          for (let i = 0; i < list.length; i++) {
-            let id = list[i].id
-            if (id === from) {
-              fromIndex = i
-            }
-            if (to) {
-              if (id === to) {
-                targetIndex = i
-              }
-              if (fromIndex >= 0 && targetIndex >= 0) {
-                break
-              }
-            } else {
-              if (fromIndex >= 0) {
-                break
-              }
-            }
-          }
-          moveIndexTo(list, fromIndex, targetIndex)
-          const idList = list.map(item => item.id)
-          bookmarkResortService(idList)
-        } else if (type === 'delete') {
-          handleRemove()
-        } else if (type === 'desktop') {
-          handleSetToDesktop()
+      } else {
+        if (fromIndex >= 0) {
+          break
         }
-      },
-      handleRemove,
-      handleSetToDesktop,
+      }
     }
-  },
+    moveIndexTo(list, fromIndex, targetIndex)
+    const idList = list.map(item => item.id)
+    bookmarkResortService(idList)
+  } else if (type === 'delete') {
+    handleRemove()
+  } else if (type === 'desktop') {
+    handleSetToDesktop()
+  }
 }
 </script>

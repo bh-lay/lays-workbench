@@ -1,14 +1,20 @@
-const APP_CONFIG_DEFAULT = {
-  maxContainerWidth: 1200,
-  gridSize: 84,
-  iconRadius: 8,
-  wallpaper: 'https://w.wallhaven.cc/full/nz/wallhaven-nzkggo.jpg',
-  searchEngineName: 'caniuse',
+import { jsonParse } from "./utils"
+
+type AppConfig = {
+  maxContainerWidth: number,
+  activeDesktopId: string,
+  desktopZoom: number,
+  searchEngineName: string,
 }
 
-let APP_CONFIG: Record<string, string | number> = new Proxy({}, {})
+const APP_CONFIG_DEFAULT: AppConfig = {
+  maxContainerWidth: 1200,
+  activeDesktopId: '',
+  desktopZoom: 1,
+  searchEngineName: 'caniuse',
+}
+let APP_CONFIG: AppConfig | null = null
 
-type configKey = 'gridSize' | 'iconRadius' | 'maxContainerWidth'
 const localStorageKey = 'APP_CONFIG_V1'
 
 // 数据持久化逻辑
@@ -41,43 +47,61 @@ function afterDataChangeDelay() {
   }, 300)
 }
 
-// 初始化
-export function initAppConfig() {
-  // 尝试从本地获取数据
-  const localData = localStorage.getItem(localStorageKey)
-  let configFromLocal = null
-  if (localData) {
-    try {
-      configFromLocal = JSON.parse(localData)
-    } catch (e) {
-      console.log('error', e)
+function setAppConfigItemValue(appConfigItem: AppConfig, key: keyof AppConfig, value: any) {
+  if (typeof value === 'string') {
+    if (key === 'activeDesktopId' || key === 'searchEngineName') {
+      appConfigItem[key] = value
+    }
+  } else if (typeof value === 'number') {
+    if (key === 'maxContainerWidth' || key === 'desktopZoom') {
+      appConfigItem[key] = value
     }
   }
-  // 合并本地数据与默认数据
-  const appConfig = Object.assign({}, APP_CONFIG_DEFAULT, configFromLocal)
-  // 初始化 Proxy 对象
-  APP_CONFIG = new Proxy(appConfig, {
-    set(target, key: configKey, value) {
-      // 若不在定义的类型中，则不设置
-      if (typeof APP_CONFIG_DEFAULT[key] === 'undefined') {
-        return false
-      }
-      afterDataChangeDelay()
-      return Reflect.set(target, key, value)
-    },
-  })
 }
 
-export function getAppConfig() {
-  return APP_CONFIG
+// 初始化
+export function initAppConfig(): AppConfig {
+  // 尝试从本地获取数据
+  const localData = localStorage.getItem(localStorageKey) || ''
+  let configFromLocal = localData ? jsonParse(localData) : null
+  const appConfig: AppConfig = getAppConfigDefault()
+  // 合并本地数据
+  if (configFromLocal) {
+    for (let key in appConfig) {
+      if (configFromLocal[key]) {
+        setAppConfigItemValue(appConfig, key as keyof AppConfig, configFromLocal[key])
+      }
+    }
+  }
+  const newAppConfig: AppConfig = new Proxy(appConfig, {
+    set(target, key: string, value) {
+      // 若不在定义的类型中，则不设置
+      if (key in APP_CONFIG_DEFAULT) {
+        afterDataChangeDelay()
+        return Reflect.set(target, key, value)
+      }
+      return false
+    },
+  })
+
+  // 初始化 Proxy 对象
+  APP_CONFIG = newAppConfig
+  return newAppConfig
+}
+
+export function getAppConfig(): AppConfig {
+  if (APP_CONFIG) {
+    return APP_CONFIG
+  }
+  return initAppConfig()
 }
 export function getAppConfigDefault() {
   return Object.assign({}, APP_CONFIG_DEFAULT)
 }
-export function getAppConfigItem(key: string): string | number  {
-  return APP_CONFIG[key]
+export function getAppConfigItem(key: keyof AppConfig) {
+  return getAppConfig()[key]
 }
 
-export function setAppConfigItem(key: string, value: string | number) {
-  APP_CONFIG[key] = value
+export function setAppConfigItem(key: keyof AppConfig, value: string | number) {
+  setAppConfigItemValue(getAppConfig(), key, value)
 }

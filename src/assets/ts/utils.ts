@@ -16,3 +16,18 @@ export function timeFormat(timeStample: number) {
     ' ' +
     leftPad(date.getHours()) + ':' + leftPad(date.getMinutes()) + ':' + leftPad(date.getSeconds())
 }
+
+export function jsonParse(input: string) {
+  try {
+    return JSON.parse(input)
+  } catch (e) {
+    return {}
+  }
+}
+export function jsonStringify(input: any) {
+  try {
+    return JSON.stringify(input)
+  } catch (e) {
+    return ''
+  }
+}

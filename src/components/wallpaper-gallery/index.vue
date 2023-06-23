@@ -20,27 +20,38 @@
       <category v-model="activeCategory" />
     </div>
     <div class="main">
-      <custom v-if="activeCategory === 'define'" />
-      <gallery v-else-if="activeCategory === 'gallery'" />
-      <color v-else />
+      <custom
+        v-if="activeCategory === 'define'"
+        @selected="setWallpaper"
+      />
+      <gallery
+        v-else-if="activeCategory === 'gallery'"
+        @selected="setWallpaper"
+      />
+      <color
+        v-else
+        @selected="setWallpaper"
+      />
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { ref } from 'vue'
+<script setup lang="ts">
+import { ref, Ref, inject } from 'vue'
+import { bookmarkDesktopWallpaperUpdateService } from '@/database/services/bookmark-service'
 import Category from './category.vue'
 import Custom from './custom.vue'
 import Color from './color.vue'
 import Gallery from './gallery.vue'
-export default {
-  name: 'SettingsWallpaperCenter',
-  components: { Category, Custom, Color, Gallery },
-  setup() {
-    const activeCategory = ref('gallery')
-    return {
-      activeCategory,
-    }
-  },
+
+const activeCategory = ref('gallery')
+const activeDesktopId = inject<Ref<string>>('activeDesktopId')
+const changeWallpaper = inject('changeWallpaper', (src: string) => {}, false)
+function setWallpaper(wallpaperUrl: string) {
+  bookmarkDesktopWallpaperUpdateService(activeDesktopId?.value || '', wallpaperUrl)
+    .then(() => {
+      changeWallpaper(wallpaperUrl)
+    })
 }
+  
 </script>

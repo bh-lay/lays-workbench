@@ -76,18 +76,12 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import colorList from '@/assets/ts/color-list'
-import { setAppConfigItem } from '@/assets/ts/app-config'
-export default {
-  name: 'SettingsWallpaperColor',
-  setup() {
-    return {
-      colorList,
-      applyWallpaper(url: string) {
-        setAppConfigItem('wallpaper', url)
-      },
-    }
-  },
+
+const emits = defineEmits(['selected'])
+
+function applyWallpaper(url: string) {
+  emits('selected', url)
 }
 </script>
