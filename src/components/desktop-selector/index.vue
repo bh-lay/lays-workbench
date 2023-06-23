@@ -1,14 +1,27 @@
 <style lang="stylus" scoped>
 .desktop-selector
   height 34px
-  padding 0 30px 0 15px
+  padding 0 6px 0 15px
   display flex
   align-items center
   cursor pointer
   transition .15s
+  .mdi-icon
+    padding 3px
+    margin-left 5px
+    border-radius 4px
+    color #c2c9d6
+    opacity 0
+    transition .2s
+    &:hover
+      background #333b4d
+    &:active
+      background #181d25
+
   &:hover
     background #252b37
-  &:active,
+    .mdi-icon
+      opacity 1
   &.active
     background #181d25
 .desktop-color-dot
@@ -48,11 +61,17 @@
       <span class="desktop-name">{{ activeDesktop.name }}</span>
     </div>
     <span v-else>无桌面</span>
+    <v-mdi
+      name="mdi-tune"
+      size="16"
+      @click.stop="handleClickSettings"
+    />
     <template #body>
       <div class="about-layer">
         <v-dropdown-item
           v-for="desktop in desktopList"
           :key="desktop.id"
+          :active="modelValue === desktop.id"
           @click="switchActiveDesktop(desktop.id)"
         >
           <span class="desktop-color-dot" :style="{
@@ -72,6 +91,7 @@ import {
   onMounted,
   watch,
 } from 'vue'
+import { Message } from '@/ui-lib/message/index'
 import { Bookmark, BookmarkSystemId } from '@database/entity/bookmark'
 import { bookmarkListService } from '@database/services/bookmark-service'
 
@@ -105,7 +125,11 @@ function automaticSelectFirstDesktop () {
 function switchActiveDesktop(bookmarkId: string) {
   emits('update:modelValue', bookmarkId)
 }
-
+function handleClickSettings() {
+  new Message({
+    message: '新增、修改桌面正在开发中，请稍后 ！',
+  })
+}
 watch(
   () => props.modelValue,
   () => {
