@@ -13,7 +13,7 @@
   <gallery :src="src">
     <v-dropdown-item-plain>
       <v-button
-        type="white"
+        type="primary"
         @click="$emit('next')"
       >
         修改
@@ -23,8 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import imgRobber from '@/assets/ts/img-robber'
-import { getAppConfigItem } from '@/assets/ts/app-config'
 import Gallery from '@/components/gallery.vue'
 
 const props = defineProps({
