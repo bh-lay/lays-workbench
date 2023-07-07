@@ -32,7 +32,7 @@
     class="bookmark-container"
   >
     <div class="header">
-      <v-input placeholder="搜索"/>
+      <v-input placeholder="搜索" v-model="searchKey"/>
       <v-button @click="handleCreateLink">
         添加链接
       </v-button>
@@ -51,7 +51,7 @@
       class="link-list-body"
     >
       <main-item
-        v-for="item in bookmarkList"
+        v-for="item in searchedBookmarkList"
         :key="item.id"
         v-contextmenu:itemMenu="{
           beforeVisible() {
@@ -126,7 +126,7 @@
 </template>
 
 <script lang="ts">
-import { Ref, ref, watch, shallowRef } from 'vue'
+import { Ref, ref, watch, shallowRef, computed } from 'vue'
 import {
   Bookmark,
   BookmarkType,
@@ -149,7 +149,7 @@ import MainDragedLayer from './main-draged-layer.vue'
 function loadListHandler(props: {
   parent: string,
   changedParentId: string
-}, bookmarkList: Ref<Bookmark[]>) {
+}, bookmarkList: Ref<Bookmark[]>, afterLoadded: () => void) {
   const loadList = () => {
     bookmarkListService({
       parent: props.parent,
@@ -160,6 +160,7 @@ function loadListHandler(props: {
         return bValue - aValue
       })
       bookmarkList.value = list
+      afterLoadded()
     })
   }
   loadList()
@@ -347,9 +348,23 @@ export default {
   setup(props, context) {
     const bookmarkList: Ref<Bookmark[]> = ref([])
     const selectedBookmark: Ref<Bookmark> = ref(new Bookmark({}))
+    const searchKey: Ref<string> = ref('')
 
+    const searchedBookmarkList = computed(() => {
+      const searchkeyValue = (searchKey.value || '').trim().toLocaleLowerCase()
+      if (searchkeyValue.length > 0) {
+        return bookmarkList.value.filter(bookmark => {
+          const bookmarkName = (bookmark.name || '').toLocaleLowerCase()
+          const bookmarkValue = (bookmark.value as string || '').toLocaleLowerCase()
+          return bookmarkName.indexOf(searchkeyValue) > -1 || bookmarkValue.indexOf(searchkeyValue) > -1
+        })
+      }
+      return bookmarkList.value
+    })
     // 处理列表数据加载
-    loadListHandler(props, bookmarkList)
+    loadListHandler(props, bookmarkList, () => {
+      searchKey.value = ''
+    })
 
     function removeBookmark(bookmarkID: string, bookmarkList: Bookmark[]) {
       bookmarkRemoveService(bookmarkID).then(() => {
@@ -384,8 +399,10 @@ export default {
     const setupObject = {
       selectedBookmark,
       bookmarkList,
+      searchedBookmarkList,
       linkEditorConfig,
       folderEditorConfig,
+      searchKey,
       handleCreateLink() {
         const linkEditorConfigValue = linkEditorConfig.value
         linkEditorConfigValue.visible = true

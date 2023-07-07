@@ -81,7 +81,6 @@ export default defineComponent({
       watch(
         () => props.modelValue,
         () => {
-          console.log('props.modelValue', props.modelValue)
           if (props.modelValue !== inputEl.value) {
             applyPropsValue(inputEl, props.modelValue)
           }
