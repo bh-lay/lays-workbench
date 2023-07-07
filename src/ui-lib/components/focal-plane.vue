@@ -9,7 +9,6 @@
   align-items center
   justify-content center
   transition 0
-  z-index 1001
   &.hidden
     // 各种方法保证视觉上弹窗不可见，且不影响动画显示
     pointer-events none
@@ -74,6 +73,9 @@
   <teleport to="#v-ui">
     <div
       :class="['focal-panel-outer', modelValue ? 'visible' : 'hidden']"
+      :style="{
+        zIndex: mainZIndex
+      }"
       @contextmenu.prevent
     >
       <transition name="fade-slow">
@@ -115,7 +117,8 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from 'vue'
+import { ref, watch } from 'vue'
+import { getNextZIndex } from '../utils'
 type modalStyle = {
   width?: string,
   height?: string
@@ -187,10 +190,12 @@ const keydownListener = function (event: KeyboardEvent) {
   }
   closeModal()
 }
+const mainZIndex = ref(0)
 watch(
   () => props.modelValue,
   isVisible => {
     if (isVisible) {
+      mainZIndex.value = getNextZIndex()
       emits('after-open')
       // 仅在配置了按下 Esc 关闭时才注册事件监听
       if (props.closeOnPressEscape) {
