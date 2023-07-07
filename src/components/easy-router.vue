@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ref, h, onBeforeUnmount, resolveComponent, nextTick, VNode } from 'vue'
+import { ref, h, onBeforeUnmount, nextTick, VNode } from 'vue'
 import { routerState, onRouterChange } from '@/assets/ts/router'
 import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
 import PublicBookmarks from '@/components/public-bookmarks/index.vue'
@@ -8,6 +8,7 @@ import JsonFormatter from '@/components/widgets/json-formatter/main.vue'
 import RegVisual from '@/components/widgets/reg-visual/main.vue'
 import ImageToBase from '@/components/widgets/img-to-base/main.vue'
 import TriangleMaker from '@/components/widgets/triangle-maker/main.vue'
+import { FocalPlane } from  '@/ui-lib/index'
 
 function createSubVNode(moduleType: string, moduleName: string, state: routerState): VNode | null {
   if (moduleType === 'widgets') {
@@ -64,12 +65,12 @@ export default {
     })
 
     return function () {
-      const modalComponent = resolveComponent('v-modal')
       return h(
-        modalComponent,
+        FocalPlane,
         {
           width: '80%',
           height: '80%',
+          closeOnPressEscape: true,
           modelValue: modalVisible.value,
           'onUpdate:modelValue'(visible: boolean) {
             modalVisible.value = visible

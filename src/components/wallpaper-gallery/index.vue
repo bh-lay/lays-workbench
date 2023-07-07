@@ -5,12 +5,12 @@
   height 100%
 .side
   width 140px
-  padding 10px 0 10px 10px
+  padding 0 10px
 .main
   width 100px
   flex-grow 1
-  padding 10px 50px 10px 10px
-  overflow auto
+  overflow-x hidden
+  overflow-y auto
   scrollbar #26262c
 </style>
 

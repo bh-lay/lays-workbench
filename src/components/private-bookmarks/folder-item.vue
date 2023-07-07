@@ -5,7 +5,7 @@
   align-items center
   padding-right 20px
   min-height 40px
-  color #bdbdc7
+  color #c8c8d0
   .add
     opacity 0
   &:before

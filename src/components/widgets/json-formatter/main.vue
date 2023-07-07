@@ -3,6 +3,7 @@
   display flex
   flex-direction column
   height 100%
+  background #26262c
   .caption
     height 50px
     background #2b2b31

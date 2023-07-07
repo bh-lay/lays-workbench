@@ -1,7 +1,7 @@
 <style lang="stylus" scoped>
 .bookmark-directory
   height 100%
-  background #3a3a40
+  background #26262c
   iframe
     display block
     width 100%

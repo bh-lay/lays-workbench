@@ -1,20 +1,24 @@
 <style lang="stylus" scoped>
 @import '../../assets/stylus/functions/scrollbar.styl'
 .bookmark-container
+  box-sizing border-box
   width 100px
+  max-height 100%
   flex-grow 1
-  padding 30px 50px
+  padding 0 0 50px 15px
   overflow auto
   scrollbar #26262c
 .link-list-body
   border-radius 4px
-  background #2f2f37
+  background rgba(47,47,55,0.5)
   overflow hidden
-  box-shadow 1px 1px 3px rgba(0, 0, 0, .3), 1px 1px 10px rgba(0, 0, 0, .1)
 .header
+  display flex
   margin-bottom 15px
+  .v-input
+    flex-grow 1
   .v-button
-    margin-right 15px
+    margin-left 15px
 .empty
   padding 100px 20px
   text-align center
@@ -28,6 +32,7 @@
     class="bookmark-container"
   >
     <div class="header">
+      <v-input placeholder="搜索"/>
       <v-button @click="handleCreateLink">
         添加链接
       </v-button>
