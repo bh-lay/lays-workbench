@@ -12,7 +12,7 @@
     border-radius 4px
     color #c2c9d6
     opacity 0
-    transition .2s
+    transition .3s .2s
     &:hover
       background #333b4d
     &:active
@@ -64,7 +64,7 @@
     <v-mdi
       name="mdi-tune"
       size="16"
-      @click.stop="handleClickSettings"
+      @click.stop="editModalVisible = true"
     />
     <template #body>
       <div class="about-layer">
@@ -82,6 +82,16 @@
       </div>
     </template>
   </v-dropdown>
+  <v-modal
+    v-model="editModalVisible"
+    :width="450"
+    title="桌面管理"
+  >
+    <desktop-editor
+      :desktop-list="desktopList"
+      @after-desktop-changed="handleDesktopChanged"
+    />
+  </v-modal>
 </template>
 
 <script setup lang="ts">
@@ -90,14 +100,15 @@ import {
   Ref,
   onMounted,
   watch,
+nextTick,
 } from 'vue'
-import { Message } from '@/ui-lib/message/index'
 import { Bookmark, BookmarkSystemId } from '@database/entity/bookmark'
 import { bookmarkListService } from '@database/services/bookmark-service'
+import DesktopEditor from './desktop-editor.vue'
 
 const activeDesktop: Ref<Bookmark | null> = ref(null)
 const desktopList: Ref<Bookmark[]> = ref([])
-
+const editModalVisible: Ref<boolean> = ref(false)
 const props = defineProps({
   modelValue: {
     type: String,
@@ -109,11 +120,9 @@ const emits = defineEmits(['update:modelValue'])
 function getActiveDeskptopByProps() {
   activeDesktop.value = desktopList.value.find(item => item.id === props.modelValue) || null
 }
-const getDesktopList = function () {
-  return bookmarkListService({
+async function getDesktopList() {
+  desktopList.value = await bookmarkListService({
     parent: BookmarkSystemId.desktop,
-  }).then((list) => {
-    desktopList.value = list
   })
 }
 function automaticSelectFirstDesktop () {
@@ -125,23 +134,25 @@ function automaticSelectFirstDesktop () {
 function switchActiveDesktop(bookmarkId: string) {
   emits('update:modelValue', bookmarkId)
 }
-function handleClickSettings() {
-  new Message({
-    message: '新增、修改桌面正在开发中，请稍后 ！',
-  })
-}
 watch(
   () => props.modelValue,
   () => {
     getActiveDeskptopByProps()
   }
 )
-onMounted(() => {
-  getDesktopList().then(() => {
-    getActiveDeskptopByProps()
-    if (!props.modelValue || !activeDesktop.value) {
-      automaticSelectFirstDesktop()
-    }
-  })
+onMounted(async () => {
+  await getDesktopList()
+  getActiveDeskptopByProps()
+  if (!props.modelValue || !activeDesktop.value) {
+    automaticSelectFirstDesktop()
+  }
 })
+
+async function handleDesktopChanged() {
+  await getDesktopList()
+  getActiveDeskptopByProps()
+  if (!props.modelValue || !activeDesktop.value) {
+    automaticSelectFirstDesktop()
+  }
+}
 </script>

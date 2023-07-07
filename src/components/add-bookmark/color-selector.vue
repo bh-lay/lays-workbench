@@ -78,7 +78,7 @@ export default {
       default: null,
     },
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'change'],
   setup(props, context) {
     // 目前没有好的方法定义此类型，临时解析成字符串
     const dropdownItemComponent = resolveComponent('v-dropdown-item-plain') as string
@@ -89,6 +89,7 @@ export default {
           class: ['color-item', props.modelValue === colorItem.value ? 'active' : ''],
           onClick() {
             context.emit('update:modelValue', colorItem.value)
+            context.emit('change', colorItem.value)
           },
           style: {
             background: colorItem.value,

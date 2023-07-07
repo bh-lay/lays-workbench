@@ -36,5 +36,19 @@ export default {
         }
       },
     })
+    app.directive('drag-stop', {
+      mounted (el: HTMLElement) {
+        const triggerElement = el
+        if (supportTouch) {
+          triggerElement.addEventListener('touchstart', (event: TouchEvent) => {
+            event.stopPropagation()
+          })
+        } else {
+          triggerElement.addEventListener('mousedown', (event: MouseEvent) => {
+            event.stopPropagation()
+          })
+        }
+      },
+    })
   },
 }

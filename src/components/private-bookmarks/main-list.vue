@@ -276,7 +276,7 @@ function dragSetup(
 ) {
   const willStartDrag = ref(false)
   const isDraging = ref(false)
-  const dragEvent: Ref<MouseEvent | TouchEvent | null> = shallowRef(null)
+  const dragEvent: Ref<MouseEvent | TouchEvent | undefined> = shallowRef(undefined)
   let willSelectedBookmark: Bookmark | null = null
   function removeDragLayer() {
     isDraging.value = false
