@@ -1,5 +1,5 @@
 <style lang="stylus" scoped>
-.modal-outer
+.focal-panel-outer
   position fixed
   width 100%
   height 100%
@@ -17,7 +17,7 @@
     width 0
     height 0
     transition .1s 1s
-.modal-mask
+.focal-panel-mask
   position absolute
   width 100%
   height 100%
@@ -25,13 +25,14 @@
   left 0
   z-index 100
   background: rgba(0, 0, 0, .7)
-.modal-title
+  backdrop-filter blur(10px) contrast(0.5) saturate(0.5)
+.focal-panel-title
   padding 15px 20px
   line-height 30px
   font-weight bold
   font-size 16px
   color #b9bdc6
-.modal-close
+.focal-panel-close
   position absolute
   top 5px
   right 5px
@@ -51,7 +52,7 @@
     background #212127
   &:active
     background #16181d
-.modal-body
+.focal-panel-body
   position relative
   box-sizing border-box
   width 80%
@@ -59,9 +60,9 @@
   max-height 900px
   z-index 101
 @media screen and (max-width:600px)
-  .modal-mask
+  .focal-panel-mask
     transition 0s !important
-  .modal-body
+  .focal-panel-body
     top 0
     left 0
     width 100% !important
@@ -71,7 +72,7 @@
 <template>
   <teleport to="#v-ui">
     <div
-      :class="['modal-outer', modelValue ? 'visible' : 'hidden']"
+      :class="['focal-panel-outer', modelValue ? 'visible' : 'hidden']"
       :style="{
         zIndex: mainZIndex
       }"
@@ -80,32 +81,35 @@
       <transition name="fade-slow">
         <div
           v-if="modelValue"
-          class="modal-mask"
+          class="focal-panel-mask"
           @click="maskClickHandle"
         />
       </transition>
       <transition name="slidedown">
         <div
           v-if="modelValue"
-          class="modal-body"
+          class="focal-panel-body"
           :style="modalBodyStyle"
         >
           <div
             v-if="title"
-            class="modal-title"
+            class="focal-panel-title"
           >
             {{ title }}
           </div>
           <slot />
-          <div
-            class="modal-close"
-            @click="closeModal"
-          >
-            <v-mdi
-              name="mdi-close"
-              size="22"
-            />
-          </div>
+        </div>
+      </transition>
+      <transition name="fade-fast">
+        <div
+          v-if="modelValue"
+          class="focal-panel-close"
+          @click="closeModal"
+        >
+          <v-mdi
+            name="mdi-close"
+            size="22"
+          />
         </div>
       </transition>
     </div>
@@ -116,7 +120,6 @@
 import { ref, watch } from 'vue'
 import { getNextZIndex } from '../utils'
 type modalStyle = {
-  background: string,
   width?: string,
   height?: string
 }
@@ -148,10 +151,6 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  undercoat: {
-    type: String,
-    default: '#26262c',
-  },
   closeOnClickModal: {
     type: Boolean,
     default: false,
@@ -163,9 +162,7 @@ const props = defineProps({
 })
 const emits = defineEmits(['after-open', 'after-close', 'update:modelValue'])
 
-const modalBodyStyle: modalStyle = {
-  background: props.undercoat,
-}
+const modalBodyStyle: modalStyle = {}
 if (props.width) {
   modalBodyStyle.width = inputSize2Style(props.width)
 }

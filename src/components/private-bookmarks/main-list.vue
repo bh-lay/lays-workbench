@@ -1,20 +1,24 @@
 <style lang="stylus" scoped>
 @import '../../assets/stylus/functions/scrollbar.styl'
 .bookmark-container
+  box-sizing border-box
   width 100px
+  max-height 100%
   flex-grow 1
-  padding 30px 50px
+  padding 0 0 50px 15px
   overflow auto
   scrollbar #26262c
 .link-list-body
   border-radius 4px
-  background #2f2f37
+  background rgba(47,47,55,0.5)
   overflow hidden
-  box-shadow 1px 1px 3px rgba(0, 0, 0, .3), 1px 1px 10px rgba(0, 0, 0, .1)
 .header
+  display flex
   margin-bottom 15px
+  .v-input
+    flex-grow 1
   .v-button
-    margin-right 15px
+    margin-left 15px
 .empty
   padding 100px 20px
   text-align center
@@ -28,6 +32,7 @@
     class="bookmark-container"
   >
     <div class="header">
+      <v-input placeholder="搜索" v-model="searchKey"/>
       <v-button @click="handleCreateLink">
         添加链接
       </v-button>
@@ -46,7 +51,7 @@
       class="link-list-body"
     >
       <main-item
-        v-for="item in bookmarkList"
+        v-for="item in searchedBookmarkList"
         :key="item.id"
         v-contextmenu:itemMenu="{
           beforeVisible() {
@@ -121,7 +126,7 @@
 </template>
 
 <script lang="ts">
-import { Ref, ref, watch, shallowRef } from 'vue'
+import { Ref, ref, watch, shallowRef, computed } from 'vue'
 import {
   Bookmark,
   BookmarkType,
@@ -144,7 +149,7 @@ import MainDragedLayer from './main-draged-layer.vue'
 function loadListHandler(props: {
   parent: string,
   changedParentId: string
-}, bookmarkList: Ref<Bookmark[]>) {
+}, bookmarkList: Ref<Bookmark[]>, afterLoadded: () => void) {
   const loadList = () => {
     bookmarkListService({
       parent: props.parent,
@@ -155,6 +160,7 @@ function loadListHandler(props: {
         return bValue - aValue
       })
       bookmarkList.value = list
+      afterLoadded()
     })
   }
   loadList()
@@ -276,7 +282,7 @@ function dragSetup(
 ) {
   const willStartDrag = ref(false)
   const isDraging = ref(false)
-  const dragEvent: Ref<MouseEvent | TouchEvent | null> = shallowRef(null)
+  const dragEvent: Ref<MouseEvent | TouchEvent | undefined> = shallowRef(undefined)
   let willSelectedBookmark: Bookmark | null = null
   function removeDragLayer() {
     isDraging.value = false
@@ -342,9 +348,23 @@ export default {
   setup(props, context) {
     const bookmarkList: Ref<Bookmark[]> = ref([])
     const selectedBookmark: Ref<Bookmark> = ref(new Bookmark({}))
+    const searchKey: Ref<string> = ref('')
 
+    const searchedBookmarkList = computed(() => {
+      const searchkeyValue = (searchKey.value || '').trim().toLocaleLowerCase()
+      if (searchkeyValue.length > 0) {
+        return bookmarkList.value.filter(bookmark => {
+          const bookmarkName = (bookmark.name || '').toLocaleLowerCase()
+          const bookmarkValue = (bookmark.value as string || '').toLocaleLowerCase()
+          return bookmarkName.indexOf(searchkeyValue) > -1 || bookmarkValue.indexOf(searchkeyValue) > -1
+        })
+      }
+      return bookmarkList.value
+    })
     // 处理列表数据加载
-    loadListHandler(props, bookmarkList)
+    loadListHandler(props, bookmarkList, () => {
+      searchKey.value = ''
+    })
 
     function removeBookmark(bookmarkID: string, bookmarkList: Bookmark[]) {
       bookmarkRemoveService(bookmarkID).then(() => {
@@ -379,8 +399,10 @@ export default {
     const setupObject = {
       selectedBookmark,
       bookmarkList,
+      searchedBookmarkList,
       linkEditorConfig,
       folderEditorConfig,
+      searchKey,
       handleCreateLink() {
         const linkEditorConfigValue = linkEditorConfig.value
         linkEditorConfigValue.visible = true

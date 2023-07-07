@@ -7,7 +7,7 @@
 .editor
   width 220px
   padding 50px 20px
-  background #405f77
+  background rgba(64, 95, 119, .2)
   overflow auto
   scrollbar #405f77
 .title
@@ -73,7 +73,7 @@
   height 100px
   flex-grow 1
   overflow hidden
-  background-image linear-gradient(45deg, rgba(0,0,0,.25) 25%, transparent 0, transparent 75%, rgba(0,0,0,.25) 0),linear-gradient(45deg, rgba(0,0,0,.25) 25%, transparent 0, transparent 75%, rgba(0,0,0,.25) 0)
+  background-image linear-gradient(45deg, rgba(200,200,200,.1) 25%, transparent 0, transparent 75%, rgba(200,200,200,.1) 0),linear-gradient(45deg, rgba(200,200,200,.1) 25%, transparent 0, transparent 75%, rgba(200,200,200,.1) 0)
   background-position 0 0, 10px 10px
   background-size 20px 20px
 .triangle
@@ -107,6 +107,7 @@
   font-family monospace
   font-size 18px
   color #b1bcd2
+  background rgba(23, 25, 28, .4)
   -webkit-touch-callout text
   -webkit-user-select text
   -khtml-user-select text

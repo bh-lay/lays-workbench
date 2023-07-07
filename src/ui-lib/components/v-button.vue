@@ -1,8 +1,8 @@
 <style lang="stylus" scoped>
 .v-button
-  padding 8px 20px
+  padding 10px 20px
   border-radius 4px
-  line-height 16px
+  line-height 18px
   font-size 14px
   cursor pointer
   transition .15s

@@ -2,13 +2,17 @@
 @import '../../assets/stylus/functions/scrollbar.styl'
 .bookmark-directory
   display flex
+  align-items flex-start
   height 100%
-  background #26262c
 .category-list
+  box-sizing border-box
   width 280px
+  max-height 100%
   flex-shrink 0
   padding 30px 0 60px
+  border-radius 4px
   overflow auto
+  background rgba(47,47,55,0.5)
   scrollbar #26262c
 </style>
 <template>

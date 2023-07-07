@@ -24,6 +24,10 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    maxlength: {
+      type: [String, Number],
+      default: 100,
+    },
     placeholder: {
       type: String,
       default: '',
@@ -34,6 +38,7 @@ export default defineComponent({
     props: {
       modelValue: string,
       placeholder: string,
+      maxlength: string | number
     },
     context
   ) {
@@ -76,7 +81,6 @@ export default defineComponent({
       watch(
         () => props.modelValue,
         () => {
-          console.log('props.modelValue', props.modelValue)
           if (props.modelValue !== inputEl.value) {
             applyPropsValue(inputEl, props.modelValue)
           }
@@ -94,6 +98,7 @@ export default defineComponent({
             'input',
             {
               placeholder: props.placeholder,
+              maxlength: props.maxlength
             }
           ),
         ]

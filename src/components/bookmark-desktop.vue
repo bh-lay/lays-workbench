@@ -75,7 +75,7 @@
     @before-drag="handleBeforeDrag"
     @drag-end="handleDragEnd"
   />
-  <v-modal
+  <FocalPlane
     v-model="folderLayerVisible"
     :width="780"
     :close-on-click-modal="true"
@@ -89,7 +89,7 @@
       @open-bookmark-editor="handleEditSubFolderBookmark"
       @after-drop-to-desktop="handleDropToDesktop"
     />
-  </v-modal>
+  </FocalPlane>
 </template>
 
 <script lang="ts">
@@ -115,6 +115,7 @@ import {
 } from '@database/services/bookmark-service'
 import { openBookmark } from '@/assets/ts/bookmark-utils'
 import { Message } from '@/ui-lib/message/index'
+import { FocalPlane } from  '@/ui-lib/index'
 import BookmarkItem from './bookmark-item.vue'
 import AddBookmark from './add-bookmark/index.vue'
 import CustomLink from './add-bookmark/custom-link.vue'
@@ -203,7 +204,7 @@ function mouseIntractive({
   }
 }
 export default {
-  components: { BookmarkItem, AddBookmark, CustomLink, DragedLayer, FolderLayer },
+  components: { FocalPlane, BookmarkItem, AddBookmark, CustomLink, DragedLayer, FolderLayer },
   setup() {
     let bookmarkList: Ref<Bookmark[]> = ref([])
     const activeDesktopId = inject<Ref<string>>('activeDesktopId')

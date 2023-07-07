@@ -4,7 +4,7 @@
   align-items center
   min-height 34px
   padding 5px 20px
-  color #bdbdc7
+  color #c8c8d0
   svg
     flex-shrink 0
   .label
@@ -18,6 +18,7 @@
     white-space nowrap
     text-overflow ellipsis
     overflow hidden
+    opacity .5
   &:hover
     background #3a3a40
   &:active,
