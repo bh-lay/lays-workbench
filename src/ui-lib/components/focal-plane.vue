@@ -1,5 +1,5 @@
 <style lang="stylus" scoped>
-.focal-panel-outer
+.focal-plane-outer
   position fixed
   width 100%
   height 100%
@@ -17,7 +17,7 @@
     width 0
     height 0
     transition .1s 1s
-.focal-panel-mask
+.focal-plane-mask
   position absolute
   width 100%
   height 100%
@@ -25,14 +25,9 @@
   left 0
   z-index 100
   background: rgba(0, 0, 0, .7)
+  -webkit-backdrop-filter blur(10px) contrast(0.5) saturate(0.5)
   backdrop-filter blur(10px) contrast(0.5) saturate(0.5)
-.focal-panel-title
-  padding 15px 20px
-  line-height 30px
-  font-weight bold
-  font-size 16px
-  color #b9bdc6
-.focal-panel-close
+.focal-plane-close
   position absolute
   top 5px
   right 5px
@@ -52,17 +47,18 @@
     background #212127
   &:active
     background #16181d
-.focal-panel-body
+.focal-plane-body
   position relative
   box-sizing border-box
   width 80%
   max-width 1400px
   max-height 900px
   z-index 101
+  color #e3e3e8
 @media screen and (max-width:600px)
-  .focal-panel-mask
+  .focal-plane-mask
     transition 0s !important
-  .focal-panel-body
+  .focal-plane-body
     top 0
     left 0
     width 100% !important
@@ -72,7 +68,7 @@
 <template>
   <teleport to="#v-ui">
     <div
-      :class="['focal-panel-outer', modelValue ? 'visible' : 'hidden']"
+      :class="['focal-plane-outer', modelValue ? 'visible' : 'hidden']"
       :style="{
         zIndex: mainZIndex
       }"
@@ -81,29 +77,23 @@
       <transition name="fade-slow">
         <div
           v-if="modelValue"
-          class="focal-panel-mask"
+          class="focal-plane-mask"
           @click="maskClickHandle"
         />
       </transition>
       <transition name="slidedown">
         <div
           v-if="modelValue"
-          class="focal-panel-body"
+          class="focal-plane-body"
           :style="modalBodyStyle"
         >
-          <div
-            v-if="title"
-            class="focal-panel-title"
-          >
-            {{ title }}
-          </div>
           <slot />
         </div>
       </transition>
       <transition name="fade-fast">
         <div
           v-if="modelValue"
-          class="focal-panel-close"
+          class="focal-plane-close"
           @click="closeModal"
         >
           <v-mdi
@@ -145,10 +135,6 @@ const props = defineProps({
   },
   height: {
     type: [String, Number],
-    default: '',
-  },
-  title: {
-    type: String,
     default: '',
   },
   closeOnClickModal: {

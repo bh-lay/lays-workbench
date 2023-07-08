@@ -84,12 +84,13 @@ textarea
   z-index 10
   background rgba(0, 0, 0, 0)
   pointer-events none
-  transition backdrop-filter .4s ease-out, background .6s ease
+  transition backdrop-filter .4s ease-out, -webkit-backdrop-filter .4s ease-out, background .6s ease
   &.defocus
     background rgba(0, 0, 0, .6)
     backdrop-filter blur(2px)
+    -webkit-backdrop-filter blur(2px)
     pointer-events all
-    transition backdrop-filter .1s ease-out, background .15s ease
+    transition backdrop-filter .1s ease-out, -webkit-backdrop-filter .1s ease-out, background .15s ease
 </style>
 
 <template>

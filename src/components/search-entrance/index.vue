@@ -12,6 +12,7 @@ search-height = 56px
   height search-height
   border-radius 4px
   background rgba(255, 255, 255, 0.2)
+  -webkit-backdrop-filter blur(2px)
   backdrop-filter blur(2px)
   transition 0.4s 0.3s ease-in-out
   .selected-engine
