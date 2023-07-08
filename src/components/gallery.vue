@@ -59,15 +59,18 @@ const props = defineProps( {
   },
 })
 
-function waitFadeOut(time: number) {
+function waitTimeout(time: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, time)
   })
 }
-function renderWallpaper (currentUrl: string)  {
+async function renderWallpaper (currentUrl: string, forceWaitTime?: number)  {
   // 长度小于17，认定为是颜色值
   // http://a.cn/1.jpg
   if (currentUrl.length < 17) {
+    if (forceWaitTime) {
+      await waitTimeout(forceWaitTime)
+    }
     isPureColor.value = true
     styleValue.value = {
       backgroundColor: currentUrl,
@@ -81,10 +84,16 @@ function renderWallpaper (currentUrl: string)  {
     styleValue.value = {
       backgroundImage: `url(${usedUrl})`,
     }
-    loadImage(usedUrl)
-      .then(() => {
-        isImageLoaded.value = true
-      })
+    const startTime = new Date().getTime()
+    await loadImage(usedUrl)
+    if (forceWaitTime) {
+      const nowTime = new Date().getTime()
+      const usedTime = nowTime - startTime
+      if (usedTime < forceWaitTime) {
+        await waitTimeout(forceWaitTime - usedTime)
+      }
+    }
+    isImageLoaded.value = true
   }
 }
 
@@ -92,13 +101,9 @@ function renderWallpaper (currentUrl: string)  {
 watch(
   () => props.src,  
   async (newSrc, oldSrc) => {
-    if (oldSrc && isImageLoaded.value) {
-      isImageLoaded.value = false
-      await waitFadeOut(800)
-    } else {
-      isImageLoaded.value = false
-    }
-    renderWallpaper(newSrc)
+    const forceWaitTime = oldSrc && isImageLoaded.value ? 800 : 0
+    isImageLoaded.value = false
+    renderWallpaper(newSrc, forceWaitTime)
   },
   {
     immediate: true
