@@ -4,6 +4,7 @@
   border-radius 4px
   line-height 18px
   font-size 14px
+  text-decoration none
   cursor pointer
   transition .15s
   &:focus
@@ -43,7 +44,11 @@
 </style>
 
 <template>
-  <button :class="['v-button', 'v-button-' + type]">
+  
+  <a v-if="href" :href="href" :target="target" :class="['v-button', 'v-button-' + type]">
+    <slot />
+  </a>
+  <button v-else :class="['v-button', 'v-button-' + type]">
     <slot />
   </button>
 </template>
@@ -53,6 +58,14 @@ defineProps({
   type: {
     type: String,
     default: 'default',
+  },
+  href: {
+    type: String,
+    default: undefined,
+  },
+  target: {
+    type: String,
+    default: undefined,
   },
 })
 </script>

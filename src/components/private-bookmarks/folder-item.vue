@@ -5,7 +5,6 @@
   align-items center
   padding-right 20px
   min-height 40px
-  color #c8c8d0
   .add
     opacity 0
   &:before
@@ -25,7 +24,6 @@
       background-color #198ae6
     .label
       font-weight bold
-      color #198ae6
 .icon-btn
   display flex
   align-items center
@@ -51,12 +49,6 @@
   line-height 24px
   font-size 13px
   cursor pointer
-  transition .15s
-  &:hover
-    color #ddd
-  &:active,
-  &.active
-    color #198ae6
 </style>
 <template>
   <div

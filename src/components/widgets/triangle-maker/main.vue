@@ -6,18 +6,15 @@
   height 100%
 .editor
   width 220px
-  padding 50px 20px
-  background rgba(64, 95, 119, .2)
+  padding 10px 40px 30px 10px
   overflow auto
   scrollbar #405f77
 .title
   margin-bottom 30px
   font-size 30px
-  color #afc4d4
 .label
   margin 20px 0 10px
   font-size 14px
-  color #afc4d4
 .isosceles
   float right
   height 26px
@@ -52,13 +49,9 @@
   .value
     line-height 12px
     font-size 12px
-    color #637f9c
+    opacity .4
 .color-input
   width 140px
-  :deep(input)
-    border-color #364f63
-    background #364f63
-    color #afc4d4
 
 .main
   display flex
@@ -91,7 +84,7 @@
   .current
     width 40px
     font-size 12px
-    color #8f96a3
+    opacity .5
   .v-slider
     width 10px
     flex-grow 1
@@ -106,8 +99,7 @@
   white-space pre
   font-family monospace
   font-size 18px
-  color #b1bcd2
-  background rgba(23, 25, 28, .4)
+  background rgba(200,200,200,.1)
   -webkit-touch-callout text
   -webkit-user-select text
   -khtml-user-select text

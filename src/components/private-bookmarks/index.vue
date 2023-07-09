@@ -6,7 +6,7 @@
   height 100%
 .category-list
   box-sizing border-box
-  width 280px
+  width 300px
   max-height 100%
   flex-shrink 0
   padding 30px 0 60px

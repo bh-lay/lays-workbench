@@ -53,7 +53,6 @@
       <p>给您几个链接，尽情探索吧～</p>
       <p>
         <a target="_blank" href="https://imgtu.com/">路过图床</a>
-        <a target="_blank" href="https://sm.ms/">SM.MS</a>
         <a target="_blank" href="https://wallhaven.cc/">wallhaven</a>
         <a target="_blank" href="https://imgurl.org/">imgurl</a>
       </p>

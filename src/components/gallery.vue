@@ -9,24 +9,26 @@
   height 100%
   background no-repeat center #444
   background-size cover
-  &:before
+  &.pure-color
+    &:before
+      content ''
+      position relative
+      display block
+      height 100%
+      background linear-gradient(145deg, rgba(255, 255, 255, .15), transparent)
+    &:after
+      content ''
+      position absolute
+      width 100%
+      height 100%
+      top 0
+      left 0
+      background url('/images/cartographer.png')
+  &.image:before
     content ''
+    position relative
     display block
     height 100%
-  &.pure-color:before
-    background url('/images/paper-texture.png')
-    background-size 250px auto
-    position relative
-  &.pure-color:after
-    content ''
-    position absolute
-    width 100%
-    height 100%
-    left 0
-    bottom 0
-    background linear-gradient(rgba(0, 0, 0, .2), transparent 10%, transparent 60%, rgba(0, 0, 0, .15) 90%, rgba(0, 0, 0, .3))
-    z-index 0
-  &.image:before
     background rgba(0, 0, 0, .3)
 </style>
 
@@ -59,15 +61,18 @@ const props = defineProps( {
   },
 })
 
-function waitFadeOut(time: number) {
+function waitTimeout(time: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, time)
   })
 }
-function renderWallpaper (currentUrl: string)  {
+async function renderWallpaper (currentUrl: string, forceWaitTime?: number)  {
   // 长度小于17，认定为是颜色值
   // http://a.cn/1.jpg
   if (currentUrl.length < 17) {
+    if (forceWaitTime) {
+      await waitTimeout(forceWaitTime)
+    }
     isPureColor.value = true
     styleValue.value = {
       backgroundColor: currentUrl,
@@ -81,10 +86,16 @@ function renderWallpaper (currentUrl: string)  {
     styleValue.value = {
       backgroundImage: `url(${usedUrl})`,
     }
-    loadImage(usedUrl)
-      .then(() => {
-        isImageLoaded.value = true
-      })
+    const startTime = new Date().getTime()
+    await loadImage(usedUrl)
+    if (forceWaitTime) {
+      const nowTime = new Date().getTime()
+      const usedTime = nowTime - startTime
+      if (usedTime < forceWaitTime) {
+        await waitTimeout(forceWaitTime - usedTime)
+      }
+    }
+    isImageLoaded.value = true
   }
 }
 
@@ -92,13 +103,9 @@ function renderWallpaper (currentUrl: string)  {
 watch(
   () => props.src,  
   async (newSrc, oldSrc) => {
-    if (oldSrc && isImageLoaded.value) {
-      isImageLoaded.value = false
-      await waitFadeOut(800)
-    } else {
-      isImageLoaded.value = false
-    }
-    renderWallpaper(newSrc)
+    const forceWaitTime = oldSrc && isImageLoaded.value ? 800 : 0
+    isImageLoaded.value = false
+    renderWallpaper(newSrc, forceWaitTime)
   },
   {
     immediate: true

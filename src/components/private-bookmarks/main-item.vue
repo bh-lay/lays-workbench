@@ -4,7 +4,7 @@
   align-items center
   min-height 34px
   padding 5px 20px
-  color #c8c8d0
+  color #e3e3e8
   svg
     flex-shrink 0
   .label

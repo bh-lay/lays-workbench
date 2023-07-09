@@ -5,7 +5,7 @@
   grid-template-rows repeat(auto-fill, var(--grid-size))
   grid-auto-flow dense
   justify-content center
-  padding-top 40px
+  padding 40px 0
   .bookmark-item
     transition opacity, transform .2s
   .draged

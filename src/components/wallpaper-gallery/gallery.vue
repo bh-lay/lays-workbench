@@ -2,22 +2,15 @@
 .list
   display flex
   flex-wrap wrap
+  padding 10px 18px
 .item
   position relative
-  width 300px
-  height 200px
+  width 280px
+  aspect-ratio 2/1
   flex-grow 1
-  background no-repeat center #26262c
-  background-size cover
-  cursor pointer
-  z-index 0
-  transition .2s
-  &:hover
-    transform scale(1.1)
-    box-shadow 1px 1px 3px rgba(0, 0, 0, .4), 1px 1px 10px rgba(0, 0, 0, .7)
-    z-index 2
+
 .empty
-  width 300px
+  width 280px
   height 0
   flex-grow 1
   overflow hidden
@@ -29,6 +22,7 @@
       v-for="item in wallpaperList"
       :key="item.url"
       :url="item.thumb"
+      :from="item.from"
       class="item"
       @click="applyWallpaper(item.url)"
     />

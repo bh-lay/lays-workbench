@@ -4,7 +4,7 @@
   padding 0 16px
   display flex
   align-items center
-  color #c2c9d6
+  color rgba(255, 255, 255, .6)
   cursor pointer
   transition .15s
   line-height 20px
