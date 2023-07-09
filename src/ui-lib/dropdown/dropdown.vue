@@ -6,7 +6,6 @@
     fill currentColor
 .dropdown-body
   position fixed
-  z-index 1002
   min-width 140px
 .dropdown-body-default
   border-radius 4px
@@ -37,6 +36,7 @@
           :style="{
             top: top + 'px',
             left: left + 'px',
+            zIndex: currentZIndex,
           }"
         >
           <slot name="body" />
@@ -48,6 +48,7 @@
 
 <script setup lang="ts">
 import { nextTick, provide, ref } from 'vue'
+import { getNextZIndex } from '../utils'
 
 const props = defineProps({
   arrow: {
@@ -72,6 +73,7 @@ provide('close-dropdown', () => {
 
 const top = ref(0)
 const left = ref(0)
+const currentZIndex = ref(0)
 const visible = ref(false)
 const buttonRef = ref(null)
 const bodyRef = ref(null)
@@ -81,6 +83,7 @@ function onClickButton() {
     return
   }
   visible.value = true
+  currentZIndex.value = getNextZIndex()
   const buttonNode = buttonRef.value as HTMLDivElement | null
 
   if (!buttonNode) {

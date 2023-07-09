@@ -5,7 +5,6 @@
   border-radius 4px
   box-shadow 2px 2px 10px rgba(0, 0, 0, .2), 1px 1px 3px rgba(0, 0, 0, .2)
   overflow hidden
-  z-index 2001
   background #2f2f37
   .contextmenu-item
     color #bdbdc7
@@ -30,6 +29,7 @@
           width: width + 'px',
           top: top + 'px',
           left: left + 'px',
+          zIndex: currentZIndex
         }"
         @click.stop
         @contextmenu.prevent
@@ -42,6 +42,7 @@
 
 <script lang="ts">
 import { ref, watch, provide, defineComponent } from 'vue'
+import { getNextZIndex } from '../utils'
 export default defineComponent({
   props: {
     width: {
@@ -52,8 +53,15 @@ export default defineComponent({
   emits: ['beforeVisible', 'afterClose'],
   setup(props, context) {
     const visible = ref(false)
+    const currentZIndex = ref(0)
     watch(visible, isVisible => {
-      context.emit(isVisible ? 'beforeVisible' : 'afterClose')
+      getNextZIndex
+      if (isVisible) {
+        currentZIndex.value = getNextZIndex()
+        context.emit('beforeVisible')
+      } else {
+        context.emit('afterClose')
+      }
     })
     provide('close-dropdown', () => {
       visible.value = false
@@ -62,6 +70,7 @@ export default defineComponent({
       top: 0,
       left: 0,
       visible,
+      currentZIndex,
       onClickoutside() {
         visible.value = false
       },

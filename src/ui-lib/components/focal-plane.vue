@@ -70,7 +70,7 @@
     <div
       :class="['focal-plane-outer', modelValue ? 'visible' : 'hidden']"
       :style="{
-        zIndex: mainZIndex
+        zIndex: currentZIndex
       }"
       @contextmenu.prevent
     >
@@ -176,12 +176,12 @@ const keydownListener = function (event: KeyboardEvent) {
   }
   closeModal()
 }
-const mainZIndex = ref(0)
+const currentZIndex = ref(0)
 watch(
   () => props.modelValue,
   isVisible => {
     if (isVisible) {
-      mainZIndex.value = getNextZIndex()
+      currentZIndex.value = getNextZIndex()
       emits('after-open')
       // 仅在配置了按下 Esc 关闭时才注册事件监听
       if (props.closeOnPressEscape) {
