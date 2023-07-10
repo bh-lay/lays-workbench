@@ -86,7 +86,6 @@
       :id="selectedBookmarkItem.id"
       :name="selectedBookmarkItem.name"
       @name-change="handleFolderNameChange"
-      @open-bookmark-editor="handleEditSubFolderBookmark"
       @after-drop-to-desktop="handleDropToDesktop"
     />
   </FocalPlane>
@@ -403,11 +402,6 @@ export default {
       handleFolderNameChange(newName: string) {
         selectedBookmarkItem.value.name = newName
         bookmarkUpdateService(selectedBookmarkItem.value)
-      },
-      handleEditSubFolderBookmark(bookmarkItem: Bookmark) {
-        mouseHandle.closeFolderLayer()
-        selectedBookmarkItem.value = bookmarkItem
-        mouseHandle.openEditModal()
       },
       afterFolderClose() {
         const opendFolderId: string = selectedBookmarkItem.value.id
