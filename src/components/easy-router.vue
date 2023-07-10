@@ -8,34 +8,55 @@ import JsonFormatter from '@/components/widgets/json-formatter/main.vue'
 import RegVisual from '@/components/widgets/reg-visual/main.vue'
 import ImageToBase from '@/components/widgets/img-to-base/main.vue'
 import TriangleMaker from '@/components/widgets/triangle-maker/main.vue'
-import { FocalPlane } from  '@/ui-lib/index'
+import { FocalPlane } from '@/ui-lib/index'
 
-function createSubVNode(moduleType: string, moduleName: string, state: routerState): VNode | null {
+function createSubVNode(moduleType: string, moduleName: string, state: routerState): { vnode: VNode, actionBlockClasses: string[] } | null {
   if (moduleType === 'widgets') {
-    switch(moduleName) {
-    case 'private-bookmarks':
-      return h(PrivateBookmarks)
-    case 'public-bookmarks':
-      return h(PublicBookmarks)
-    case 'json-formatter':
-      return h(JsonFormatter)
-    case 'reg-visual':
-      return h(RegVisual, {
-        regText: state.regText as string,
-      })
-    case 'img-to-base':
-      return h(ImageToBase, {
-        file: state.file as File,
-      })
-    case 'triangle-maker':
-      return h(TriangleMaker, {
-        defaultIndex: state.defaultIndex as number,
-      })
+    switch (moduleName) {
+      case 'private-bookmarks':
+        return {
+          vnode: h(PrivateBookmarks),
+          actionBlockClasses: ['category-list', 'link-list-body', 'header'],
+        }
+      case 'public-bookmarks':
+        return {
+          vnode: h(PublicBookmarks),
+          actionBlockClasses: ['bookmark-directory'],
+        }
+      case 'json-formatter':
+        return {
+          vnode: h(JsonFormatter),
+          actionBlockClasses: ['json-formatter'],
+        }
+      case 'reg-visual':
+        return {
+          vnode: h(RegVisual, {
+            regText: state.regText as string,
+          }),
+          actionBlockClasses: [],
+        }
+      case 'img-to-base':
+        return {
+          vnode: h(ImageToBase, {
+            file: state.file as File,
+          }),
+          actionBlockClasses: ['imgtobase-main'],
+        }
+      case 'triangle-maker':
+        return {
+          vnode: h(TriangleMaker, {
+            defaultIndex: state.defaultIndex as number,
+          }),
+          actionBlockClasses: ['triangle-maker'],
+        }
     }
   } else if (moduleType === 'settings') {
-    switch(moduleName) {
-    case 'wallpaper':
-      return h(WallpaperGallery)
+    switch (moduleName) {
+      case 'wallpaper':
+        return {
+          vnode: h(WallpaperGallery),
+          actionBlockClasses: ['category-item', 'gallery-item', 'color-item', 'custom-wallpaper'],
+        }
     }
   }
   return null
@@ -44,13 +65,17 @@ export default {
   setup() {
     const modalVisible = ref(false)
     let activeComponent: VNode = h('div')
+    let activeActionBlockClasses: string[] = []
+    
     // 监听路由变动
     let unbindRouterListener: (() => void) | null = onRouterChange((moduleType, moduleName, state) => {
       // 弹窗先隐藏，再选择性显示
       modalVisible.value = false
-      const matchedComponentVNode = createSubVNode(moduleType, moduleName, state)
-      if (matchedComponentVNode) {
-        activeComponent = matchedComponentVNode
+      const matchedSubVNodeConfig = createSubVNode(moduleType, moduleName, state)
+      if (matchedSubVNodeConfig) {
+        const { vnode, actionBlockClasses } = matchedSubVNodeConfig
+        activeComponent = vnode
+        activeActionBlockClasses = actionBlockClasses
         nextTick(() => {
           modalVisible.value = true
         })
@@ -71,6 +96,7 @@ export default {
           width: '80%',
           height: '80%',
           closeOnPressEscape: true,
+          actionBlockClasses: activeActionBlockClasses,
           modelValue: modalVisible.value,
           'onUpdate:modelValue'(visible: boolean) {
             modalVisible.value = visible

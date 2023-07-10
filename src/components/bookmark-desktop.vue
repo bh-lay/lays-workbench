@@ -78,8 +78,8 @@
   <FocalPlane
     v-model="folderLayerVisible"
     :width="780"
-    :close-on-click-modal="true"
     :close-on-press-escape="true"
+    :action-block-classes="['folder-name-editor', 'bookmark-item']"
     @after-close="afterFolderClose"
   >
     <folder-layer
