@@ -27,26 +27,6 @@
   background: rgba(0, 0, 0, .7)
   -webkit-backdrop-filter blur(10px) contrast(0.5) saturate(0.5)
   backdrop-filter blur(10px) contrast(0.5) saturate(0.5)
-.focal-plane-close
-  position absolute
-  top 5px
-  right 5px
-  width 40px
-  height 40px
-  display flex
-  align-items center
-  justify-content center
-  z-index 102
-  transition-delay .2s
-  cursor pointer
-  margin-left 5px
-  transition .2s
-  svg
-    fill #aaa
-  &:hover
-    background #212127
-  &:active
-    background #16181d
 .focal-plane-body
   position relative
   box-sizing border-box
@@ -78,28 +58,18 @@
         <div
           v-if="modelValue"
           class="focal-plane-mask"
-          @click="maskClickHandle"
+          @click="closeFocusPlane"
         />
       </transition>
       <transition name="slidedown">
         <div
           v-if="modelValue"
+          ref="focalBody"
           class="focal-plane-body"
           :style="modalBodyStyle"
+          @click="afterFocalBodyClick"
         >
           <slot />
-        </div>
-      </transition>
-      <transition name="fade-fast">
-        <div
-          v-if="modelValue"
-          class="focal-plane-close"
-          @click="closeModal"
-        >
-          <v-mdi
-            name="mdi-close"
-            size="22"
-          />
         </div>
       </transition>
     </div>
@@ -107,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { PropType, Ref, ref, watch } from 'vue'
 import { getNextZIndex } from '../utils'
 type modalStyle = {
   width?: string,
@@ -137,13 +107,15 @@ const props = defineProps({
     type: [String, Number],
     default: '',
   },
-  closeOnClickModal: {
-    type: Boolean,
-    default: false,
-  },
   closeOnPressEscape: {
     type: Boolean,
     default: false,
+  },
+  actionBlockClasses: {
+    type: Array as PropType<string[]>,
+    default() {
+      return ['focal-action-block']
+    }
   },
 })
 const emits = defineEmits(['after-open', 'after-close', 'update:modelValue'])
@@ -155,7 +127,7 @@ if (props.width) {
 if (props.height) {
   modalBodyStyle.height = inputSize2Style(props.height)
 }
-function closeModal() {
+function closeFocusPlane() {
   emits('update:modelValue', false)
 }
 const keydownListener = function (event: KeyboardEvent) {
@@ -174,7 +146,7 @@ const keydownListener = function (event: KeyboardEvent) {
     }
     return
   }
-  closeModal()
+  closeFocusPlane()
 }
 const currentZIndex = ref(0)
 watch(
@@ -194,9 +166,40 @@ watch(
     }
   }
 )
-function maskClickHandle() {
-  if (props.closeOnClickModal) {
-    closeModal()
+
+const focalBody: Ref<HTMLElement | null> = ref(null)
+function afterFocalBodyClick(event: MouseEvent) {
+  const targetNode = event.target
+  if (!targetNode) {
+    return
+  }
+  function hasFocalActionBlockClass(node: HTMLElement) {
+    return props.actionBlockClasses.some(className => {
+      return node.classList.contains(className)
+    })
+  }
+  function hasFocalActionBlockBetweenTargetAndBody(targetNode: HTMLElement | null, bodyNode: HTMLElement | null) {
+    if (!targetNode || !bodyNode) {
+      return false
+    }
+    let nodeForCheck: HTMLElement | null = targetNode
+    let hasFocalActionBlock = false
+    while (true) {
+      if (hasFocalActionBlockClass(nodeForCheck)) {
+        hasFocalActionBlock = true
+        break
+      }
+      nodeForCheck = nodeForCheck.parentNode as HTMLElement | null
+
+      if (!nodeForCheck || nodeForCheck === bodyNode) {
+        break
+      }
+    }
+    return hasFocalActionBlock
+  }
+
+  if (!hasFocalActionBlockBetweenTargetAndBody(targetNode as HTMLElement, focalBody.value)) {
+    closeFocusPlane()
   }
 }
 </script>

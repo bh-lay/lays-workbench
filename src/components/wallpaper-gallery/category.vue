@@ -1,5 +1,5 @@
 <style lang="stylus" scoped>
-.item
+.category-item
   position relative
   display flex
   align-items center
@@ -26,7 +26,7 @@
   <div
     v-for="item in categoryList"
     :key="item.name"
-    :class="['item', modelValue === item.name ? 'active' : '']"
+    :class="['category-item', modelValue === item.name ? 'active' : '']"
     @click="$emit('update:modelValue', item.name);"
   >
     <v-mdi

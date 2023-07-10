@@ -22,7 +22,6 @@
     <div class="btn-list">
       <bookmark-list
         :parent-id="id"
-        @open-bookmark-editor="$emit('open-bookmark-editor', $event)"
         @after-drop-to-desktop="$emit('after-drop-to-desktop', $event)"
       />
     </div>
@@ -46,7 +45,7 @@ export default {
       default: '',
     },
   },
-  emits: ['name-change', 'open-bookmark-editor', 'after-drop-to-desktop'],
+  emits: ['name-change', 'after-drop-to-desktop'],
   setup(props, context) {
     return {
       handleNameChange(newValue: string) {

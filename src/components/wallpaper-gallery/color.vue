@@ -2,7 +2,7 @@
 .list
   display flex
   flex-wrap wrap
-.item
+.color-item
   position relative
   width 180px
   height 120px
@@ -58,7 +58,7 @@
     <div
       v-for="item in colorList"
       :key="item.value"
-      :class="['item']"
+      :class="['color-item']"
       :style="{
         background: item.value
       }"

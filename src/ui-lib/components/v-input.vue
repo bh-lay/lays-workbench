@@ -26,7 +26,7 @@ export default defineComponent({
     },
     maxlength: {
       type: [String, Number],
-      default: 100,
+      default: 200,
     },
     placeholder: {
       type: String,

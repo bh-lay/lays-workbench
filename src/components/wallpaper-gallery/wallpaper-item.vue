@@ -1,5 +1,9 @@
 <style lang="stylus" scoped>
 .gallery-item
+  position relative
+  width 280px
+  aspect-ratio 2/1
+  flex-grow 1
   background #26262c
   cursor pointer
   z-index 0
@@ -24,7 +28,7 @@ a.from
   align-items center
   font-size 12px
   opacity 0
-  transition .5s .2s
+  transition opacity .5s .2s, background 0.2s
   .mdi-icon
     width 20px
     height 20px
@@ -38,6 +42,7 @@ a.from
         v-if="isImageLoaded"
         class="img-container"
         :style="styleValue"
+        @click="$emit('selected')"
       />
     </transition>
     <v-button v-if="from" class="from" target="_blank" :href="from" type="primary">

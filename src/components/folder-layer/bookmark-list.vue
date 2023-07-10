@@ -42,7 +42,7 @@
     >
       <v-contextmenu-item
         v-if="selectedBookmarkItem.type === BookmarkType.link"
-        @click="$emit('open-bookmark-editor', selectedBookmarkItem)"
+        @click="editModalVisible = true"
       >
         编辑
       </v-contextmenu-item>
@@ -62,6 +62,17 @@
       @before-drag="handleBeforeDrag"
       @drag-end="handleDragEnd"
     />
+    <v-modal
+      v-model="editModalVisible"
+      :width="800"
+    >
+      <div style="padding: 20px">
+        <custom-link
+          :data="selectedBookmarkItem"
+          @confirm="handleConfirmEdit"
+        />
+      </div>
+    </v-modal>
   </div>
 </template>
 
@@ -88,6 +99,7 @@ import { openBookmark } from '@/assets/ts/bookmark-utils'
 import { Message } from '@/ui-lib/message/index'
 import BookmarkItem from '../bookmark-item.vue'
 import DragedLayer from '../draged-layer.vue'
+import CustomLink from '../add-bookmark/custom-link.vue'
 function moveIndexTo(list: Bookmark[], fromIndex: number, toIndex: number) {
   if (fromIndex > toIndex) {
     list.splice(toIndex, 0, list[fromIndex])
@@ -104,7 +116,7 @@ parentId: {
   default: '',
 },
 })
-const emits = defineEmits(['open-bookmark-editor', 'after-drop-to-desktop'])
+const emits = defineEmits(['after-drop-to-desktop'])
 
 let bookmarkList: Ref<Bookmark[]> = ref([])
 const selectedBookmarkItem: Ref<Bookmark | null> = ref(null)
@@ -229,5 +241,20 @@ function handleDragEnd({ type, from, to }: {
   } else if (type === 'desktop') {
     handleSetToDesktop()
   }
+}
+
+
+const editModalVisible = ref(false)
+function  handleConfirmEdit(newBookmark: Bookmark) {
+  bookmarkUpdateService(newBookmark).then(() => {
+    editModalVisible.value = false
+    for (let i = 0; i < bookmarkList.value.length; i++) {
+      if (bookmarkList.value[i].id === newBookmark.id) {
+        // 更新书签数据
+        bookmarkList.value[i].fill(newBookmark)
+        break
+      }
+    }
+  })
 }
 </script>
