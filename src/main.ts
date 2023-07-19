@@ -3,11 +3,13 @@ import App from './App.vue'
 import uiLib from './ui-lib/index'
 import { initAppConfig } from './assets/ts/app-config'
 import { initVariables } from './assets/ts/css-variables'
+import funnyFn from './assets/ts/funny'
 import './assets/stylus/imported-styles/index.styl'
 // import SevenSegmentDisplay from 'vue3-seven-segment-display'
 function initApp() {
   initAppConfig()
   initVariables()
+  funnyFn()
 
   const app = createApp(App)
   app.use(uiLib)
