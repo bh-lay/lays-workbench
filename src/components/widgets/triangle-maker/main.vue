@@ -6,8 +6,9 @@
   height 100%
 .editor
   width 220px
-  padding 10px 40px 30px 10px
+  padding 30px
   overflow auto
+  background: rgba(64,95,200,0.05);
   scrollbar #405f77
 .title
   margin-bottom 30px
