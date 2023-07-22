@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/functions/scrollbar.styl'
 .focal-plane-outer
   position fixed
   width 100%
@@ -32,9 +33,11 @@
   box-sizing border-box
   width 80%
   max-width 1400px
-  max-height 900px
+  max-height 100%
+  overflow auto
   z-index 101
   color #e3e3e8
+  scrollbar()
 @media screen and (max-width:600px)
   .focal-plane-mask
     transition 0s !important
@@ -187,6 +190,9 @@ function afterFocalBodyClick(event: MouseEvent) {
     while (true) {
       if (hasFocalActionBlockClass(nodeForCheck)) {
         hasFocalActionBlock = true
+        break
+      }
+      if (!nodeForCheck || nodeForCheck === bodyNode) {
         break
       }
       nodeForCheck = nodeForCheck.parentNode as HTMLElement | null
