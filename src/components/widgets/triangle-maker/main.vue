@@ -9,7 +9,7 @@
   padding 30px
   overflow auto
   background: rgba(64,95,200,0.05);
-  scrollbar #405f77
+  scrollbar()
 .title
   margin-bottom 30px
   font-size 30px
@@ -107,7 +107,7 @@
   -moz-user-select text
   -ms-user-select text
   user-select text
-  scrollbar #26262c
+  scrollbar()
 </style>
 
 <template>

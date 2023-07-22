@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/vars/colors.styl'
 .desktop-selector
   height 34px
   padding 0 6px 0 15px
@@ -43,7 +44,7 @@
   color #c2c9d6
 .about-layer
   // padding 20px 26px 50px
-  background #3e4451
+  background $card-bg-color
   color #949eb3
 
 </style>

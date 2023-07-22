@@ -13,7 +13,7 @@
     margin-bottom 6px
     line-height 14px
     font-size 12px
-    color #6f6f85
+    color #777c88
 .undercoat
   display inline-block
   width 50px

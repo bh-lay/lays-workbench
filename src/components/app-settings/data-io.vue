@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/vars/colors.styl'
 .data-io
   position relative
   display flex
@@ -42,7 +43,7 @@
 	0%,
 	15%,
   100%
-    background #3e4451
+    background $card-bg-color
 	60%,
 	64%
     background #29303d

@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/vars/colors.styl'
 .settings-btn
   position relative
   cursor pointer
@@ -36,7 +37,7 @@
 .group-list
   width 340px
   margin-top 5px
-  background #3e4451
+  background $card-bg-color
 .setting-group
   padding 18px 20px
 .label

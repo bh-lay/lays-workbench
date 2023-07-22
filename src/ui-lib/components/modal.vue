@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/vars/colors.styl'
 .modal-outer
   position fixed
   width 100%
@@ -57,6 +58,7 @@
   width 80%
   max-width 1400px
   max-height 900px
+  background $card-bg-color
   z-index 101
 @media screen and (max-width:600px)
   .modal-mask
@@ -116,7 +118,7 @@
 import { ref, watch } from 'vue'
 import { getNextZIndex } from '../utils'
 type modalStyle = {
-  background: string,
+  background?: string,
   width?: string,
   height?: string
 }
@@ -150,7 +152,7 @@ const props = defineProps({
   },
   undercoat: {
     type: String,
-    default: '#26262c',
+    default: undefined,
   },
   closeOnClickModal: {
     type: Boolean,

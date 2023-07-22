@@ -7,14 +7,14 @@
   padding 8px 18px
   border-radius 4px 4px 0 0
   font-size 14px
-  color #6b6b7b
+  color #adadb8
   cursor pointer
   transition .15s
   &:hover
     background #2f2f37
   &.active,
   &:active
-    background #3b3b44
+    background #2b2b31
     color #c1c5cd
 </style>
 

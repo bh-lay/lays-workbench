@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/functions/scrollbar.styl'
 .focal-plane-outer
   position fixed
   width 100%
@@ -32,9 +33,31 @@
   box-sizing border-box
   width 80%
   max-width 1400px
-  max-height 900px
+  max-height 100%
+  overflow auto
   z-index 101
   color #e3e3e8
+  scrollbar()
+.focal-plane-close
+  position absolute
+  top 5px
+  right 5px
+  width 40px
+  height 40px
+  display flex
+  align-items center
+  justify-content center
+  z-index 102
+  transition-delay .2s
+  cursor pointer
+  margin-left 5px
+  transition .2s
+  svg
+    fill #aaa
+  &:hover
+    background #212127
+  &:active
+    background #16181d
 @media screen and (max-width:600px)
   .focal-plane-mask
     transition 0s !important
@@ -70,6 +93,18 @@
           @click="afterFocalBodyClick"
         >
           <slot />
+        </div>
+      </transition>
+      <transition name="fade-fast">
+        <div
+          v-if="modelValue"
+          class="focal-plane-close"
+          @click="closeFocusPlane"
+        >
+          <v-mdi
+            name="mdi-close"
+            size="22"
+          />
         </div>
       </transition>
     </div>
@@ -187,6 +222,9 @@ function afterFocalBodyClick(event: MouseEvent) {
     while (true) {
       if (hasFocalActionBlockClass(nodeForCheck)) {
         hasFocalActionBlock = true
+        break
+      }
+      if (!nodeForCheck || nodeForCheck === bodyNode) {
         break
       }
       nodeForCheck = nodeForCheck.parentNode as HTMLElement | null

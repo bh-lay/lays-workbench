@@ -36,7 +36,7 @@ textarea
   height 100px
   flex-grow 1
   overflow auto
-  scrollbar #334
+  scrollbar()
 .pager-footer
   height 40px
   flex-shrink 0

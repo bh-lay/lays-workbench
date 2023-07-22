@@ -17,13 +17,19 @@ export default [
     thumb: 'https://th.wallhaven.cc/small/nm/nm3p79.jpg',
     url: 'https://w.wallhaven.cc/full/nm/wallhaven-nm3p79.jpg',
   },
-  
   {
     name: '公共空间',
     from: 'https://wallhaven.cc/w/83ex7j',
     thumb: 'https://th.wallhaven.cc/small/83/83ex7j.jpg',
     url: 'https://w.wallhaven.cc/full/83/wallhaven-83ex7j.jpg',
   },
+  {
+    name: '日落',
+    from: 'https://wallhaven.cc/w/wedogr',
+    thumb: 'https://th.wallhaven.cc/small/we/wedogr.jpg',
+    url: 'https://w.wallhaven.cc/full/we/wallhaven-wedogr.jpg',
+  },
+  
   {
     name: '城市森林',
     from: 'https://wallhaven.cc/w/ne6l2r',

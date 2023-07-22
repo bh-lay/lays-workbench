@@ -6,7 +6,7 @@
   max-height 400px
   padding 40px
   overflow auto
-  scrollbar #26262c
+  scrollbar()
 @media screen and (max-width: 770px)
   .container
     flex-shrink 1
