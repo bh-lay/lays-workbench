@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../assets/stylus/vars/colors.styl'
 .draged-layer
   position fixed
   top 0
@@ -35,11 +36,11 @@
   display flex
   align-items center
   justify-content center
-  background #26262c
+  background $card-bg-color
   border-radius 0 0 8px 8px
   transform-origin center top
   transition .2s
-  color #666
+  color #fff
   &.active
     background red
     transform scale(1.25)
@@ -54,7 +55,7 @@
   display flex
   align-items center
   justify-content center
-  background #26262c
+  background $card-bg-color
   border-radius 0 0 8px 8px
   &.disabled
     opacity .5
@@ -82,12 +83,12 @@
   width 140px
   height 50px
   margin-left 110px
-  background #26262c
+  background $card-bg-color
   border-radius 0 0 8px 8px
   line-height 50px
   text-align center
   font-size 14px
-  color #888
+  color #fff
   transform-origin center top
   transition .2s
   &:before

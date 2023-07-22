@@ -8,7 +8,7 @@
   height 500px
   max-height calc(90vh - 150px)
   overflow auto
-  scrollbar #26262c
+  scrollbar()
 .bookmark-item
   cursor pointer
   :deep(.card)

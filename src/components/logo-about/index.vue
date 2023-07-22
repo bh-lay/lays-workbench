@@ -1,4 +1,5 @@
 <style lang="stylus" scoped>
+@import '../../assets/stylus/vars/colors.styl'
 .page-title
   height 34px
   padding 0 16px
@@ -10,14 +11,14 @@
   line-height 20px
   font-size 12px
   &:hover
-    background #3e4451
+    background $card-bg-color
   &:active,
   &.active
     background #353a45
 .about-layer
   width 260px
   padding 20px 26px 50px
-  background #3e4451
+  background $card-bg-color
   color #949eb3
   .sub-title
     margin-bottom 10px

@@ -1,5 +1,6 @@
 <style lang="stylus" scoped>
 @import '../../assets/stylus/functions/scrollbar.styl'
+@import '../../assets/stylus/vars/colors.styl'
 .search-list
   position absolute
   top 110%
@@ -7,9 +8,9 @@
   width 100%
   max-height 500%
   border-radius 4px
-  background #fff
+  background $card-bg-color
   overflow auto
-  scrollbar #fff
+  scrollbar()
 .bookmark-list
   padding 20px
 .no-result
@@ -24,7 +25,7 @@
     vertical-align top
     padding 0 60px 0 20px
     line-height 60px
-    color #5c6670
+    color #9099a2
 .item
   padding 4px 8px
   border-radius 4px
@@ -32,23 +33,22 @@
   overflow hidden
   text-overflow ellipsis
   line-height 24px
-  color #a3b3c2
   cursor pointer
+  color #697886
   :deep(b)
-    font-weight normal
     color #d96e26
   .name
-    color #364049
+    color #c4cdd4
     font-size 14px
   .url
     padding-left 1em
     font-size 12px
   &.active
-    background #f3f5f7
+    background #2c313a
   &:hover
-    background #e0e6eb
+    background #333a47
   &:active
-    background #adcfeb
+    background #16181d
 </style>
 <template>
   <div class="search-list" @mousedown.prevent>

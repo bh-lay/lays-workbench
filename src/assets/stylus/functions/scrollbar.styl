@@ -1,4 +1,4 @@
-scrollbar(backgroundColor)
+scrollbar()
   &::-webkit-scrollbar
     width 12px
     height 12px
@@ -7,11 +7,11 @@ scrollbar(backgroundColor)
     background-color transparent
   }
   &::-webkit-scrollbar-thumb
-    background-color light(backgroundColor) ? darken(backgroundColor, 5) : lighten(backgroundColor, 5)
+    background-color rgba(255, 255, 255, 0)
     background-clip content-box
     border-radius 6px
     border 4px solid transparent
   &:hover::-webkit-scrollbar-thumb
-    background-color light(backgroundColor) ? darken(backgroundColor, 20) : lighten(backgroundColor, 20)
+    background-color rgba(255, 255, 255, .3)
   &::-webkit-scrollbar-thumb:hover
     border-width 3px

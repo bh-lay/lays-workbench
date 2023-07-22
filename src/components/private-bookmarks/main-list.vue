@@ -7,7 +7,7 @@
   flex-grow 1
   padding 0 0 50px 15px
   overflow auto
-  scrollbar #26262c
+  scrollbar()
 .link-list-body
   border-radius 4px
   background rgba(47,47,55,0.5)

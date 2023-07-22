@@ -13,7 +13,7 @@
   border-radius 4px
   overflow auto
   background rgba(47,47,55,0.5)
-  scrollbar #26262c
+  scrollbar()
 </style>
 <template>
   <div class="bookmark-directory">
