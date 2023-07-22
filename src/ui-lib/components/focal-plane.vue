@@ -38,6 +38,26 @@
   z-index 101
   color #e3e3e8
   scrollbar()
+.focal-plane-close
+  position absolute
+  top 5px
+  right 5px
+  width 40px
+  height 40px
+  display flex
+  align-items center
+  justify-content center
+  z-index 102
+  transition-delay .2s
+  cursor pointer
+  margin-left 5px
+  transition .2s
+  svg
+    fill #aaa
+  &:hover
+    background #212127
+  &:active
+    background #16181d
 @media screen and (max-width:600px)
   .focal-plane-mask
     transition 0s !important
@@ -73,6 +93,18 @@
           @click="afterFocalBodyClick"
         >
           <slot />
+        </div>
+      </transition>
+      <transition name="fade-fast">
+        <div
+          v-if="modelValue"
+          class="focal-plane-close"
+          @click="closeFocusPlane"
+        >
+          <v-mdi
+            name="mdi-close"
+            size="22"
+          />
         </div>
       </transition>
     </div>
