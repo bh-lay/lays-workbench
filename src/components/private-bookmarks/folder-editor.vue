@@ -1,7 +1,6 @@
 <style lang="stylus" scoped>
 .link-editor
   padding 0 20px 20px
-  background #26262c
 .footer
   padding-top 15px
   text-align right
