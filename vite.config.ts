@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { initPluginPWA } from './build/pwa-config'
 const path = require('path')
 
 function resolve(dir: string) {
@@ -9,6 +10,7 @@ function resolve(dir: string) {
 export default defineConfig({
   plugins: [
     vue(),
+    initPluginPWA()
   ],
   resolve: {
     alias: {
