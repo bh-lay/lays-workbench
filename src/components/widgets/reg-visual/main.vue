@@ -33,7 +33,7 @@ export default {
       queryStr = `#!re=${encodeURIComponent(quickInputValue)}`
     }
     return {
-      iframeSrc: '/regulex-legacy/index.html?v1' + queryStr,
+      iframeSrc: '/regulex-legacy/index.html' + queryStr,
     }
   },
 }
