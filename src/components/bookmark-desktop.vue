@@ -95,7 +95,6 @@
 import {
   ref,
   Ref,
-  onMounted,
   shallowRef,
   inject,
   watch,
@@ -174,7 +173,7 @@ function mouseIntractive({
       openBookmark(data, {
         handleFolder() {
           folderLayerVisible.value = true
-        }
+        },
       })
     },
     dragStartHandle(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {

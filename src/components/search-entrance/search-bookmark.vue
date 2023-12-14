@@ -51,12 +51,24 @@
     background #16181d
 </style>
 <template>
-  <div class="search-list" @mousedown.prevent>
-    <div v-if="!isSearching && bookmarks.length === 0" class="no-result">
-      <v-mdi name="mdi-meteor" size="60" />
+  <div
+    class="search-list"
+    @mousedown.prevent
+  >
+    <div
+      v-if="!isSearching && bookmarks.length === 0"
+      class="no-result"
+    >
+      <v-mdi
+        name="mdi-meteor"
+        size="60"
+      />
       <span>没有搜索到书签</span>
     </div>
-    <div v-if="bookmarks.length > 0" class="bookmark-list">
+    <div
+      v-if="bookmarks.length > 0"
+      class="bookmark-list"
+    >
       <div
         v-for="(bookmark, index) in bookmarks"
         :key="bookmark.id"
@@ -91,6 +103,7 @@ export default defineComponent({
       default: '',
     },
   },
+  emits: ['after-open'],
   setup(props: {
     searchText: string
   }, context) {
@@ -98,7 +111,7 @@ export default defineComponent({
     const selectedIndex = ref(0)
     const bookmarkElList: HTMLElement[] = []
     const bookmarks: Ref<Bookmark[]> = ref([])
-    
+
     watch(
       () => props.searchText,
       (value: string) => {

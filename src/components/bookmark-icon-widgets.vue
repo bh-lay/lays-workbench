@@ -44,7 +44,7 @@ export default {
         if (index >= 0) {
           return h(supportWidgets[index], {
             data: props.data,
-            params: widgetsParams
+            params: widgetsParams,
           })
         }
       }

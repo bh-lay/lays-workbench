@@ -22,6 +22,7 @@ export function getIDBRequest(): Promise<IDBDatabase> {
       reject(error)
     }
     request.onerror = function(event: Event) {
+      console.log('connenct error', event)
       const error = new Error('建立数据库连接失败！')
       reject(error)
     }
@@ -29,7 +30,8 @@ export function getIDBRequest(): Promise<IDBDatabase> {
       resolve(request.result)
     }
     request.onblocked = function(event) {
-      alert('本地数据升级，请关闭全部页面重新打开！');
+      console.log('db blocked', event)
+      alert('本地数据升级，请关闭全部页面重新打开！')
     }
     request.onupgradeneeded = async function(event) {
       const target = event.target as CustomIDBTransactionEventTarget

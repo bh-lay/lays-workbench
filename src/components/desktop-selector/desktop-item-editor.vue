@@ -33,9 +33,12 @@
 <template>
   <div class="desktop-item">
     <v-dropdown type="plain">
-      <div class="dot" :style="{
-        background: desktopColor
-      }"></div>
+      <div
+        class="dot"
+        :style="{
+          background: desktopColor
+        }"
+      />
       <template #body>
         <color-selector
           v-model="desktopColor"
@@ -45,32 +48,48 @@
     </v-dropdown>
     <template v-if="editMode">
       <v-input
-        class="desktop-name"
         v-model="desktopName"
         v-focus
         v-drag-stop
+        class="desktop-name"
         :maxlength="10"
         @keydown.enter="handConfirm"
       />
-      <v-button type="primary" @click="handConfirm">{{ confirmLabel }}</v-button>
-      <v-button type="secondary" @click="handleCancel">取消</v-button>
+      <v-button
+        type="primary"
+        @click="handConfirm"
+      >
+        {{ confirmLabel }}
+      </v-button>
+      <v-button
+        type="secondary"
+        @click="handleCancel"
+      >
+        取消
+      </v-button>
     </template>
-    <div v-else class="desktop-name desktop-name-text" @click="editMode = true">{{ desktop.name }}</div>
+    <div
+      v-else
+      class="desktop-name desktop-name-text"
+      @click="editMode = true"
+    >
+      {{ desktop.name }}
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Bookmark, BookmarkSystemId, BookmarkType, bookmarkOriginData } from '@/database/entity/bookmark';
-import { PropType, Ref, ref, watch } from 'vue';
+import { Bookmark, BookmarkSystemId, BookmarkType, bookmarkOriginData } from '@/database/entity/bookmark'
+import { PropType, Ref, ref, watch } from 'vue'
 import ColorSelector from '@/components/add-bookmark/color-selector.vue'
-import { bookmarkUpdateService } from '@/database/services/bookmark-service';
+import { bookmarkUpdateService } from '@/database/services/bookmark-service'
 const props = defineProps({
   desktop: {
     type: Object as PropType<Bookmark>,
     default() {
       return new Bookmark({
         parent: BookmarkSystemId.desktop,
-        type: BookmarkType.folder
+        type: BookmarkType.folder,
       })
     },
   },
@@ -80,8 +99,8 @@ const props = defineProps({
   },
   confirmLabel: {
     type: String,
-    default: '保存'
-  }
+    default: '保存',
+  },
 })
 const emits = defineEmits(['confirm', 'cancel', 'after-update'])
 const editMode = ref(typeof props.onlyEditMode === 'boolean' && props.onlyEditMode)
@@ -94,7 +113,7 @@ watch(
     desktopColor.value = desktop?.undercoat || '#f44336'
   },
   {
-    immediate: true
+    immediate: true,
   }
 )
 

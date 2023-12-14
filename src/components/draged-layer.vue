@@ -232,7 +232,7 @@ function getMouseTriggered(
   type: string,
   target?: mapItem,
   size?: BookmarkSize,
-} { 
+} {
   const gridGap = getGridSize() * 0.4
   // 是否拖拽合并
   for (let i = 0; i < map.length; i++) {

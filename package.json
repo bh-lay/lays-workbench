@@ -6,7 +6,7 @@
     "build": "vite build",
     "publish": "scp -r ./dist/* root@119.27.164.123:/root/webserver/e.bh-lay.com/",
     "deploy": "npm run build && npm run publish",
-    "lint": "eslint --ext .ts,.vue src"
+    "lint": "eslint --ext .ts,.vue src --fix"
   },
   "dependencies": {
     "@mdi/js": "^6.3.95",

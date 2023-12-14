@@ -32,7 +32,10 @@
     class="bookmark-container"
   >
     <div class="header">
-      <v-input placeholder="搜索" v-model="searchKey"/>
+      <v-input
+        v-model="searchKey"
+        placeholder="搜索"
+      />
       <v-button @click="handleCreateLink">
         添加链接
       </v-button>
@@ -466,7 +469,7 @@ export default {
         openBookmark(bookmark, {
           handleFolder() {
             context.emit('open-folder', bookmark.id)
-          }
+          },
         })
       },
       handleRemove() {

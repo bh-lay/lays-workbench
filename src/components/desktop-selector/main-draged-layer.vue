@@ -86,9 +86,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, Ref } from 'vue'
+import { ref, inject } from 'vue'
 import dragHandle from '@/assets/ts/drag-handle'
-import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
+import { Bookmark } from '@database/entity/bookmark'
 type mapItem = {
   id: string,
   top: number,
@@ -158,7 +158,7 @@ function getMouseTriggered(
       type: 'delete',
     }
   }
-  
+
   // 拖拽取消
   return {
     type: 'cancel',

@@ -104,7 +104,7 @@ textarea
     <div class="pager-header">
       <div class="pager-header-inner">
         <div class="side-toolset">
-          <app-settings :active-wallpaper="activeWallpaper"/>
+          <app-settings :active-wallpaper="activeWallpaper" />
           <desktop-selector v-model="activeDesktopId" />
         </div>
         <logo-about />
@@ -184,7 +184,7 @@ watch(
   },
   {
     immediate: true,
-  },
+  }
 )
 
 </script>

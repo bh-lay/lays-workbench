@@ -44,11 +44,18 @@
 </style>
 
 <template>
-  
-  <a v-if="href" :href="href" :target="target" :class="['v-button', 'v-button-' + type]">
+  <a
+    v-if="href"
+    :href="href"
+    :target="target"
+    :class="['v-button', 'v-button-' + type]"
+  >
     <slot />
   </a>
-  <button v-else :class="['v-button', 'v-button-' + type]">
+  <button
+    v-else
+    :class="['v-button', 'v-button-' + type]"
+  >
     <slot />
   </button>
 </template>

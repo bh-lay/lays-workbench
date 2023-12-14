@@ -32,9 +32,12 @@
       v-if="iconType === 'mdi'"
       :name="iconData"
     />
-    <span v-else-if="iconType === 'text'" :style="{
-      fontSize: (iconData || '').length > 3 ? '1.3em' : undefined
-    }">{{ iconData }}</span>
+    <span
+      v-else-if="iconType === 'text'"
+      :style="{
+        fontSize: (iconData || '').length > 3 ? '1.3em' : undefined
+      }"
+    >{{ iconData }}</span>
     <template v-else>
       <transition name="fade-slow">
         <img

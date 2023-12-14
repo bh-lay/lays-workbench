@@ -3,7 +3,7 @@
   display flex
   flex-direction column
   background-image linear-gradient(349deg, rgba(0, 0, 0, 0.4), transparent), linear-gradient(34deg, rgba(255, 255, 255, 0.2), transparent)
-  box-shadow inset 1px 1px 1px rgba(255, 255, 255, .1), inset -1px -1px 1px rgba(0, 0, 0, .2) 
+  box-shadow inset 1px 1px 1px rgba(255, 255, 255, .1), inset -1px -1px 1px rgba(0, 0, 0, .2)
 .title
   padding-top 12px
   line-height 20px
@@ -51,26 +51,52 @@
     }"
     @click="handleClick"
   >
-    <div v-if="widgetsSize !== BookmarkSize.small" class="title">{{ eventName }}</div>
-    <div class="countdown-time-list" :style="{
-      fontSize: 0.4 / Math.max(timeLeftArray.length, 3.6) + 'em'
-    }">
-      <div v-if="timeLeftArray.length === 0">到站</div>
+    <div
+      v-if="widgetsSize !== BookmarkSize.small"
+      class="title"
+    >
+      {{ eventName }}
+    </div>
+    <div
+      class="countdown-time-list"
+      :style="{
+        fontSize: 0.4 / Math.max(timeLeftArray.length, 3.6) + 'em'
+      }"
+    >
+      <div v-if="timeLeftArray.length === 0">
+        到站
+      </div>
       <template v-else>
-        <div v-for="item in timeLeftArray" :key="item[1]" class="item">
-          <div class="num"><SevenSegmentDisplay :value="leftPad(item[0])" /></div>
-          <div class="label">{{ item[1] }}</div>
+        <div
+          v-for="item in timeLeftArray"
+          :key="item[1]"
+          class="item"
+        >
+          <div class="num">
+            <SevenSegmentDisplay :value="leftPad(item[0])" />
+          </div>
+          <div class="label">
+            {{ item[1] }}
+          </div>
         </div>
       </template>
     </div>
-    <div v-if="widgetsSize !== BookmarkSize.small" class="end-time">{{ timeFormat(eventEndTime) }}</div>
+    <div
+      v-if="widgetsSize !== BookmarkSize.small"
+      class="end-time"
+    >
+      {{ timeFormat(eventEndTime) }}
+    </div>
 
     <v-modal
       v-model="editModalVisible"
       :width="400"
     >
       <div style="padding: 20px">
-        <countdown-editor :data="$props.data" @confirm="handleDataChange"/>
+        <countdown-editor
+          :data="$props.data"
+          @confirm="handleDataChange"
+        />
       </div>
     </v-modal>
   </div>
@@ -78,11 +104,10 @@
 
 <script lang="ts">
 import {
-  bookmarkUpdateService
+  bookmarkUpdateService,
 } from '@database/services/bookmark-service'
 import { ref, computed, Ref, watch, onBeforeUnmount, ComputedRef } from 'vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
-import { openBookmark } from '@/assets/ts/bookmark-utils'
 import { SevenSegmentDisplay } from 'vue3-seven-segment-display'
 import CountdownEditor from './countdown-editor.vue'
 import { leftPad, splitInFirstColon, timeFormat } from '@/assets/ts/utils'
@@ -175,7 +200,7 @@ export default {
       () => props.data.value,
       (value: string | boolean) => {
         if (typeof value === 'string') {
-          const [widgetsType, widgetsParams] = splitInFirstColon(value)
+          const [, widgetsParams] = splitInFirstColon(value)
           if (widgetsParams) {
             const paramsSeprator = '-|-'
             const [eventNameInParams, eventTimeInParams] = widgetsParams.split(paramsSeprator)

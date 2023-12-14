@@ -154,7 +154,7 @@ search-height = 56px
       <search-bookmark
         v-if="selectedEngineName === 'bookmark' && isActive && searchText.length"
         ref="searchRef"
-        :searchText="searchText"
+        :search-text="searchText"
         @after-open="searchText = ''"
       />
     </transition>
@@ -312,7 +312,7 @@ export default defineComponent({
       inputBlur()
     }
     function handleSwitchEngine(direct: number) {
-      let nextIndex: number = -1 
+      let nextIndex = -1
       const currentIndex = activeEngineIndex.value
       const engineCount = searchEngineConfig.length
       if (currentIndex === engineCount - 1 && direct > 0) {
@@ -322,7 +322,7 @@ export default defineComponent({
       } else {
         nextIndex = currentIndex + (direct > 0 ? 1 : -1)
       }
-       selectedEngineName.value = searchEngineConfig[nextIndex].name
+      selectedEngineName.value = searchEngineConfig[nextIndex].name
     }
     globalShortcut({
       setInputFocus,
@@ -352,36 +352,37 @@ export default defineComponent({
           return
         }
         switch(e.key) {
-          case 'ArrowUp':
-            if (searchText.value.length) {
-              searchRef.value?.prev()
-            } else {
-              engineListVisible.value = true
-              handleSwitchEngine(-1)
-            }
-            e.preventDefault()
-            break;
-          case 'ArrowDown':
-            if (searchText.value.length) {
-              searchRef.value?.next()
-            } else {
-              engineListVisible.value = true
-              handleSwitchEngine(1)
-            }
-            e.preventDefault()
-            break;
-          case 'Enter':
-            if (selectedEngineName.value === 'bookmark') {
-              searchRef.value?.confirm()
-            } else {
-              handleSearch()
-            }
-            break;
-          case 'Escape':
-            closeEngineList()
-            inputBlur()
-          default:
-            closeEngineList()
+        case 'ArrowUp':
+          if (searchText.value.length) {
+            searchRef.value?.prev()
+          } else {
+            engineListVisible.value = true
+            handleSwitchEngine(-1)
+          }
+          e.preventDefault()
+          break
+        case 'ArrowDown':
+          if (searchText.value.length) {
+            searchRef.value?.next()
+          } else {
+            engineListVisible.value = true
+            handleSwitchEngine(1)
+          }
+          e.preventDefault()
+          break
+        case 'Enter':
+          if (selectedEngineName.value === 'bookmark') {
+            searchRef.value?.confirm()
+          } else {
+            handleSearch()
+          }
+          break
+        case 'Escape':
+          closeEngineList()
+          inputBlur()
+          break
+        default:
+          closeEngineList()
         }
       },
     }

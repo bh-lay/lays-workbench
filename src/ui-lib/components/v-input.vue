@@ -98,7 +98,7 @@ export default defineComponent({
             'input',
             {
               placeholder: props.placeholder,
-              maxlength: props.maxlength
+              maxlength: props.maxlength,
             }
           ),
         ]

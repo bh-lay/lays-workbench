@@ -9,5 +9,7 @@
 
 <script setup lang="ts">
 import { inject } from 'vue'
-const closeDropdown = inject('close-dropdown', () => {}, false)
+const closeDropdown = inject('close-dropdown', () => {
+  // console.log('do nothing')
+}, false)
 </script>

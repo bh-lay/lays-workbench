@@ -149,7 +149,6 @@ import {
   dbImportService,
   dbEmptyService,
 } from '@database/services/db-management-service'
-import { Bookmark } from '@/database/entity/bookmark'
 
 function getFileContent(file: File):  Promise<string> {
   return new Promise((resolve, reject) => {

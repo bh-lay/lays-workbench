@@ -16,7 +16,7 @@ export async function dbExportService(): Promise<dbBackupDataType> {
   })
   return {
     bookmarks,
-    version: dbVersioon
+    version: dbVersioon,
   }
 }
 // 数据导入服务
@@ -32,7 +32,7 @@ export async function dbImportService(data: {
     const db: IDBDatabase = await getIDBRequest()
     return await bookmarkInsertListManager(db, bookmarks)
   }
-  
+
 }
 
 // 数据清空服务

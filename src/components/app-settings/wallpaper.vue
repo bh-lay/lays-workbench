@@ -25,11 +25,11 @@
 <script setup lang="ts">
 import Gallery from '@/components/gallery.vue'
 
-const props = defineProps({
+defineProps({
   src: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
-const emits = defineEmits(['next'])
+defineEmits(['next'])
 </script>

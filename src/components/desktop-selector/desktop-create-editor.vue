@@ -11,17 +11,21 @@
     @confirm="handelConfirm"
     @cancel="createMode = false"
   />
-  <div v-else style="height: 50px;text-align: right;">
-    <v-button @click="createMode = true">创建桌面</v-button>
+  <div
+    v-else
+    style="height: 50px;text-align: right;"
+  >
+    <v-button @click="createMode = true">
+      创建桌面
+    </v-button>
   </div>
-
 </template>
 
 <script setup lang="ts">
-import { PropType, Ref, onBeforeUpdate, provide, ref, shallowRef } from 'vue';
-import { Bookmark, BookmarkSystemId, BookmarkType } from '@/database/entity/bookmark';
+import { Ref, ref } from 'vue'
+import { Bookmark, BookmarkSystemId, BookmarkType } from '@/database/entity/bookmark'
 import DesktopItemEditor from './desktop-item-editor.vue'
-import { bookmarkInsertService } from '@/database/services/bookmark-service';
+import { bookmarkInsertService } from '@/database/services/bookmark-service'
 
 const createMode = ref(false)
 const emits = defineEmits(['after-create'])

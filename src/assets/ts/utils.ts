@@ -1,5 +1,5 @@
 export function splitInFirstColon(input: string): [string, string] {
-  const output = input.match(/(^[^:]+)(?:\:(.+))*/)
+  const output = input.match(/(^[^:]+)(?::(.+))*/)
   if (!output) {
     return ['', '']
   }
@@ -24,7 +24,14 @@ export function jsonParse(input: string) {
     return {}
   }
 }
-export function jsonStringify(input: any) {
+export function jsonStringify(input: unknown) {
+  try {
+    return JSON.stringify(input)
+  } catch (e) {
+    return ''
+  }
+}
+export function cloneDeep(input: T): T {
   try {
     return JSON.stringify(input)
   } catch (e) {

@@ -14,11 +14,11 @@ export default defineComponent({
     return function() {
       const parsedContent = props.content.replace(/[<>]/g, function (c){
         return c === '<' ? '&lt;':'&gt;'
-      });
-      const html = parsedContent.replace(new RegExp(`(${props.keyword})`, 'gmi'), `<b>$1</b>`)
+      })
+      const html = parsedContent.replace(new RegExp(`(${props.keyword})`, 'gmi'), '<b>$1</b>')
       return h('span', {
         innerHTML: html,
       })
     }
-  }
+  },
 })
