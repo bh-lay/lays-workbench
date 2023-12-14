@@ -29,7 +29,7 @@ export default [
     thumb: 'https://th.wallhaven.cc/small/we/wedogr.jpg',
     url: 'https://w.wallhaven.cc/full/we/wallhaven-wedogr.jpg',
   },
-  
+
   {
     name: '城市森林',
     from: 'https://wallhaven.cc/w/ne6l2r',
@@ -72,7 +72,7 @@ export default [
     thumb: 'https://th.wallhaven.cc/small/nz/nzkggo.jpg',
     url: 'https://w.wallhaven.cc/full/nz/wallhaven-nzkggo.jpg',
   },
-  
+
   {
     name: '流浪宇航员',
     from: 'https://wallhaven.cc/w/j3ge7w',
@@ -85,7 +85,7 @@ export default [
     thumb: 'https://th.wallhaven.cc/small/45/45yp51.jpg',
     url: 'https://w.wallhaven.cc/full/45/wallhaven-45yp51.jpg',
   },
-  
+
   {
     name: '小镇晨雾',
     from: 'https://wallhaven.cc/w/nmkj89',

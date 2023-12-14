@@ -101,14 +101,14 @@ async function renderWallpaper (currentUrl: string, forceWaitTime?: number)  {
 
 // 当 APP 配置数据发生变动，重载
 watch(
-  () => props.src,  
+  () => props.src,
   async (newSrc, oldSrc) => {
     const forceWaitTime = oldSrc && isImageLoaded.value ? 800 : 0
     isImageLoaded.value = false
     renderWallpaper(newSrc, forceWaitTime)
   },
   {
-    immediate: true
+    immediate: true,
   }
 )
 </script>

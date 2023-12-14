@@ -46,12 +46,14 @@ import Gallery from './gallery.vue'
 
 const activeCategory = ref('gallery')
 const activeDesktopId = inject<Ref<string>>('activeDesktopId')
-const changeWallpaper = inject('changeWallpaper', (src: string) => {}, false)
+const changeWallpaper = inject('changeWallpaper', (src: string) => {
+  console.log('changeWallpaper', src)
+}, false)
 function setWallpaper(wallpaperUrl: string) {
   bookmarkDesktopWallpaperUpdateService(activeDesktopId?.value || '', wallpaperUrl)
     .then(() => {
       changeWallpaper(wallpaperUrl)
     })
 }
-  
+
 </script>

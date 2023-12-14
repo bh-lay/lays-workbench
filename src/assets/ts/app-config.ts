@@ -1,4 +1,4 @@
-import { jsonParse } from "./utils"
+import { jsonParse } from './utils'
 
 type AppConfig = {
   userName: string,
@@ -49,7 +49,7 @@ function afterDataChangeDelay() {
   }, 300)
 }
 
-function setAppConfigItemValue(appConfigItem: AppConfig, key: keyof AppConfig, value: any) {
+function setAppConfigItemValue(appConfigItem: AppConfig, key: keyof AppConfig, value: unknown) {
   if (typeof value === 'string') {
     if (key === 'activeDesktopId' || key === 'searchEngineName' || key === 'userName') {
       appConfigItem[key] = value
@@ -65,11 +65,11 @@ function setAppConfigItemValue(appConfigItem: AppConfig, key: keyof AppConfig, v
 export function initAppConfig(): AppConfig {
   // 尝试从本地获取数据
   const localData = localStorage.getItem(localStorageKey) || ''
-  let configFromLocal = localData ? jsonParse(localData) : null
+  const configFromLocal = localData ? jsonParse(localData) : null
   const appConfig: AppConfig = getAppConfigDefault()
   // 合并本地数据
   if (configFromLocal) {
-    for (let key in appConfig) {
+    for (const key in appConfig) {
       if (configFromLocal[key]) {
         setAppConfigItemValue(appConfig, key as keyof AppConfig, configFromLocal[key])
       }

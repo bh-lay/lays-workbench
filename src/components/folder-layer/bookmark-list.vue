@@ -111,10 +111,10 @@ function moveIndexTo(list: Bookmark[], fromIndex: number, toIndex: number) {
 }
 
 const props =defineProps({
-parentId: {
-  type: String,
-  default: '',
-},
+  parentId: {
+    type: String,
+    default: '',
+  },
 })
 const emits = defineEmits(['after-drop-to-desktop'])
 

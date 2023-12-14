@@ -150,7 +150,7 @@ const props = defineProps({
     type: Array as PropType<string[]>,
     default() {
       return ['focal-action-block']
-    }
+    },
   },
 })
 const emits = defineEmits(['after-open', 'after-close', 'update:modelValue'])
@@ -219,6 +219,7 @@ function afterFocalBodyClick(event: MouseEvent) {
     }
     let nodeForCheck: HTMLElement | null = targetNode
     let hasFocalActionBlock = false
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       if (hasFocalActionBlockClass(nodeForCheck)) {
         hasFocalActionBlock = true

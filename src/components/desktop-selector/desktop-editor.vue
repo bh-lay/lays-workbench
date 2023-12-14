@@ -4,39 +4,41 @@
 </style>
 
 <template>
-<div ref="editRootNode" class="desktop-editor">
-  <desktop-item-editor
-    v-for="desktop in desktopList"
-    :key="desktop.id"
-    :data-id="desktop.id"
-    :desktop="desktop"
-    class="desktop-item"
-    v-drag-start="(event: MouseEvent | TouchEvent) => {
-      dragStartHandle(event, desktop)
-    }"
-    @after-update="handleDesktopChanged"
-  />
+  <div
+    ref="editRootNode"
+    class="desktop-editor"
+  >
+    <desktop-item-editor
+      v-for="desktop in desktopList"
+      :key="desktop.id"
+      v-drag-start="(event: MouseEvent | TouchEvent) => {
+        dragStartHandle(event, desktop)
+      }"
+      :data-id="desktop.id"
+      :desktop="desktop"
+      class="desktop-item"
+      @after-update="handleDesktopChanged"
+    />
 
-  <desktop-create-editor @after-create="handleDesktopChanged" />
-  <main-draged-layer
-    v-if="willStartDrag"
-    :event="dragEvent"
-    :draged-bookmark="selectedDesktop"
-    @before-drag="handleBeforeDrag"
-    @drag-end="handleDragEnd"
-  />
-</div>
-
+    <desktop-create-editor @after-create="handleDesktopChanged" />
+    <main-draged-layer
+      v-if="willStartDrag"
+      :event="dragEvent"
+      :draged-bookmark="selectedDesktop"
+      @before-drag="handleBeforeDrag"
+      @drag-end="handleDragEnd"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { PropType, Ref, provide, ref, shallowRef } from 'vue';
-import { Bookmark } from '@/database/entity/bookmark';
+import { PropType, Ref, provide, ref, shallowRef } from 'vue'
+import { Bookmark } from '@/database/entity/bookmark'
 import MainDragedLayer from './main-draged-layer.vue'
 import DesktopCreateEditor from './desktop-create-editor.vue'
 import DesktopItemEditor from './desktop-item-editor.vue'
-import { bookmarkRemoveService, bookmarkResortService } from '@/database/services/bookmark-service';
-import { Message } from '@/ui-lib/message';
+import { bookmarkRemoveService, bookmarkResortService } from '@/database/services/bookmark-service'
+import { Message } from '@/ui-lib/message'
 
 
 // 找到拖放元素和目标元素的位置
@@ -93,7 +95,7 @@ const props = defineProps({
     default() {
       return []
     },
-  }
+  },
 })
 const emits = defineEmits(['after-desktop-changed'])
 

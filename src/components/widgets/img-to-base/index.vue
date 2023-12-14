@@ -149,8 +149,8 @@ export default {
       }
       openBookmark(props.data, {
         widgetsData: {
-          file
-        }
+          file,
+        },
       })
     }
     onMounted(() => {

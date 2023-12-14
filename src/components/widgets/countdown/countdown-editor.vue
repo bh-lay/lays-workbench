@@ -57,6 +57,7 @@
         v-focus
         type="text"
         placeholder="输入目标时间"
+        @keydown.enter="confirm"
       />
     </div>
     <div class="footer">

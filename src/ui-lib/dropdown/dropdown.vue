@@ -34,8 +34,8 @@
           v-clickoutside="onClickoutside"
           :class="['dropdown-body', `dropdown-body-${type}`]"
           :style="{
-            top: top + 'px',
-            left: left + 'px',
+            top: (top + (offset && offset.top ? offset.top : 0)) + 'px',
+            left: (left + (offset && offset.left ? offset.left : 0)) + 'px',
             zIndex: currentZIndex,
           }"
         >
@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, provide, ref } from 'vue'
+import { PropType, nextTick, provide, ref } from 'vue'
 import { getNextZIndex } from '../utils'
 
 const props = defineProps({
@@ -63,6 +63,15 @@ const props = defineProps({
     type: String,
     // default、plain、dark
     default: 'default',
+  },
+  offset: {
+    type: Object as PropType<{
+      top?: number,
+      left?: number,
+    }>,
+    default() {
+      return {}
+    },
   },
 })
 const emits = defineEmits(['visible-before'])

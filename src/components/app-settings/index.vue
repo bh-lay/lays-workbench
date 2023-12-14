@@ -53,7 +53,9 @@
     placement="bottom-left"
     @visible-before="handleDropdownVisible"
   >
-    <div class="app-name">{{ userName }}</div>
+    <div class="app-name">
+      {{ userName }}
+    </div>
     <template #body>
       <div class="group-list">
         <div class="setting-group">
@@ -67,11 +69,14 @@
             placeholder="怎么称呼你 ？"
             @keydown.enter="userNameConfirm"
           />
-          <div v-if="userNameInEdit !== userName" style="padding-top: 10px;">
+          <div
+            v-if="userNameInEdit !== userName"
+            style="padding-top: 10px;"
+          >
             <v-button
               type="primary"
-              @click="userNameConfirm"
               style="margin-right: 10px;"
+              @click="userNameConfirm"
             >
               修改
             </v-button>
@@ -87,7 +92,10 @@
           <div class="label">
             壁纸设置
           </div>
-          <wallpaper :src="activeWallpaper" @next="settingWallpaper" />
+          <wallpaper
+            :src="activeWallpaper"
+            @next="settingWallpaper"
+          />
         </div>
         <div class="setting-group">
           <div class="label">
@@ -114,10 +122,10 @@ import Wallpaper from './wallpaper.vue'
 import DataIo from './data-io.vue'
 import { ref } from 'vue'
 
-const props = defineProps({
+defineProps({
   activeWallpaper: {
     type: String,
-    default: ''
+    default: '',
   },
 })
 const userNameInEdit = ref('')

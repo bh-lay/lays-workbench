@@ -75,7 +75,7 @@
       class="card"
       :icon="data.icon"
       :undercoat="data.undercoat"
-      :url="data.value"
+      :url="(data.value as string)"
       @click="$emit('next', data)"
     />
     <bookmark-icon-widgets

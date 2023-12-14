@@ -45,7 +45,13 @@ a.from
         @click="$emit('selected')"
       />
     </transition>
-    <v-button v-if="from" class="from" target="_blank" :href="from" type="primary">
+    <v-button
+      v-if="from"
+      class="from"
+      target="_blank"
+      :href="from"
+      type="primary"
+    >
       <v-mdi name="mdi-link" />
       来源
     </v-button>
@@ -69,6 +75,7 @@ export default {
       default: '',
     },
   },
+  emits: ['selected'],
   setup(props) {
     const usedUrl = imgRobber(props.url)
     const isImageLoaded = ref(false)

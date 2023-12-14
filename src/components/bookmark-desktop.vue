@@ -95,10 +95,10 @@
 import {
   ref,
   Ref,
-  onMounted,
   shallowRef,
   inject,
   watch,
+  provide,
 } from 'vue'
 import {
   Bookmark,
@@ -174,7 +174,7 @@ function mouseIntractive({
       openBookmark(data, {
         handleFolder() {
           folderLayerVisible.value = true
-        }
+        },
       })
     },
     dragStartHandle(event: MouseEvent | TouchEvent, bookmarkItem: Bookmark) {
@@ -230,6 +230,15 @@ export default {
         immediate: true,
       }
     )
+    provide('updateBookmark', (needUpdateBookmark: Bookmark) => {
+      for (let i = 0; i < bookmarkList.value.length; i++) {
+        if (bookmarkList.value[i].id === needUpdateBookmark.id) {
+          bookmarkList.value[i] = needUpdateBookmark
+          break
+        }
+      }
+    })
+
     function triggerFolderIconChange(bookmarkItem: Bookmark) {
       // 用 value 触发重绘
       bookmarkItem.value = bookmarkItem.value === '1' ? '2' : '1'

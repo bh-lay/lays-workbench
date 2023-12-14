@@ -9,7 +9,6 @@ import {
   bookmarkRemoveManager,
   bookmarkListManager,
   bookmarkResetSortManager,
-  bookmarkClearManager,
   bookmarkCountManager,
   bookmarkSearchManager,
 } from '../manager/bookmark-manager'
@@ -102,7 +101,6 @@ async function getListByDefault(db: IDBDatabase, query: queryOptions) {
 
 // 通过默认数据加载数据
 async function getBookmarkByDefault(db: IDBDatabase, bookmarkId: string) {
-  const data: Bookmark[] = []
   // 若数据库中有数据，则放弃查找
   const count = await bookmarkCountManager(db)
   if (count > 0) {
@@ -145,6 +143,6 @@ export async function bookmarkIsEmptyService(): Promise<boolean> {
 // 搜索书签
 export async function bookmarkSearchService(searchKey: string): Promise<Bookmark[]> {
   const db: IDBDatabase = await getIDBRequest()
-  let data: Bookmark[] = await bookmarkSearchManager(db, searchKey)
+  const data: Bookmark[] = await bookmarkSearchManager(db, searchKey)
   return data
 }

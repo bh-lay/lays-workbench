@@ -56,7 +56,7 @@ function fixAllParentId(objectStore: IDBObjectStore): Promise<boolean> {
   })
 }
 
-function addBookmark(objectStore: IDBObjectStore, data: any) {
+function addBookmark(objectStore: IDBObjectStore, data: unknown) {
   return new Promise((resolve) => {
     const request = objectStore.add(data)
     request.onsuccess = function () {
@@ -95,7 +95,7 @@ async function addDesktopDefaultBookmark(objectStore: IDBObjectStore) {
     icon: 'mdi:worker',
     sort: 0,
     value: '{"wallpaper": "https://w.wallhaven.cc/full/nz/wallhaven-nzkggo.jpg"}',
-    desc: ''
+    desc: '',
   })
   await addBookmark(objectStore, {
     id: 'desktop-fish',
@@ -107,7 +107,7 @@ async function addDesktopDefaultBookmark(objectStore: IDBObjectStore) {
     icon: 'mdi:fish',
     sort: 0,
     value: '{"wallpaper": "https://w.wallhaven.cc/full/wy/wallhaven-wyewex.jpg"}',
-    desc: ''
+    desc: '',
   })
 }
 export default async function bookmarkUpgrade (

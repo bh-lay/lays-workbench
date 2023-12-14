@@ -2,6 +2,7 @@ module.exports = {
   'env': {
     'browser': true,
     'es2021': true,
+    'vue/setup-compiler-macros': true,
   },
   'extends': [
     'eslint:recommended',
@@ -48,5 +49,7 @@ module.exports = {
     'no-trailing-spaces': ['error', {
       'skipBlankLines': false,
     }],
+    'vue/multi-word-component-names': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
 }

@@ -56,9 +56,12 @@
     placement="bottom-left"
   >
     <div v-if="activeDesktop">
-      <span class="desktop-color-dot" :style="{
-        background: activeDesktop.undercoat
-      }"></span>
+      <span
+        class="desktop-color-dot"
+        :style="{
+          background: activeDesktop.undercoat
+        }"
+      />
       <span class="desktop-name">{{ activeDesktop.name }}</span>
     </div>
     <span v-else>无桌面</span>
@@ -75,9 +78,12 @@
           :active="modelValue === desktop.id"
           @click="switchActiveDesktop(desktop.id)"
         >
-          <span class="desktop-color-dot" :style="{
-            background: desktop.undercoat
-          }"></span>
+          <span
+            class="desktop-color-dot"
+            :style="{
+              background: desktop.undercoat
+            }"
+          />
           <span class="desktop-name">{{ desktop.name }}</span>
         </v-dropdown-item>
       </div>
@@ -101,7 +107,6 @@ import {
   Ref,
   onMounted,
   watch,
-nextTick,
 } from 'vue'
 import { Bookmark, BookmarkSystemId } from '@database/entity/bookmark'
 import { bookmarkListService } from '@database/services/bookmark-service'
@@ -113,7 +118,7 @@ const editModalVisible: Ref<boolean> = ref(false)
 const props = defineProps({
   modelValue: {
     type: String,
-    default: false,
+    default: '',
   },
 })
 const emits = defineEmits(['update:modelValue'])
