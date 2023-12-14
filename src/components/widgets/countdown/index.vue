@@ -106,11 +106,11 @@
 import {
   bookmarkUpdateService,
 } from '@database/services/bookmark-service'
-import { ref, computed, Ref, watch, onBeforeUnmount, ComputedRef } from 'vue'
-import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
+import { ref, computed, Ref, watch, onBeforeUnmount, ComputedRef, inject } from 'vue'
+import { Bookmark, BookmarkSize, bookmarkOriginData } from '@database/entity/bookmark'
 import { SevenSegmentDisplay } from 'vue3-seven-segment-display'
 import CountdownEditor from './countdown-editor.vue'
-import { leftPad, splitInFirstColon, timeFormat } from '@/assets/ts/utils'
+import { cloneDeep, leftPad, splitInFirstColon, timeFormat } from '@/assets/ts/utils'
 import { anyColorToHsl, formatHslToHex } from '@/assets/ts/color-conversion'
 
 const timeOneSecond = 1000
@@ -195,7 +195,9 @@ export default {
     onBeforeUnmount(() => {
       stopTimer()
     })
-
+    const updateBookmarkFn = inject('updateBookmark', (data: Bookmark) => {
+      console.log(data)
+    }, false)
     watch(
       () => props.data.value,
       (value: string | boolean) => {
@@ -246,9 +248,11 @@ export default {
         editModalVisible.value = true
       },
       handleDataChange(params: {undercoat: string, value: string}) {
-        props.data.undercoat = params.undercoat
-        props.data.value = params.value
-        bookmarkUpdateService(props.data)
+        const newData = new Bookmark(cloneDeep(props.data) as bookmarkOriginData)
+        newData.undercoat = params.undercoat
+        newData.value = params.value
+        updateBookmarkFn(newData)
+        bookmarkUpdateService(newData)
         editModalVisible.value = false
       },
       leftPad,

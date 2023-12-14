@@ -31,10 +31,12 @@ export function jsonStringify(input: unknown) {
     return ''
   }
 }
-export function cloneDeep(input: T): T {
+
+// export function cloneDeep<T>(input: T): T {
+export function cloneDeep(input: unknown): unknown {
   try {
-    return JSON.stringify(input)
+    return jsonParse(jsonStringify(input))
   } catch (e) {
-    return ''
+    return {}
   }
 }

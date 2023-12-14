@@ -149,6 +149,7 @@ import {
   dbImportService,
   dbEmptyService,
 } from '@database/services/db-management-service'
+import { jsonParse } from '@/assets/ts/utils'
 
 function getFileContent(file: File):  Promise<string> {
   return new Promise((resolve, reject) => {
@@ -218,7 +219,7 @@ export default {
         isWorking.value = true
         getFileContent(eventTarget.files[0])
           .then((contentStr: string) => {
-            return JSON.parse(contentStr)
+            return jsonParse(contentStr)
           })
           .then(dbBackupDataType => {
             return dbImportService(dbBackupDataType)

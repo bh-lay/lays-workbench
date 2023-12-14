@@ -147,13 +147,8 @@ import LogoAbout from '@/components/logo-about/index.vue'
 import DesktopSelector from '@/components/desktop-selector/index.vue'
 import EasyRouter from '@/components/easy-router.vue'
 import { Bookmark } from './database/entity/bookmark'
-function jsonParse(input: string) {
-  try {
-    return JSON.parse(input)
-  } catch (e) {
-    return {}
-  }
-}
+import { jsonParse } from './assets/ts/utils'
+
 const appConfig =  getAppConfig()
 const focused = ref(false)
 const activeDesktopId: Ref<string> = ref(appConfig.activeDesktopId)
