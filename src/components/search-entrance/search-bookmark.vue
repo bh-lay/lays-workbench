@@ -43,6 +43,8 @@
   .url
     padding-left 1em
     font-size 12px
+  .use-engine
+    font-size 14px
   &.active
     background #2c313a
   &:hover
@@ -55,20 +57,15 @@
     class="search-list"
     @mousedown.prevent
   >
-    <div
-      v-if="!isSearching && bookmarks.length === 0"
-      class="no-result"
-    >
-      <v-mdi
-        name="mdi-meteor"
-        size="60"
-      />
-      <span>没有搜索到书签</span>
-    </div>
-    <div
-      v-if="bookmarks.length > 0"
-      class="bookmark-list"
-    >
+    <div class="bookmark-list">
+      <div
+        key="default-search"
+        :ref="setItemRef"
+        :class="['item', selectedIndex === -1 ? 'active' : '']"
+        @click="handleDefaultSearch"
+      >
+        <span class="use-engine">使用“<b>{{ searchEngineName }}</b>”搜索</span>
+      </div>
       <div
         v-for="(bookmark, index) in bookmarks"
         :key="bookmark.id"
@@ -87,6 +84,16 @@
           :keyword="searchText"
         />
       </div>
+      <div
+        v-if="!isSearching && bookmarks.length === 0"
+        class="no-result"
+      >
+        <v-mdi
+          name="mdi-meteor"
+          size="60"
+        />
+        <span>没有搜索到书签</span>
+      </div>
     </div>
   </div>
 </template>
@@ -95,20 +102,24 @@
 import { defineComponent, onBeforeUpdate, Ref, ref, watch } from 'vue'
 import { bookmarkSearchService } from '@database/services/bookmark-service'
 import { Bookmark, BookmarkType } from '@/database/entity/bookmark'
-import { openBookmark } from '@/assets/ts/bookmark-utils'
+
 export default defineComponent({
   props: {
     searchText: {
       type: String,
       default: '',
     },
+    searchEngineName: {
+      type: String,
+      default: '',
+    },
   },
-  emits: ['after-open'],
+  emits: ['request-open', 'request-search'],
   setup(props: {
     searchText: string
   }, context) {
     const isSearching = ref(false)
-    const selectedIndex = ref(0)
+    const selectedIndex = ref(-1)
     const bookmarkElList: HTMLElement[] = []
     const bookmarks: Ref<Bookmark[]> = ref([])
 
@@ -132,7 +143,7 @@ export default defineComponent({
       }
     )
     watch(selectedIndex, (index) => {
-      const el: HTMLElement | undefined =  bookmarkElList[index]
+      const el: HTMLElement | undefined =  bookmarkElList[index + 1]
       if (!el) {
         return
       }
@@ -159,24 +170,25 @@ export default defineComponent({
         if (selectedIndex.value < bookmarks.value.length - 1) {
           selectedIndex.value++
         } else {
-          selectedIndex.value = 0
+          selectedIndex.value = -1
         }
       },
       prev() {
-        if (selectedIndex.value > 0) {
+        if (selectedIndex.value > -1) {
           selectedIndex.value--
         } else {
           selectedIndex.value = bookmarks.value.length - 1
         }
       },
-      confirm() {
-        const selectedBookmark = bookmarks.value[selectedIndex.value]
-        openBookmark(selectedBookmark)
-        context.emit('after-open')
+      getSelectedBookmark() {
+        const selectedIndexValue = selectedIndex.value
+        return selectedIndexValue === -1 ? null : bookmarks.value[selectedIndex.value]
       },
       handleClick(bookmark: Bookmark) {
-        openBookmark(bookmark)
-        context.emit('after-open')
+        context.emit('request-open', bookmark)
+      },
+      handleDefaultSearch() {
+        context.emit('request-search')
       },
     }
   },
