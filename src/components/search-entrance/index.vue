@@ -152,10 +152,12 @@ search-height = 56px
     </transition>
     <transition name="zoom">
       <search-bookmark
-        v-if="selectedEngineName === 'bookmark' && isActive && searchText.length"
+        v-if="isActive && searchText.length"
         ref="searchRef"
         :search-text="searchText"
-        @after-open="searchText = ''"
+        :search-engine-name="selectedEngine.label"
+        @request-open="handleOpenBookmark"
+        @request-search="handleSearchByEngine"
       />
     </transition>
   </div>
@@ -165,6 +167,8 @@ search-height = 56px
 import { ref, Ref, computed, watch, nextTick, onUnmounted, defineComponent } from 'vue'
 import { getAppConfigItem, setAppConfigItem } from '@/assets/ts/app-config'
 import SearchBookmark from './search-bookmark.vue'
+import { openBookmark } from '@/assets/ts/bookmark-utils'
+import { Bookmark } from '@/database/entity/bookmark'
 
 type searchEngine = {
   name: string,
@@ -215,13 +219,6 @@ const searchEngineConfig: searchEngine[] = [
     placeholder: '别硬撸了，找个好用的轮子吧！',
     url: 'https://www.npmjs.com/search?q=[kw]',
     icon: 'mdi-npm',
-  },
-  {
-    name: 'bookmark',
-    label: '书签',
-    placeholder: '搜索书签名或网址...',
-    url: '',
-    icon: 'mdi-bookmark',
   },
 ]
 function globalShortcut({
@@ -347,6 +344,13 @@ export default defineComponent({
       },
       showEngineList,
       closeEngineList,
+      handleOpenBookmark(bookmark: Bookmark) {
+        openBookmark(bookmark)
+        searchText.value = ''
+      },
+      handleSearchByEngine() {
+        handleSearch()
+      },
       handleKeydown(e: KeyboardEvent) {
         if (isComposing.value) {
           return
@@ -371,10 +375,14 @@ export default defineComponent({
           e.preventDefault()
           break
         case 'Enter':
-          if (selectedEngineName.value === 'bookmark') {
-            searchRef.value?.confirm()
-          } else {
-            handleSearch()
+          if (searchRef.value) {
+            const selectedBookmark = searchRef.value?.getSelectedBookmark()
+            if (selectedBookmark) {
+              openBookmark(selectedBookmark)
+              searchText.value = ''
+            } else {
+              handleSearch()
+            }
           }
           break
         case 'Escape':
