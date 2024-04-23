@@ -1,40 +1,37 @@
 <style lang="stylus" scoped>
-@import '../../assets/stylus/vars/colors.styl'
 .page-title-button
   background transparent
   border none
   color rgba(255, 255, 255, .6)
 .intro-header
-  padding 24px 26px 30px
-  background rgba(255, 255, 255, .1)
-  border-radius 10px 10px 0 0
+  padding 80px 40px 50px
+  border-bottom 1px dashed #49505f
   h1
     margin 0
-    font-size 30px
+    font-size 36px
     color #cdd5e4
     small
       display block
       margin-bottom 10px
       font-weight normal
-      font-size 14px
+      font-size 18px
 .about-layer
-  padding 20px 26px 50px
-  background $card-bg-color
+  padding 40px 40px 150px
   color #949eb3
   .features
     display flex
     flex-wrap wrap
     margin-bottom 30px
-    padding 10px 0
+    padding 20px 0
     gap 10px
     .feature
       width 200px
       flex-grow 1
-      padding 15px
+      padding 20px
       border 1px dashed #49505f
     .feature-name
       margin-bottom 10px
-      font-size 20px
+      font-size 24px
       color #cdd5e4
     .feature-desc
       font-size 14px
@@ -57,7 +54,7 @@
   small
     margin-left 10px
     font-size 12px
-    color #586174
+    opacity .5
 .qrcode
   width 150px
   height 150px
@@ -88,12 +85,7 @@
     小剧起始页
   </v-button>
 
-  <FocalPlane
-    v-model="visilbe"
-    :width="780"
-    :close-on-press-escape="true"
-    :action-block-classes="['about-layer', 'intro-header']"
-  >
+  <OverlayPanel v-model="visilbe">
     <div class="intro-header">
       <h1><small>小剧起始页</small>更适合前端的上网首页</h1>
     </div>
@@ -142,12 +134,12 @@
         <span>剧</span>
       </div>
     </div>
-  </FocalPlane>
+  </OverlayPanel>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { FocalPlane } from '@/ui-lib/index'
+import { OverlayPanel } from '@/ui-lib/index'
 // import imgRobber from '@/assets/ts/img-robber'
 
 // const wechatQrCode = imgRobber('https://api.qrserver.com/v1/create-qr-code/?data=https://u.wechat.com/ELEgl9SCdqLRb0m3ZXzfct4')

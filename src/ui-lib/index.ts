@@ -4,6 +4,8 @@ import Directives from './directives/index'
 import contextmenu from './contextmenu/index'
 import dropdown from './dropdown/index'
 export { default as FocalPlane } from './components/focal-plane.vue'
+export { default as OverlayPanel } from './components/overlay-panel.vue'
+
 
 function initUiLayer() {
   const uiNode = document.querySelector('#v-ui')
