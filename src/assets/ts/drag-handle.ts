@@ -13,9 +13,9 @@ if (!window.TouchEvent) {
 }
 export type dragOptions = {
   beforeStart?: () => void;
-  start: (startX: number, startY: number) => void;
+  start?: (startX: number, startY: number) => void;
   move: (a: dragParams) => void;
-  end: (a: dragParams) => void;
+  end?: (a: dragParams) => void;
   cancel?: () => void;
   mouseStableDistance?: number;
   touchStableDistance?: number;

@@ -76,6 +76,10 @@ const supportWidgetsList = [
     label: '倒计时',
     name: 'countdown',
   },
+  {
+    label: '简裁变图',
+    name: 'easy-crop-pic',
+  },
 ]
 
 export default {

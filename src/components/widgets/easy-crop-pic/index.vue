@@ -3,7 +3,11 @@
   display flex
   box-sizing border-box
   height 100%
-  background #4caf50
+  background #d7ecf1
+  --primary-color #415358
+  --secondary-color #5d7d86
+  --third-color #c9dce1
+  --fouth-color #b1cad1
 .small
   display flex
   align-items center
@@ -11,11 +15,12 @@
   width 100%
   height 100%
   transition .2s
-  color #fff
+  color color var(--primary-color)
   cursor pointer
   &:hover
     background rgba(0, 0, 0, .2)
 .intro
+  width 40%
   padding 16px 0 16px 16px
   font-size 14px
   .caption
@@ -26,20 +31,20 @@
     line-height 20px
     font-weight bold
     font-size 16px
-    color #fff
+    color var(--primary-color)
   .desc
     margin-bottom 28px
     line-height 16px
     font-size 12px
-    color #adebaf
+    color var(--secondary-color)
   button
     width 80px
     height 30px
     border none
     border-radius 4px
     cursor pointer
-    background #91cf93
-    color #27722a
+    background var(--fouth-color)
+    color var(--primary-color)
     transition .5s
     &:active,
     &:focus
@@ -56,16 +61,16 @@
   flex-grow 1
   align-items center
   justify-content center
-  border-left 1px dashed #63bb66
+  border-left 1px dashed #cbdce0
   cursor pointer
   transition .2s
   span
     font-size 12px
-    color #85e088
+    color var(--secondary-color)
   &:hover
-    background #58b65c
+    background var(--third-color)
   &:active
-    background #70c273
+    background var(--fouth-color)
 .hidden-input
   position absolute
   width 0
@@ -91,10 +96,10 @@
       }"
     >
       <div class="title">
-        图片base64
+        简裁变图
       </div>
       <div class="desc">
-        小图嵌入更容易
+        图片尺寸随意拿捏
       </div>
       <button @click="$refs.input.click()">
         上传
@@ -123,9 +128,8 @@
 import { ref, Ref, computed, onMounted } from 'vue'
 import { Bookmark, BookmarkSize } from '@database/entity/bookmark'
 import { openBookmark } from '@/assets/ts/bookmark-utils'
-import { Message } from '@/ui-lib/message/index'
 export default {
-  name: 'ImageBaseWidgetsButton',
+  name: 'EasyCropPicWidgetsButton',
   props: {
     data: {
       type: Bookmark,
@@ -141,12 +145,6 @@ export default {
     const dragArea: Ref<HTMLElement | null> = ref(null)
 
     function handleSelectFile(file: File) {
-      if (file.size > 2 * 1024 * 1024) {
-        new Message({
-          message: '图片大于 2M，不建议使用 base64 !',
-        })
-        return
-      }
       openBookmark(props.data, {
         widgetsData: {
           file,

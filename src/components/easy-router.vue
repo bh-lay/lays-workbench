@@ -8,6 +8,7 @@ import JsonFormatter from '@/components/widgets/json-formatter/main.vue'
 import RegVisual from '@/components/widgets/reg-visual/main.vue'
 import ImageToBase from '@/components/widgets/img-to-base/main.vue'
 import TriangleMaker from '@/components/widgets/triangle-maker/main.vue'
+import EsayCropPic from '@/components/widgets/easy-crop-pic/main.vue'
 import { FocalPlane } from '@/ui-lib/index'
 
 function createSubVNode(moduleType: string, moduleName: string, state: routerState): { vnode: VNode, actionBlockClasses: string[] } | null {
@@ -48,6 +49,13 @@ function createSubVNode(moduleType: string, moduleName: string, state: routerSta
           defaultIndex: state.defaultIndex as number,
         }),
         actionBlockClasses: ['triangle-maker'],
+      }
+    case 'easy-crop-pic':
+      return {
+        vnode: h(EsayCropPic, {
+          file: state.file as File,
+        }),
+        actionBlockClasses: ['easy-crop-pic-main'],
       }
     }
   } else if (moduleType === 'settings') {

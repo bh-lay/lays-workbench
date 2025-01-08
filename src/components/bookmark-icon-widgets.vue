@@ -9,10 +9,11 @@ import PublicBookmarks from './widgets/public-bookmarks/index.vue'
 import PrivateBookmarks from './widgets/private-bookmarks/index.vue'
 import TriangleMaker from './widgets/triangle-maker/index.vue'
 import Countdown from './widgets/countdown/index.vue'
+import EasyCropPic from './widgets/easy-crop-pic/index.vue'
 import { splitInFirstColon } from '@/assets/ts/utils'
 
-const supportWidgetsTypes = ['reg-visual', 'json-formatter', 'native-bookmark', 'img-to-base', 'public-bookmarks', 'private-bookmarks', 'triangle-maker', 'countdown']
-const supportWidgets = [RegVisual, JsonFormatter, NativeBookmark, ImgToBase, PublicBookmarks, PrivateBookmarks, TriangleMaker, Countdown]
+const supportWidgetsTypes = ['reg-visual', 'json-formatter', 'native-bookmark', 'img-to-base', 'public-bookmarks', 'private-bookmarks', 'triangle-maker', 'countdown', 'easy-crop-pic']
+const supportWidgets = [RegVisual, JsonFormatter, NativeBookmark, ImgToBase, PublicBookmarks, PrivateBookmarks, TriangleMaker, Countdown, EasyCropPic]
 
 export default {
   components: {
