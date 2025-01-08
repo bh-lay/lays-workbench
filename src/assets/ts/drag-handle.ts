@@ -93,11 +93,11 @@ export function mouseDragHandle(originEvent: MouseEvent | TouchEvent, options?: 
     }
   }
   function up(event: MouseEvent) {
-    event.stopPropagation()
 
     document.removeEventListener('mousemove', mousemove, listenerConfig)
     document.removeEventListener('mouseup', up, listenerConfig)
     if (hasTriggerStartEvent) {
+      event.stopPropagation()
       end && end(getParamFromMouseEvent(event, startX, startY))
     } else {
       cancel && cancel()

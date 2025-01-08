@@ -66,9 +66,6 @@
     flex-shrink 1
     margin 0 auto
   }
-  .size-input {
-    width: 120px
-  }
 }
 </style>
 
@@ -124,21 +121,10 @@
         />
       </div>
       <div class="input-bar">
-        <!-- <v-input
-          v-model="cropWidth"
-          class="size-input"
-          type="number"
-          placeholder="输入链接名称"
-          max="1000"
+        <PhotoSizeSelector
+          v-model:width="cropWidth"
+          v-model:height="cropHeight"
         />
-        <v-input
-          v-model="cropHeight"
-          class="size-input"
-          type="number"
-          placeholder="输入链接名称"
-          max="1000"
-        /> -->
-        <span>{{ cropWidth }} x {{ cropHeight }}</span>
 
         <v-slider
           v-model="size.scale"
@@ -168,6 +154,8 @@
 <script lang="ts">
 import { computed, defineComponent, nextTick, onMounted, ref, watch, watchEffect } from 'vue'
 import dragHandle from '@/assets/ts/drag-handle'
+import PhotoSizeSelector from './photo-size-selector.vue'
+
 function getBoxSizePlaceIntoAnotherBox(
   innerWidth: number,
   innerHeight: number,
@@ -232,6 +220,7 @@ function captureImage(
 }
 export default defineComponent({
   name: 'EasyCropPicMain',
+  components: { PhotoSizeSelector },
   props: {
     file: {
       type: File,
@@ -266,8 +255,8 @@ export default defineComponent({
     const uploadInput = ref<HTMLInputElement | null>(null)
     const canvasImage = ref<HTMLDivElement | null>(null)
 
-    const cropWidth = ref(300)
-    const cropHeight = ref(200)
+    const cropWidth = ref(413)
+    const cropHeight = ref(579)
     const imageWidthInView = computed(() => size.value.imageWidth * size.value.scale)
     const imageHeightInView = computed(() => size.value.imageHeight * size.value.scale)
 

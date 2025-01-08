@@ -40,8 +40,9 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, context) {
     function triggerValueUpdate(inputEl: HTMLInputElement) {
-      if (props.modelValue !== inputEl.value) {
-        context.emit('update:modelValue', inputEl.value)
+      const valueInNode = props.type === 'number' ? Number(inputEl.value) : inputEl.value
+      if (props.modelValue !== valueInNode) {
+        context.emit('update:modelValue', valueInNode)
       }
     }
     function applyPropsValue(inputEl:HTMLInputElement, propsValue: string) {

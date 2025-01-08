@@ -103,12 +103,15 @@ function onClickButton() {
   if (props.placement === 'bottom-right') {
     nextTick(() => {
       const bodyNode = bodyRef.value as HTMLDivElement | null
-      let bodyWidth = 300
-      if (bodyNode) {
-        bodyWidth = bodyNode.clientWidth
-      }
+      const bodyWidth = bodyNode?.clientWidth || 300
       top.value = buttonBRC.top + buttonBRC.height
       left.value = buttonBRC.left + buttonBRC.width - bodyWidth
+    })
+  } else if (props.placement === 'top-left') {
+    nextTick(() => {
+      const bodyNode = bodyRef.value as HTMLDivElement | null
+      top.value = buttonBRC.top - (bodyNode?.clientHeight || 300)
+      left.value = buttonBRC.left
     })
   } else {
     // default
