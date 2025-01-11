@@ -3,7 +3,9 @@
     width: 120px
   }
   .size-selector-body
+    box-sizing border-box
     width 600px
+    max-width 90vw
     padding 20px
     .manual-input
       display flex
@@ -14,6 +16,7 @@
         width 120px
     .photo-size-map
       display flex
+      gap 12px
       padding 40px 0 10px
       .photo-size-list
         flex-grow 1

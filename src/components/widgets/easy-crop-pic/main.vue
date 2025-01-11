@@ -96,7 +96,7 @@
     </div>
     <template v-else>
       <div
-        v-drag-start="dragStartHandle"
+        v-drag="dragOption"
         class="vue-image-filler-canvas"
         :style="{
           height: size.canvasHeight + 'px',
@@ -125,7 +125,6 @@
           v-model:width="cropWidth"
           v-model:height="cropHeight"
         />
-
         <v-slider
           v-model="size.scale"
           :min="size.scaleMin"
@@ -153,7 +152,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, nextTick, onMounted, ref, watch, watchEffect } from 'vue'
-import dragHandle from '@/assets/ts/drag-handle'
+import { dragOptions } from '@/assets/ts/drag-handle'
 import PhotoSizeSelector from './photo-size-selector.vue'
 
 function getBoxSizePlaceIntoAnotherBox(
@@ -235,7 +234,7 @@ export default defineComponent({
     const size = ref({
       // 缩放配置
       scaleMin: 0.1,
-      scaleMax: 2,
+      scaleMax: 3,
       scale: 5,
       // 画布尺寸
       canvasWidth: 0,
@@ -365,6 +364,26 @@ export default defineComponent({
     watch([cropWidth, cropHeight], () => {
       originImageNode && putImageToEditor(originImageNode)
     })
+
+    let offsetTopStart = 0
+    let offsetLeftStart = 0
+    let offsetLeftRange = 0
+    let offsetTopRange = 0
+    const dragOption: dragOptions = {
+      touchStableTime: 0,
+      beforeStart() {
+        offsetTopStart = size.value.offsetTop
+        offsetLeftStart = size.value.offsetLeft
+        offsetLeftRange = (imageWidthInView.value - size.value.cropWidthInView) / 2
+        offsetTopRange = (imageHeightInView.value - size.value.cropHeightInView) / 2
+      },
+      move({ xOffset, yOffset }) {
+        let newOffsetTop = offsetTopStart + yOffset
+        let newOffsetLeft = offsetLeftStart + xOffset
+        size.value.offsetTop = Math.max(Math.min(newOffsetTop, offsetTopRange), -offsetTopRange)
+        size.value.offsetLeft = Math.max(Math.min(newOffsetLeft, offsetLeftRange), -offsetLeftRange)
+      },
+    }
     return {
       isFileSelected,
       size,
@@ -378,27 +397,7 @@ export default defineComponent({
       triggerFileSelect,
       fileChangeHandle,
       handleReRender,
-      dragStartHandle(event: MouseEvent) {
-        const offsetTopStart = size.value.offsetTop
-        const offsetLeftStart = size.value.offsetLeft
-        const offsetLeftRange = (imageWidthInView.value - size.value.cropWidthInView) / 2
-        const offsetTopRange = (imageHeightInView.value - size.value.cropHeightInView) / 2
-
-        dragHandle(
-          event,
-          {
-            move({ xOffset, yOffset }) {
-              let newOffsetTop = offsetTopStart + yOffset
-              let newOffsetLeft = offsetLeftStart + xOffset
-              size.value.offsetTop = Math.max(Math.min(newOffsetTop, offsetTopRange), -offsetTopRange)
-              size.value.offsetLeft = Math.max(Math.min(newOffsetLeft, offsetLeftRange), -offsetLeftRange)
-            },
-            end() {
-              // handleReRender()
-            },
-          }
-        )
-      },
+      dragOption,
       async handleFileDownload() {
         const file = await getCropedFile()
         file && downloadFile(file)
