@@ -21,7 +21,7 @@ import { watch, h, onMounted, getCurrentInstance, defineComponent } from 'vue'
 export default defineComponent({
   props: {
     modelValue: {
-      type: String,
+      type: [String, Number],
       default: '',
     },
     maxlength: {
@@ -32,19 +32,17 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    type: {
+      type: String,
+      default: '',
+    },
   },
   emits: ['update:modelValue'],
-  setup(
-    props: {
-      modelValue: string,
-      placeholder: string,
-      maxlength: string | number
-    },
-    context
-  ) {
+  setup(props, context) {
     function triggerValueUpdate(inputEl: HTMLInputElement) {
-      if (props.modelValue !== inputEl.value) {
-        context.emit('update:modelValue', inputEl.value)
+      const valueInNode = props.type === 'number' ? Number(inputEl.value) : inputEl.value
+      if (props.modelValue !== valueInNode) {
+        context.emit('update:modelValue', valueInNode)
       }
     }
     function applyPropsValue(inputEl:HTMLInputElement, propsValue: string) {
@@ -76,13 +74,14 @@ export default defineComponent({
       if (!inputEl) {
         return
       }
-      applyPropsValue(inputEl, props.modelValue)
+      applyPropsValue(inputEl, props.modelValue.toString())
       bindInputEvent(inputEl)
       watch(
         () => props.modelValue,
         () => {
           if (props.modelValue !== inputEl.value) {
-            applyPropsValue(inputEl, props.modelValue)
+            const value = props.type === 'number' ? props.modelValue.toString() : props.modelValue as string
+            applyPropsValue(inputEl, value)
           }
         }
       )
@@ -99,6 +98,7 @@ export default defineComponent({
             {
               placeholder: props.placeholder,
               maxlength: props.maxlength,
+              type: props.type,
             }
           ),
         ]

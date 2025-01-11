@@ -124,7 +124,7 @@ const props = defineProps({
     },
   },
 })
-const emits =defineEmits(['update:modelValue'])
+const emits =defineEmits(['update:modelValue', 'after-change'])
 
 const screenWidthByValue = ref('0%')
 const screenWidthByDrag = ref('0px')
@@ -220,7 +220,9 @@ const dragOption: dragOptions = {
   },
   end(params) {
     const { value } = countValueByDrag(params.xOffset)
-    emits('update:modelValue', applyStep(value))
+    const parsedValue = applyStep(value)
+    emits('update:modelValue', parsedValue)
+    emits('after-change', parsedValue)
     isInDragMode.value = false
   },
   cancel() {

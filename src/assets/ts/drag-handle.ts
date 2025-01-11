@@ -13,9 +13,9 @@ if (!window.TouchEvent) {
 }
 export type dragOptions = {
   beforeStart?: () => void;
-  start: (startX: number, startY: number) => void;
+  start?: (startX: number, startY: number) => void;
   move: (a: dragParams) => void;
-  end: (a: dragParams) => void;
+  end?: (a: dragParams) => void;
   cancel?: () => void;
   mouseStableDistance?: number;
   touchStableDistance?: number;
@@ -93,11 +93,11 @@ export function mouseDragHandle(originEvent: MouseEvent | TouchEvent, options?: 
     }
   }
   function up(event: MouseEvent) {
-    event.stopPropagation()
 
     document.removeEventListener('mousemove', mousemove, listenerConfig)
     document.removeEventListener('mouseup', up, listenerConfig)
     if (hasTriggerStartEvent) {
+      event.stopPropagation()
       end && end(getParamFromMouseEvent(event, startX, startY))
     } else {
       cancel && cancel()
