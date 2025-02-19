@@ -19,7 +19,7 @@
     .half
       position relative
       flex-grow 1
-      width 100%
+      width 100px
       height 100%
     textarea
       display block
@@ -30,7 +30,8 @@
       border none
       border-right 1px solid #3e3e47
       resize none
-      font-size 14px
+      font-size 12px
+      font-family monospace
       color #a2a2ae
       background transparent
       transition .15s
@@ -39,18 +40,25 @@
         background #1c1c21
 .json-formatter-content
   box-sizing border-box
-  flex-grow 1
-  width 100%
+  flex-grow 1.4
+  width 100px
   height 100%
   padding 20px 20px 20px 30px
   // 临时使用滤镜兼容暗色模式
-  filter contrast(0.5) brightness(1.5)
-  line-height: 1.2
-  font-size 14px
+  filter invert(1) contrast(0.8)
+  line-height: 1.5
+  font-size 16px
   overflow auto
 :deep(.json-formatter-row .json-formatter-toggler)
-    position absolute
-    margin-left -15px
+  display inline-block
+  width 20px
+  height 20px
+  padding 0
+  text-align center
+  font-family serif
+  color #999
+  &:hover
+    color #000
 
 @media screen and (max-width:600px)
   .json-formatter .content
@@ -87,18 +95,47 @@ const defaultText = `{
   website: "http://bh-lay.com",
   hobbies: ["photography", "coding"]
 }`
-function parseJSON(str: string) {
-  try{
-    return (new Function('', 'return ' + str))()
+function parseJSONByString(str: string) {
+  try {
+    return (new Function('', `return ${str}`))()
   } catch (e) {
-    console.log('e', e)
-    return str
+    return null
   }
+}
+function parseJSONByStringfy(str: string) {
+  try {
+    return (new Function('', `return JSON.parse(${str})`))()
+  } catch (e) {
+    return null
+  }
+}
+function parseJSON(str: string) {
+  const firstTryResult = parseJSONByStringfy(str)
+  if (firstTryResult) {
+    return firstTryResult
+  }
+  const secondTryResult = parseJSONByString(str)
+  if (secondTryResult) {
+    return secondTryResult
+  }
+  return str
+}
+const localStorageKey = 'widget-json-formatter'
+function writeToLocal(newValue: string) {
+  if (newValue) {
+    localStorage.setItem(localStorageKey, newValue)
+  } else {
+    localStorage.removeItem(localStorageKey)
+  }
+}
+function readFromLocal() {
+  const newValue = localStorage.getItem(localStorageKey)
+  return newValue || ''
 }
 export default {
   name: 'JsonFormatterWidgets',
   setup() {
-    const sourceJson = ref(defaultText)
+    const sourceJson = ref('')
     const fomatterRef: Ref<HTMLDivElement | null> = ref(null)
     function render() {
       const formatter = new JSONFormatter(parseJSON(sourceJson.value))
@@ -112,8 +149,11 @@ export default {
 
     watch(sourceJson, () => {
       render()
+      writeToLocal(sourceJson.value)
     })
     onMounted(() => {
+      const localValue = readFromLocal()
+      sourceJson.value = localValue || defaultText
       render()
     })
     return {
