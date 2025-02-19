@@ -1,61 +1,19 @@
 <script lang="ts">
 import { ref, h, onBeforeUnmount, nextTick, VNode } from 'vue'
 import { routerState, onRouterChange } from '@/assets/ts/router'
-import PrivateBookmarks from '@/components/private-bookmarks/index.vue'
-import PublicBookmarks from '@/components/public-bookmarks/index.vue'
+import { getWidgetsByName } from '@/components/widgets/widgets-config'
 import WallpaperGallery from '@/components/wallpaper-gallery/index.vue'
-import JsonFormatter from '@/components/widgets/json-formatter/main.vue'
-import RegVisual from '@/components/widgets/reg-visual/main.vue'
-import ImageToBase from '@/components/widgets/img-to-base/main.vue'
-import TriangleMaker from '@/components/widgets/triangle-maker/main.vue'
-import EsayCropPic from '@/components/widgets/easy-crop-pic/main.vue'
+
 import { FocalPlane } from '@/ui-lib/index'
 
 function createSubVNode(moduleType: string, moduleName: string, state: routerState): { vnode: VNode, actionBlockClasses: string[] } | null {
   if (moduleType === 'widgets') {
-    switch (moduleName) {
-    case 'private-bookmarks':
+    const matchedWidgets = getWidgetsByName(moduleName)
+    if (matchedWidgets && matchedWidgets.mainComponent) {
+      const defaultParams = matchedWidgets.defaultParams?.(state)
       return {
-        vnode: h(PrivateBookmarks),
-        actionBlockClasses: ['category-list', 'link-list-body', 'header'],
-      }
-    case 'public-bookmarks':
-      return {
-        vnode: h(PublicBookmarks),
-        actionBlockClasses: ['bookmark-directory'],
-      }
-    case 'json-formatter':
-      return {
-        vnode: h(JsonFormatter),
-        actionBlockClasses: ['json-formatter'],
-      }
-    case 'reg-visual':
-      return {
-        vnode: h(RegVisual, {
-          regText: state.regText as string,
-        }),
-        actionBlockClasses: [],
-      }
-    case 'img-to-base':
-      return {
-        vnode: h(ImageToBase, {
-          file: state.file as File,
-        }),
-        actionBlockClasses: ['imgtobase-main'],
-      }
-    case 'triangle-maker':
-      return {
-        vnode: h(TriangleMaker, {
-          defaultIndex: state.defaultIndex as number,
-        }),
-        actionBlockClasses: ['triangle-maker'],
-      }
-    case 'easy-crop-pic':
-      return {
-        vnode: h(EsayCropPic, {
-          file: state.file as File,
-        }),
-        actionBlockClasses: ['easy-crop-pic-main'],
+        vnode: h(matchedWidgets.mainComponent, defaultParams),
+        actionBlockClasses: matchedWidgets.actionBlockClasses || [],
       }
     }
   } else if (moduleType === 'settings') {
