@@ -50,7 +50,7 @@ const widgetsConfig = [
     iconComponent: CountdownIcon,
     // mainComponent: ,
     containerStyle: CONTAINER_STYLE.dialog,
-    // actionBlockClasses: ['json-formatter'],
+    // actionBlockClasses: [],
   },
   {
     name: 'triangle-maker',

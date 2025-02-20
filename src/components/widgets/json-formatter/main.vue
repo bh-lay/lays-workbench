@@ -1,39 +1,41 @@
 <style lang="stylus" scoped>
 .json-formatter
   display flex
-  flex-direction column
+  gap 16px
   height 100%
-  background #26262c
-  .caption
-    height 50px
-    background #2b2b31
-    border-bottom 1px solid #212126
-    text-align center
-    line-height 50px
-    font-size 16px
-    color #777
-  .content
+
+  .origin-content
+    position relative
+    box-sizing border-box
     display flex
-    height 100px
+    flex-direction column
     flex-grow 1
-    .half
-      position relative
-      flex-grow 1
-      width 100px
-      height 100%
+    width 100px
+    height 100%
+    padding 10px
+    background rgba(0, 0, 0, .1)
+    border-radius 8px
+    .caption
+      height 40px
+      padding 0 8px
+      line-height 30px
+      font-size 15px
+      color #bbb
     textarea
       display block
       box-sizing border-box
       width 100%
-      height 100%
+      height 100px
+      flex-grow 1
       padding 20px
       border none
-      border-right 1px solid #3e3e47
       resize none
       font-size 12px
+      line-height 1.5
       font-family monospace
       color #a2a2ae
-      background transparent
+      border-radius 4px
+      background rgba(0, 0, 0, .2)
       transition .15s
       &:focus
         outline none
@@ -42,13 +44,17 @@
   box-sizing border-box
   flex-grow 1.4
   width 100px
-  height 100%
-  padding 20px 20px 20px 30px
-  // 临时使用滤镜兼容暗色模式
-  filter invert(1) contrast(0.8)
-  line-height: 1.5
+  padding 15px
+  line-height: 1.8
   font-size 16px
+  border-radius 8px
   overflow auto
+  transition .6s .15s
+  & > :deep(div)
+    // 使用滤镜兼容暗色模式
+    filter invert(1) contrast(0.8)
+  &:hover
+    background rgba(0, 0, 0, .1)
 :deep(.json-formatter-row .json-formatter-toggler)
   display inline-block
   width 20px
@@ -59,6 +65,8 @@
   color #999
   &:hover
     color #000
+:deep(.json-formatter-row .json-formatter-row)
+  margin-left 1.3em
 
 @media screen and (max-width:600px)
   .json-formatter .content
@@ -67,22 +75,21 @@
 
 <template>
   <div class="json-formatter">
-    <div class="caption">
-      JSON 格式化
-    </div>
-    <div class="content">
-      <div class="half">
-        <textarea
-          v-model="sourceJson"
-          cols="30"
-          rows="10"
-        />
+    <div class="origin-content">
+      <div class="caption">
+        JSON 格式化
       </div>
-      <div
-        ref="fomatterRef"
-        class="json-formatter-content"
+      <textarea
+        v-model="sourceJson"
+        cols="30"
+        rows="10"
+        spellcheck="false"
       />
     </div>
+    <div
+      ref="fomatterRef"
+      class="json-formatter-content"
+    />
   </div>
 </template>
 
