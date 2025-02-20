@@ -1,5 +1,4 @@
 <style lang="stylus" scoped>
-@import '../../../assets/stylus/functions/scrollbar.styl'
 .triangle-maker
   display flex
   width 100%
@@ -9,7 +8,6 @@
   padding 30px
   overflow auto
   background: rgba(64,95,200,0.05);
-  scrollbar()
 .title
   margin-bottom 30px
   font-size 30px
@@ -107,7 +105,6 @@
   -moz-user-select text
   -ms-user-select text
   user-select text
-  scrollbar()
 </style>
 
 <template>

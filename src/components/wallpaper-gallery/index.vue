@@ -1,5 +1,4 @@
 <style lang="stylus" scoped>
-@import '../../assets/stylus/functions/scrollbar.styl'
 .wallpaper-gallery
   display flex
   height 100%
@@ -11,7 +10,6 @@
   flex-grow 1
   overflow-x hidden
   overflow-y auto
-  scrollbar()
 </style>
 
 <template>

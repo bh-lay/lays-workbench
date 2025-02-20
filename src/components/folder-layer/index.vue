@@ -1,12 +1,10 @@
 <style lang="stylus" scoped>
-@import '../../assets/stylus/functions/scrollbar.styl'
 .container
   position relative
   min-height 260px
   max-height 400px
   padding 40px
   overflow auto
-  scrollbar()
 @media screen and (max-width: 770px)
   .container
     flex-shrink 1

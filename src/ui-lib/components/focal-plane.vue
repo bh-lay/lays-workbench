@@ -1,5 +1,4 @@
 <style lang="stylus" scoped>
-@import '../../assets/stylus/functions/scrollbar.styl'
 .focal-plane-outer
   position fixed
   width 100%
@@ -37,7 +36,6 @@
   overflow auto
   z-index 101
   color #e3e3e8
-  scrollbar()
 .focal-plane-close
   position absolute
   top 5px

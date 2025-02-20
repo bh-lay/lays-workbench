@@ -1,5 +1,4 @@
 <style lang="stylus" scoped>
-@import '../../assets/stylus/functions/scrollbar.styl'
 .widgets-selector
   padding-top 20px
 .size-selector
@@ -8,7 +7,6 @@
   height 500px
   max-height calc(90vh - 150px)
   overflow auto
-  scrollbar()
 .bookmark-item
   cursor pointer
   :deep(.card)

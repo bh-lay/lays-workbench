@@ -1,5 +1,4 @@
 <style lang="stylus" scoped>
-@import '../../assets/stylus/functions/scrollbar.styl'
 .bookmark-directory
   display flex
   align-items flex-start
@@ -13,7 +12,6 @@
   border-radius 4px
   overflow auto
   background rgba(47,47,55,0.5)
-  scrollbar()
 </style>
 <template>
   <div class="bookmark-directory">

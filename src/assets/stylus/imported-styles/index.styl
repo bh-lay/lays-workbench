@@ -3,3 +3,20 @@
 @import "./slidedown.styl"
 @import "./message-ani.styl"
 @import "./zoom.styl"
+
+*::-webkit-scrollbar
+  width 12px
+  height 12px
+  background-color transparent
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-corner
+  background-color transparent
+*::-webkit-scrollbar-thumb
+  background-color rgba(255, 255, 255, 0)
+  background-clip content-box
+  border-radius 6px
+  border 4px solid transparent
+*:hover::-webkit-scrollbar-thumb
+  background-color rgba(255, 255, 255, .3)
+*::-webkit-scrollbar-thumb:hover
+  border-width 3px
