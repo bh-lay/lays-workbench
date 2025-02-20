@@ -27,7 +27,7 @@ export enum CONTAINER_STYLE {
   dialog = 1,
   fullpage = 2,
 }
-const widgetsConfig = [
+export const widgetsConfig = [
   {
     name: 'reg-visual',
     label: '正则可视化',

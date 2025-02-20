@@ -44,41 +44,7 @@ import { Ref, ref, watch } from 'vue'
 import { Bookmark, BookmarkType, BookmarkSize } from '@database/entity/bookmark'
 import BookmarkItem from '../bookmark-item.vue'
 import SizeSelector from './size-selector.vue'
-
-const supportWidgetsList = [
-  {
-    label: '正则可视化',
-    name: 'reg-visual',
-  },
-  {
-    label: 'JSON格式化',
-    name: 'json-formatter',
-  },
-  {
-    label: '图片base64',
-    name: 'img-to-base',
-  },
-  {
-    label: '藏经阁',
-    name: 'public-bookmarks',
-  },
-  {
-    label: '小书房',
-    name: 'private-bookmarks',
-  },
-  {
-    label: '三角形生成器',
-    name: 'triangle-maker',
-  },
-  {
-    label: '倒计时',
-    name: 'countdown',
-  },
-  {
-    label: '简裁变图',
-    name: 'easy-crop-pic',
-  },
-]
+import { widgetsConfig } from '@/components/widgets/widgets-config'
 
 export default {
   components: { BookmarkItem, SizeSelector },
@@ -92,15 +58,13 @@ export default {
       })
     })
 
-    supportWidgetsList.forEach(item => {
-      widgetsList.value.push(
-        new Bookmark({
-          type: BookmarkType.widgets,
-          size: BookmarkSize.large,
-          value: item.name,
-          name: item.label,
-        })
-      )
+    widgetsList.value = widgetsConfig.map(item => {
+      return new Bookmark({
+        type: BookmarkType.widgets,
+        size: BookmarkSize.large,
+        value: item.name,
+        name: item.label,
+      })
     })
     return {
       previewSize,
