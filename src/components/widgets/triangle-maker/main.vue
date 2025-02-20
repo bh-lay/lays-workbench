@@ -1,16 +1,23 @@
 <style lang="stylus" scoped>
 .triangle-maker
-  display flex
   width 100%
   height 100%
+  display grid
+  grid-template-columns 280px 1fr
+  grid-template-rows 1fr 230px
+  grid-column-gap 24px
+  grid-row-gap 24px
+  & > div
+    border-radius 8px
+
 .editor
-  width 220px
+  grid-area 1 / 1 / 3 / 2
   padding 30px
   overflow auto
-  background: rgba(64,95,200,0.05);
+  background rgba(200,200,200,.06)
 .title
-  margin-bottom 30px
-  font-size 30px
+  margin-bottom 36px
+  font-size 24px
 .label
   margin 20px 0 10px
   font-size 14px
@@ -52,20 +59,14 @@
 .color-input
   width 140px
 
-.main
-  display flex
-  flex-direction column
-  width 100px
-  flex-grow 1
 .preview-canvas
+  grid-area: 1 / 2 / 2 / 3
   position relative
   display flex
   align-items center
   justify-content center
-  height 100px
-  flex-grow 1
   overflow hidden
-  background-image linear-gradient(45deg, rgba(200,200,200,.1) 25%, transparent 0, transparent 75%, rgba(200,200,200,.1) 0),linear-gradient(45deg, rgba(200,200,200,.1) 25%, transparent 0, transparent 75%, rgba(200,200,200,.1) 0)
+  background-image linear-gradient(45deg, rgba(200,200,200,.06) 25%, transparent 0, transparent 75%, rgba(200,200,200,.06) 0),linear-gradient(45deg, rgba(200,200,200,.06) 25%, transparent 0, transparent 75%, rgba(200,200,200,.06) 0)
   background-position 0 0, 10px 10px
   background-size 20px 20px
 .triangle
@@ -92,13 +93,14 @@
     padding 6px 10px
     font-size 12px
 .code
-  padding 50px 80px 70px
+  grid-area 2 / 2 / 3 / 3
+  padding 40px 60px 0
   overflow auto
   line-height 1.5
   white-space pre
   font-family monospace
   font-size 18px
-  background rgba(200,200,200,.1)
+  background rgba(200,200,200,.06)
   -webkit-touch-callout text
   -webkit-user-select text
   -khtml-user-select text
@@ -181,34 +183,32 @@
         type="text"
       />
     </div>
-    <div class="main">
-      <div class="preview-canvas">
-        <div
-          class="triangle"
-          :style="{
-            borderWidth: screenBorderWidth,
-            borderColor: screenBorderColor,
-            transform: `scale(${zoomLevel / 100})`
-          }"
-        />
-        <div class="zoom-bar">
-          <div class="current">
-            {{ zoomLevel }}%
-          </div>
-          <v-slider
-            v-model="zoomLevel"
-            :min="50"
-            :max="800"
-            :step="1"
-          />
-          <v-button @click="zoomLevel = 100">
-            还原
-          </v-button>
+    <div class="preview-canvas">
+      <div
+        class="triangle"
+        :style="{
+          borderWidth: screenBorderWidth,
+          borderColor: screenBorderColor,
+          transform: `scale(${zoomLevel / 100})`
+        }"
+      />
+      <div class="zoom-bar">
+        <div class="current">
+          {{ zoomLevel }}%
         </div>
+        <v-slider
+          v-model="zoomLevel"
+          :min="50"
+          :max="800"
+          :step="1"
+        />
+        <v-button @click="zoomLevel = 100">
+          还原
+        </v-button>
       </div>
-      <div class="code">
-        <span>width: 0;<br>height: 0;<br>border-style: solid;<br>border-width: {{ screenBorderWidth }};<br>border-color: {{ screenBorderColor }};</span>
-      </div>
+    </div>
+    <div class="code">
+      <span>width: 0;<br>height: 0;<br>border-style: solid;<br>border-width: {{ screenBorderWidth }};<br>border-color: {{ screenBorderColor }};</span>
     </div>
   </div>
 </template>
