@@ -1,5 +1,4 @@
 <style lang="stylus" scoped>
-@import '../../assets/stylus/functions/scrollbar.styl'
 .overlay-panel-outer
   position fixed
   width 100%
@@ -26,7 +25,6 @@
   overflow auto
   z-index 101
   color #e3e3e8
-  scrollbar()
 
 .overlay-panel-close
   position absolute

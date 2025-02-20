@@ -1,5 +1,4 @@
 <style lang="stylus" scoped>
-@import '../../assets/stylus/functions/scrollbar.styl'
 @import '../../assets/stylus/vars/colors.styl'
 .search-list
   position absolute
@@ -10,7 +9,6 @@
   border-radius 4px
   background $card-bg-color
   overflow auto
-  scrollbar()
 .bookmark-list
   padding 20px
 .no-result

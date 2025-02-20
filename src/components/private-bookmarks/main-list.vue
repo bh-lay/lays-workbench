@@ -1,5 +1,4 @@
 <style lang="stylus" scoped>
-@import '../../assets/stylus/functions/scrollbar.styl'
 .bookmark-container
   box-sizing border-box
   width 100px
@@ -7,7 +6,6 @@
   flex-grow 1
   padding 0 0 50px 15px
   overflow auto
-  scrollbar()
 .link-list-body
   border-radius 4px
   background rgba(47,47,55,0.5)
