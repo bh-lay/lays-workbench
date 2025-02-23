@@ -10,7 +10,7 @@ function resolve(dir: string) {
 export default defineConfig({
   plugins: [
     vue(),
-    initPluginPWA()
+    initPluginPWA(),
   ],
   resolve: {
     alias: {
@@ -22,6 +22,7 @@ export default defineConfig({
     host: '0.0.0.0',
   },
   build:{
+    chunkSizeWarningLimit: 20 * 1024 * 1024,
     rollupOptions:{
       output:{
         // 分包逻辑
@@ -30,6 +31,11 @@ export default defineConfig({
           if(id.includes('@mdi')){
             return 'mdi'
           }
+          // monaco-editor 较大，单独拆包
+          if(id.includes('node_modules/monaco-editor')){
+            return 'monaco-editor'
+          }
+
           // JSON formatter 分离
           if (id.includes('node_modules/json-formatter-js')) {
             return 'json-formatter'

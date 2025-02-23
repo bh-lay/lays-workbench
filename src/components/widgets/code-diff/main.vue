@@ -24,7 +24,8 @@
     box-shadow: none;
   }
   :deep(.codicon) {
-    padding-left: 4px;
+    // padding-left: 4px;
+    opacity: 0 !important;
   }
   :deep(.line-numbers) {
     font-size: 12px;
@@ -50,14 +51,16 @@
 
 <script lang="ts">
 import { Ref, ref, onMounted, onUnmounted } from 'vue'
-import { editor as monacoEditor } from 'monaco-editor'
 
 export default {
   name: 'CodeDiffWidgets',
   setup() {
     const editorRef: Ref<HTMLDivElement | null> = ref(null)
-    let diffEditor: monacoEditor.IStandaloneDiffEditor | null = null
-    function render() {
+    let destroyEditorFn: (() => void) | null = null
+    async function render() {
+      destroyEditorFn?.()
+      const monaco = await import('monaco-editor/esm/vs/editor/editor.api')
+      const monacoEditor = monaco.editor
       var originalModel = monacoEditor.createModel(
         `Hello !
 I'm 剧中人.
@@ -71,8 +74,7 @@ Email is mail@bh-lay.com
 Nice to meet you`,
         'text/plain'
       )
-      diffEditor?.dispose?.()
-      diffEditor = monacoEditor.createDiffEditor(
+      const diffEditor = monacoEditor.createDiffEditor(
         editorRef.value as HTMLDivElement,
         {
           enableSplitViewResizing: true,
@@ -89,13 +91,16 @@ Nice to meet you`,
         original: originalModel,
         modified: modifiedModel,
       })
+      destroyEditorFn = () => {
+        diffEditor?.dispose?.()
+      }
     }
 
     onMounted(() => {
       render()
     })
     onUnmounted(() => {
-      diffEditor?.dispose?.()
+      destroyEditorFn?.()
     })
     return {
       editorRef,
