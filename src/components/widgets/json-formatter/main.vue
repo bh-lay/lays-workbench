@@ -69,8 +69,15 @@
   margin-left 1.3em
 
 @media screen and (max-width:600px)
-  .json-formatter .content
+  .json-formatter
     flex-direction column
+    .origin-content
+      width 100%
+      height 400px
+      flex-grow 0
+      flex-shrink 0
+    .json-formatter-content
+      width 100%
 </style>
 
 <template>

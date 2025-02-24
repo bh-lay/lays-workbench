@@ -233,39 +233,6 @@ function getMouseTriggered(
   target?: mapItem,
   size?: BookmarkSize,
 } {
-  const gridGap = getGridSize() * 0.4
-  // 是否拖拽合并
-  for (let i = 0; i < map.length; i++) {
-    let mapItem = map[i]
-    if (
-      mapItem.left + gridGap / 2 <= clientX &&
-      mapItem.right - gridGap / 2 >= clientX &&
-      mapItem.top <= clientY &&
-      mapItem.bottom - gridGap >= clientY
-    ) {
-      return {
-        type: 'enter',
-        target: mapItem,
-      }
-    }
-  }
-  // 是否拖拽移动
-  for (let t = 0; t < map.length; t++) {
-    let mapItem = map[t]
-    if (
-      // 鼠标在当前卡片同水平线
-      mapItem.top < clientY &&
-      mapItem.bottom - gridGap > clientY &&
-      // 鼠标在卡片左侧 34 像素内
-      clientX < mapItem.left + gridGap / 2 &&
-      mapItem.left + gridGap / 2 - clientX < gridGap * 2
-    ) {
-      return {
-        type: 'before',
-        target: mapItem,
-      }
-    }
-  }
   // 是否拖拽删除
   const winWidth = window.innerWidth
   if (
@@ -302,6 +269,40 @@ function getMouseTriggered(
   ) {
     return {
       type: 'desktop',
+    }
+  }
+
+  const gridGap = getGridSize() * 0.4
+  // 是否拖拽合并
+  for (let i = 0; i < map.length; i++) {
+    let mapItem = map[i]
+    if (
+      mapItem.left + gridGap / 2 <= clientX &&
+      mapItem.right - gridGap / 2 >= clientX &&
+      mapItem.top <= clientY &&
+      mapItem.bottom - gridGap >= clientY
+    ) {
+      return {
+        type: 'enter',
+        target: mapItem,
+      }
+    }
+  }
+  // 是否拖拽移动
+  for (let t = 0; t < map.length; t++) {
+    let mapItem = map[t]
+    if (
+      // 鼠标在当前卡片同水平线
+      mapItem.top < clientY &&
+      mapItem.bottom - gridGap > clientY &&
+      // 鼠标在卡片左侧 34 像素内
+      clientX < mapItem.left + gridGap / 2 &&
+      mapItem.left + gridGap / 2 - clientX < gridGap * 2
+    ) {
+      return {
+        type: 'before',
+        target: mapItem,
+      }
     }
   }
   // 拖拽取消

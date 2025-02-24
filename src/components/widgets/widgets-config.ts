@@ -6,6 +6,9 @@ import RegVisualMain from '@/components/widgets/reg-visual/main.vue'
 import JsonFormatterIcon from '@/components/widgets/json-formatter/index.vue'
 import JsonFormatterMain from '@/components/widgets/json-formatter/main.vue'
 
+import CodeDiffIcon from '@/components/widgets/code-diff/index.vue'
+import CodeDiffMain from '@/components/widgets/code-diff/main.vue'
+
 import TriangleMakerIcon from '@/components/widgets/triangle-maker/index.vue'
 import TriangleMakerMain from '@/components/widgets/triangle-maker/main.vue'
 
@@ -43,6 +46,14 @@ export const widgetsConfig = [
     mainComponent: JsonFormatterMain,
     containerStyle: CONTAINER_STYLE.dialog,
     actionBlockClasses: ['json-formatter'],
+  },
+  {
+    name: 'code-diff',
+    label: '文本对比',
+    iconComponent: CodeDiffIcon,
+    mainComponent: CodeDiffMain,
+    containerStyle: CONTAINER_STYLE.dialog,
+    actionBlockClasses: ['code-diff-container'],
   },
   {
     name: 'countdown',
