@@ -15,7 +15,7 @@
   width 100%
   height 100%
   transition .2s
-  color color var(--primary-color)
+  color var(--primary-color)
   cursor pointer
   &:hover
     background rgba(0, 0, 0, .2)
