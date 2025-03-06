@@ -1,29 +1,31 @@
-<style lang="stylus" scoped>
-
-</style>
-
 <template>
   <desktop-item-editor
     v-if="createMode"
     :only-edit-mode="true"
     :desktop="newDesktop"
-    confirm-label="创建"
     @confirm="handelConfirm"
     @cancel="createMode = false"
   />
   <div
     v-else
-    style="height: 50px;text-align: right;"
+    style="text-align: center;"
   >
-    <v-button @click="createMode = true">
-      创建桌面
+    <v-button
+      style="width: 100%"
+      type="primary"
+      @click="createMode = true"
+    >
+      <v-mdi
+        name="mdi-plus"
+        size="18"
+      />
     </v-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
-import { Bookmark, BookmarkSystemId, BookmarkType } from '@/database/entity/bookmark'
+import { Bookmark, BookmarkSystemId, BookmarkType, generateID } from '@/database/entity/bookmark'
 import DesktopItemEditor from './desktop-item-editor.vue'
 import { bookmarkInsertService } from '@/database/services/bookmark-service'
 
@@ -35,9 +37,12 @@ const newDesktop: Ref<Bookmark> = ref(new Bookmark({
   value: '{"wallpaper": "https://w.wallhaven.cc/full/nz/wallhaven-nzkggo.jpg"}',
 }))
 async function handelConfirm({name, undercoat}: {name: string, undercoat: string}) {
+  createMode.value = false
+  newDesktop.value.id = generateID()
   newDesktop.value.name = name
   newDesktop.value.undercoat = undercoat
   await bookmarkInsertService(newDesktop.value)
+  newDesktop.value.name = ''
   emits('after-create')
 }
 </script>

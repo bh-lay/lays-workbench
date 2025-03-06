@@ -218,7 +218,7 @@ dragHandle(props.event, {
     if (triggered.type === 'before') {
       if (triggeredTarget) {
         shadowRectStyle.value = {
-          top: triggeredTarget.top + 'px',
+          top: (triggeredTarget.top - 10) + 'px',
           left: triggeredTarget.left + 'px',
           width: triggeredTarget.right -
             triggeredTarget.left +

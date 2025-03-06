@@ -26,7 +26,7 @@ export type BookmarkIcon = BookmarkIconCrab | BookmarkIconMdi | BookmarkIconText
 // 书签值类型
 export type BookmarkValue = string | boolean
 // 生成 ID
-function generateID() {
+export function generateID() {
   const randomNum = Math.floor(new Date().getTime() * 100 + Math.random() * 100)
   return randomNum.toString(24)
 }

@@ -1,33 +1,43 @@
-<style lang="stylus" scoped>
-.desktop-item
-  display flex
-  align-items center
-  gap 10px
-  height 50px
-.dropdown-button
-  display flex
-  justify-content center
-  align-items center
-  width 30px
-  height  30px
-  border-radius 4px
-  &:hover
-    background #252b37
-  &.active
-    background #181d25
-.dot
-  display inline-block
-  width 6px
-  height 6px
-  border-radius 3px
-  vertical-align middle
-.desktop-name
-  width 100px
-  flex-grow 1
-.desktop-name-text
-  cursor text
-  color #c2c9d6
-  font-size 14px
+<style lang="less" scoped>
+.desktop-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.dropdown-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height:  30px;
+  border-radius: 4px;
+  &:hover {
+    background: #252b37
+  }
+  &.active {
+    background: #181d25
+  }
+}
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+.desktop-name {
+  width: 100px;
+  flex-grow: 1;
+}
+.desktop-name-text {
+  cursor: text;
+  color: #c2c9d6;
+  font-size: 14px;
+}
 </style>
 
 <template>
@@ -59,13 +69,19 @@
         type="primary"
         @click="handConfirm"
       >
-        {{ confirmLabel }}
+        <v-mdi
+          name="mdi-check"
+          size="14"
+        />
       </v-button>
       <v-button
         type="secondary"
         @click="handleCancel"
       >
-        取消
+        <v-mdi
+          name="mdi-close"
+          size="14"
+        />
       </v-button>
     </template>
     <div
@@ -96,10 +112,6 @@ const props = defineProps({
   onlyEditMode: {
     type: Boolean,
     default: undefined,
-  },
-  confirmLabel: {
-    type: String,
-    default: '保存',
   },
 })
 const emits = defineEmits(['confirm', 'cancel', 'after-update'])

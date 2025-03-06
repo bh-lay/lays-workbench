@@ -82,7 +82,7 @@ export const widgetsConfig = [
     iconComponent: ImgToBaseIcon,
     mainComponent: ImageToBaseMain,
     containerStyle: CONTAINER_STYLE.dialog,
-    actionBlockClasses: ['imgtobase-main'],
+    actionBlockClasses: ['base64-output', 'action-side'],
     defaultParams(state: routerState) {
       return {
         file: state.file as File,

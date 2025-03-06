@@ -1,6 +1,12 @@
-<style lang="stylus" scoped>
-.desktop-editor
-  padding 0 20px 30px
+<style lang="less" scoped>
+.desktop-editor {
+  padding: 40px 20px 80px;
+  max-width: 400px;
+  margin: 0 auto;
+  .desktop-item {
+    margin-bottom: 18px;
+  }
+}
 </style>
 
 <template>
@@ -20,7 +26,10 @@
       @after-update="handleDesktopChanged"
     />
 
-    <desktop-create-editor @after-create="handleDesktopChanged" />
+    <desktop-create-editor
+      v-if="desktopList.length < 5"
+      @after-create="handleDesktopChanged"
+    />
     <main-draged-layer
       v-if="willStartDrag"
       :event="dragEvent"

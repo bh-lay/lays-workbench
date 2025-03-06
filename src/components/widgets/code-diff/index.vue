@@ -6,10 +6,11 @@
   align-items center
   justify-content center
   cursor pointer
-  background #900965
-  transition .2s
+  background-image linear-gradient(150deg, #900938, #ff6a00)
+  box-shadow inset 1px 1px 1px rgba(255, 255, 255, .1), inset -1px -1px 1px rgba(0, 0, 0, .2)
+  transition 2s
   &:hover
-    background #730a51
+    background-image linear-gradient(150deg, #970000, #d45800)
 svg
   width 32px
   height 32px
