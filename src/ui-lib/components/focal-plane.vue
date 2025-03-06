@@ -88,7 +88,7 @@
           ref="focalBody"
           class="focal-plane-body"
           :style="modalBodyStyle"
-          @click="afterFocalBodyClick"
+          @mousedown="afterFocalBodyClick"
         >
           <slot />
         </div>

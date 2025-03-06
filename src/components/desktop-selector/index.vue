@@ -89,16 +89,17 @@
       </div>
     </template>
   </v-dropdown>
-  <v-modal
+  <FocalPlane
     v-model="editModalVisible"
-    :width="450"
-    title="桌面管理"
+    :width="780"
+    :close-on-press-escape="true"
+    :action-block-classes="['desktop-editor']"
   >
-    <desktop-editor
+    <DesktopEditor
       :desktop-list="desktopList"
       @after-desktop-changed="handleDesktopChanged"
     />
-  </v-modal>
+  </FocalPlane>
 </template>
 
 <script setup lang="ts">
@@ -109,6 +110,7 @@ import {
   watch,
 } from 'vue'
 import { Bookmark, BookmarkSystemId } from '@database/entity/bookmark'
+import { FocalPlane } from  '@/ui-lib/index'
 import { bookmarkListService } from '@database/services/bookmark-service'
 import DesktopEditor from './desktop-editor.vue'
 
