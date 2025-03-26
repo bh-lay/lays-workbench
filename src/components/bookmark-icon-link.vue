@@ -6,6 +6,7 @@
   justify-content center
   cursor pointer
   transition filter .4s
+  font-size: calc((var(--grid-size) * 0.6) * 0.2);
   svg,
   img
     width 2.6em

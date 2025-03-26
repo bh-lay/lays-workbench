@@ -32,8 +32,6 @@
     transform translateX(-50%) scale(.9)
     visibility hidden
     transition .15s
-  .bookmark-icon
-    font-size calc((var(--grid-size) * 0.6) * 0.2)
   &:hover
     .popover
       visibility visible

@@ -50,7 +50,6 @@
       width calc((var(--grid-size) * 0.6))
       height calc((var(--grid-size) * 0.6))
       border-radius 8px
-      font-size calc((var(--grid-size) * 0.6) * 0.17)
 </style>
 
 <template>
