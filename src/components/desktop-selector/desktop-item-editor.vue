@@ -24,19 +24,20 @@
 }
 .dot {
   display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
   vertical-align: middle;
 }
 .desktop-name {
   width: 100px;
+  min-height: 20px;
   flex-grow: 1;
 }
 .desktop-name-text {
   cursor: text;
   color: #c2c9d6;
-  font-size: 14px;
+  font-size: 16px;
 }
 </style>
 

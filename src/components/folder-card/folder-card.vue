@@ -35,7 +35,7 @@
     div
       width calc((var(--grid-size) * 0.6) * 0.75)
       height calc((var(--grid-size) * 0.6) * 0.75)
-      font-size calc((var(--grid-size) * 0.6) * 0.12)
+      font-size calc((var(--grid-size) * 0.6) * 0.18)
   .folder-card-large,
   .folder-card-medium
     display grid
