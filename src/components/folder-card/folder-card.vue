@@ -66,6 +66,7 @@
       v-for="item in bookmarkListNormal"
       :key="item.id"
       :data="item"
+      :title="item.name"
       class="folder-card-item"
       @next="$emit('next', item)"
     />
