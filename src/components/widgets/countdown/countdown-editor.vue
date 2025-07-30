@@ -136,6 +136,7 @@ export default {
         const eventTimeStample = new Date(eventTime.value).getTime()
         context.emit('confirm', {
           undercoat: undercoat.value,
+          name: eventName.value,
           value: `${widgetsType}:${eventName.value}${paramsSeprator}${eventTimeStample}`,
         })
       },
