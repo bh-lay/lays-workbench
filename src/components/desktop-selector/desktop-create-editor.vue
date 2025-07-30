@@ -17,7 +17,7 @@
     >
       <v-mdi
         name="mdi-plus"
-        size="18"
+        size="24"
       />
     </v-button>
   </div>

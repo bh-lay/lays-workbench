@@ -35,7 +35,7 @@
     div
       width calc((var(--grid-size) * 0.6) * 0.75)
       height calc((var(--grid-size) * 0.6) * 0.75)
-      font-size calc((var(--grid-size) * 0.6) * 0.12)
+      font-size calc((var(--grid-size) * 0.6) * 0.18)
   .folder-card-large,
   .folder-card-medium
     display grid
@@ -50,7 +50,6 @@
       width calc((var(--grid-size) * 0.6))
       height calc((var(--grid-size) * 0.6))
       border-radius 8px
-      font-size calc((var(--grid-size) * 0.6) * 0.17)
 </style>
 
 <template>
@@ -67,6 +66,7 @@
       v-for="item in bookmarkListNormal"
       :key="item.id"
       :data="item"
+      :title="item.name"
       class="folder-card-item"
       @next="$emit('next', item)"
     />

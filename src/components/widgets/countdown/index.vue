@@ -154,8 +154,10 @@ function calTimeLeft (endTime: number) {
 function startTimer(eventEndTime: Ref<number>, widgetsSize: ComputedRef<BookmarkSize>, timeLeftArray: Ref<timeLeftList> ) {
   const timer = setInterval(() => {
     let newTimeLeftList = calTimeLeft(eventEndTime.value)
-    if (widgetsSize.value === BookmarkSize.small && newTimeLeftList.length) {
+    if (widgetsSize.value === BookmarkSize.small) {
       newTimeLeftList = [newTimeLeftList[0]]
+    } else if (widgetsSize.value === BookmarkSize.medium) {
+      newTimeLeftList = newTimeLeftList.slice(0, 3)
     }
     timeLeftArray.value = newTimeLeftList
     if (newTimeLeftList.length === 0) {
@@ -247,10 +249,11 @@ export default {
       handleClick() {
         editModalVisible.value = true
       },
-      handleDataChange(params: {undercoat: string, value: string}) {
+      handleDataChange(params: {undercoat: string, value: string, name: string}) {
         const newData = new Bookmark(cloneDeep(props.data) as bookmarkOriginData)
         newData.undercoat = params.undercoat
         newData.value = params.value
+        newData.name = params.name
         updateBookmarkFn(newData)
         bookmarkUpdateService(newData)
         editModalVisible.value = false
