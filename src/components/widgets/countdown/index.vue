@@ -155,7 +155,7 @@ function startTimer(eventEndTime: Ref<number>, widgetsSize: ComputedRef<Bookmark
   const timer = setInterval(() => {
     let newTimeLeftList = calTimeLeft(eventEndTime.value)
     if (widgetsSize.value === BookmarkSize.small) {
-      newTimeLeftList = [newTimeLeftList[0]]
+      newTimeLeftList = newTimeLeftList.slice(0, 1)
     } else if (widgetsSize.value === BookmarkSize.medium) {
       newTimeLeftList = newTimeLeftList.slice(0, 3)
     }
