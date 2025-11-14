@@ -95,7 +95,7 @@
     </div>
     <div
       ref="fomatterRef"
-      class="json-formatter-content"
+      class="json-formatter-content allow-text-user-select"
     />
   </div>
 </template>

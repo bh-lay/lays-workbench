@@ -101,12 +101,6 @@
   font-family monospace
   font-size 18px
   background rgba(200,200,200,.06)
-  -webkit-touch-callout text
-  -webkit-user-select text
-  -khtml-user-select text
-  -moz-user-select text
-  -ms-user-select text
-  user-select text
 </style>
 
 <template>
@@ -207,7 +201,7 @@
         </v-button>
       </div>
     </div>
-    <div class="code">
+    <div class="code allow-text-user-select">
       <span>width: 0;<br>height: 0;<br>border-style: solid;<br>border-width: {{ screenBorderWidth }};<br>border-color: {{ screenBorderColor }};</span>
     </div>
   </div>

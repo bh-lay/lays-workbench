@@ -17,6 +17,14 @@ html, body
 input,
 textarea
   font-family inherit
+.allow-text-user-select
+  -webkit-touch-callout text
+  -webkit-user-select text
+  -khtml-user-select text
+  -moz-user-select text
+  -ms-user-select text
+  user-select text
+
 </style>
 <style lang="stylus" scoped>
 .gallery
