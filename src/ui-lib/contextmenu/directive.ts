@@ -39,6 +39,11 @@ export default {
             contextmenuVM.visible = true
           })
         }, false)
+        el.addEventListener('mouseup', function(event: customMouseEvent) {
+          if (event.button === 2) {
+            event.stopPropagation()
+          }
+        })
       },
     })
   },
