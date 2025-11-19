@@ -9,6 +9,9 @@ import JsonFormatterMain from '@/components/widgets/json-formatter/main.vue'
 import CodeDiffIcon from '@/components/widgets/code-diff/index.vue'
 import CodeDiffMain from '@/components/widgets/code-diff/main.vue'
 
+import QrcodeIcon from '@/components/widgets/qrcode/index.vue'
+import QrcodeMain from '@/components/widgets/qrcode/main.vue'
+
 import TriangleMakerIcon from '@/components/widgets/triangle-maker/index.vue'
 import TriangleMakerMain from '@/components/widgets/triangle-maker/main.vue'
 
@@ -54,6 +57,14 @@ export const widgetsConfig = [
     mainComponent: CodeDiffMain,
     containerStyle: CONTAINER_STYLE.dialog,
     actionBlockClasses: ['code-diff-container'],
+  },
+  {
+    name: 'qrcode',
+    label: '二维码工具',
+    iconComponent: QrcodeIcon,
+    mainComponent: QrcodeMain,
+    containerStyle: CONTAINER_STYLE.dialog,
+    actionBlockClasses: ['card'],
   },
   {
     name: 'countdown',
