@@ -26,4 +26,5 @@
     "[vue]": {
       "editor.defaultFormatter": "Vue.volar"
     },
+    "volar.takeOverMode.enabled": true,
 }

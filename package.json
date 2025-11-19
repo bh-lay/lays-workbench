@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@mdi/js": "^6.3.95",
+    "@types/qrcode": "^1.5.6",
     "json-formatter-js": "^2.3.4",
+    "jsqr": "^1.4.0",
     "monaco-editor": "0.51.0",
+    "qrcode": "^1.5.4",
     "vue": "^3.2.26",
     "vue3-seven-segment-display": "^1.0.1"
   },

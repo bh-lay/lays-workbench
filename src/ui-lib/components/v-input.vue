@@ -1,18 +1,30 @@
 <style lang="stylus">
 .v-input
-  input
+  input,
+  textarea
     box-sizing border-box
     width 100%
-    height 40px
-    padding 0 12px
+    padding 8px 12px
     background #2f2f37
     border 1px solid #1c1c21
     border-radius 4px
-    color #888
+    color #ccc
     transition .4s
     &:focus
       outline none
       border-color #2154ba
+  input
+    height 40px
+  textarea
+    min-height 80px
+    resize vertical
+  &.is-disabled
+    input,
+    textarea
+      cursor not-allowed
+      opacity .5
+      background #272730
+      color #ccc
 </style>
 
 <script lang="ts">
@@ -26,7 +38,7 @@ export default defineComponent({
     },
     maxlength: {
       type: [String, Number],
-      default: 200,
+      default: Infinity,
     },
     placeholder: {
       type: String,
@@ -36,22 +48,27 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['update:modelValue'],
   setup(props, context) {
-    function triggerValueUpdate(inputEl: HTMLInputElement) {
+    type InputOrTextarea = HTMLInputElement | HTMLTextAreaElement
+    function triggerValueUpdate(inputEl: InputOrTextarea) {
       const valueInNode = props.type === 'number' ? Number(inputEl.value) : inputEl.value
       if (props.modelValue !== valueInNode) {
         context.emit('update:modelValue', valueInNode)
       }
     }
-    function applyPropsValue(inputEl:HTMLInputElement, propsValue: string) {
+    function applyPropsValue(inputEl: InputOrTextarea, propsValue: string) {
       if (inputEl.value === propsValue) {
         return
       }
       inputEl.value = propsValue
     }
-    function bindInputEvent(inputEl: HTMLInputElement) {
+    function bindInputEvent(inputEl: InputOrTextarea) {
       let isComposition = false
       inputEl.addEventListener('input', () => {
         if (isComposition) {
@@ -70,11 +87,12 @@ export default defineComponent({
     onMounted(() => {
       const internalInstance = getCurrentInstance()
       const moduleOuterNode = internalInstance?.proxy?.$el as HTMLElement
-      const inputEl = moduleOuterNode.querySelector('input')
+      const selector = props.type === 'textarea' ? 'textarea' : 'input'
+      const inputEl = moduleOuterNode.querySelector(selector) as InputOrTextarea | null
       if (!inputEl) {
         return
       }
-      applyPropsValue(inputEl, props.modelValue.toString())
+      applyPropsValue(inputEl, `${props.modelValue ?? ''}`)
       bindInputEvent(inputEl)
       watch(
         () => props.modelValue,
@@ -87,19 +105,23 @@ export default defineComponent({
       )
     })
     return function() {
+      const isTextarea = props.type === 'textarea'
+      const elementTag = isTextarea ? 'textarea' : 'input'
+      const elementProps = {
+        placeholder: props.placeholder,
+        maxlength: props.maxlength,
+        disabled: props.disabled,
+        ...(isTextarea ? {} : { type: props.type }),
+      }
       return h(
         'div',
         {
-          class: 'v-input',
+          class: ['v-input', { 'is-disabled': props.disabled }],
         },
         [
           h(
-            'input',
-            {
-              placeholder: props.placeholder,
-              maxlength: props.maxlength,
-              type: props.type,
-            }
+            elementTag,
+            elementProps
           ),
         ]
       )

@@ -5,7 +5,10 @@
 
 <template>
   <div class="add-bookmark-modal">
-    <tab v-model="activeCreateType" />
+    <VTabSwitch
+      v-model="activeCreateType"
+      :options="tabOptions"
+    />
     <custom-link
       v-if="activeCreateType === 'custom'"
       @confirm="handleConfirm"
@@ -20,13 +23,16 @@
 <script setup lang="ts">
 import { Ref, ref, inject } from 'vue'
 import { bookmarkInsertService } from '@database/services/bookmark-service'
-import Tab from './tab.vue'
 import CustomLink from './custom-link.vue'
 import WidgetsSelector from './widgets-selector.vue'
 import { Bookmark } from '@/database/entity/bookmark'
 
 const emits = defineEmits(['success'])
-const activeCreateType = ref('custom')
+const tabOptions = [
+  { id: 'custom', label: '自定义链接' },
+  { id: 'widgets', label: '小工具' },
+]
+const activeCreateType = ref<string>(tabOptions[0].id)
 const activeDesktopId = inject<Ref<string>>('activeDesktopId')
 
 function handleConfirm(data: Bookmark) {
