@@ -9,6 +9,10 @@
   transition .15s
   &:focus
     outline none
+.v-button.is-disabled
+  cursor not-allowed
+  opacity .5
+  pointer-events none
 .v-button-default
   background #2f2f37
   border 1px solid #1c1c21
@@ -48,13 +52,15 @@
     v-if="href"
     :href="href"
     :target="target"
-    :class="['v-button', 'v-button-' + type]"
+    :class="['v-button', 'v-button-' + type, { 'is-disabled': disabled }]"
+    :aria-disabled="disabled ? 'true' : undefined"
   >
     <slot />
   </a>
   <button
     v-else
-    :class="['v-button', 'v-button-' + type]"
+    :class="['v-button', 'v-button-' + type, { 'is-disabled': disabled }]"
+    :disabled="disabled"
   >
     <slot />
   </button>
@@ -73,6 +79,10 @@ defineProps({
   target: {
     type: String,
     default: undefined,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 })
 </script>

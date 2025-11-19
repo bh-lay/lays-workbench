@@ -1,6 +1,5 @@
 <template>
-  <div class="card">
-    <h3>接收端（扫码并重组）</h3>
+  <div>
     <label>选择摄像头</label>
     <select id="cameraSelect" ref="cameraSelect"></select>
     <div style="margin-top:8px">

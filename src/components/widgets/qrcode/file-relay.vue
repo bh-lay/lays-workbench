@@ -1,3 +1,4 @@
+
 <style lang="less" scoped>
 h1 {
   font-size: 18px;
@@ -14,14 +15,6 @@ h1 {
   grid-template-columns: 1fr 420px;
   gap: 12px;
 }
-
-:deep(.card) {
-  padding: 12px;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  background: #fff;
-}
-
 :deep(label) {
   display: block;
   margin: 8px 0 4px;
@@ -78,31 +71,30 @@ h1 {
   height: 320px;
   background: #000;
 }
-
-:deep(.log) {
-  height: 120px;
-  overflow: auto;
-  background: #f8f8f8;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #eee;
-}
 </style>
 
 <template>
-  <div class="code-diff-container">
-    <h1>分片二维码（ZXing 风格） — 本地前端工具</h1>
+  <div class="card">
+    <h1>文件接力</h1>
     <p class="small">
       说明：把任意文本分成多片，每片生成带序号的二维码。接收端可连续扫码并重组原文，支持相同文本校验（SHA-256）。完全本地运行，支持导出图片序列或自动播放。
     </p>
-    <div class="grid">
-      <FileRelayEncoder />
-      <FileRelayDecoder />
-    </div>
+    <VTabSwitch
+      v-model="activeType"
+      :options="tabOptions"
+    />
+    <FileRelayEncoder v-if="activeType === 'encoder'" />
+    <FileRelayDecoder v-else />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+const tabOptions = [
+  { id: 'encoder', label: '发送端（编码）' },
+  { id: 'decoder', label: '接收端（扫码并重组）' },
+]
+const activeType = ref(tabOptions[0].id)
 import FileRelayDecoder from './file-relay-decoder.vue'
 import FileRelayEncoder from './file-relay-encoder.vue'
 </script>

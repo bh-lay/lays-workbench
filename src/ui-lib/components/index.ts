@@ -2,6 +2,7 @@ import { App as Application }  from 'vue'
 import VButton from './v-button.vue'
 import VInput from './v-input.vue'
 import VSlider from './v-slider.vue'
+import TabSwitch from './tab-switch.vue'
 import Modal from './modal.vue'
 import FocalPlane from './focal-plane.vue'
 import OverlayPanel from './overlay-panel.vue'
@@ -12,6 +13,7 @@ export default {
   install(app: Application) {
     app.component('VButton', VButton)
     app.component('VSlider', VSlider)
+    app.component('VTabSwitch', TabSwitch)
     app.component('VInput', VInput)
     app.component('VModal', Modal)
     app.component('FocalPlane', FocalPlane)

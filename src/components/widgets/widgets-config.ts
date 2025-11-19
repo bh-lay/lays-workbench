@@ -64,7 +64,7 @@ export const widgetsConfig = [
     iconComponent: QrcodeIcon,
     mainComponent: QrcodeMain,
     containerStyle: CONTAINER_STYLE.dialog,
-    actionBlockClasses: ['card'],
+    actionBlockClasses: ['card', 'qrcode-header'],
   },
   {
     name: 'countdown',
