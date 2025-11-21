@@ -1,5 +1,38 @@
+
+<style scoped lang="stylus">
+.v-tab-switch
+  display flex
+  padding 0 10px
+  border-bottom 1px solid #3b3b44
+.tab-item
+  position relative
+  margin-right 2px
+  padding 8px 18px
+  font-size 14px
+  color #adadb8
+  cursor pointer
+  transition .15s
+  --line-color transparent
+  &:after
+    content ''
+    position absolute
+    bottom -1px
+    left 0
+    width 100%
+    height 2px
+    background-color var(--line-color)
+    transition .2s
+  &:hover
+    --line-color #1e5f97
+  &.active,
+  &:active
+    --line-color #289cff
+    color #fff
+</style>
+
+
 <template>
-  <div class="tab-outer">
+  <div class="v-tab-switch">
     <div
       v-for="item in options"
       :key="item.id"
@@ -59,24 +92,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style scoped lang="stylus">
-.tab-outer
-  display flex
-  border-bottom 1px solid #3b3b44
-.tab-item
-  margin-right 2px
-  padding 8px 18px
-  border-radius 4px 4px 0 0
-  font-size 14px
-  color #adadb8
-  cursor pointer
-  transition .15s
-  &:hover
-    background #2f2f37
-  &.active,
-  &:active
-    background #2b2b31
-    color #c1c5cd
-</style>
-

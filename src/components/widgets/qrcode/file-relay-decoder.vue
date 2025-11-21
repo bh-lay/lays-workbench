@@ -1,97 +1,123 @@
+<style lang="less" scoped>
+.scanner-video {
+  position: relative;
+  margin-bottom: 16px;
+  video {
+    display: block;
+    width: 100%;
+    height: 320px;
+    background: #000;
+    border-radius: 8px;
+    border: 1px solid #333;
+  }
+  canvas {
+    display: none;
+  }
+  .progress-mask {
+    position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    padding: 60px 10px 10px;
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.8))
+  }
+  .camera-selector {
+    position: absolute;
+    width: 300px;
+    height: 100px;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: -50px 0 0 -150px;
+  }
+}
+</style>
 <template>
-  <div>
-    <label>选择摄像头</label>
-    <select id="cameraSelect" ref="cameraSelect"></select>
-    <div style="margin-top:8px">
-      <video id="video" ref="video" class="scanner-video" autoplay playsinline></video>
-      <canvas id="cameraCanvas" ref="cameraCanvas"></canvas>
+  <file-relay-decoder-preview
+    v-if="isScanedSuccess"
+    :origin-text="recoveredText"
+    @request-back="handleResetDecoder"
+  />
+  <div v-else>
+    <div class="scanner-video">
+      <video
+        ref="videoNodeRef"
+        autoplay
+        playsinline
+      />
+      <canvas ref="canvasNodeRef"></canvas>
+      <div
+        v-if="isScaning"
+        class="progress-mask"
+      >
+        <file-relay-decoder-progress :decoder-state="decoderState" />
+      </div>
+      <div
+        v-else
+        class="camera-selector"
+      >
+        <camera-selector v-model="selectedCameraId" />
+      </div>
     </div>
 
-    <div class="controls">
-      <button id="startScanBtn" ref="startScanBtn" @click="handleStartScan">开始扫码</button>
-      <button id="stopScanBtn" ref="stopScanBtn" disabled @click="handleStopScan">
-        停止扫码
-      </button>
-      <button id="resetDecoderBtn" ref="resetDecoderBtn" @click="handleResetDecoder">
-        重置接收器
-      </button>
+    <div>
+      <v-button
+        type="primary"
+        @click="handleToggleScan"
+      >
+        {{ isScaning ? '停止扫码' : '开始扫码' }}
+      </v-button>
     </div>
 
-    <label>解码日志 / 进度</label>
-    <div id="decoderLog" ref="decoderLog" class="log"></div>
-
-    <label>已接收分片（实时）</label>
-    <div
-      id="partsList"
-      ref="partsList"
-      style="min-height:60px;padding:8px;border:1px dashed #eee;border-radius:6px;background:#fafafa"
-    ></div>
-
-    <label>恢复出的文本</label>
-    <textarea id="recovered" ref="recovered" readonly></textarea>
+    <div v-if="decoderLog.length">
+      <div class="form-label">解码日志 / 进度</div>
+      <v-input
+        :model-value="decoderLog"
+        type="textarea"
+        disabled
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, onMounted, onUnmounted } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import jsQR from 'jsqr'
-import { ab2str, bytesFromB64, sha256Hex } from './file-relay-helpers'
+import { Message } from '@/ui-lib/message'
+import { ab2str, bytesFromB64, sha256Hex, DecoderState } from './file-relay-helpers'
+import FileRelayDecoderProgress from './file-relay-decoder-progress.vue'
+import FileRelayDecoderPreview from './file-relay-decoder-preview.vue'
+import CameraSelector from './camera-selector.vue'
 
-interface DecoderState {
-  total: number | null
-  hash: string | null
-  parts: Record<number, string>
-}
+const isScaning = ref(false)
+const isScanedSuccess = ref(false)
+const selectedCameraId = ref('')
 
-const cameraSelect = ref<HTMLSelectElement | null>(null)
-const video = ref<HTMLVideoElement | null>(null)
-const cameraCanvas = ref<HTMLCanvasElement | null>(null)
-const startScanBtn = ref<HTMLButtonElement | null>(null)
-const stopScanBtn = ref<HTMLButtonElement | null>(null)
-const resetDecoderBtn = ref<HTMLButtonElement | null>(null)
-const decoderLog = ref<HTMLDivElement | null>(null)
-const partsList = ref<HTMLDivElement | null>(null)
-const recovered = ref<HTMLTextAreaElement | null>(null)
+const videoNodeRef = ref<HTMLVideoElement | null>(null)
+const canvasNodeRef = ref<HTMLCanvasElement | null>(null)
+const decoderLog = ref('')
+const recoveredText = ref('')
 
 let stream: MediaStream | null = null
 let scanTimer: number | null = null
-let decoderState: DecoderState = { total: null, hash: null, parts: {} }
-
-const setButtonDisabled = (btn: Ref<HTMLButtonElement | null>, disabled: boolean): void => {
-  if (btn.value) {
-    btn.value.disabled = disabled
-  }
-}
+let decoderState = ref<DecoderState>({ total: null, hash: null, parts: {} })
 
 const logDecoder = (txt: string): void => {
-  if (!decoderLog.value) return
-  decoderLog.value.innerText += `${txt}\n`
-  decoderLog.value.scrollTop = decoderLog.value.scrollHeight
-}
-
-const updatePartsUI = (): void => {
-  if (!partsList.value) return
-  const totalLabel = decoderState.total ?? '?'
-  partsList.value.innerHTML = ''
-  const keys = Object.keys(decoderState.parts)
-    .map((n) => Number.parseInt(n, 10))
-    .sort((a, b) => a - b)
-  keys.forEach((k) => {
-    const d = document.createElement('div')
-    d.innerText = `${k}/${totalLabel}`
-    partsList.value?.appendChild(d)
-  })
+  decoderLog.value += `${txt}\n`
 }
 
 const tryFinish = async (): Promise<void> => {
-  const total = decoderState.total
+  const total = decoderState.value.total
   if (!total) return
-  const got = Object.keys(decoderState.parts).length
+  const got = Object.keys(decoderState.value.parts).length
   if (got !== total) return
   logDecoder('接收完毕，正在重组并校验...')
   let all = new Uint8Array(0)
   for (let i = 1; i <= total; i += 1) {
-    const b64 = decoderState.parts[i]
+    const b64 = decoderState.value.parts[i]
     if (!b64) return
     const u = bytesFromB64(b64)
     const tmp = new Uint8Array(all.length + u.length)
@@ -99,25 +125,24 @@ const tryFinish = async (): Promise<void> => {
     tmp.set(u, all.length)
     all = tmp
   }
-  const expectedHash = decoderState.hash
+  const expectedHash = decoderState.value.hash
   const calculated = await sha256Hex(all)
   if (expectedHash && calculated === expectedHash) {
-    if (recovered.value) {
-      recovered.value.value = ab2str(all)
-    }
+    recoveredText.value = ab2str(all)
     logDecoder('校验通过：SHA256 匹配。已恢复文本。')
+    handleScanSuccess()
   } else {
     logDecoder(`校验失败：计算 ${calculated} ≠ 期望 ${expectedHash ?? '未知'}`)
   }
 }
 
 const scanOnce = (): void => {
-  if (!video.value || !cameraCanvas.value) return
-  if (!video.value.videoWidth || !video.value.videoHeight) return
-  const ctx = cameraCanvas.value.getContext('2d')
+  if (!videoNodeRef.value || !canvasNodeRef.value) return
+  if (!videoNodeRef.value.videoWidth || !videoNodeRef.value.videoHeight) return
+  const ctx = canvasNodeRef.value.getContext('2d')
   if (!ctx) return
-  ctx.drawImage(video.value, 0, 0, cameraCanvas.value.width, cameraCanvas.value.height)
-  const imgd = ctx.getImageData(0, 0, cameraCanvas.value.width, cameraCanvas.value.height)
+  ctx.drawImage(videoNodeRef.value, 0, 0, canvasNodeRef.value.width, canvasNodeRef.value.height)
+  const imgd = ctx.getImageData(0, 0, canvasNodeRef.value.width, canvasNodeRef.value.height)
   const code = jsQR(imgd.data, imgd.width, imgd.height, { inversionAttempts: 'attemptBoth' })
   if (!code) return
   const payload = code.data
@@ -131,19 +156,18 @@ const scanOnce = (): void => {
     const hash = payload.substring(idx2 + 1, idx3)
     const b64 = payload.substring(idx3 + 1)
     if (Number.isNaN(partNum) || Number.isNaN(total) || !hash) return
-    if (!decoderState.total) {
-      decoderState.total = total
-      decoderState.hash = hash
+    if (!decoderState.value.total) {
+      decoderState.value.total = total
+      decoderState.value.hash = hash
       logDecoder(`检测到第 ${partNum}/${total} 片，目标 SHA256: ${hash}`)
     }
-    if (decoderState.hash !== hash || decoderState.total !== total) {
+    if (decoderState.value.hash !== hash || decoderState.value.total !== total) {
       logDecoder('警告：检测到不一致的任务（哈希或总片数不同），已忽略此片')
       return
     }
-    if (!decoderState.parts[partNum]) {
-      decoderState.parts[partNum] = b64
+    if (!decoderState.value.parts[partNum]) {
+      decoderState.value.parts[partNum] = b64
       logDecoder(`已接收片 ${partNum}`)
-      updatePartsUI()
       void tryFinish()
     }
   } else {
@@ -166,44 +190,37 @@ const startCamera = async (deviceId?: string): Promise<void> => {
     },
   }
   stream = await navigator.mediaDevices.getUserMedia(constraints)
-  if (!video.value || !cameraCanvas.value) return
-  video.value.srcObject = stream
-  await video.value.play()
-  cameraCanvas.value.width = video.value.videoWidth
-  cameraCanvas.value.height = video.value.videoHeight
+  if (!videoNodeRef.value || !canvasNodeRef.value) return
+  videoNodeRef.value.srcObject = stream
+  await videoNodeRef.value.play()
+  canvasNodeRef.value.width = videoNodeRef.value.videoWidth
+  canvasNodeRef.value.height = videoNodeRef.value.videoHeight
 }
 
-const initCameras = async (): Promise<void> => {
-  if (!navigator.mediaDevices?.enumerateDevices || !cameraSelect.value) return
-  const devices = await navigator.mediaDevices.enumerateDevices()
-  const cams = devices.filter((d) => d.kind === 'videoinput')
-  cameraSelect.value.innerHTML = ''
-  cams.forEach((c, index) => {
-    const option = document.createElement('option')
-    option.value = c.deviceId
-    option.innerText = c.label || `camera ${index + 1}`
-    cameraSelect.value?.appendChild(option)
-  })
+const handleResetDecoder = (): void => {
+  decoderState.value = { total: null, hash: null, parts: {} }
+  recoveredText.value = ''
+  decoderLog.value = ''
+  isScaning.value = false
+  isScanedSuccess.value = false
 }
-
 const handleStartScan = async (): Promise<void> => {
   try {
-    await initCameras()
-    const selected = cameraSelect.value?.value || undefined
+    isScaning.value = true
+    const selected = selectedCameraId.value || undefined
     await startCamera(selected)
-    setButtonDisabled(startScanBtn, true)
-    setButtonDisabled(stopScanBtn, false)
-    setButtonDisabled(resetDecoderBtn, false)
-    if (decoderLog.value) {
-      decoderLog.value.innerText = ''
-    }
+    decoderLog.value = ''
     scanTimer = window.setInterval(scanOnce, 300)
   } catch (error) {
-    alert(`打开摄像头失败：${String(error)}`)
+    isScaning.value = false
+    new Message({
+      message: `打开摄像头失败：${String(error)}`,
+    })
   }
 }
 
 const handleStopScan = (): void => {
+  isScaning.value = false
   if (scanTimer) {
     window.clearInterval(scanTimer)
     scanTimer = null
@@ -212,31 +229,22 @@ const handleStopScan = (): void => {
     stream.getTracks().forEach((t) => t.stop())
     stream = null
   }
-  setButtonDisabled(startScanBtn, false)
-  setButtonDisabled(stopScanBtn, true)
 }
-
-const handleResetDecoder = (): void => {
-  decoderState = { total: null, hash: null, parts: {} }
-  if (partsList.value) {
-    partsList.value.innerHTML = ''
+const handleToggleScan = () => {
+  if (isScaning.value) {
+    handleResetDecoder()
+    handleStopScan()
+  } else {
+    handleResetDecoder()
+    handleStartScan()
   }
-  if (recovered.value) {
-    recovered.value.value = ''
-  }
-  if (decoderLog.value) {
-    decoderLog.value.innerText = ''
-  }
-  logDecoder('接收器已重置')
 }
-
-onMounted(() => {
-  if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
-    initCameras().catch(() => {
-      // 用户未授权时忽略
-    })
-  }
-})
+const handleScanSuccess = () => {
+  setTimeout(() => {
+    handleStopScan()
+    isScanedSuccess.value = true
+  }, 1000)
+}
 
 onUnmounted(() => {
   handleStopScan()

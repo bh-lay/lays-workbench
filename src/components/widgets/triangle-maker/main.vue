@@ -201,7 +201,7 @@
         </v-button>
       </div>
     </div>
-    <div class="code allow-text-user-select">
+    <div class="code allow-user-select-text">
       <span>width: 0;<br>height: 0;<br>border-style: solid;<br>border-width: {{ screenBorderWidth }};<br>border-color: {{ screenBorderColor }};</span>
     </div>
   </div>

@@ -1,5 +1,7 @@
 <style lang="stylus" scoped>
 .v-button
+  display inline-block
+  vertical-align bottom
   padding 10px 20px
   border-radius 4px
   line-height 18px
@@ -9,13 +11,20 @@
   transition .15s
   &:focus
     outline none
+  & + .v-button
+    margin-left 8px
+  :deep .mdi-icon
+    width 18px
+    height 18px
+    margin 0
+    vertical-align bottom
 .v-button.is-disabled
   cursor not-allowed
   opacity .5
   pointer-events none
 .v-button-default
   background #2f2f37
-  border 1px solid #1c1c21
+  border 1px solid #515161
   color #bdbdc7
   &:hover
     background #3a3a40
@@ -37,7 +46,7 @@
     border-color #2154ba
 .v-button-secondary
   background transparent
-  border 1px solid #1c1c21
+  border 1px solid transparent
   color #bdbdc7
   &:hover
     background #3a3a40

@@ -1,4 +1,19 @@
-export type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H'
+export const errorCorrectionLevels = ['L', 'M', 'Q', 'H'] as const
+export type ErrorCorrectionLevel = typeof errorCorrectionLevels[number]
+
+export interface RelayFrame {
+  index: number
+  total: number
+  hash: string
+  payload: string
+  dataUrl: string
+}
+
+export interface DecoderState {
+  total: number | null
+  hash: string | null
+  parts: Record<number, string>
+}
 
 const textEncoder = new TextEncoder()
 const textDecoder = new TextDecoder()

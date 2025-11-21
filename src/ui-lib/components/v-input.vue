@@ -3,12 +3,13 @@
   input,
   textarea
     box-sizing border-box
+    display block
     width 100%
     padding 8px 12px
     background #2f2f37
     border 1px solid #1c1c21
     border-radius 4px
-    color #ccc
+    color #eee
     transition .4s
     &:focus
       outline none
@@ -17,7 +18,7 @@
     height 40px
   textarea
     min-height 80px
-    resize vertical
+    resize none
   &.is-disabled
     input,
     textarea

@@ -2,11 +2,13 @@
 .v-slider
   height 14px
   padding-top 10px
+  &:has(.railway-station-label)
+    margin 0 5px 20px
 .railway-track
   position relative
   height 4px
   border-radius 4px
-  background: #e7ebee
+  background: #ddd
 .railway-train
   position relative
   height 4px
@@ -51,7 +53,14 @@
   margin-left -1px
   width 2px
   height 4px
-  background rgba(255, 255, 255, .6)
+  background rgba(255, 255, 255, .4)
+.railway-station-label
+  position relative
+  top 10px
+  left -5px
+  font-size 12px
+  white-space nowrap
+  opacity .6
 .touch-mode .railway-engine
   &.active
     cursor grabbing
@@ -79,7 +88,12 @@
             left: 100 * (mark.value - min) / (max - min) + '%'
           }"
         >
-          <div class="label" />
+          <div
+            v-if="mark.label"
+            class="railway-station-label"
+          >
+            {{ mark.label }}
+          </div>
         </div>
       </div>
       <div

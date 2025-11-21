@@ -40,6 +40,14 @@ export default defineConfig({
           if (id.includes('node_modules/json-formatter-js')) {
             return 'json-formatter'
           }
+          // 二维码相关
+          if (
+            id.includes('/components/widgets/qrcode/') ||
+            id.includes('node_modules/jsqr') ||
+            id.includes('node_modules/qrcode')
+          ) {
+            return 'qrcode'
+          }
           // 其余依赖均拆分至 libs 模块
           if(id.includes('node_modules')){
             return 'libs'

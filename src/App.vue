@@ -17,7 +17,7 @@ html, body
 input,
 textarea
   font-family inherit
-.allow-text-user-select
+.allow-user-select-text
   -webkit-touch-callout text
   -webkit-user-select text
   -khtml-user-select text

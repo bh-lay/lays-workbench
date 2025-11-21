@@ -49,6 +49,7 @@ module.exports = {
     'no-trailing-spaces': ['error', {
       'skipBlankLines': false,
     }],
+    'vue/html-self-closing': 'off',
     'vue/multi-word-component-names': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
   },

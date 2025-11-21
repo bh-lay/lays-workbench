@@ -1,16 +1,15 @@
 <style lang="stylus" scoped>
-.formatter-widgets
+.qrcode-widgets
   height 100%
   display flex
   flex-direction column
   align-items center
   justify-content center
   cursor pointer
-  background-image linear-gradient(150deg, #900938, #ff6a00)
+  background-image linear-gradient(160deg, #094f90, #59b7ce)
   box-shadow inset 1px 1px 1px rgba(255, 255, 255, .1), inset -1px -1px 1px rgba(0, 0, 0, .2)
-  transition 2s
   &:hover
-    background-image linear-gradient(150deg, #970000, #d45800)
+    background-image linear-gradient(150deg, #164774, #3a8da1)
 svg
   width 32px
   height 32px
@@ -26,13 +25,15 @@ svg
   font-weight bold
   color #fff
 .desc
+  padding 0 10px
   line-height 20px
+  text-align center
   font-size 12px
   color rgba(255, 255, 255, .6)
 </style>
 <template>
   <div
-    class="formatter-widgets"
+    class="qrcode-widgets"
     @click="open"
   >
     <v-mdi
@@ -46,7 +47,7 @@ svg
         二维码工具
       </div>
       <div class="desc">
-        二维码在线生成、扫描，文件接力
+        二维码生成、扫描，文件接力
       </div>
     </template>
   </div>
