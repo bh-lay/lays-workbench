@@ -41,6 +41,11 @@ export const widgetsConfig = [
     mainComponent: RegVisualMain,
     containerStyle: CONTAINER_STYLE.dialog,
     actionBlockClasses: [],
+    defaultParams(state: routerState) {
+      return {
+        regText: state.regText as string,
+      }
+    },
   },
   {
     name: 'json-formatter',
