@@ -5,11 +5,12 @@
   gap: 4px;
   span {
     width: 40px;
-    padding: 4px o;
+    padding: 6px 0;
     border-radius: 2px;
     line-height: 20px;
     text-align: center;
     font-size: 14px;
+    font-weight: bold;
     color: rgba(255, 255, 255, .7);
     &.empty {
       background: rgba(0, 0, 0, .4);

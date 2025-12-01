@@ -34,6 +34,11 @@
     margin: -50px 0 0 -150px;
   }
 }
+.v-input {
+  :deep textarea {
+    min-height: 200px;
+  }
+}
 .result-section {
   display: flex;
   flex-direction: column;
