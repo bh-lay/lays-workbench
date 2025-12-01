@@ -6,6 +6,13 @@
     min-height: 200px;
   }
 }
+@media screen and (max-width:600px) {
+  .v-input {
+    :deep textarea {
+      height: 60vh;
+    }
+  }
+}
 </style>
 <template>
   <div>

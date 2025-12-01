@@ -42,14 +42,24 @@ svg
         small: widgetsSize === BookmarkSize.small
       }"
     />
-    <template v-if="widgetsSize !== BookmarkSize.small">
-      <div class="title">
-        二维码工具
-      </div>
-      <div class="desc">
-        二维码生成、扫描，文件接力
-      </div>
-    </template>
+    <div
+      v-if="widgetsSize !== BookmarkSize.small"
+      class="title"
+    >
+      二维码工具
+    </div>
+    <div
+      v-if="widgetsSize === BookmarkSize.medium"
+      class="desc"
+    >
+      跨设备文本离线分享
+    </div>
+    <div
+      v-else-if="widgetsSize === BookmarkSize.large"
+      class="desc"
+    >
+      跨设备文本离线分享，支持超大文件
+    </div>
   </div>
 </template>
 

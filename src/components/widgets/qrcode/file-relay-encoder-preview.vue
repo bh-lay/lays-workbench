@@ -2,11 +2,35 @@
   .preview {
     display: flex;
     flex-wrap: wrap;
+  }
+  .preview-item {
+    position: relative;
+    box-sizing: border-box;
+    width: 20%;
+    min-width: 100px;
+    cursor: pointer;
     img {
+      display: block;
       box-sizing: border-box;
-      width: 25%;
-      border: 4px solid transparent;
-      min-width: 140px;
+      width: 100%;
+      aspect-ratio: 1;
+      border: 5px solid transparent;
+    }
+    .badge {
+      position: absolute;
+      inset: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.4);
+      font-size: 24px;
+      color: #fff;
+      transition: .3s ease-in-out;
+    }
+    &:hover {
+      .badge {
+        background: rgba(0,0,0,.7);
+      }
     }
   }
   .fullscreen-preview {
@@ -29,6 +53,21 @@
       padding: 12px;
     }
   }
+  .tip {
+    margin: 16px 0 12px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid rgba(249, 169, 51, 0.6);
+    background: linear-gradient(90deg, rgba(249, 169, 51, 0.15), rgba(249, 169, 51, 0.05));
+    font-size: 13px;
+    line-height: 1.6;
+    color: #ffdca0;
+    a {
+      font-size: 18px;
+      color: #ffdca0;
+      text-decoration: underline;
+    }
+  }
 </style>
 <template>
   <div class="generate-part">
@@ -42,21 +81,25 @@
     >
       播放二维码序列
     </v-button>
-    <div class="form-label">生成信息 / 日志</div>
-    <v-input
-      :model-value="encoderLog"
-      type="textarea"
-      disabled
-    />
+    <p
+      class="tip allow-user-select-text"
+    >
+      使用其它设备打开“在线扫描”，依次识别二维码序列后重组。<br />
+      <a href="https://e.bh-lay.com/#!=widgets:qrcode">https://e.bh-lay.com/#!=widgets:qrcode</a>
+    </p>
 
-    <h4>预览</h4>
     <div class="preview">
-      <img
+      <div
         v-for="(frame, index) in relayFrames"
         :key="frame.index"
-        :src="frame.dataUrl"
+        class="preview-item"
         @click="handlePreview(index)"
-      />
+      >
+        <span class="badge">
+          {{ frame.index }}/{{ frame.total }}
+        </span>
+        <img :src="frame.dataUrl" />
+      </div>
     </div>
     <div
       v-if="fullscreenVisible"
@@ -71,7 +114,10 @@
       </div>
       <div>
         <v-button type="primary" @click="handleExitPlay">退出播放</v-button>
-        <v-button @click="handleTogglePause">{{ fullscreenPaused ? '继续' : '暂停' }}</v-button>
+        <v-button @click="handleTogglePause">
+          <v-mdi :name="fullscreenPaused ? 'mdi-play' : 'mdi-pause'" />
+          {{ fullscreenPaused ? '继续' : '暂停' }}
+        </v-button>
       </div>
     </div>
   </div>
@@ -85,10 +131,6 @@ import {
 } from './file-relay-helpers'
 
 const props = defineProps({
-  encoderLog: {
-    type: String,
-    default: '',
-  },
   isGenerateSuccess: {
     type: Boolean,
     default: false,

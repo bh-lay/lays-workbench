@@ -4,15 +4,16 @@
   flex-wrap: wrap;
   gap: 4px;
   span {
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    padding: 6px 0;
     border-radius: 2px;
-    line-height: 24px;
+    line-height: 20px;
     text-align: center;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: bold;
     color: rgba(255, 255, 255, .7);
     &.empty {
-      background: #888;
+      background: rgba(0, 0, 0, .4);
     }
     &.scaned {
       background: #2a782a;
