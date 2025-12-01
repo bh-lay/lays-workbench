@@ -12,9 +12,6 @@
 
 <template>
   <div class="card">
-    <p class="small">
-      文本分段生成二维码，扫码后本地重组并校验。
-    </p>
     <VTabSwitch
       v-model="activeType"
       :options="tabOptions"
@@ -30,8 +27,8 @@ import FileRelayDecoder from './file-relay-decoder.vue'
 import FileRelayEncoder from './file-relay-encoder.vue'
 
 const tabOptions = [
-  { id: 'encoder', label: '发送端（编码）' },
-  { id: 'decoder', label: '接收端（扫码并重组）' },
+  { id: 'encoder', label: '生成二维码' },
+  { id: 'decoder', label: '在线扫描' },
 ]
 const activeType = ref(tabOptions[0].id)
 </script>

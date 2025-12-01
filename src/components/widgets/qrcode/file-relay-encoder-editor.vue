@@ -11,30 +11,27 @@
       max-width: 400px;
     }
   }
+  .decription {
+    padding: 1.5em 0 0.5em;
+    font-size: 14px;
+    color: #f9a933
+  }
+  @media screen and (max-width:600px) {
+    .v-input {
+      :deep textarea {
+        min-height: 60vh;
+      }
+    }
+  }
+
 </style>
 <template>
   <div class="source-part">
     <v-input
       v-model="sourceText"
       type="textarea"
-      placeholder="把长文本粘贴到这里——例如几 KB 的说明、短文件内容等"
+      placeholder="在这里输入或粘贴要生成二维码的内容"
     />
-
-    <div>
-      <VButton
-        type="primary"
-        :disabled="sourceText.length === 0"
-        @click="handleEncode"
-      >
-        生成二维码序列
-      </VButton>
-      <VButton
-        type="secondary"
-        @click="advanceConfigVisible = !advanceConfigVisible"
-      >
-        更多设置
-      </VButton>
-    </div>
     <div
       v-if="advanceConfigVisible"
       class="advance-config"
@@ -50,11 +47,33 @@
       <div class="form-label">错误更正等级</div>
       <ec-level-slider v-model="ecLevel" />
     </div>
+
+    <div>
+      <VButton
+        type="primary"
+        :disabled="sourceText.length === 0"
+        @click="handleEncode"
+      >
+        {{ encodeButtonLabel }}
+      </VButton>
+      <VButton
+        type="secondary"
+        @click="advanceConfigVisible = !advanceConfigVisible"
+      >
+        更多设置
+      </VButton>
+    </div>
+    <div
+      v-if="isSequenceMode"
+      class="decription"
+    >
+      文本较长，需要生成多张二维码序列。
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { ErrorCorrectionLevel } from './file-relay-helpers'
 import EcLevelSlider from './ec-level-slider.vue'
 
@@ -82,6 +101,22 @@ const chunkSizeMarks = [
     label: '800',
   },
 ]
+
+// 根据当前文本长度和分片上限，预估是单图还是序列
+const isSequenceMode = computed(() => {
+  if (!sourceText.value) return false
+  const encoder = new TextEncoder()
+  const bytesLength = encoder.encode(sourceText.value).length
+  const csize = Math.max(100, chunkSize.value || 600)
+  const expectedParts = Math.ceil(bytesLength / csize)
+  return expectedParts > 1
+})
+
+// 按模式返回对应的按钮文案
+const encodeButtonLabel = computed(() => {
+  if (!sourceText.value) return '生成二维码'
+  return isSequenceMode.value ? '生成二维码序列' : '生成二维码'
+})
 const handleEncode = async (): Promise<void> => {
   if (!sourceText.value) {
     return

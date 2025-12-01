@@ -34,6 +34,32 @@
     margin: -50px 0 0 -150px;
   }
 }
+.result-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.result-box {
+  padding: 12px;
+  background: #2f2f37;
+  border: 1px solid #1c1c21;
+  border-radius: 4px;
+  word-break: break-all;
+  white-space: pre-wrap;
+  font-size: 12px;
+  color: #ccc;
+  .v-button {
+    vertical-align: baseline;
+    margin-left: 1em;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+@media screen and (max-width:600px) {
+  video {
+    min-height: 60vh;
+  }
+}
 </style>
 <template>
   <file-relay-decoder-preview
@@ -70,6 +96,12 @@
       >
         {{ isScaning ? '停止扫码' : '开始扫码' }}
       </v-button>
+      <v-button
+        v-if="mode === 'simple' && scannedTextList.length"
+        @click="handleClearResult"
+      >
+        清空结果
+      </v-button>
     </div>
 
     <div v-if="decoderLog.length">
@@ -79,6 +111,22 @@
         type="textarea"
         disabled
       />
+    </div>
+
+    <div
+      v-if="mode === 'simple' && scannedTextList.length"
+      class="result-section"
+    >
+      <div class="form-label">扫描结果</div>
+      <div
+        v-for="(scannedText, index) in scannedTextList"
+        :key="index"
+      >
+        <div class="result-box allow-user-select-text">
+          {{ scannedText }}
+          <v-button @click="handleCopyResult(index)">复制</v-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -95,11 +143,13 @@ import CameraSelector from './camera-selector.vue'
 const isScaning = ref(false)
 const isScanedSuccess = ref(false)
 const selectedCameraId = ref('')
+const mode = ref<'unknown' | 'fragment' | 'simple'>('unknown')
 
 const videoNodeRef = ref<HTMLVideoElement | null>(null)
 const canvasNodeRef = ref<HTMLCanvasElement | null>(null)
 const decoderLog = ref('')
 const recoveredText = ref('')
+const scannedTextList = ref<string[]>([])
 
 let stream: MediaStream | null = null
 let scanTimer: number | null = null
@@ -144,8 +194,34 @@ const scanOnce = (): void => {
   ctx.drawImage(videoNodeRef.value, 0, 0, canvasNodeRef.value.width, canvasNodeRef.value.height)
   const imgd = ctx.getImageData(0, 0, canvasNodeRef.value.width, canvasNodeRef.value.height)
   const code = jsQR(imgd.data, imgd.width, imgd.height, { inversionAttempts: 'attemptBoth' })
-  if (!code) return
+  if (!code || !code.data) return
   const payload = code.data
+
+  // 根据第一次识别到的二维码内容自动决定工作模式
+  if (mode.value === 'unknown') {
+    mode.value = payload.startsWith('ZX|') ? 'fragment' : 'simple'
+    if (mode.value === 'simple') {
+      // 简单模式下直接记录扫描结果，与原“在线扫描”功能一致
+      scannedTextList.value.push(payload)
+      return
+    }
+  }
+
+  // 简单模式：直接累积结果
+  if (mode.value === 'simple') {
+    if (scannedTextList.value[scannedTextList.value.length - 1] !== payload) {
+      if (scannedTextList.value.length > 10) {
+        new Message({
+          message: '扫描记录过多，请清空后继续！',
+        })
+        return
+      }
+      scannedTextList.value.push(payload)
+    }
+    return
+  }
+
+  // 分片模式：只处理带 ZX| 头的分片二维码
   if (payload.startsWith('ZX|')) {
     const idx1 = payload.indexOf('|', 3)
     const idx2 = payload.indexOf('|', idx1 + 1)
@@ -170,8 +246,6 @@ const scanOnce = (): void => {
       logDecoder(`已接收片 ${partNum}`)
       void tryFinish()
     }
-  } else {
-    logDecoder(`检测到非分片二维码，内容：${payload.slice(0, 200)}`)
   }
 }
 
@@ -201,6 +275,8 @@ const handleResetDecoder = (): void => {
   decoderState.value = { total: null, hash: null, parts: {} }
   recoveredText.value = ''
   decoderLog.value = ''
+  scannedTextList.value = []
+  mode.value = 'unknown'
   isScaning.value = false
   isScanedSuccess.value = false
 }
@@ -249,5 +325,25 @@ const handleScanSuccess = () => {
 onUnmounted(() => {
   handleStopScan()
 })
+
+const handleClearResult = (): void => {
+  scannedTextList.value = []
+}
+
+const handleCopyResult = async (index: number): Promise<void> => {
+  const text = scannedTextList.value[index]
+  if (!text) return
+
+  try {
+    await navigator.clipboard.writeText(text)
+    new Message({
+      message: '结果已复制到剪贴板',
+    })
+  } catch (error) {
+    new Message({
+      message: `复制失败：${String(error)}`,
+    })
+  }
+}
 </script>
 
