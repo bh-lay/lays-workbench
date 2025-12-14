@@ -10,6 +10,7 @@
     border 1px solid #1c1c21
     border-radius 4px
     color #eee
+    font-size inherit
     transition .4s
     &:focus
       outline none

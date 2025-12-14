@@ -44,7 +44,7 @@
   box-sizing border-box
   flex-grow 1.4
   width 100px
-  padding 15px
+  padding 15px 15px 30px 30px
   line-height: 1.8
   font-size 16px
   border-radius 8px
@@ -55,8 +55,12 @@
     filter invert(1) contrast(0.8)
   &:hover
     background rgba(0, 0, 0, .1)
+:deep(.json-formatter-row)
+  position relative
 :deep(.json-formatter-row .json-formatter-toggler)
-  display inline-block
+  position absolute
+  left -20px
+  top 5px
   width 20px
   height 20px
   padding 0

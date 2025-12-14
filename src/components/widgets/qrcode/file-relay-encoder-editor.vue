@@ -2,7 +2,7 @@
   .v-input {
     margin-bottom: 16px;
     :deep textarea {
-      min-height: 200px;
+      min-height: var(--main-editor-height);
     }
   }
   .advance-config {
@@ -16,13 +16,6 @@
     font-size: 14px;
     color: #f9a933
   }
-  @media screen and (max-width:600px) {
-    .v-input {
-      :deep textarea {
-        min-height: 60vh;
-      }
-    }
-  }
 
 </style>
 <template>
@@ -30,7 +23,10 @@
     <v-input
       v-model="sourceText"
       type="textarea"
-      placeholder="在这里输入或粘贴要生成二维码的内容"
+      placeholder="输入或粘贴要生成二维码的内容"
+      :style="{
+        fontSize: inputFontSize + 'px'
+      }"
     />
     <div
       v-if="advanceConfigVisible"
@@ -112,6 +108,19 @@ const isSequenceMode = computed(() => {
   return expectedParts > 1
 })
 
+const inputFontSize = computed(() => {
+  const textLength = sourceText.value.length
+  if (textLength < 100) {
+    return 28
+  }
+  if (textLength < 200) {
+    return 20
+  }
+  if (textLength < 300) {
+    return 16
+  }
+  return 12
+})
 // 按模式返回对应的按钮文案
 const encodeButtonLabel = computed(() => {
   if (!sourceText.value) return '生成二维码'

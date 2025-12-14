@@ -3,6 +3,7 @@
   max-width: 800px;
   height: 100%;
   margin: 0 auto;
+  --main-editor-height: 320px
 }
 .qrcode-header {
   margin-bottom: 16px;
@@ -23,8 +24,10 @@
   :deep(.card) {
     min-height: 100%;
   }
+  .qrcode-container {
+    --main-editor-height: 60vh
+  }
 }
-
 </style>
 
 <template>
