@@ -5,7 +5,7 @@
   video {
     display: block;
     width: 100%;
-    height: 320px;
+    height: var(--main-editor-height);
     background: #000;
     border-radius: 8px;
     border: 1px solid #333;
@@ -58,11 +58,6 @@
     margin-left: 1em;
     padding: 4px 8px;
     font-size: 12px;
-  }
-}
-@media screen and (max-width:600px) {
-  video {
-    min-height: 60vh;
   }
 }
 </style>
