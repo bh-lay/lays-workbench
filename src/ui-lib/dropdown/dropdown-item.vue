@@ -12,12 +12,17 @@
   &:active,
   &.active
     background #202228
+  &.disabled
+    opacity .5
+    cursor not-allowed
+    pointer-events none
 </style>
 <template>
   <div
     :class="{
       'v-dropdown-item': true,
       active: active,
+      disabled: disabled
     }"
     @click="closeDropdown"
   >
@@ -34,6 +39,10 @@ const closeDropdown = inject('close-dropdown', () => {
 
 defineProps({
   active: {
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
     type: Boolean,
     default: false,
   },

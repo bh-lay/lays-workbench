@@ -6,6 +6,9 @@ import RegVisualMain from '@/components/widgets/reg-visual/main.vue'
 import JsonFormatterIcon from '@/components/widgets/json-formatter/index.vue'
 import JsonFormatterMain from '@/components/widgets/json-formatter/main.vue'
 
+import TranslatorIcon from '@/components/widgets/translator/index.vue'
+import TranslatorMain from '@/components/widgets/translator/main.vue'
+
 import RearviewMirrorIcon from '@/components/widgets/rearview-mirror/index.vue'
 // import RearviewMirrorMain from '@/components/widgets/rearview-mirror/main.vue'
 
@@ -57,6 +60,21 @@ export const widgetsConfig = [
     mainComponent: JsonFormatterMain,
     containerStyle: CONTAINER_STYLE.dialog,
     actionBlockClasses: ['json-formatter'],
+  },
+  {
+    name: 'translator',
+    label: '翻译',
+    iconComponent: TranslatorIcon,
+    mainComponent: TranslatorMain,
+    containerStyle: CONTAINER_STYLE.dialog,
+    actionBlockClasses: ['translator'],
+    defaultParams(state: routerState) {
+      return {
+        initialText: state.text as string,
+        initialSourceLang: state.sourceLang as string,
+        initialTargetLang: state.targetLang as string,
+      }
+    },
   },
   {
     name: 'rearview-mirror',
