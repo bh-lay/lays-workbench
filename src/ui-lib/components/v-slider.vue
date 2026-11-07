@@ -212,6 +212,8 @@ function delayTriggerUpdate(value: number) {
 
 const dragOption: dragOptions = {
   touchStableTime: 0,
+  mouseStableDistance: 0,
+  touchStableDistance: 0,
   beforeStart() {
     const trackNode = trackRef.value
     if (trackNode === null) {

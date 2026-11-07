@@ -6,6 +6,9 @@ import RegVisualMain from '@/components/widgets/reg-visual/main.vue'
 import JsonFormatterIcon from '@/components/widgets/json-formatter/index.vue'
 import JsonFormatterMain from '@/components/widgets/json-formatter/main.vue'
 
+import RearviewMirrorIcon from '@/components/widgets/rearview-mirror/index.vue'
+// import RearviewMirrorMain from '@/components/widgets/rearview-mirror/main.vue'
+
 import CodeDiffIcon from '@/components/widgets/code-diff/index.vue'
 import CodeDiffMain from '@/components/widgets/code-diff/main.vue'
 
@@ -54,6 +57,14 @@ export const widgetsConfig = [
     mainComponent: JsonFormatterMain,
     containerStyle: CONTAINER_STYLE.dialog,
     actionBlockClasses: ['json-formatter'],
+  },
+  {
+    name: 'rearview-mirror',
+    label: '工位后视镜',
+    iconComponent: RearviewMirrorIcon,
+    // mainComponent: RearviewMirrorMain,
+    // containerStyle: CONTAINER_STYLE.dialog,
+    // actionBlockClasses: ['rearview-mirror'],
   },
   {
     name: 'code-diff',
